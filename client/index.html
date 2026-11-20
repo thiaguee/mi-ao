@@ -75,6 +75,7 @@
       <div id="announce" class="hidden"></div>
       <div id="fps"></div>
       <div id="diag" class="hidden"></div>
+      <div id="mis-seg" class="hidden"></div>
       <canvas id="minimap" width="300" height="300" title="Minimapa"></canvas>
     </div>
     <div id="bottom-bar" class="frame">
@@ -93,7 +94,7 @@
     <div class="char-head">
       <div id="s-name">-</div>
       <div class="lvl-row"><span id="s-level">Nivel 1</span><span id="s-exp-pct">[0%]</span></div>
-      <div class="exp-row"><span id="s-class">-</span></div>
+      <div class="exp-row"><span id="s-class">-</span><span class="pts-row">⭐ <b id="s-puntos">0</b> pts</span></div>
       <div class="bar exp"><div id="b-exp"></div><span id="t-exp"></span></div>
     </div>
 
@@ -138,6 +139,7 @@
         <div class="gold-box"><div class="gold-title">ORO</div><b id="s-gold">0</b></div>
         <button class="btn mid" id="b-opts">OPCIONES</button>
         <button class="btn mid" id="b-skills">SKILLS</button>
+        <button class="btn mid" id="b-misiones">MISIONES</button>
         <button class="btn mid" id="b-clanes">CLANES</button>
         <button class="btn mid" id="b-mapa">MAPA</button>
         <button class="btn mid" id="b-menu">MENÚ</button>

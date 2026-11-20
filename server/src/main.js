@@ -63,9 +63,10 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'));
 world.dataDir = DATA_DIR;
 world.cargarClanes();
+world.cargarMisiones();
 
 // ---------- logs, bans y guardado ----------
 const day = () => new Date().toISOString().slice(0, 10);
@@ -180,6 +181,7 @@ function handle(sock, msg) {
       return;
     }
     case 'clan': return world.accionClan(p, msg);
+    case 'mis': return world.accionMision(p, msg);
     case 'capa': return world.alternarCapa(p);
     case 'ping': return world.send(p, { t: 'pong', ts: msg.ts });
     case 'logout': return world.logout(p);

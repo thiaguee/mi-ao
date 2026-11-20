@@ -63,6 +63,7 @@ I.interact = function (p, x, y) {
     if (!near(p, e, 4)) return this.msg(p, 'Estás demasiado lejos.', 'warn');
     if (t === NPC_TYPE.RESUCITADOR) return this.priest(p, e);
     if (p.dead) return this.msg(p, '¡¡Estás muerto!! Sólo podés hablar con sacerdotes.', 'warn');
+    if (e.def.misiones) return this.abrirMaestro(p);
     if (t === NPC_TYPE.BANQUERO) return this.openBank(p, e);
     if (e.def.comercia) return this.openTrade(p, e);
     if (t === NPC_TYPE.GOBERNADOR && e.def.ciudad) {

@@ -380,6 +380,7 @@ export function render(now) {
   for (const c of E.chars.values()) {
     if (c.y < y0 - 1 || c.y > by1 || c.x < x0 - 1 || c.x > x1 + 1) continue;
     const px = sx(c.x) + c.offX, py = sy(c.y) + c.offY;
+    if (c.mis) signoMision(ctx, px + 16, py - 40 + Math.sin(now / 250) * 2);
     if (c.inv && c.id !== E.me) continue;
     if (c.say) {
       if (now > c.say.until) c.say = null; else drawSay(ctx, c, px, py);
@@ -443,6 +444,15 @@ function drawChar(ctx, c, px, py, now, me) {
     if (now > c.fx.until) c.fx = null;
     else drawGrh(ctx, c.fx.grh, px + c.fx.ox, py + c.fx.oy, true, now - c.fx.start);
   }
+}
+
+// "!" amarillo arriba de los Maestros de Misiones
+function signoMision(ctx, x, y) {
+  ctx.save();
+  ctx.font = 'bold 18px Georgia, serif'; ctx.textAlign = 'center';
+  ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.strokeText('!', x, y);
+  ctx.fillStyle = '#ffd84a'; ctx.fillText('!', x, y);
+  ctx.restore();
 }
 
 function drawName(ctx, c, px, py) {

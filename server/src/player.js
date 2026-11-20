@@ -95,6 +95,7 @@ P.login = function (sock, req) {
   p.map = map; p.x = pos.x; p.y = pos.y;
   this.recalcEquip(p);
   this.revisarClanAlEntrar(p);
+  this.misDe(p);
   this.place(p, p.map, p.x, p.y);
   this.send(p, { t: 'welcome', id: p.id, name: p.name, gm: p.gm, motd: this.config.motd, capa: p.capaOculta ? 0 : 1,
     server: this.config.nombreServidor });
@@ -107,6 +108,8 @@ P.login = function (sock, req) {
   for (const line of this.config.motd) this.msg(p, line, 'server');
   if (p.gm > 0) this.msg(p, `Tenés poderes de ${this.gmTitle(p.gm)}. Escribí /GMAYUDA para ver tus comandos.`, 'gm');
   this.checkClassUp(p);
+  this.enviarSeguimiento(p);
+  this.pagarPendientesClan(p);
   this.log(`Ingresó ${p.name} (${p.ip})`);
   return { ok: true };
 };
@@ -149,7 +152,7 @@ P.toRecord = function (p) {
     eq: p.eq, spells: p.spells, bank: p.bank, bankGld: p.bankGld,
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
-    lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta,
+    lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
   };
 };
 
@@ -512,7 +515,7 @@ P.checkLevel = function (p) {
     const sta = 15;
     const manaF = G.MANA_POR_NIVEL[p.clase] || 0;
     const man = Math.floor(manaF * p.attrs[2]);
-    s.maxHp = Math.min(999, s.maxHp + hp);
+    s.maxHp = Math.min(2500, s.maxHp + hp);
     s.maxSta = Math.min(999, s.maxSta + sta);
     s.maxMan = Math.min(3000, s.maxMan + man);
     s.minHit = Math.min(99, s.minHit + hit);
@@ -520,6 +523,10 @@ P.checkLevel = function (p) {
     const pts = s.lvl === 2 ? 10 : 5;
     s.skillPts += pts;
     this.msg(p, `¡Has subido al nivel ${s.lvl}!`, 'server');
+    if (s.lvl === G.NIVEL_DESBLOQUEO) {
+      this.msg(p, `¡Llegaste al nivel ${G.NIVEL_DESBLOQUEO}! Se desbloquearon 10 niveles más (hasta el ${G.MAX_NIVEL}) y las MISIONES DE ÉLITE en los Maestros de Misiones.`, 'server');
+      this.toAll({ t: 'msg', text: `¡${p.name} llegó al nivel ${G.NIVEL_DESBLOQUEO} y desbloqueó los niveles de élite!`, color: 'server' });
+    }
     this.msg(p, `Ganaste ${hp} de vida, ${sta} de energía${man ? `, ${man} de maná` : ''}, ${hit} de golpe y ${pts} skillpoints.`, 'info');
     if (s.lvl > NEWBIE_LVL && s.lvl - 1 === NEWBIE_LVL) this.dropNewbieItems(p);
   }

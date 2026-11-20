@@ -124,7 +124,7 @@ class World {
   charInfo(e) {
     if (e.kind === 'npc') {
       return { id: e.id, n: e.name, x: e.x, y: e.y, h: e.heading, b: e.body, hd: e.head,
-        npc: 1, col: e.def.hostile ? 'npc_h' : 'npc', w: 0, s: 0, c: 0 };
+        npc: 1, col: e.def.hostile ? 'npc_h' : 'npc', w: 0, s: 0, c: 0, mis: e.def.misiones ? 1 : 0 };
     }
     return {
       id: e.id, n: e.name + (e.guild ? ` <${e.guild}>` : ''), x: e.x, y: e.y, h: e.heading,

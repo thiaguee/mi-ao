@@ -158,6 +158,8 @@ K.command = function (p, text) {
     }
     case 'CAPA':
       return this.alternarCapa(p);
+    case 'MISIONES':
+      return this.enviarMisiones(p, !!this.cercaDeMaestro(p));
     case 'FUNDARCLAN':
       return this.abrirFundar(p);
     case 'CLANES':

@@ -1,0 +1,2079 @@
+{
+ "_ayuda": "Misiones de Norway AO. Todas son de matar bichos. \"bichos\" son números de NPC (ver el Excel), \"*\" = cualquier bicho. recompensa: oro, exp y puntos de misión (no se pierden al morir). Para regenerar este archivo: python3 tools/misiones.py",
+ "normales": [
+  {
+   "id": "murcielagos",
+   "tipo": "normal",
+   "nivel": 1,
+   "nombre": "Bichos molestos",
+   "desc": "Una plaga de murciélagos invade los bosques de Ullathorpe.",
+   "objetivos": [
+    {
+     "bichos": [
+      500
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 5800,
+    "exp": 180,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "ratas",
+   "tipo": "normal",
+   "nivel": 1,
+   "nombre": "Plaga de ratas",
+   "desc": "Las ratas salvajes se comen las cosechas.",
+   "objetivos": [
+    {
+     "bichos": [
+      536
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 5800,
+    "exp": 180,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "serpientes",
+   "tipo": "normal",
+   "nivel": 2,
+   "nombre": "Serpientes en la ciudad",
+   "desc": "Las serpientes se meten hasta en las casas. Limpiá los alrededores.",
+   "objetivos": [
+    {
+     "bichos": [
+      504,
+      565
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 8200,
+    "exp": 270,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "escorpiones",
+   "tipo": "normal",
+   "nivel": 3,
+   "nombre": "Escorpiones del desierto",
+   "desc": "Los viajeros del desierto piden ayuda contra los escorpiones.",
+   "objetivos": [
+    {
+     "bichos": [
+      529,
+      564
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 12200,
+    "exp": 405,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "esqueletos",
+   "tipo": "normal",
+   "nivel": 4,
+   "nombre": "Huesos que caminan",
+   "desc": "Algo despertó a los esqueletos de los bosques.",
+   "objetivos": [
+    {
+     "bichos": [
+      503
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 17800,
+    "exp": 607,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "lobos",
+   "tipo": "normal",
+   "nivel": 5,
+   "nombre": "Cacería de lobos",
+   "desc": "Los lobos atacan a los viajeros entre las ciudades.",
+   "objetivos": [
+    {
+     "bichos": [
+      501
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 25000,
+    "exp": 910,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "goblins",
+   "tipo": "normal",
+   "nivel": 6,
+   "nombre": "Goblins revoltosos",
+   "desc": "Los goblins roban todo lo que encuentran.",
+   "objetivos": [
+    {
+     "bichos": [
+      505,
+      516
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 33800,
+    "exp": 1366,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "esq_guerreros",
+   "tipo": "normal",
+   "nivel": 8,
+   "nombre": "Guerreros del más allá",
+   "desc": "Los esqueletos guerreros custodian los cementerios.",
+   "objetivos": [
+    {
+     "bichos": [
+      508
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 56200,
+    "exp": 3073,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "bandidos",
+   "tipo": "normal",
+   "nivel": 9,
+   "nombre": "Bandidos del camino",
+   "desc": "Los bandidos asaltan las caravanas. Hacé justicia.",
+   "objetivos": [
+    {
+     "bichos": [
+      530
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 69800,
+    "exp": 4609,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "duendes",
+   "tipo": "normal",
+   "nivel": 10,
+   "nombre": "Duendes traviesos",
+   "desc": "Los duendes del bosque se volvieron peligrosos.",
+   "objetivos": [
+    {
+     "bichos": [
+      540
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 85000,
+    "exp": 6914,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "zombies",
+   "tipo": "normal",
+   "nivel": 11,
+   "nombre": "Los muertos se levantan",
+   "desc": "Zombies y sus señores avanzan hacia las ciudades.",
+   "objetivos": [
+    {
+     "bichos": [
+      502
+     ],
+     "cantidad": 20
+    },
+    {
+     "bichos": [
+      507
+     ],
+     "cantidad": 5
+    }
+   ],
+   "recompensa": {
+    "oro": 101800,
+    "exp": 8988,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "orcos",
+   "tipo": "normal",
+   "nivel": 12,
+   "nombre": "Guerra contra los orcos",
+   "desc": "Los orcos de Dorck se preparan para la guerra.",
+   "objetivos": [
+    {
+     "bichos": [
+      522,
+      523
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 120200,
+    "exp": 11685,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "hormigas",
+   "tipo": "normal",
+   "nivel": 14,
+   "nombre": "Hormigas gigantes",
+   "desc": "Las hormigas gigantes destruyen los bosques.",
+   "objetivos": [
+    {
+     "bichos": [
+      534
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 161800,
+    "exp": 19747,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "osos",
+   "tipo": "normal",
+   "nivel": 15,
+   "nombre": "Osos del bosque",
+   "desc": "Los osos pardos atacan a los leñadores.",
+   "objetivos": [
+    {
+     "bichos": [
+      538
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 185000,
+    "exp": 25671,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "tortugas",
+   "tipo": "normal",
+   "nivel": 16,
+   "nombre": "Tortugas acorazadas",
+   "desc": "Las tortugas gigantes bloquean los caminos de Nix.",
+   "objetivos": [
+    {
+     "bichos": [
+      539
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 209800,
+    "exp": 33372,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "tigres",
+   "tipo": "normal",
+   "nivel": 18,
+   "nombre": "Tigres salvajes",
+   "desc": "Los tigres cazan a los viajeros cerca de Nix.",
+   "objetivos": [
+    {
+     "bichos": [
+      521
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 264200,
+    "exp": 56398,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "asesinos",
+   "tipo": "normal",
+   "nivel": 19,
+   "nombre": "Asesinos en las catacumbas",
+   "desc": "Una banda de asesinos se esconde en las catacumbas.",
+   "objetivos": [
+    {
+     "bichos": [
+      531
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 293800,
+    "exp": 73317,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "aracnidos",
+   "tipo": "normal",
+   "nivel": 20,
+   "nombre": "Arácnidos del desierto",
+   "desc": "Los arácnidos gigantes se multiplican en el desierto.",
+   "objetivos": [
+    {
+     "bichos": [
+      510
+     ],
+     "cantidad": 25
+    }
+   ],
+   "recompensa": {
+    "oro": 325000,
+    "exp": 95312,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "gusanos",
+   "tipo": "normal",
+   "nivel": 21,
+   "nombre": "Gusanos de arena",
+   "desc": "Los gusanos de arena se tragan a los viajeros.",
+   "objetivos": [
+    {
+     "bichos": [
+      519
+     ],
+     "cantidad": 25
+    }
+   ],
+   "recompensa": {
+    "oro": 357800,
+    "exp": 123906,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "gorilas",
+   "tipo": "normal",
+   "nivel": 22,
+   "nombre": "Gorilas de Dorck",
+   "desc": "Los gorilas salvajes dominan el bosque de Dorck.",
+   "objetivos": [
+    {
+     "bichos": [
+      515
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 392200,
+    "exp": 161077,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "sirenas",
+   "tipo": "normal",
+   "nivel": 24,
+   "nombre": "Canto de sirenas",
+   "desc": "Las sirenas hunden los barcos en alta mar.",
+   "objetivos": [
+    {
+     "bichos": [
+      603
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 465800,
+    "exp": 272220,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "lobo_oscuro",
+   "tipo": "normal",
+   "nivel": 25,
+   "nombre": "El lobo oscuro",
+   "desc": "Lobos oscuros rondan las minas de hierro.",
+   "objetivos": [
+    {
+     "bichos": [
+      703
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 505000,
+    "exp": 326664,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "lord_orcos",
+   "tipo": "normal",
+   "nivel": 26,
+   "nombre": "Señores orcos",
+   "desc": "Los señores orcos y sus brujos atacan la Isla Nueva Esperanza.",
+   "objetivos": [
+    {
+     "bichos": [
+      555
+     ],
+     "cantidad": 15
+    },
+    {
+     "bichos": [
+      549
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 545800,
+    "exp": 391997,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "liches",
+   "tipo": "normal",
+   "nivel": 28,
+   "nombre": "Los liches de Marabel",
+   "desc": "Los liches resucitan a los muertos en Marabel.",
+   "objetivos": [
+    {
+     "bichos": [
+      554
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 632200,
+    "exp": 564475,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "ogros",
+   "tipo": "normal",
+   "nivel": 30,
+   "nombre": "Ogros y esclavos",
+   "desc": "Los ogros esclavizan a los pobladores de la isla.",
+   "objetivos": [
+    {
+     "bichos": [
+      541
+     ],
+     "cantidad": 20
+    },
+    {
+     "bichos": [
+      511
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 725000,
+    "exp": 812844,
+    "puntos": 3
+   }
+  },
+  {
+   "id": "magos_malvados",
+   "tipo": "normal",
+   "nivel": 32,
+   "nombre": "Magos malvados",
+   "desc": "Magos oscuros practican hechizos prohibidos.",
+   "objetivos": [
+    {
+     "bichos": [
+      551
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 824200,
+    "exp": 1170495,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "enanos",
+   "tipo": "normal",
+   "nivel": 33,
+   "nombre": "Enanos de las profundidades",
+   "desc": "Los enanos de las profundidades tomaron las minas.",
+   "objetivos": [
+    {
+     "bichos": [
+      582
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 876200,
+    "exp": 1404594,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "brujas",
+   "tipo": "normal",
+   "nivel": 35,
+   "nombre": "Brujas y djinns",
+   "desc": "Brujas y djinns de viento conspiran juntos.",
+   "objetivos": [
+    {
+     "bichos": [
+      550
+     ],
+     "cantidad": 15
+    },
+    {
+     "bichos": [
+      517
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 985000,
+    "exp": 2022615,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "ciclopes",
+   "tipo": "normal",
+   "nivel": 37,
+   "nombre": "El cíclope guardián",
+   "desc": "Los cíclopes guardan tesoros en la Cueva de la Ladera.",
+   "objetivos": [
+    {
+     "bichos": [
+      513
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1100200,
+    "exp": 2912565,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "dragones",
+   "tipo": "normal",
+   "nivel": 38,
+   "nombre": "Dragones rojos",
+   "desc": "Los dragones rojos de Marabel deben caer.",
+   "objetivos": [
+    {
+     "bichos": [
+      509
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1160200,
+    "exp": 3495078,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "leviatan",
+   "tipo": "normal",
+   "nivel": 40,
+   "nombre": "Leviatán",
+   "desc": "Un leviatán aterroriza los mares.",
+   "objetivos": [
+    {
+     "bichos": [
+      548
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1285000,
+    "exp": 5032912,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "medusas",
+   "tipo": "normal",
+   "nivel": 42,
+   "nombre": "Las medusas de Veriil",
+   "desc": "Su mirada convierte en piedra a los aventureros.",
+   "objetivos": [
+    {
+     "bichos": [
+      553
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1416200,
+    "exp": 7247394,
+    "puntos": 5
+   }
+  },
+  {
+   "id": "hombres_lobo",
+   "tipo": "normal",
+   "nivel": 44,
+   "nombre": "Hombres lobo",
+   "desc": "Los hombres lobo cazan en la Cueva de la Ladera.",
+   "objetivos": [
+    {
+     "bichos": [
+      709
+     ],
+     "cantidad": 8
+    }
+   ],
+   "recompensa": {
+    "oro": 1553800,
+    "exp": 10436247,
+    "puntos": 5
+   }
+  },
+  {
+   "id": "viudas",
+   "tipo": "normal",
+   "nivel": 45,
+   "nombre": "Viudas negras",
+   "desc": "Arañas gigantes tejen sus redes en las cavernas heladas.",
+   "objetivos": [
+    {
+     "bichos": [
+      706
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1625000,
+    "exp": 12523496,
+    "puntos": 5
+   }
+  },
+  {
+   "id": "protectores",
+   "tipo": "normal",
+   "nivel": 47,
+   "nombre": "Guerreros protectores",
+   "desc": "Guardianes antiguos protegen el Dungeon Morgolock.",
+   "objetivos": [
+    {
+     "bichos": [
+      752
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1772200,
+    "exp": 18033834,
+    "puntos": 5
+   }
+  },
+  {
+   "id": "momias",
+   "tipo": "normal",
+   "nivel": 48,
+   "nombre": "Las momias de la pirámide",
+   "desc": "Las momias despertaron en la pirámide.",
+   "objetivos": [
+    {
+     "bichos": [
+      758
+     ],
+     "cantidad": 5
+    },
+    {
+     "bichos": [
+      932
+     ],
+     "cantidad": 5
+    }
+   ],
+   "recompensa": {
+    "oro": 1848200,
+    "exp": 21640600,
+    "puntos": 5
+   }
+  },
+  {
+   "id": "destructor",
+   "tipo": "normal",
+   "nivel": 50,
+   "nombre": "El destructor de almas",
+   "desc": "Un mal antiguo devora almas en Morgolock.",
+   "objetivos": [
+    {
+     "bichos": [
+      761
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 2005000,
+    "exp": 31162464,
+    "puntos": 5
+   }
+  }
+ ],
+ "elite": [
+  {
+   "id": "yetis",
+   "tipo": "elite",
+   "nivel": 51,
+   "nombre": "Yetis del Averno",
+   "desc": "Los yetis bloquean el camino al Averno.",
+   "objetivos": [
+    {
+     "bichos": [
+      825
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 2085800,
+    "exp": 37394957,
+    "puntos": 8
+   }
+  },
+  {
+   "id": "gorgonas",
+   "tipo": "elite",
+   "nivel": 52,
+   "nombre": "Gorgonas",
+   "desc": "Las gorgonas custodian la pirámide.",
+   "objetivos": [
+    {
+     "bichos": [
+      807
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 2168200,
+    "exp": 44873948,
+    "puntos": 8
+   }
+  },
+  {
+   "id": "demonios",
+   "tipo": "elite",
+   "nivel": 53,
+   "nombre": "Demonios",
+   "desc": "Los demonios escaparon del Dungeon Inferno.",
+   "objetivos": [
+    {
+     "bichos": [
+      543
+     ],
+     "cantidad": 5
+    },
+    {
+     "bichos": [
+      584
+     ],
+     "cantidad": 5
+    }
+   ],
+   "recompensa": {
+    "oro": 2252200,
+    "exp": 53848737,
+    "puntos": 8
+   }
+  },
+  {
+   "id": "orcos_elite",
+   "tipo": "elite",
+   "nivel": 54,
+   "nombre": "Orcos de élite",
+   "desc": "Los mejores guerreros orcos esperan en la Caverna Helada.",
+   "objetivos": [
+    {
+     "bichos": [
+      772
+     ],
+     "cantidad": 8
+    }
+   ],
+   "recompensa": {
+    "oro": 2337800,
+    "exp": 64618485,
+    "puntos": 8
+   }
+  },
+  {
+   "id": "jinetes",
+   "tipo": "elite",
+   "nivel": 55,
+   "nombre": "Jinetes del apocalipsis",
+   "desc": "Los jinetes recorren el Limbo de los Justos.",
+   "objetivos": [
+    {
+     "bichos": [
+      768
+     ],
+     "cantidad": 8
+    }
+   ],
+   "recompensa": {
+    "oro": 2425000,
+    "exp": 77542182,
+    "puntos": 9
+   }
+  },
+  {
+   "id": "archimagos",
+   "tipo": "elite",
+   "nivel": 56,
+   "nombre": "Archimagos de fuego",
+   "desc": "Los archimagos queman todo en el Paso del Titán.",
+   "objetivos": [
+    {
+     "bichos": [
+      762
+     ],
+     "cantidad": 8
+    }
+   ],
+   "recompensa": {
+    "oro": 2513800,
+    "exp": 93050618,
+    "puntos": 9
+   }
+  },
+  {
+   "id": "golems",
+   "tipo": "elite",
+   "nivel": 57,
+   "nombre": "Golems",
+   "desc": "Golems de piedra y barro despertaron.",
+   "objetivos": [
+    {
+     "bichos": [
+      552
+     ],
+     "cantidad": 5
+    },
+    {
+     "bichos": [
+      811
+     ],
+     "cantidad": 3
+    }
+   ],
+   "recompensa": {
+    "oro": 2604200,
+    "exp": 111660741,
+    "puntos": 9
+   }
+  },
+  {
+   "id": "olvidado",
+   "tipo": "elite",
+   "nivel": 58,
+   "nombre": "El Olvidado",
+   "desc": "Raistar, el Olvidado, volvió a Marabel.",
+   "objetivos": [
+    {
+     "bichos": [
+      774
+     ],
+     "cantidad": 3
+    }
+   ],
+   "recompensa": {
+    "oro": 2696200,
+    "exp": 133992889,
+    "puntos": 9
+   }
+  },
+  {
+   "id": "morgolock",
+   "tipo": "elite",
+   "nivel": 59,
+   "nombre": "Dark Morgolock",
+   "desc": "El señor oscuro de Morgolock debe caer.",
+   "objetivos": [
+    {
+     "bichos": [
+      558
+     ],
+     "cantidad": 3
+    }
+   ],
+   "recompensa": {
+    "oro": 2789800,
+    "exp": 160791467,
+    "puntos": 10
+   }
+  },
+  {
+   "id": "golem_infernal",
+   "tipo": "elite",
+   "nivel": 60,
+   "nombre": "El golem infernal",
+   "desc": "La prueba final de los héroes de Norway.",
+   "objetivos": [
+    {
+     "bichos": [
+      586
+     ],
+     "cantidad": 3
+    }
+   ],
+   "recompensa": {
+    "oro": 2885000,
+    "exp": 192949760,
+    "puntos": 10
+   }
+  }
+ ],
+ "diarias": [
+  {
+   "id": "d_murcielagos",
+   "tipo": "diaria",
+   "nivel": 1,
+   "nombre": "Diaria: Bichos molestos",
+   "desc": "Una plaga de murciélagos invade los bosques de Ullathorpe.",
+   "objetivos": [
+    {
+     "bichos": [
+      500
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 2900,
+    "exp": 90,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_ratas",
+   "tipo": "diaria",
+   "nivel": 1,
+   "nombre": "Diaria: Plaga de ratas",
+   "desc": "Las ratas salvajes se comen las cosechas.",
+   "objetivos": [
+    {
+     "bichos": [
+      536
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 2900,
+    "exp": 90,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_serpientes",
+   "tipo": "diaria",
+   "nivel": 2,
+   "nombre": "Diaria: Serpientes en la ciudad",
+   "desc": "Las serpientes se meten hasta en las casas. Limpiá los alrededores.",
+   "objetivos": [
+    {
+     "bichos": [
+      504,
+      565
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 4100,
+    "exp": 135,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_escorpiones",
+   "tipo": "diaria",
+   "nivel": 3,
+   "nombre": "Diaria: Escorpiones del desierto",
+   "desc": "Los viajeros del desierto piden ayuda contra los escorpiones.",
+   "objetivos": [
+    {
+     "bichos": [
+      529,
+      564
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 6100,
+    "exp": 202,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_esqueletos",
+   "tipo": "diaria",
+   "nivel": 4,
+   "nombre": "Diaria: Huesos que caminan",
+   "desc": "Algo despertó a los esqueletos de los bosques.",
+   "objetivos": [
+    {
+     "bichos": [
+      503
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 8900,
+    "exp": 303,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_lobos",
+   "tipo": "diaria",
+   "nivel": 5,
+   "nombre": "Diaria: Cacería de lobos",
+   "desc": "Los lobos atacan a los viajeros entre las ciudades.",
+   "objetivos": [
+    {
+     "bichos": [
+      501
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 12500,
+    "exp": 455,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_goblins",
+   "tipo": "diaria",
+   "nivel": 6,
+   "nombre": "Diaria: Goblins revoltosos",
+   "desc": "Los goblins roban todo lo que encuentran.",
+   "objetivos": [
+    {
+     "bichos": [
+      505,
+      516
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 16900,
+    "exp": 683,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_esq_guerreros",
+   "tipo": "diaria",
+   "nivel": 8,
+   "nombre": "Diaria: Guerreros del más allá",
+   "desc": "Los esqueletos guerreros custodian los cementerios.",
+   "objetivos": [
+    {
+     "bichos": [
+      508
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 28100,
+    "exp": 1536,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_bandidos",
+   "tipo": "diaria",
+   "nivel": 9,
+   "nombre": "Diaria: Bandidos del camino",
+   "desc": "Los bandidos asaltan las caravanas. Hacé justicia.",
+   "objetivos": [
+    {
+     "bichos": [
+      530
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 34900,
+    "exp": 2304,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_duendes",
+   "tipo": "diaria",
+   "nivel": 10,
+   "nombre": "Diaria: Duendes traviesos",
+   "desc": "Los duendes del bosque se volvieron peligrosos.",
+   "objetivos": [
+    {
+     "bichos": [
+      540
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 42500,
+    "exp": 3457,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_zombies",
+   "tipo": "diaria",
+   "nivel": 11,
+   "nombre": "Diaria: Los muertos se levantan",
+   "desc": "Zombies y sus señores avanzan hacia las ciudades.",
+   "objetivos": [
+    {
+     "bichos": [
+      502
+     ],
+     "cantidad": 40
+    },
+    {
+     "bichos": [
+      507
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 50900,
+    "exp": 4494,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_orcos",
+   "tipo": "diaria",
+   "nivel": 12,
+   "nombre": "Diaria: Guerra contra los orcos",
+   "desc": "Los orcos de Dorck se preparan para la guerra.",
+   "objetivos": [
+    {
+     "bichos": [
+      522,
+      523
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 60100,
+    "exp": 5842,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_hormigas",
+   "tipo": "diaria",
+   "nivel": 14,
+   "nombre": "Diaria: Hormigas gigantes",
+   "desc": "Las hormigas gigantes destruyen los bosques.",
+   "objetivos": [
+    {
+     "bichos": [
+      534
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 80900,
+    "exp": 9873,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_osos",
+   "tipo": "diaria",
+   "nivel": 15,
+   "nombre": "Diaria: Osos del bosque",
+   "desc": "Los osos pardos atacan a los leñadores.",
+   "objetivos": [
+    {
+     "bichos": [
+      538
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 92500,
+    "exp": 12835,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_tortugas",
+   "tipo": "diaria",
+   "nivel": 16,
+   "nombre": "Diaria: Tortugas acorazadas",
+   "desc": "Las tortugas gigantes bloquean los caminos de Nix.",
+   "objetivos": [
+    {
+     "bichos": [
+      539
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 104900,
+    "exp": 16686,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_tigres",
+   "tipo": "diaria",
+   "nivel": 18,
+   "nombre": "Diaria: Tigres salvajes",
+   "desc": "Los tigres cazan a los viajeros cerca de Nix.",
+   "objetivos": [
+    {
+     "bichos": [
+      521
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 132100,
+    "exp": 28199,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_asesinos",
+   "tipo": "diaria",
+   "nivel": 19,
+   "nombre": "Diaria: Asesinos en las catacumbas",
+   "desc": "Una banda de asesinos se esconde en las catacumbas.",
+   "objetivos": [
+    {
+     "bichos": [
+      531
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 146900,
+    "exp": 36658,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_aracnidos",
+   "tipo": "diaria",
+   "nivel": 20,
+   "nombre": "Diaria: Arácnidos del desierto",
+   "desc": "Los arácnidos gigantes se multiplican en el desierto.",
+   "objetivos": [
+    {
+     "bichos": [
+      510
+     ],
+     "cantidad": 50
+    }
+   ],
+   "recompensa": {
+    "oro": 162500,
+    "exp": 47656,
+    "puntos": 1
+   }
+  },
+  {
+   "id": "d_gusanos",
+   "tipo": "diaria",
+   "nivel": 21,
+   "nombre": "Diaria: Gusanos de arena",
+   "desc": "Los gusanos de arena se tragan a los viajeros.",
+   "objetivos": [
+    {
+     "bichos": [
+      519
+     ],
+     "cantidad": 50
+    }
+   ],
+   "recompensa": {
+    "oro": 178900,
+    "exp": 61953,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_gorilas",
+   "tipo": "diaria",
+   "nivel": 22,
+   "nombre": "Diaria: Gorilas de Dorck",
+   "desc": "Los gorilas salvajes dominan el bosque de Dorck.",
+   "objetivos": [
+    {
+     "bichos": [
+      515
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 196100,
+    "exp": 80538,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_sirenas",
+   "tipo": "diaria",
+   "nivel": 24,
+   "nombre": "Diaria: Canto de sirenas",
+   "desc": "Las sirenas hunden los barcos en alta mar.",
+   "objetivos": [
+    {
+     "bichos": [
+      603
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 232900,
+    "exp": 136110,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_lobo_oscuro",
+   "tipo": "diaria",
+   "nivel": 25,
+   "nombre": "Diaria: El lobo oscuro",
+   "desc": "Lobos oscuros rondan las minas de hierro.",
+   "objetivos": [
+    {
+     "bichos": [
+      703
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 252500,
+    "exp": 163332,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_lord_orcos",
+   "tipo": "diaria",
+   "nivel": 26,
+   "nombre": "Diaria: Señores orcos",
+   "desc": "Los señores orcos y sus brujos atacan la Isla Nueva Esperanza.",
+   "objetivos": [
+    {
+     "bichos": [
+      555
+     ],
+     "cantidad": 30
+    },
+    {
+     "bichos": [
+      549
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 272900,
+    "exp": 195998,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_liches",
+   "tipo": "diaria",
+   "nivel": 28,
+   "nombre": "Diaria: Los liches de Marabel",
+   "desc": "Los liches resucitan a los muertos en Marabel.",
+   "objetivos": [
+    {
+     "bichos": [
+      554
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 316100,
+    "exp": 282237,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_ogros",
+   "tipo": "diaria",
+   "nivel": 30,
+   "nombre": "Diaria: Ogros y esclavos",
+   "desc": "Los ogros esclavizan a los pobladores de la isla.",
+   "objetivos": [
+    {
+     "bichos": [
+      541
+     ],
+     "cantidad": 40
+    },
+    {
+     "bichos": [
+      511
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 362500,
+    "exp": 406422,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_magos_malvados",
+   "tipo": "diaria",
+   "nivel": 32,
+   "nombre": "Diaria: Magos malvados",
+   "desc": "Magos oscuros practican hechizos prohibidos.",
+   "objetivos": [
+    {
+     "bichos": [
+      551
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 412100,
+    "exp": 585247,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_enanos",
+   "tipo": "diaria",
+   "nivel": 33,
+   "nombre": "Diaria: Enanos de las profundidades",
+   "desc": "Los enanos de las profundidades tomaron las minas.",
+   "objetivos": [
+    {
+     "bichos": [
+      582
+     ],
+     "cantidad": 40
+    }
+   ],
+   "recompensa": {
+    "oro": 438100,
+    "exp": 702297,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_brujas",
+   "tipo": "diaria",
+   "nivel": 35,
+   "nombre": "Diaria: Brujas y djinns",
+   "desc": "Brujas y djinns de viento conspiran juntos.",
+   "objetivos": [
+    {
+     "bichos": [
+      550
+     ],
+     "cantidad": 30
+    },
+    {
+     "bichos": [
+      517
+     ],
+     "cantidad": 30
+    }
+   ],
+   "recompensa": {
+    "oro": 492500,
+    "exp": 1011307,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_ciclopes",
+   "tipo": "diaria",
+   "nivel": 37,
+   "nombre": "Diaria: El cíclope guardián",
+   "desc": "Los cíclopes guardan tesoros en la Cueva de la Ladera.",
+   "objetivos": [
+    {
+     "bichos": [
+      513
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 550100,
+    "exp": 1456282,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_dragones",
+   "tipo": "diaria",
+   "nivel": 38,
+   "nombre": "Diaria: Dragones rojos",
+   "desc": "Los dragones rojos de Marabel deben caer.",
+   "objetivos": [
+    {
+     "bichos": [
+      509
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 580100,
+    "exp": 1747539,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_leviatan",
+   "tipo": "diaria",
+   "nivel": 40,
+   "nombre": "Diaria: Leviatán",
+   "desc": "Un leviatán aterroriza los mares.",
+   "objetivos": [
+    {
+     "bichos": [
+      548
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 642500,
+    "exp": 2516456,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_medusas",
+   "tipo": "diaria",
+   "nivel": 42,
+   "nombre": "Diaria: Las medusas de Veriil",
+   "desc": "Su mirada convierte en piedra a los aventureros.",
+   "objetivos": [
+    {
+     "bichos": [
+      553
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 708100,
+    "exp": 3623697,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_hombres_lobo",
+   "tipo": "diaria",
+   "nivel": 44,
+   "nombre": "Diaria: Hombres lobo",
+   "desc": "Los hombres lobo cazan en la Cueva de la Ladera.",
+   "objetivos": [
+    {
+     "bichos": [
+      709
+     ],
+     "cantidad": 16
+    }
+   ],
+   "recompensa": {
+    "oro": 776900,
+    "exp": 5218123,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_viudas",
+   "tipo": "diaria",
+   "nivel": 45,
+   "nombre": "Diaria: Viudas negras",
+   "desc": "Arañas gigantes tejen sus redes en las cavernas heladas.",
+   "objetivos": [
+    {
+     "bichos": [
+      706
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 812500,
+    "exp": 6261748,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_protectores",
+   "tipo": "diaria",
+   "nivel": 47,
+   "nombre": "Diaria: Guerreros protectores",
+   "desc": "Guardianes antiguos protegen el Dungeon Morgolock.",
+   "objetivos": [
+    {
+     "bichos": [
+      752
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 886100,
+    "exp": 9016917,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_momias",
+   "tipo": "diaria",
+   "nivel": 48,
+   "nombre": "Diaria: Las momias de la pirámide",
+   "desc": "Las momias despertaron en la pirámide.",
+   "objetivos": [
+    {
+     "bichos": [
+      758
+     ],
+     "cantidad": 10
+    },
+    {
+     "bichos": [
+      932
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 924100,
+    "exp": 10820300,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_destructor",
+   "tipo": "diaria",
+   "nivel": 50,
+   "nombre": "Diaria: El destructor de almas",
+   "desc": "Un mal antiguo devora almas en Morgolock.",
+   "objetivos": [
+    {
+     "bichos": [
+      761
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 1002500,
+    "exp": 15581232,
+    "puntos": 2
+   }
+  },
+  {
+   "id": "d_yetis",
+   "tipo": "diaria",
+   "nivel": 51,
+   "nombre": "Diaria: Yetis del Averno",
+   "desc": "Los yetis bloquean el camino al Averno.",
+   "objetivos": [
+    {
+     "bichos": [
+      825
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 1042900,
+    "exp": 18697478,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_gorgonas",
+   "tipo": "diaria",
+   "nivel": 52,
+   "nombre": "Diaria: Gorgonas",
+   "desc": "Las gorgonas custodian la pirámide.",
+   "objetivos": [
+    {
+     "bichos": [
+      807
+     ],
+     "cantidad": 20
+    }
+   ],
+   "recompensa": {
+    "oro": 1084100,
+    "exp": 22436974,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_demonios",
+   "tipo": "diaria",
+   "nivel": 53,
+   "nombre": "Diaria: Demonios",
+   "desc": "Los demonios escaparon del Dungeon Inferno.",
+   "objetivos": [
+    {
+     "bichos": [
+      543
+     ],
+     "cantidad": 10
+    },
+    {
+     "bichos": [
+      584
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1126100,
+    "exp": 26924368,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_orcos_elite",
+   "tipo": "diaria",
+   "nivel": 54,
+   "nombre": "Diaria: Orcos de élite",
+   "desc": "Los mejores guerreros orcos esperan en la Caverna Helada.",
+   "objetivos": [
+    {
+     "bichos": [
+      772
+     ],
+     "cantidad": 16
+    }
+   ],
+   "recompensa": {
+    "oro": 1168900,
+    "exp": 32309242,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_jinetes",
+   "tipo": "diaria",
+   "nivel": 55,
+   "nombre": "Diaria: Jinetes del apocalipsis",
+   "desc": "Los jinetes recorren el Limbo de los Justos.",
+   "objetivos": [
+    {
+     "bichos": [
+      768
+     ],
+     "cantidad": 16
+    }
+   ],
+   "recompensa": {
+    "oro": 1212500,
+    "exp": 38771091,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_archimagos",
+   "tipo": "diaria",
+   "nivel": 56,
+   "nombre": "Diaria: Archimagos de fuego",
+   "desc": "Los archimagos queman todo en el Paso del Titán.",
+   "objetivos": [
+    {
+     "bichos": [
+      762
+     ],
+     "cantidad": 16
+    }
+   ],
+   "recompensa": {
+    "oro": 1256900,
+    "exp": 46525309,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_golems",
+   "tipo": "diaria",
+   "nivel": 57,
+   "nombre": "Diaria: Golems",
+   "desc": "Golems de piedra y barro despertaron.",
+   "objetivos": [
+    {
+     "bichos": [
+      552
+     ],
+     "cantidad": 10
+    },
+    {
+     "bichos": [
+      811
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1302100,
+    "exp": 55830370,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_olvidado",
+   "tipo": "diaria",
+   "nivel": 58,
+   "nombre": "Diaria: El Olvidado",
+   "desc": "Raistar, el Olvidado, volvió a Marabel.",
+   "objetivos": [
+    {
+     "bichos": [
+      774
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1348100,
+    "exp": 66996444,
+    "puntos": 4
+   }
+  },
+  {
+   "id": "d_morgolock",
+   "tipo": "diaria",
+   "nivel": 59,
+   "nombre": "Diaria: Dark Morgolock",
+   "desc": "El señor oscuro de Morgolock debe caer.",
+   "objetivos": [
+    {
+     "bichos": [
+      558
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1394900,
+    "exp": 80395733,
+    "puntos": 5
+   }
+  },
+  {
+   "id": "d_golem_infernal",
+   "tipo": "diaria",
+   "nivel": 60,
+   "nombre": "Diaria: El golem infernal",
+   "desc": "La prueba final de los héroes de Norway.",
+   "objetivos": [
+    {
+     "bichos": [
+      586
+     ],
+     "cantidad": 10
+    }
+   ],
+   "recompensa": {
+    "oro": 1442500,
+    "exp": 96474880,
+    "puntos": 5
+   }
+  }
+ ],
+ "clan": [
+  {
+   "id": "c_cazadores",
+   "tipo": "clan",
+   "nombre": "Cazadores del clan",
+   "desc": "Entre todos, maten 500 bichos de cualquier tipo.",
+   "objetivos": [
+    {
+     "bichos": [
+      "*"
+     ],
+     "cantidad": 500
+    }
+   ],
+   "recompensa": {
+    "oro": 300000,
+    "puntos": 5,
+    "expPct": 0.3
+   }
+  },
+  {
+   "id": "c_nomuertos",
+   "tipo": "clan",
+   "nombre": "Exterminio de no-muertos",
+   "desc": "Entre todos, maten 150 no-muertos (esqueletos, zombies, liches, momias).",
+   "objetivos": [
+    {
+     "bichos": [
+      503,
+      508,
+      502,
+      507,
+      554,
+      758,
+      932,
+      583
+     ],
+     "cantidad": 150
+    }
+   ],
+   "recompensa": {
+    "oro": 500000,
+    "puntos": 8,
+    "expPct": 0.4
+   }
+  },
+  {
+   "id": "c_bestias",
+   "tipo": "clan",
+   "nombre": "Bestias salvajes",
+   "desc": "Entre todos, maten 200 lobos, osos, tigres o gorilas.",
+   "objetivos": [
+    {
+     "bichos": [
+      501,
+      703,
+      765,
+      766,
+      538,
+      521,
+      515,
+      165,
+      166
+     ],
+     "cantidad": 200
+    }
+   ],
+   "recompensa": {
+    "oro": 400000,
+    "puntos": 6,
+    "expPct": 0.35
+   }
+  },
+  {
+   "id": "c_dragones",
+   "tipo": "clan",
+   "nombre": "Matadragones",
+   "desc": "Entre todos, maten 15 dragones.",
+   "objetivos": [
+    {
+     "bichos": [
+      509,
+      542,
+      518,
+      585,
+      622,
+      624
+     ],
+     "cantidad": 15
+    }
+   ],
+   "recompensa": {
+    "oro": 1500000,
+    "puntos": 15,
+    "expPct": 0.6
+   }
+  }
+ ]
+}

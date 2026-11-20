@@ -91,7 +91,9 @@ const SKILLS = ['Magia', 'Robar', 'Tácticas de combate', 'Combate con armas', '
 const SK = Object.fromEntries(SKILLS.map((s, i) => [s, i]));
 
 // Tabla de experiencia de Fénix
-const MAX_NIVEL = 50;
+// Nivel máximo: 50, más 10 niveles que se desbloquean al llegar al 50 (51 a 60)
+const MAX_NIVEL = 60;
+const NIVEL_DESBLOQUEO = 50;
 const ELU = [0, 300];
 for (let i = 2; i <= MAX_NIVEL; i++) {
   ELU[i] = Math.floor(ELU[i - 1] * (i <= 10 ? 1.5 : i <= 24 ? 1.3 : 1.2));
@@ -342,7 +344,7 @@ function cargarNpcsExtra(npcs) {
       heading: e.heading || 3, movement: e.movimiento || 1, attackable: false, respawn: true, hostile: false,
       comercia: !!e.items, tipoItems: e.tipoItems || 0, exp: 0, gld: 0, minHp: 1, maxHp: 1, minHit: 0, maxHit: 0,
       def: 0, defM: 0, ataque: 0, evasion: 0, veneno: false, aguaValida: false, tierraInvalida: false,
-      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [],
+      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [], misiones: !!e.misiones,
     };
   }
   return lista;
@@ -378,5 +380,5 @@ function loadAll() {
 module.exports = {
   loadAll, idx, XY, OBJ, CLASES, EVOLUCION, esClaseBase, claseConMana, RESTA, AUMENTO_HIT,
   MANA_POR_NIVEL, NOMBRE_DAT_CLASE, RAZAS, MOD_RAZA, APARIENCIA, ES_RAZA_BAJA, SKILLS, SK, ELU,
-  MAX_NIVEL, CUERPO_MUERTO, CABEZA_MUERTO, FX, TRIGGER, SND,
+  MAX_NIVEL, NIVEL_DESBLOQUEO, CUERPO_MUERTO, CABEZA_MUERTO, FX, TRIGGER, SND,
 };

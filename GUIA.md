@@ -213,3 +213,18 @@ La aplicación trae el servidor adentro: no hace falta instalar nada más ni abr
 Así juega solamente tu PC. Para que entren otros jugadores hace falta el servidor alquilado (punto 2).
 
 Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo y lo publica en esa misma página.
+
+---
+
+## 7. Misiones
+
+- Se piden en el **Maestro de Misiones** (tiene un **!** amarillo arriba), cerca del centro de
+  **Ullathorpe, Nix, Banderbill, Arghal y Lindos**. Doble clic sobre él.
+- Todas son de **matar bichos** y se cumplen solas al llegar al número: dan **oro, experiencia
+  y puntos de misión**.
+- Podés tener **3 misiones activas**. Al terminar una se libera el lugar.
+- **Diarias**: 3 por día según tu nivel, no ocupan lugar.
+- **De clan**: semanales, suman las muertes de todos los integrantes y premian a todos.
+- **Élite**: al llegar al **nivel 50** se desbloquean 10 niveles más (hasta el 60) y misiones de élite.
+- **Puntos de misión**: no se pierden al morir. Más adelante se van a poder canjear por objetos.
+- Las misiones están en `server/data/misiones.json` (se regenera con `python3 tools/misiones.py`).
