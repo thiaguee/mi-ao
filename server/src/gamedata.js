@@ -17,7 +17,7 @@ const OBJ = {
   MOCHILA: 37,
 };
 
-// ---- Árbol de clases de Fénix AO ----
+// ---- Árbol de clases de Norway AO ----
 const CLASES = {
   1: 'Ciudadano', 2: 'Trabajador', 3: 'Experto en minerales', 4: 'Minero', 8: 'Herrero',
   13: 'Experto en uso de madera', 14: 'Leñador', 18: 'Carpintero', 23: 'Pescador', 27: 'Sastre',

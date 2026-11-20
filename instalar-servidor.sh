@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================================================
-#  Instalador del SERVIDOR de Fénix AO para Ubuntu (22.04 o 24.04)
+#  Instalador del SERVIDOR de Norway AO para Ubuntu (22.04 o 24.04)
 #  Uso (como root, dentro de la carpeta del proyecto):
 #      sudo bash instalar-servidor.sh
 #  Deja el servidor andando las 24 hs (se reinicia solo si se cae
@@ -36,9 +36,9 @@ npm install
 bash crear-instalador.sh "ws://$IP:$PUERTO"
 
 echo "=== 5/5 Dejando el servidor encendido siempre ==="
-cat > /etc/systemd/system/fenixao.service <<EOF
+cat > /etc/systemd/system/norwayao.service <<EOF
 [Unit]
-Description=Servidor Fenix AO
+Description=Servidor Norway AO
 After=network.target
 
 [Service]
@@ -52,15 +52,15 @@ Environment=NODE_ENV=production
 WantedBy=multi-user.target
 EOF
 systemctl daemon-reload
-systemctl enable fenixao
-systemctl restart fenixao
+systemctl enable norwayao
+systemctl restart norwayao
 if command -v ufw >/dev/null && ufw status | grep -q "Status: active"; then ufw allow "$PUERTO/tcp"; fi
 
 sleep 2
-systemctl --no-pager status fenixao | head -5 || true
+systemctl --no-pager status norwayao | head -5 || true
 echo
 echo "=================================================================="
-echo " ¡LISTO! Tu servidor de Fénix AO está funcionando."
+echo " ¡LISTO! Tu servidor de Norway AO está funcionando."
 echo
 echo "  Descarga del juego (pasale este link a los jugadores):"
 echo "      http://$IP:$PUERTO/descargar"
@@ -71,7 +71,7 @@ echo "  IMPORTANTE: el PRIMER personaje que se cree será el ADMINISTRADOR."
 echo "  Crealo vos antes de pasarle el link a nadie."
 echo
 echo "  Comandos útiles en esta máquina:"
-echo "    systemctl restart fenixao    (reiniciar el servidor)"
-echo "    systemctl stop fenixao       (apagarlo)"
-echo "    journalctl -u fenixao -f     (ver lo que pasa en vivo)"
+echo "    systemctl restart norwayao    (reiniciar el servidor)"
+echo "    systemctl stop norwayao       (apagarlo)"
+echo "    journalctl -u norwayao -f     (ver lo que pasa en vivo)"
 echo "=================================================================="

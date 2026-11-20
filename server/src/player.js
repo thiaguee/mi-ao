@@ -50,7 +50,7 @@ P.createCharacter = function (sock, req) {
     attrs,
     skills: new Array(G.SKILLS.length).fill(0),
     stats: { lvl: 1, exp: 0, maxHp, hp: maxHp, maxMan: 0, man: 0, maxSta, sta: maxSta,
-      ham: 100, sed: 100, gld: 0, minHit: 1, maxHit: 2, skillPts: 10 },
+      ham: 100, sed: 100, gld: this.config.oroInicial || 0, minHit: 1, maxHit: 2, skillPts: 10 },
     inv: [], eq: { weapon: -1, armor: -1, shield: -1, helmet: -1, ammo: -1 },
     spells: [], bank: [], bankGld: 0,
     pos: { map: city.map, x: city.x, y: city.y },

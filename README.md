@@ -1,4 +1,4 @@
-# Fénix AO
+# Norway AO
 
 Servidor y cliente de un **Argentum Online estilo Fénix**, reescritos desde cero en
 JavaScript (Node.js en el servidor y HTML5 en el cliente), con instalador para Windows.

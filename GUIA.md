@@ -1,4 +1,4 @@
-# Fénix AO — Guía para el dueño del servidor
+# Norway AO — Guía para el dueño del servidor
 
 Esta guía explica, sin tecnicismos, cómo poner tu servidor en internet para que
 cualquiera pueda jugar, y cómo usar tus poderes de GM.
@@ -11,11 +11,11 @@ cualquiera pueda jugar, y cómo usar tus poderes de GM.
 |---|---|
 | `server/` | El **servidor**: el programa que queda prendido en internet y maneja el mundo. |
 | `client/` | El **juego** que ven los jugadores (gráficos, mapas, música, sonidos). |
-| `launcher/` | Lo que arma el **instalador para Windows** (`FenixAO-Instalador.exe`). |
+| `launcher/` | Lo que arma el **instalador para Windows** (`NorwayAO-Instalador.exe`). |
 | `instalar-servidor.sh` | Un script que instala todo en el servidor alquilado con un solo comando. |
 
 Las reglas del juego (clases que evolucionan, fórmulas de vida, golpe y maná,
-experiencia, etc.) están tomadas del código liberado de **Fénix AO**. El mundo,
+experiencia, etc.) están tomadas del código liberado de **Norway AO**. El mundo,
 los gráficos, los mapas y la música son los de **Argentum Online Libre**.
 Ambos tienen licencia libre (GPL/AGPL), así que podés usarlos.
 
@@ -51,11 +51,11 @@ Te va a pedir la contraseña. Al escribirla no se ve nada en pantalla, es normal
 Copiá y pegá estos comandos, uno por uno (cambiando la dirección por la de tu repositorio):
 
 ```
-git clone https://github.com/TU_USUARIO/TU_REPOSITORIO fenixao
+git clone https://github.com/TU_USUARIO/TU_REPOSITORIO norwayao
 ```
 
 ```
-cd fenixao
+cd norwayao
 ```
 
 ```
@@ -136,7 +136,7 @@ Con `/GMAYUDA` ves la lista completa adentro del juego.
 
 En el servidor podés editar este archivo con `nano server/config.json`
 (se guarda con Ctrl+O y Enter, y se sale con Ctrl+X). Después reiniciá con
-`systemctl restart fenixao`.
+`systemctl restart norwayao`.
 
 | Opción | Para qué sirve |
 |---|---|

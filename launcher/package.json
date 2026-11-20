@@ -1,19 +1,19 @@
 {
-  "name": "fenix-ao",
-  "productName": "Fenix AO",
+  "name": "norway-ao",
+  "productName": "Norway AO",
   "version": "1.0.0",
-  "description": "Fénix AO - cliente del juego",
+  "description": "Norway AO - cliente del juego",
   "main": "main.js",
   "private": true,
   "license": "AGPL-3.0",
-  "author": "Fenix AO",
+  "author": "Norway AO",
   "scripts": {
     "start": "electron .",
     "dist:win": "electron-builder --win nsis --x64"
   },
   "build": {
-    "appId": "ar.fenixao.cliente",
-    "productName": "Fenix AO",
+    "appId": "ar.norwayao.cliente",
+    "productName": "Norway AO",
     "directories": {
       "output": "dist"
     },
@@ -37,8 +37,8 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Fenix AO",
-      "artifactName": "FenixAO-Instalador.exe",
+      "shortcutName": "Norway AO",
+      "artifactName": "NorwayAO-Instalador.exe",
       "language": "3082"
     }
   },

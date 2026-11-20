@@ -1,5 +1,5 @@
 'use strict';
-// Punto de entrada del servidor de Fénix AO.
+// Punto de entrada del servidor de Norway AO.
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
@@ -15,15 +15,16 @@ const LOGS = path.join(ROOT, 'logs');
 fs.mkdirSync(LOGS, { recursive: true });
 
 const DEFAULT_CONFIG = {
-  nombreServidor: 'Fénix AO',
+  nombreServidor: 'Norway AO',
   puerto: 7666,
   maxJugadores: 300,
   primerPersonajeEsAdmin: true,
   gms: { admins: [], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
-  multiplicadorExp: 1,
-  multiplicadorOro: 1,
-  respawnSegundos: 60,
+  multiplicadorExp: 10, // experiencia x10: se sube rápido de nivel
+  multiplicadorOro: 10, // oro x10 de los monstruos
+  oroInicial: 1000, // oro con el que arranca cada personaje nuevo
+  respawnSegundos: 30,
   intervaloGolpe: 900,
   intervaloHechizo: 1000,
   intervaloCaminar: 170,
@@ -169,12 +170,12 @@ const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; cha
 const server = http.createServer((req, res) => {
   let url = decodeURIComponent((req.url || '/').split('?')[0]);
   if (url === '/') url = '/index.html';
-  if (url === '/descargar' || url === '/FenixAO-Instalador.exe') {
-    const exe = path.join(ROOT, '..', 'launcher', 'dist', 'FenixAO-Instalador.exe');
+  if (url === '/descargar' || url === '/NorwayAO-Instalador.exe') {
+    const exe = path.join(ROOT, '..', 'launcher', 'dist', 'NorwayAO-Instalador.exe');
     return fs.stat(exe, (err, st) => {
       if (err) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }); return res.end('El instalador todavía no fue creado.'); }
       res.writeHead(200, { 'Content-Type': 'application/octet-stream', 'Content-Length': st.size,
-        'Content-Disposition': 'attachment; filename="FenixAO-Instalador.exe"' });
+        'Content-Disposition': 'attachment; filename="NorwayAO-Instalador.exe"' });
       fs.createReadStream(exe).pipe(res);
     });
   }

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Crea el instalador de Windows con la dirección de TU servidor adentro.
 # Uso:  ./crear-instalador.sh ws://IP_DE_TU_SERVIDOR:7666
-# El instalador queda en launcher/dist/FenixAO-Instalador.exe
+# El instalador queda en launcher/dist/NorwayAO-Instalador.exe
 set -e
 cd "$(dirname "$0")"
 SERVIDOR="$1"
@@ -28,5 +28,5 @@ EOF
 echo ">> Creando el instalador..."
 [ -f icono.ico ] || python3 -c "from PIL import Image; Image.open('icono.png').save('icono.ico', sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])"
 makensis -V2 instalador.nsi
-ls -lh dist/FenixAO-Instalador.exe
-echo ">> Listo: dist/FenixAO-Instalador.exe"
+ls -lh dist/NorwayAO-Instalador.exe
+echo ">> Listo: dist/NorwayAO-Instalador.exe"

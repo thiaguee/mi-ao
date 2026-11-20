@@ -1,4 +1,4 @@
-// Lanzador de Windows para Fénix AO (Electron).
+// Lanzador de Windows para Norway AO (Electron).
 // Abre el cliente del juego (incluido en el instalador) en una ventana propia.
 const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
@@ -13,7 +13,7 @@ function createWindow() {
     height: 800,
     minWidth: 960,
     minHeight: 600,
-    title: 'Fénix AO',
+    title: 'Norway AO',
     icon: path.join(CLIENT, 'assets', 'ui', 'icono.png'),
     backgroundColor: '#0d0b08',
     autoHideMenuBar: true,

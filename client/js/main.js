@@ -1,4 +1,4 @@
-// Cliente de Fénix AO: pantallas, controles y comunicación con el servidor.
+// Cliente de Norway AO: pantallas, controles y comunicación con el servidor.
 import { A, loadIndexes, drawGrh, drawIcon } from './assets.js';
 import { loadMap, idx } from './mapdata.js';
 import * as Eng from './engine.js';

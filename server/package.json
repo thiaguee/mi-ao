@@ -1,7 +1,7 @@
 {
-  "name": "fenix-ao-server",
+  "name": "norway-ao-server",
   "version": "0.1.0",
-  "description": "Servidor de Fénix AO (reescritura en Node.js)",
+  "description": "Servidor de Norway AO (reescritura en Node.js)",
   "main": "src/main.js",
   "private": true,
   "license": "AGPL-3.0",
