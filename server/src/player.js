@@ -203,7 +203,7 @@ P.slotInfo = function (p, i) {
   const eq = Object.values(p.eq).includes(i);
   return { i, id: it.id, n: o.name, g: o.grh, a: it.amount, eq: eq ? 1 : 0, ty: o.type,
     mh: o.minHit, xh: o.maxHit, md: o.minDef, xd: o.maxDef, v: Math.floor(o.value / 3),
-    pr: o.proyectil ? 1 : 0 };
+    pr: o.proyectil ? 1 : 0, pt: o.pocion || 0 };
 };
 
 P.sendSlot = function (p, i) {

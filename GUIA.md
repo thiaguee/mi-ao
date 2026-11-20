@@ -141,8 +141,9 @@ En el servidor podés editar este archivo con `nano server/config.json`
 | Opción | Para qué sirve |
 |---|---|
 | `nombreServidor` | El nombre que aparece en el juego. |
-| `multiplicadorExp` | `2` = el doble de experiencia, `0.5` = la mitad. |
-| `multiplicadorOro` | Lo mismo, para el oro que tiran los monstruos. |
+| `multiplicadorExp` | Cuánto rinde la experiencia. Viene en `50` (50 veces más que el original). |
+| `multiplicadorOro` | Lo mismo para el oro que tiran los monstruos. Viene en `50`. |
+| `oroInicial` | Oro con el que arranca cada personaje nuevo (viene en `1000`). |
 | `respawnSegundos` | Cuánto tardan en reaparecer los monstruos. |
 | `chatGlobal` | `true` o `false` para permitir el comando `/GLOBAL`. |
 | `gms` | Lista de GMs por rango (también se maneja con `/DARGM`). |
@@ -155,17 +156,23 @@ registros (chat, comandos de GM, conexiones) en `server/logs/`.
 
 ## 5. Cómo se juega
 
-| Tecla o acción | Qué hace |
-|---|---|
-| Flechas | Caminar |
-| Ctrl | Atacar (con arco: Ctrl y después clic en el objetivo) |
-| A | Agarrar del piso |
-| M | Meditar |
-| U · E · T | Usar · Equipar · Tirar el objeto seleccionado |
-| Enter | Hablar |
-| Clic | Mirar |
-| Doble clic | Comerciar, banco, sacerdote, abrir puertas |
-| Hechizos | Pestaña Hechizos → elegir uno → Lanzar → clic en el objetivo |
+Hay dos modos de teclas. Se cambia con el botón **⌨** del panel derecho y viene en **Moderno**.
+
+| Acción | Moderno | Clásico |
+|---|---|---|
+| Caminar | WASD o flechas | Flechas |
+| Tomar poción de vida (roja) | **Espacio** | — |
+| Tomar poción de maná (azul) | Q | — |
+| Atacar | F o Ctrl | Ctrl |
+| Agarrar del piso | G | A |
+| Lanzar hechizo | 1 a 9 y clic en el objetivo | Pestaña Hechizos → Lanzar → clic |
+| Meditar | M | M |
+| Usar · Equipar · Tirar | U · E · T | U · E · T |
+| Hablar | Enter | Enter |
+| Mirar · Interactuar | Clic · Doble clic | Clic · Doble clic |
+
+Con doble clic comerciás con los vendedores, usás el banco, te revive el sacerdote y abrís puertas.
+Con arco: equipá el arco y las flechas, apretá F (o Ctrl) y hacé clic en el objetivo.
 
 ### Clases (como en Fénix)
 
@@ -188,8 +195,13 @@ Todos empiezan como **Ciudadano**:
 
 ---
 
-## 6. Si querés probarlo en tu PC (opcional)
+## 6. Probarlo en tu PC, sin servidor
 
-1. Instalá **Node.js** desde nodejs.org (versión LTS).
-2. Abrí una terminal en la carpeta `server` y ejecutá `npm install` y después `npm start`.
-3. Abrí el navegador en `http://localhost:7666`.
+1. En la página del repositorio en GitHub tocá **Code** y después **Download ZIP**.
+2. Descomprimí el ZIP (clic derecho → **Extraer todo**).
+3. Doble clic en **`JUGAR-EN-MI-PC.bat`**.
+   - La primera vez descarga solo lo que necesita (unos 30 MB) y tarda un par de minutos.
+   - Si Windows avisa "Windows protegió su PC": **Más información** → **Ejecutar de todas formas**.
+4. El juego se abre solo en el navegador. **No cierres la ventana negra** mientras jugás.
+
+Así juega solamente tu PC. Para que entren otros jugadores hace falta el servidor alquilado (punto 2).

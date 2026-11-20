@@ -6,3 +6,4 @@ server/logs/
 server/baneados.json
 server/config.json
 *.log
+motor/

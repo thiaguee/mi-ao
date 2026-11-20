@@ -21,8 +21,8 @@ const DEFAULT_CONFIG = {
   primerPersonajeEsAdmin: true,
   gms: { admins: [], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
-  multiplicadorExp: 10, // experiencia x10: se sube rápido de nivel
-  multiplicadorOro: 10, // oro x10 de los monstruos
+  multiplicadorExp: 50, // experiencia x50: se sube rápido de nivel
+  multiplicadorOro: 50, // oro x50 de los monstruos
   oroInicial: 1000, // oro con el que arranca cada personaje nuevo
   respawnSegundos: 30,
   intervaloGolpe: 900,

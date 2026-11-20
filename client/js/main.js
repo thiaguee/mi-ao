@@ -8,6 +8,10 @@ import * as Snd from './audio.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
+// Modo moderno: WASD para caminar (además de las flechas)
+const DIR_MODERNO = { KeyW: 1, KeyD: 2, KeyS: 3, KeyA: 4 };
+let MODO = localStorage.getItem('ao_teclas') || 'moderno';
+const dirOf = (code) => DIR[code] || (MODO === 'moderno' ? DIR_MODERNO[code] : 0);
 const DXY = { 1: [0, -1], 2: [1, 0], 3: [0, 1], 4: [-1, 0] };
 
 const S = {
@@ -488,10 +492,11 @@ function openClassUp(m) {
 
 function openHelp() {
   openModal('Ayuda', `<div style="max-width:520px;line-height:1.6">
-    <b>Controles</b><br>
-    Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>
-    U: usar objeto · E: equipar · T: tirar · Enter: hablar · Esc: cancelar<br>
-    Clic: mirar · Doble clic: comerciar / banco / sacerdote / abrir puertas<br>
+    <b>Controles — modo ${MODO === 'moderno' ? 'MODERNO' : 'CLÁSICO'}</b> (cambialo con el botón ⌨)<br>
+    ${MODO === 'moderno'
+    ? 'WASD o flechas: caminar · <b>Espacio: poción de vida</b> · Q: poción de maná · F o Ctrl: atacar<br>G: agarrar · M: meditar · 1 a 9: lanzar hechizo · U usar · E equipar · T tirar<br>'
+    : 'Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>U: usar objeto · E: equipar · T: tirar<br>'}
+    Enter: hablar · Esc: cancelar · Clic: mirar · Doble clic: comerciar / banco / sacerdote / puertas<br>
     Hechizos: elegí uno en la pestaña Hechizos, tocá "Lanzar" y hacé clic en el objetivo.<br>
     Arcos: equipá el arco y las flechas, presioná Ctrl y hacé clic en el objetivo.<br><br>
     <b>Comandos útiles</b><br>
@@ -514,35 +519,76 @@ chat.addEventListener('keydown', (e) => {
   e.stopPropagation();
 });
 
+// Toma la primera poción de un tipo (3 = vida/roja, 4 = maná/azul)
+function potear(tipo) {
+  const it = S.inv.find((x) => x && x.ty === 11 && x.pt === tipo);
+  if (it) send({ t: 'use', i: it.i });
+  else log(tipo === 3 ? 'No tenés pociones de vida.' : 'No tenés pociones de maná.', 'warn');
+}
+function atacar() {
+  const it = S.inv.find((x) => x && x.eq && x.ty === 2);
+  if (it && it.pr) { setTarget('shoot'); log('Hacé clic sobre el objetivo.', 'info'); }
+  else send({ t: 'attack' });
+}
+function hechizoRapido(n) {
+  const sp = S.spells[n];
+  if (!sp || !sp.id) return log(`No tenés un hechizo en el lugar ${n + 1}.`, 'warn');
+  S.selSpell = n; renderSpells(); startCast();
+}
+
 window.addEventListener('keydown', (e) => {
   if (!S.inGame) return;
   if (document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
   if (S.modal && e.key === 'Escape') { closeModal(); return; }
   if (S.modal && S.modal !== 'trade' && S.modal !== 'bank') return;
-  if (DIR[e.key]) { S.keys.add(e.key); S.lastKey = e.key; e.preventDefault(); return; }
-  switch (e.key) {
-    case 'Enter': chat.focus(); e.preventDefault(); break;
-    case 'Control': {
-      const it = S.inv.find((x) => x && x.eq && x.ty === 2);
-      if (it && it.pr) { setTarget('shoot'); log('Hacé clic sobre el objetivo.', 'info'); }
-      else send({ t: 'attack' });
-      break;
+  const code = e.code;
+  if (dirOf(code)) { S.keys.add(code); S.lastKey = code; e.preventDefault(); return; }
+  if (e.key === 'Enter') { chat.focus(); e.preventDefault(); return; }
+  if (e.key === 'Escape') { setTarget(null); return; }
+  if (e.key === 'F1') { openHelp(); e.preventDefault(); return; }
+  if (e.key === 'Control') { atacar(); return; }
+  if (e.repeat && !['Space', 'KeyQ'].includes(code)) return;
+  if (MODO === 'moderno') {
+    switch (code) {
+      case 'Space': potear(3); e.preventDefault(); return;
+      case 'KeyQ': potear(4); return;
+      case 'KeyF': atacar(); return;
+      case 'KeyG': send({ t: 'pick' }); return;
+      case 'KeyM': send({ t: 'meditate' }); return;
+      case 'KeyE': equipSelected(); return;
+      case 'KeyU': useSelected(); return;
+      case 'KeyT': dropSelected(); return;
+      case 'KeyN': E.showNames = !E.showNames; return;
+      default:
+        if (/^Digit[1-9]$/.test(code)) hechizoRapido(+code.slice(5) - 1);
     }
-    case 'Escape': setTarget(null); break;
-    default: {
-      const k = e.key.toLowerCase();
-      if (k === 'a') send({ t: 'pick' });
-      else if (k === 'm') send({ t: 'meditate' });
-      else if (k === 'u') useSelected();
-      else if (k === 'e') equipSelected();
-      else if (k === 't') dropSelected();
-      else if (k === 'n') E.showNames = !E.showNames;
-      else if (k === 'f1') { openHelp(); e.preventDefault(); }
+  } else {
+    switch (code) {
+      case 'KeyA': send({ t: 'pick' }); return;
+      case 'KeyM': send({ t: 'meditate' }); return;
+      case 'KeyU': useSelected(); return;
+      case 'KeyE': equipSelected(); return;
+      case 'KeyT': dropSelected(); return;
+      case 'KeyN': E.showNames = !E.showNames; return;
+      default:
     }
   }
 });
-window.addEventListener('keyup', (e) => { S.keys.delete(e.key); });
+window.addEventListener('keyup', (e) => { S.keys.delete(e.code); });
 window.addEventListener('blur', () => S.keys.clear());
+
+function setModo(m) {
+  MODO = m;
+  localStorage.setItem('ao_teclas', m);
+  $('b-keys').textContent = m === 'moderno' ? '⌨ Moderno' : '⌨ Clásico';
+}
+$('b-keys').onclick = () => {
+  setModo(MODO === 'moderno' ? 'clasico' : 'moderno');
+  log(MODO === 'moderno'
+    ? 'Modo MODERNO: WASD caminar · Espacio poción de vida · Q poción de maná · F o Ctrl atacar · G agarrar · 1-9 hechizos'
+    : 'Modo CLÁSICO: flechas caminar · Ctrl atacar · A agarrar · M meditar · U usar · E equipar · T tirar', 'server');
+};
+setModo(MODO);
 
 function tryWalk(now) {
   if (!S.keys.size || S.loadingMap || S.modal === 'ask') return;
@@ -550,7 +596,7 @@ function tryWalk(now) {
   if (!me || !E.map) return;
   if (now - S.lastStep < WALK_MS) return;
   const key = S.keys.has(S.lastKey) ? S.lastKey : [...S.keys][0];
-  const d = DIR[key];
+  const d = dirOf(key);
   if (!d) return;
   S.lastStep = now;
   if (S.paralyzed && !S.gm) { if (me.h !== d) { me.h = d; send({ t: 'turn', d }); } return; }
