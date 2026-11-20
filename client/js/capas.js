@@ -77,56 +77,140 @@ export function dibujarEmblema(ctx, tipo, cx, cy, s, color) {
 }
 
 // ---------- capa ----------
-// fase 'atras': se dibuja antes que el cuerpo (de frente y de costado se ve detrás del personaje)
-// fase 'adelante': después del cuerpo y antes de la cabeza (de espaldas tapa la espalda y muestra el emblema)
+// fase 'atras': antes del cuerpo (de frente y de costado la capa cae detrás del personaje)
+// fase 'adelante': después del cuerpo y antes de la cabeza (de espaldas tapa la espalda y muestra
+// el emblema; de frente sólo se dibuja el broche en el pecho)
 export function dibujarCapa(ctx, cap, px, py, h, fase, now, caminando) {
   if (!cap) return;
-  const espaldas = h === 1;
-  if ((fase === 'adelante') !== espaldas) return;
   const cx = px + 16;
-  const top = py - 8, bot = py + 26;
-  const ondeo = caminando ? Math.sin(now / 90) * 1.6 : Math.sin(now / 700) * 0.6;
+  const top = py - 7, bot = py + 27;
+  const ondeo = caminando ? Math.sin(now / 95) * 1.3 : Math.sin(now / 900) * 0.35;
+  const ondeo2 = caminando ? Math.sin(now / 95 + 1.7) * 1.1 : 0;
   ctx.save();
-  ctx.beginPath();
-  if (h === 1 || h === 3) {
-    const tw = espaldas ? 7 : 9, bw = espaldas ? 11 : 13;
-    ctx.moveTo(cx - tw, top);
-    ctx.lineTo(cx + tw, top);
-    ctx.quadraticCurveTo(cx + bw + 1, (top + bot) / 2, cx + bw + ondeo, bot);
-    // ruedo ondulado
-    ctx.quadraticCurveTo(cx + bw / 2, bot + 2 - ondeo, cx, bot);
-    ctx.quadraticCurveTo(cx - bw / 2, bot - 2 + ondeo, cx - bw - ondeo, bot);
-    ctx.quadraticCurveTo(cx - bw - 1, (top + bot) / 2, cx - tw, top);
-  } else {
-    // de costado: la capa cae hacia atrás
-    const dir = h === 2 ? -1 : 1; // mirando al este, la capa queda hacia el oeste
-    const atras = 9 + (caminando ? 4 + ondeo : 1);
-    ctx.moveTo(cx - 4 * dir, top);
-    ctx.lineTo(cx + 3 * dir, top + 1);
-    ctx.quadraticCurveTo(cx + 2 * dir, (top + bot) / 2, cx + 1 * dir, bot - 1);
-    ctx.quadraticCurveTo(cx + atras * dir * 0.5 * -1, bot + 2, cx + atras * -dir, bot - 3 + ondeo);
-    ctx.quadraticCurveTo(cx - atras * dir * 0.8, (top + bot) / 2, cx - 4 * dir, top);
-  }
-  ctx.closePath();
-  const grad = ctx.createLinearGradient(cx, top, cx, bot);
-  grad.addColorStop(0, sombra(cap.c, espaldas ? 1.15 : 0.75));
-  grad.addColorStop(1, sombra(cap.c, espaldas ? 0.8 : 0.5));
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = cap.b;
-  ctx.stroke();
-  if (espaldas) {
-    // broche en los hombros y emblema en la espalda
-    ctx.fillStyle = cap.b;
-    ctx.fillRect(cx - 8, top - 1, 16, 2);
-    dibujarEmblema(ctx, cap.e, cx, top + (bot - top) * 0.45, 11, cap.ce);
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  if (h === 1) {
+    if (fase !== 'adelante') { ctx.restore(); return; }
+    capaEspalda(ctx, cap, cx, top, bot, ondeo, ondeo2);
   } else if (h === 3) {
-    // de frente: el cuello de la capa sobre los hombros
-    ctx.fillStyle = cap.b;
-    ctx.fillRect(cx - 9, top, 3, 3); ctx.fillRect(cx + 6, top, 3, 3);
+    if (fase === 'atras') capaFrenteAtras(ctx, cap, cx, top, bot, ondeo, ondeo2);
+    else broche(ctx, cap, cx, top);
+  } else if (fase === 'atras') {
+    capaCostado(ctx, cap, cx, top, bot, h === 2 ? -1 : 1, caminando, ondeo);
   }
   ctx.restore();
+}
+
+// tela con volumen: más oscura en los costados y más clara en el centro
+function tela(ctx, cap, x0, x1, top, bot, luz) {
+  const g = ctx.createLinearGradient(x0, 0, x1, 0);
+  g.addColorStop(0, sombra(cap.c, 0.5 * luz));
+  g.addColorStop(0.3, sombra(cap.c, 0.95 * luz));
+  g.addColorStop(0.5, sombra(cap.c, 1.12 * luz));
+  g.addColorStop(0.7, sombra(cap.c, 0.95 * luz));
+  g.addColorStop(1, sombra(cap.c, 0.5 * luz));
+  ctx.fillStyle = g;
+  ctx.fill();
+  // un poco más oscura abajo
+  const v = ctx.createLinearGradient(0, top, 0, bot);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.22)');
+  ctx.fillStyle = v; ctx.fill();
+}
+
+// ribete: contorno oscuro finito por fuera y el borde del color elegido por dentro
+function ribete(ctx, cap) {
+  ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = 1.4; ctx.stroke();
+  ctx.strokeStyle = cap.b; ctx.lineWidth = 0.7; ctx.stroke();
+}
+
+function pliegue(ctx, x0, y0, cx1, cy1, x1, y1, oscuro) {
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo(cx1, cy1, x1, y1);
+  ctx.strokeStyle = oscuro ? 'rgba(0,0,0,0.28)' : 'rgba(255,255,255,0.10)';
+  ctx.lineWidth = 0.6; ctx.stroke();
+}
+
+function capaEspalda(ctx, cap, cx, top, bot, o, o2) {
+  const path = () => {
+    ctx.beginPath();
+    ctx.moveTo(cx - 6, top + 0.5);
+    ctx.quadraticCurveTo(cx, top - 1.2, cx + 6, top + 0.5); // cuello
+    ctx.bezierCurveTo(cx + 9, top + 3, cx + 9.5, top + 14, cx + 10.5 + o, bot - 1); // costado derecho
+    ctx.quadraticCurveTo(cx + 7.5, bot + 0.5 + o2 * 0.5, cx + 5, bot - 1.2); // ruedo en puntas suaves
+    ctx.quadraticCurveTo(cx + 2.5, bot + 1.2, cx, bot - 0.6);
+    ctx.quadraticCurveTo(cx - 2.5, bot + 1.2, cx - 5, bot - 1.2);
+    ctx.quadraticCurveTo(cx - 7.5, bot + 0.5 - o2 * 0.5, cx - 10.5 - o, bot - 1);
+    ctx.bezierCurveTo(cx - 9.5, top + 14, cx - 9, top + 3, cx - 6, top + 0.5);
+    ctx.closePath();
+  };
+  path(); tela(ctx, cap, cx - 10.5, cx + 10.5, top, bot, 1);
+  // pliegues de la tela
+  ctx.save(); path(); ctx.clip();
+  pliegue(ctx, cx - 3.5, top + 4, cx - 5 - o * 0.4, top + 18, cx - 6.5 - o, bot, true);
+  pliegue(ctx, cx + 3.5, top + 4, cx + 5 + o * 0.4, top + 18, cx + 6.5 + o, bot, true);
+  pliegue(ctx, cx - 1, top + 6, cx - 1.5, top + 20, cx - 2, bot, false);
+  pliegue(ctx, cx - 7, top + 8, cx - 8.5, top + 20, cx - 9.5 - o, bot - 1, false);
+  ctx.restore();
+  path(); ribete(ctx, cap);
+  // cuello (manto corto sobre los hombros)
+  ctx.beginPath();
+  ctx.moveTo(cx - 6.5, top + 0.5);
+  ctx.quadraticCurveTo(cx, top - 1.4, cx + 6.5, top + 0.5);
+  ctx.quadraticCurveTo(cx + 5.5, top + 3.6, cx, top + 3.2);
+  ctx.quadraticCurveTo(cx - 5.5, top + 3.6, cx - 6.5, top + 0.5);
+  ctx.closePath();
+  ctx.fillStyle = cap.b; ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.45)'; ctx.lineWidth = 0.6; ctx.stroke();
+  // emblema con una sombra suave
+  const ey = top + (bot - top) * 0.4;
+  dibujarEmblema(ctx, cap.e, cx + 0.4, ey + 0.5, 8.5, 'rgba(0,0,0,0.45)');
+  dibujarEmblema(ctx, cap.e, cx, ey, 8.5, cap.ce);
+}
+
+function capaFrenteAtras(ctx, cap, cx, top, bot, o, o2) {
+  // de frente sólo asoman los bordes de la capa a los costados y abajo (se ve el forro, más oscuro)
+  ctx.beginPath();
+  ctx.moveTo(cx - 7, top + 1.5);
+  ctx.bezierCurveTo(cx - 10, top + 5, cx - 10.5, top + 15, cx - 11 - o, bot - 1);
+  ctx.quadraticCurveTo(cx - 6, bot + 0.8 + o2 * 0.4, cx, bot);
+  ctx.quadraticCurveTo(cx + 6, bot + 0.8 - o2 * 0.4, cx + 11 + o, bot - 1);
+  ctx.bezierCurveTo(cx + 10.5, top + 15, cx + 10, top + 5, cx + 7, top + 1.5);
+  ctx.closePath();
+  tela(ctx, cap, cx - 11, cx + 11, top, bot, 0.62);
+  ribete(ctx, cap);
+}
+
+function broche(ctx, cap, cx, top) {
+  // cadenita y dos broches sobre los hombros
+  ctx.beginPath();
+  ctx.moveTo(cx - 5, top + 2.2);
+  ctx.quadraticCurveTo(cx, top + 4.5, cx + 5, top + 2.2);
+  ctx.strokeStyle = cap.b; ctx.lineWidth = 0.6; ctx.stroke();
+  for (const dx of [-5, 5]) {
+    ctx.beginPath(); ctx.arc(cx + dx, top + 2.2, 1.25, 0, Math.PI * 2);
+    ctx.fillStyle = cap.b; ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 0.4; ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx + dx, top + 2.2, 0.55, 0, Math.PI * 2);
+    ctx.fillStyle = cap.ce; ctx.fill();
+  }
+}
+
+function capaCostado(ctx, cap, cx, top, bot, dir, caminando, o) {
+  // dir: hacia dónde queda la espalda (-1 = izquierda)
+  const vuelo = caminando ? 3.5 + o : 0.5;
+  const path = () => {
+    ctx.beginPath();
+    ctx.moveTo(cx + 1.5 * -dir, top + 0.5);
+    ctx.quadraticCurveTo(cx + 5 * dir, top + 1, cx + 6.5 * dir, top + 6);
+    ctx.bezierCurveTo(cx + 8 * dir, top + 15, cx + (9 + vuelo) * dir, bot - 6, cx + (10 + vuelo) * dir, bot - 1.5);
+    ctx.quadraticCurveTo(cx + (5 + vuelo / 2) * dir, bot + 1, cx + 1 * dir, bot - 0.5);
+    ctx.bezierCurveTo(cx + 2.5 * dir, top + 18, cx + 1.5 * dir, top + 8, cx + 1.5 * -dir, top + 0.5);
+    ctx.closePath();
+  };
+  path();
+  tela(ctx, cap, cx + dir * 1, cx + dir * (10 + vuelo), top, bot, 0.85);
+  ctx.save(); path(); ctx.clip();
+  pliegue(ctx, cx + 4 * dir, top + 5, cx + 5.5 * dir, top + 17, cx + (6.5 + vuelo * 0.6) * dir, bot, true);
+  ctx.restore();
+  path(); ribete(ctx, cap);
 }
 
 // ---------- aura del líder ----------
