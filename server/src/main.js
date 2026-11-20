@@ -49,7 +49,14 @@ const DEFAULT_CONFIG = {
   // Solo poner en true si el servidor está detrás de un proxy propio (nginx, Cloudflare)
   // que agrega la IP real del jugador. Si no, cualquiera podría inventarse una IP.
   proxyConfiable: false,
+  // SOLO PARA PROBAR: crea tsk, heaveN y peladoh con la contraseña 123 si no existen.
+  // ANTES DE ABRIR EL SERVIDOR AL PÚBLICO hay que ponerlo en false y cambiar las contraseñas
+  // con tools/clave-admin.js (ver GUIA.md).
+  adminsDePrueba: true,
 };
+
+// Contraseña de los admins en modo de prueba (adminsDePrueba)
+const CLAVE_DE_PRUEBA = '123';
 
 function loadConfig() {
   let cfg = {};
@@ -85,6 +92,16 @@ world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
 world.modoLocal = !!process.parentPort;
+
+// Modo de prueba: los admins reservados se crean solos con la contraseña 123
+if (config.adminsDePrueba) {
+  for (const n of NOMBRES_RESERVADOS) {
+    if (accounts.exists(n)) continue;
+    accounts.save(world.armarPersonaje(n, CLAVE_DE_PRUEBA, 1, 'h', 0, [18, 18, 18, 18, 18]));
+    console.log('Admin de prueba creado: ' + n);
+  }
+  console.log('ATENCIÓN: adminsDePrueba está activado (tsk, heaveN y peladoh con contraseña 123). Desactivarlo antes de abrir el servidor al público.');
+}
 world.cargarClanes();
 
 // ---------- logs, bans y guardado ----------

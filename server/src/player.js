@@ -36,13 +36,21 @@ P.createCharacter = function (sock, req) {
   if (this.config.nombresProhibidos.some((n) => name.toLowerCase().includes(n))) {
     return { error: 'Ese nombre no está permitido.' };
   }
+  const rec = this.armarPersonaje(name, pass, raza, genero, +req.head, sock._dice || P.rollDice());
+  accounts.save(rec);
+  this.log('Personaje creado: ' + name);
+  if (reservado) accounts.borrarReserva(name);
+  return this.login(sock, { name, pass });
+};
+
+// Arma el registro de un personaje nuevo (nivel 1, equipo newbie, en Ullathorpe) sin guardarlo
+P.armarPersonaje = function (name, pass, raza, genero, headPedida, dice) {
   const ap = G.APARIENCIA[raza][genero];
-  let head = +req.head;
+  let head = headPedida;
   if (!(head >= ap.heads[0] && head <= ap.heads[1])) head = ap.heads[0];
 
   // Atributos: 3d6 al estilo AO (mínimo 10) + modificador de raza, como en Fénix
   const mod = G.MOD_RAZA[raza];
-  const dice = sock._dice || P.rollDice();
   const attrs = dice.map((base, i) => Math.max(6, Math.min(23, base + mod[i])));
   const [fu, ag, int, ca, co] = attrs;
   const maxHp = 15 + rnd(1, Math.floor(co / 3));
@@ -68,10 +76,7 @@ P.createCharacter = function (sock, req) {
   items.forEach(([id, amount], i) => { rec.inv[i] = { id, amount }; });
   rec.eq.weapon = 0;
   rec.eq.armor = 5;
-  accounts.save(rec);
-  this.log('Personaje creado: ' + name);
-  if (reservado) accounts.borrarReserva(name);
-  return this.login(sock, { name, pass });
+  return rec;
 };
 
 // ---------- ingreso ----------

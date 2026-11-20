@@ -69,6 +69,11 @@ Tarda unos 10 minutos. Al terminar te muestra dos links:
 
 ### Paso 4: crear los personajes administradores
 
+> **Mientras estemos probando:** con `adminsDePrueba: true` en `server/config.json` (viene así),
+> el servidor crea solo **tsk**, **heaveN** y **peladoh** con la contraseña **123**.
+> **Antes de abrir el servidor al público** hay que ponerlo en `false` y cambiar las tres
+> contraseñas con el comando de abajo.
+
 Los nombres **tsk**, **heaveN** y **peladoh** están **reservados** para los dueños y son
 **ADMINISTRADORES**. Nadie puede crearlos desde el juego hasta que cada uno les ponga
 contraseña en el servidor. Cada dueño, conectado al servidor como en el paso 2, escribe
