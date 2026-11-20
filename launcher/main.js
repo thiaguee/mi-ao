@@ -77,7 +77,10 @@ function createWindow() {
     },
   });
   Menu.setApplicationMenu(null);
-  win.loadFile(path.join(CLIENT, 'index.html'));
+  // Le pasamos al juego la versión y el estado de la placa de video (para el diagnóstico F3)
+  let gpu = '';
+  try { const g = app.getGPUFeatureStatus(); gpu = `${g['2d_canvas']}/${g.gpu_compositing}`; } catch (e) { /* nada */ }
+  win.loadFile(path.join(CLIENT, 'index.html'), { query: { v: app.getVersion(), gpu } });
   // Los links externos se abren en el navegador
   win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: 'deny' }; });
   // F11 = pantalla completa, Ctrl+F12 = herramientas (para soporte)

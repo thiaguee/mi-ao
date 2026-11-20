@@ -18,7 +18,7 @@ fs.mkdirSync(LOGS, { recursive: true });
 
 // Administradores fijos: siempre tienen todos los poderes
 const ADMINS_FIJOS = ['Thiago', 'Lautaro'];
-const VERSION_CONFIG = 3;
+const VERSION_CONFIG = 4;
 
 const DEFAULT_CONFIG = {
   versionConfig: VERSION_CONFIG,
@@ -34,7 +34,7 @@ const DEFAULT_CONFIG = {
   respawnSegundos: 30,
   intervaloGolpe: 900,
   intervaloHechizo: 1000,
-  intervaloCaminar: 170,
+  intervaloCaminar: 150,
   chatGlobal: true,
   guardadoMinutos: 5,
   carcel: { map: 66, x: 75, y: 47 },
@@ -46,7 +46,7 @@ function loadConfig() {
   if (fs.existsSync(CONFIG_PATH)) cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
   // Si el archivo es de una versión vieja, se actualizan los valores de experiencia y oro
   if ((cfg.versionConfig || 0) < VERSION_CONFIG) {
-    for (const k of ['multiplicadorExp', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin']) delete cfg[k];
+    for (const k of ['multiplicadorExp', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin', 'intervaloCaminar']) delete cfg[k];
     cfg.versionConfig = VERSION_CONFIG;
   }
   cfg = Object.assign({}, DEFAULT_CONFIG, cfg);

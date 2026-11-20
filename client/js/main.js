@@ -2,7 +2,7 @@
 import { A, loadIndexes, drawGrh, drawIcon } from './assets.js';
 import { loadMap, idx } from './mapdata.js';
 import * as Eng from './engine.js';
-import { E, WALK_MS } from './engine.js';
+import { E, walkMs } from './engine.js';
 import { connect, send, on, N, serverUrl } from './net.js';
 import * as Snd from './audio.js';
 
@@ -616,6 +616,7 @@ function tryWalk(now) {
   if (!S.keys.size || S.loadingMap || S.modal === 'ask') return;
   const me = E.chars.get(S.me);
   if (!me || !E.map) return;
+  const WALK_MS = walkMs();
   if (now - S.lastStep < WALK_MS) return;
   const key = S.keys.has(S.lastKey) ? S.lastKey : [...S.keys][0];
   const d = dirOf(key);
@@ -665,14 +666,85 @@ view.addEventListener('contextmenu', (e) => {
 });
 
 // ================== BUCLE PRINCIPAL ==================
+// ---- Reloj parejo ----
+// En Windows el momento en que llega cada cuadro varía unos milisegundos (14, 19, 15, 18 ms...).
+// Si el movimiento usara ese tiempo exacto, cada variación sería un saltito de la cámara.
+// Por eso el juego avanza siempre lo mismo por cuadro (la duración típica de un cuadro de tu
+// monitor) y sólo se corrige de a poco si se atrasa o adelanta de verdad.
+const CLK = { last: 0, dts: [], frame: 1000 / 60, t: 0 };
+const DIAG = { on: false, frames: [], start: 0 };
+function tick(now) {
+  if (!CLK.last) { CLK.last = now; CLK.t = now; return now; }
+  const real = now - CLK.last;
+  CLK.last = now;
+  if (real > 0 && real < 100) {
+    CLK.dts.push(real);
+    if (CLK.dts.length > 60) CLK.dts.shift();
+    if (CLK.dts.length >= 10 && CLK.dts.length % 10 === 0) {
+      const sorted = [...CLK.dts].sort((a, b) => a - b);
+      // se redondea a monitores comunes (60, 75, 120, 144, 165 Hz...) para que sea estable
+      const hz = 1000 / sorted[Math.floor(sorted.length / 2)];
+      const comunes = [50, 60, 75, 90, 100, 120, 144, 165, 240];
+      const near = comunes.reduce((a, b) => (Math.abs(b - hz) < Math.abs(a - hz) ? b : a));
+      CLK.frame = 1000 / (Math.abs(near - hz) < 4 ? near : hz);
+      Eng.ajustarCaminata(CLK.frame);
+    }
+  }
+  // si se perdió algún cuadro de verdad (la PC se trabó), avanzamos lo que corresponde
+  const step = real > CLK.frame * 1.6 ? Math.min(real, 100) : CLK.frame;
+  CLK.t += step;
+  // corrección suave para no desfasarse del tiempo real
+  const drift = now - CLK.t;
+  if (Math.abs(drift) > 250) CLK.t = now;
+  else if (Math.abs(drift) > CLK.frame) CLK.t += drift * 0.05; // sólo si se desfasó más de un cuadro
+  if (DIAG.on) DIAG.frames.push(real);
+  return CLK.t;
+}
+
+let fpsShown = 0;
 function loop(now) {
+  const t = tick(now);
+  E.time = t;
   if (S.inGame) {
-    tryWalk(now);
-    Eng.render(now);
-    $('fps').textContent = `${E.fps} fps${S.ping !== undefined ? ` · ${S.ping} ms` : ''}`;
+    tryWalk(t);
+    Eng.render(t);
+    // el texto de fps se actualiza una vez por segundo (tocar la página en cada cuadro también traba)
+    if (now - fpsShown > 1000) {
+      fpsShown = now;
+      $('fps').textContent = `${E.fps} fps${S.ping !== undefined ? ` · ${S.ping} ms` : ''}`;
+      if (DIAG.on) renderDiag(now);
+    }
   }
   requestAnimationFrame(loop);
 }
+
+// ---- Diagnóstico (tecla F3): para saber qué pasa en una PC que no puedo ver ----
+const QS = new URLSearchParams(location.search);
+function renderDiag(now) {
+  const f = DIAG.frames.slice(-300);
+  if (!f.length) return;
+  const avg = f.reduce((a, b) => a + b, 0) / f.length;
+  const sorted = [...f].sort((a, b) => a - b);
+  const p95 = sorted[Math.floor(f.length * 0.95)], max = sorted[f.length - 1];
+  const tirones = f.filter((x) => x > CLK.frame * 1.6).length;
+  const varia = Math.sqrt(f.reduce((a, b) => a + (b - avg) ** 2, 0) / f.length);
+  $('diag').innerHTML = `<b>DIAGNÓSTICO (F3)</b><br>Versión: ${esc(QS.get('v') || 'web')}<br>
+    Cuadro promedio: ${avg.toFixed(1)} ms (${(1000 / avg).toFixed(0)} fps)<br>
+    Monitor detectado: ${(1000 / CLK.frame).toFixed(0)} Hz<br>
+    Variación entre cuadros: ${varia.toFixed(1)} ms<br>
+    Cuadro más lento: ${max.toFixed(0)} ms · 95%: ${p95.toFixed(1)} ms<br>
+    Cuadros perdidos (últimos 5 s): ${tirones}<br>
+    Pantalla: ${E.canvas.width}x${E.canvas.height} · zoom ${E.zoom} · escala ${window.devicePixelRatio}<br>
+    Placa de video: ${esc(QS.get('gpu') || 'desconocido')}<br>
+    Modo de dibujo: ${E.lowRes ? 'liviano' : 'normal'}`;
+}
+window.addEventListener('keydown', (e) => {
+  if (e.key !== 'F3') return;
+  e.preventDefault();
+  DIAG.on = !DIAG.on; DIAG.frames = [];
+  $('diag').classList.toggle('hidden', !DIAG.on);
+  if (DIAG.on) $('diag').textContent = 'Midiendo... caminá unos segundos.';
+});
 setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
 
 // ================== INICIO ==================
@@ -686,6 +758,7 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
     return;
   }
   $('l-name').value = localStorage.getItem('ao_ultimo') || '';
+  if (QS.get('v')) $('app-ver').textContent = 'Norway AO v' + QS.get('v');
   // El botón de descarga sólo tiene sentido cuando se juega desde el navegador
   if (location.protocol === 'file:') $('b-download').classList.add('hidden');
   statusLine();

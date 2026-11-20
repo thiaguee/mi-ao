@@ -3,12 +3,25 @@ import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap } fro
 import { idx } from './mapdata.js';
 
 export const TILE = 32;
-export const WALK_MS = 200;
+export const WALK_MS = 200; // velocidad nominal: un paso cada 200 ms
+// Duración real de un paso: se ajusta al monitor para que la cámara avance la MISMA cantidad de
+// píxeles de pantalla en todos los cuadros (ver ajustarCaminata).
+export const walkMs = () => E.walkMs || WALK_MS;
+export function ajustarCaminata(frameMs) {
+  const dev = 32 * (E.zoom || 1); // píxeles de pantalla por baldosa
+  const k = Math.max(1, Math.round(dev * frameMs / WALK_MS)); // píxeles por cuadro
+  E.walkMs = (dev / k) * frameMs;
+  E.frameMs = frameMs;
+}
 // Velocidad de la animación de las piernas: igual que el AO original (Movement_Speed = 0.5)
 const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
 const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#ff8c1a', npc: '#d8d8d8', npc_h: '#ffb0b0' };
 const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
+
+// Reloj del juego: avanza de a cuadros parejos (ver tick en main.js). Todo lo que se mueve usa
+// este reloj, así las pequeñas variaciones del reloj de Windows no se ven como tirones.
+export const clock = () => (E.time || performance.now());
 
 export const E = {
   canvas: null, ctx: null,
@@ -42,6 +55,24 @@ export function resize() {
   // Zoom entero (1x, 2x, 3x) para que los píxeles queden nítidos y parejos
   const zoom = Math.max(1, Math.round(Math.min(devW / (32 * 22), devH / (32 * 15))));
   E.zoom = zoom;
+  // Si la PC no tiene aceleración de video para el juego, usamos un modo más liviano:
+  // se dibuja en baja resolución y la pantalla lo agranda.
+  const gpu = new URLSearchParams(location.search).get('gpu') || '';
+  E.lowRes = /software|disabled|unavailable/.test(gpu);
+  if (E.lowRes) {
+    E.canvas.width = Math.floor(devW / zoom);
+    E.canvas.height = Math.floor(devH / zoom);
+    E.canvas.style.width = (E.canvas.width * zoom / dpr) + 'px';
+    E.canvas.style.height = (E.canvas.height * zoom / dpr) + 'px';
+    E.viewW = E.canvas.width; E.viewH = E.canvas.height;
+    E.zoomDraw = 1;
+    E.ctx.imageSmoothingEnabled = false;
+    setSnap(1);
+    if (E.frameMs) ajustarCaminata(E.frameMs);
+    return;
+  }
+  E.zoomDraw = zoom;
+  if (E.frameMs) ajustarCaminata(E.frameMs);
   // El canvas tiene la resolución REAL de la pantalla: así la cámara puede moverse de a 1 píxel
   // de pantalla (con zoom 2, antes avanzaba de a 4 o 6 píxeles y se veía a tirones)
   E.canvas.width = devW;
@@ -153,7 +184,7 @@ export function addChar(c) {
 export function moveChar(id, x, y, h, start) {
   const c = E.chars.get(id);
   if (!c) return;
-  const now = performance.now();
+  const now = clock();
   const dx = x - c.x, dy = y - c.y;
   if (Math.abs(dx) + Math.abs(dy) === 1) {
     const t0 = start !== undefined ? Math.min(start, now) : now;
@@ -161,7 +192,7 @@ export function moveChar(id, x, y, h, start) {
     // (si el paso nuevo arranca justo cuando terminó el anterior, no falta nada: sin frenos)
     let restX = 0, restY = 0;
     if (c.walking) {
-      const k = 1 - Math.min(1, Math.max(0, (t0 - c.moveStart) / WALK_MS));
+      const k = 1 - Math.min(1, Math.max(0, (t0 - c.moveStart) / walkMs()));
       restX = c.fromX * k; restY = c.fromY * k;
     }
     // la animación de caminar sigue corriendo si venía caminando
@@ -178,7 +209,7 @@ export function moveChar(id, x, y, h, start) {
 }
 
 export function isMoving(c) {
-  return c.walking && performance.now() - c.moveStart < WALK_MS;
+  return c.walking && clock() - c.moveStart < walkMs();
 }
 
 export function charAt(x, y, includeDead = true) {
@@ -195,25 +226,25 @@ export function setFx(id, fx, loops) {
   const f = A.fxs[fx];
   if (!f || !f[0]) return;
   const dur = animDuration(f[0]) || 500;
-  c.fx = { grh: f[0], ox: f[1], oy: f[2], start: performance.now(),
-    until: loops < 0 ? Infinity : performance.now() + dur * (Math.max(0, loops) + 1) };
+  c.fx = { grh: f[0], ox: f[1], oy: f[2], start: clock(),
+    until: loops < 0 ? Infinity : clock() + dur * (Math.max(0, loops) + 1) };
 }
 
 export function say(id, text, color) {
   const c = E.chars.get(id);
   if (!c) return;
-  c.say = { lines: wrap(text, 22), color: SAY_COLORS[color] || '#fff', until: performance.now() + 3500 + text.length * 60 };
+  c.say = { lines: wrap(text, 22), color: SAY_COLORS[color] || '#fff', until: clock() + 3500 + text.length * 60 };
 }
 
 export function addDamage(id, v) {
   const c = E.chars.get(id);
   if (!c) return;
-  E.dmg.push({ x: c.x, y: c.y, v, t: performance.now() });
+  E.dmg.push({ x: c.x, y: c.y, v, t: clock() });
 }
 
 export function addShot(fromId, toId) {
   const a = E.chars.get(fromId), b = E.chars.get(toId);
-  if (a && b) E.shots.push({ ax: a.x, ay: a.y, bx: b.x, by: b.y, t: performance.now() });
+  if (a && b) E.shots.push({ ax: a.x, ay: a.y, bx: b.x, by: b.y, t: clock() });
 }
 
 function wrap(text, n) {
@@ -230,8 +261,9 @@ function wrap(text, n) {
 // ---------- coordenadas ----------
 export function screenToTile(sx, sy) {
   const r = E.canvas.getBoundingClientRect();
-  const px = (sx - r.left) * (E.canvas.width / r.width) / E.zoom + E.camX;
-  const py = (sy - r.top) * (E.canvas.height / r.height) / E.zoom + E.camY;
+  const zd = E.zoomDraw || E.zoom;
+  const px = (sx - r.left) * (E.canvas.width / r.width) / zd + E.camX;
+  const py = (sy - r.top) * (E.canvas.height / r.height) / zd + E.camY;
   return { x: Math.floor(px / TILE) + 1, y: Math.floor(py / TILE) + 1 };
 }
 
@@ -243,7 +275,7 @@ export function render(now) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, E.canvas.width, E.canvas.height);
-  const Z = E.zoom;
+  const Z = E.zoomDraw || E.zoom;
   ctx.setTransform(Z, 0, 0, Z, 0, 0);
   ctx.imageSmoothingEnabled = false;
   const snap = (v) => Math.round(v * Z) / Z; // a la grilla de píxeles reales de la pantalla
@@ -254,7 +286,7 @@ export function render(now) {
   // actualizar desplazamientos de caminata
   for (const c of E.chars.values()) {
     if (c.walking) {
-      const t = (now - c.moveStart) / WALK_MS;
+      const t = (now - c.moveStart) / walkMs();
       if (t >= 1) { c.offX = 0; c.offY = 0; c.walking = false; c.walkEnd = now; } else {
         const k = 1 - Math.max(0, t);
         c.offX = snap(c.fromX * k); c.offY = snap(c.fromY * k);

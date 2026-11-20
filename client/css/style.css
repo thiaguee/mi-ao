@@ -154,3 +154,6 @@ input:focus, select:focus { border-color: var(--gold); }
 .class-opts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .class-opts .btn { min-width: 140px; }
 a.btn.download { text-align: center; text-decoration: none; background: linear-gradient(#2c5a1c, #183a0e); }
+#diag { position: absolute; top: 26px; right: 8px; background: #000d; border: 1px solid #5a4628; border-radius: 4px;
+  padding: 8px 10px; font: 12px/1.5 Consolas, monospace; color: #cfe; pointer-events: none; z-index: 3; }
+#app-ver { position: fixed; right: 8px; bottom: 6px; color: #6a5a40; font-size: 11px; }
