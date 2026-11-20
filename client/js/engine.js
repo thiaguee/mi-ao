@@ -388,11 +388,6 @@ export function render(now) {
   if (E.rain && !underRoof) drawRain(ctx, now);
   if (E.rain) { ctx.fillStyle = 'rgba(0,10,30,0.25)'; ctx.fillRect(0, 0, E.viewW, E.viewH); }
 
-  // casilla bajo el mouse
-  if (E.mouseTile && E.targeting) {
-    ctx.strokeStyle = '#ff6'; ctx.lineWidth = 1;
-    ctx.strokeRect(sx(E.mouseTile.x) + 0.5, sy(E.mouseTile.y) + 0.5, TILE - 1, TILE - 1);
-  }
 }
 
 function drawChar(ctx, c, px, py, now, me) {
