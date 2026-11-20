@@ -67,10 +67,14 @@ Tarda unos 10 minutos. Al terminar te muestra dos links:
 - `http://TU_IP:7666/descargar` → el **instalador para Windows**, que es lo que les pasás a los jugadores.
 - `http://TU_IP:7666` → para **jugar desde el navegador**, sin instalar nada.
 
-### Paso 4: crear TU personaje primero
+### Paso 4: crear los personajes administradores primero
 
-**El primer personaje que se crea en el servidor queda como ADMINISTRADOR.**
-Entrá al juego y creá tu personaje **antes** de pasarle el link a nadie.
+Los personajes **Thiago** y **Lautaro** quedan como **ADMINISTRADORES** apenas se crean.
+Creen esos dos personajes **antes** de pasarle el link a nadie. Si no, otra persona podría
+crear un personaje con ese nombre y quedarse con los poderes.
+
+Para sumar o sacar administradores después, usá `/DARGM nombre nivel` adentro del juego,
+o editá la lista `gms` en `server/config.json`.
 
 ---
 
@@ -161,18 +165,17 @@ Hay dos modos de teclas. Se cambia con el botón **⌨** del panel derecho y vie
 | Acción | Moderno | Clásico |
 |---|---|---|
 | Caminar | WASD o flechas | Flechas |
-| Tomar poción de vida (roja) | **Espacio** | — |
-| Tomar poción de maná (azul) | Q | — |
-| Atacar | F o Ctrl | Ctrl |
-| Agarrar del piso | G | A |
-| Lanzar hechizo | 1 a 9 y clic en el objetivo | Pestaña Hechizos → Lanzar → clic |
-| Meditar | M | M |
-| Usar · Equipar · Tirar | U · E · T | U · E · T |
+| Tomar pociones (potear) | Seleccioná la poción y apretá **Espacio** | Seleccioná la poción y apretá U |
+| Atacar | Ctrl | Ctrl |
+| Agarrar del piso | Q | A |
+| Meditar | F | M |
+| Lanzar hechizo | Pestaña Hechizos → Lanzar → clic en el objetivo | Igual |
+| Equipar · Tirar | E · T | E · T |
 | Hablar | Enter | Enter |
 | Mirar · Interactuar | Clic · Doble clic | Clic · Doble clic |
 
 Con doble clic comerciás con los vendedores, usás el banco, te revive el sacerdote y abrís puertas.
-Con arco: equipá el arco y las flechas, apretá F (o Ctrl) y hacé clic en el objetivo.
+Con arco: equipá el arco y las flechas, apretá Ctrl y hacé clic en el objetivo.
 
 ### Clases (como en Fénix)
 

@@ -67,8 +67,8 @@ echo "      http://$IP:$PUERTO/descargar"
 echo "  Jugar desde el navegador:"
 echo "      http://$IP:$PUERTO"
 echo
-echo "  IMPORTANTE: el PRIMER personaje que se cree será el ADMINISTRADOR."
-echo "  Crealo vos antes de pasarle el link a nadie."
+echo "  IMPORTANTE: los personajes Thiago y Lautaro son ADMINISTRADORES."
+echo "  Crealos ustedes ANTES de pasarle el link a nadie."
 echo
 echo "  Comandos útiles en esta máquina:"
 echo "    systemctl restart norwayao    (reiniciar el servidor)"

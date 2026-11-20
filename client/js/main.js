@@ -494,7 +494,7 @@ function openHelp() {
   openModal('Ayuda', `<div style="max-width:520px;line-height:1.6">
     <b>Controles — modo ${MODO === 'moderno' ? 'MODERNO' : 'CLÁSICO'}</b> (cambialo con el botón ⌨)<br>
     ${MODO === 'moderno'
-    ? 'WASD o flechas: caminar · <b>Espacio: poción de vida</b> · Q: poción de maná · F o Ctrl: atacar<br>G: agarrar · M: meditar · 1 a 9: lanzar hechizo · U usar · E equipar · T tirar<br>'
+    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · E equipar · T tirar<br>'
     : 'Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>U: usar objeto · E: equipar · T: tirar<br>'}
     Enter: hablar · Esc: cancelar · Clic: mirar · Doble clic: comerciar / banco / sacerdote / puertas<br>
     Hechizos: elegí uno en la pestaña Hechizos, tocá "Lanzar" y hacé clic en el objetivo.<br>
@@ -519,21 +519,10 @@ chat.addEventListener('keydown', (e) => {
   e.stopPropagation();
 });
 
-// Toma la primera poción de un tipo (3 = vida/roja, 4 = maná/azul)
-function potear(tipo) {
-  const it = S.inv.find((x) => x && x.ty === 11 && x.pt === tipo);
-  if (it) send({ t: 'use', i: it.i });
-  else log(tipo === 3 ? 'No tenés pociones de vida.' : 'No tenés pociones de maná.', 'warn');
-}
 function atacar() {
   const it = S.inv.find((x) => x && x.eq && x.ty === 2);
   if (it && it.pr) { setTarget('shoot'); log('Hacé clic sobre el objetivo.', 'info'); }
   else send({ t: 'attack' });
-}
-function hechizoRapido(n) {
-  const sp = S.spells[n];
-  if (!sp || !sp.id) return log(`No tenés un hechizo en el lugar ${n + 1}.`, 'warn');
-  S.selSpell = n; renderSpells(); startCast();
 }
 
 window.addEventListener('keydown', (e) => {
@@ -547,20 +536,18 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { setTarget(null); return; }
   if (e.key === 'F1') { openHelp(); e.preventDefault(); return; }
   if (e.key === 'Control') { atacar(); return; }
-  if (e.repeat && !['Space', 'KeyQ'].includes(code)) return;
+  if (e.repeat && code !== 'Space') return;
   if (MODO === 'moderno') {
     switch (code) {
-      case 'Space': potear(3); e.preventDefault(); return;
-      case 'KeyQ': potear(4); return;
-      case 'KeyF': atacar(); return;
-      case 'KeyG': send({ t: 'pick' }); return;
-      case 'KeyM': send({ t: 'meditate' }); return;
+      // Espacio: usa el objeto seleccionado (seleccioná la poción y apretá Espacio para potear)
+      case 'Space': useSelected(); e.preventDefault(); return;
+      case 'KeyQ': send({ t: 'pick' }); return;
+      case 'KeyF': send({ t: 'meditate' }); return;
       case 'KeyE': equipSelected(); return;
       case 'KeyU': useSelected(); return;
-      case 'KeyT': dropSelected(); return;
+      case 'KeyT': e.preventDefault(); dropSelected(); return;
       case 'KeyN': E.showNames = !E.showNames; return;
       default:
-        if (/^Digit[1-9]$/.test(code)) hechizoRapido(+code.slice(5) - 1);
     }
   } else {
     switch (code) {
@@ -568,7 +555,7 @@ window.addEventListener('keydown', (e) => {
       case 'KeyM': send({ t: 'meditate' }); return;
       case 'KeyU': useSelected(); return;
       case 'KeyE': equipSelected(); return;
-      case 'KeyT': dropSelected(); return;
+      case 'KeyT': e.preventDefault(); dropSelected(); return;
       case 'KeyN': E.showNames = !E.showNames; return;
       default:
     }
@@ -585,7 +572,7 @@ function setModo(m) {
 $('b-keys').onclick = () => {
   setModo(MODO === 'moderno' ? 'clasico' : 'moderno');
   log(MODO === 'moderno'
-    ? 'Modo MODERNO: WASD caminar · Espacio poción de vida · Q poción de maná · F o Ctrl atacar · G agarrar · 1-9 hechizos'
+    ? 'Modo MODERNO: WASD caminar · Espacio usar (potear) · Ctrl atacar · Q agarrar · F meditar'
     : 'Modo CLÁSICO: flechas caminar · Ctrl atacar · A agarrar · M meditar · U usar · E equipar · T tirar', 'server');
 };
 setModo(MODO);
@@ -660,3 +647,9 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
   requestAnimationFrame(loop);
   window.__AO = { S, E, send }; // para pruebas
 })();
+
+// Que los botones no se queden con el foco: si no, Espacio los volvería a "apretar"
+document.addEventListener('click', (e) => {
+  const b = e.target.closest && e.target.closest('button');
+  if (b) b.blur();
+});

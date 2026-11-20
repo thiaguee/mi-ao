@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
   nombreServidor: 'Norway AO',
   puerto: 7666,
   maxJugadores: 300,
-  primerPersonajeEsAdmin: true,
-  gms: { admins: [], dioses: [], semidioses: [], consejeros: [] },
+  primerPersonajeEsAdmin: false,
+  gms: { admins: ['Thiago', 'Lautaro'], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
   multiplicadorExp: 50, // experiencia x50: se sube rápido de nivel
   multiplicadorOro: 50, // oro x50 de los monstruos
