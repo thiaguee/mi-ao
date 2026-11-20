@@ -157,3 +157,12 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 #diag { position: absolute; top: 26px; right: 8px; background: #000d; border: 1px solid #5a4628; border-radius: 4px;
   padding: 8px 10px; font: 12px/1.5 Consolas, monospace; color: #cfe; pointer-events: none; z-index: 3; }
 #app-ver { position: fixed; right: 8px; bottom: 6px; color: #6a5a40; font-size: 11px; }
+#minimap { position: absolute; right: 10px; bottom: 10px; width: 150px; height: 150px; z-index: 2;
+  border: 2px solid #5a4628; border-radius: 6px; background: #000; box-shadow: 0 0 0 1px #000, 0 4px 14px #000a;
+  image-rendering: pixelated; opacity: .92; cursor: pointer; }
+#minimap.hidden { display: none; }
+.mundo-wrap { position: relative; display: flex; gap: 14px; align-items: flex-start; }
+#mundo-cv { image-rendering: pixelated; border: 1px solid #5a4628; background: #05070c; cursor: crosshair; }
+.mundo-info { width: 210px; font-size: 12px; line-height: 1.6; }
+.mundo-info b { color: var(--gold); }
+#mundo-hover { min-height: 40px; color: #ffd84a; font-weight: bold; }

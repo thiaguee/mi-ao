@@ -5,6 +5,7 @@ import * as Eng from './engine.js';
 import { E, walkMs } from './engine.js';
 import { connect, send, on, N, serverUrl } from './net.js';
 import * as Snd from './audio.js';
+import * as Mapas from './mapas.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
@@ -388,6 +389,17 @@ $('b-med').onclick = () => send({ t: 'meditate' });
 $('b-help').onclick = () => openHelp();
 $('b-sound').textContent = Snd.AU.on ? '🔊 Sonido: sí' : '🔇 Sonido: no';
 $('b-sound').onclick = () => { $('b-sound').textContent = Snd.toggle() ? '🔊 Sonido: sí' : '🔇 Sonido: no'; };
+$('b-mapa').onclick = () => Mapas.abrirMundo(openModal, send, S.gm, esc);
+$('minimap').addEventListener('click', (e) => Mapas.minimapaClic(e, send, S.gm));
+$('minimap').addEventListener('dblclick', () => Mapas.abrirMundo(openModal, send, S.gm, esc));
+const miniOn = localStorage.getItem('ao_minimapa') !== '0';
+$('minimap').classList.toggle('hidden', !miniOn);
+$('b-mini').textContent = 'Minimapa: ' + (miniOn ? 'sí' : 'no');
+$('b-mini').onclick = () => {
+  const on = $('minimap').classList.toggle('hidden') === false;
+  localStorage.setItem('ao_minimapa', on ? '1' : '0');
+  $('b-mini').textContent = 'Minimapa: ' + (on ? 'sí' : 'no');
+};
 $('b-names').onclick = () => { E.showNames = !E.showNames; $('b-names').textContent = 'Nombres: ' + (E.showNames ? 'sí' : 'no'); };
 // Menús desplegables de OPCIONES y MENÚ
 function togglePop(id) {
@@ -529,7 +541,7 @@ function openHelp() {
   openModal('Ayuda', `<div style="max-width:520px;line-height:1.6">
     <b>Controles — modo ${MODO === 'moderno' ? 'MODERNO' : 'CLÁSICO'}</b> (cambialo con el botón ⌨)<br>
     ${MODO === 'moderno'
-    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · E equipar · T tirar<br>'
+    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · E equipar · T tirar<br>'
     : 'Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>U: usar objeto · E: equipar · T: tirar<br>'}
     Enter: hablar · Esc: cancelar · Clic: mirar · Doble clic: comerciar / banco / sacerdote / puertas<br>
     Hechizos: elegí uno en la pestaña Hechizos, tocá "Lanzar" y hacé clic en el objetivo.<br>
@@ -564,6 +576,7 @@ window.addEventListener('keydown', (e) => {
   if (!S.inGame) return;
   if (document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
   if (S.modal && e.key === 'Escape') { closeModal(); return; }
+  if (S.modal === 'mundo' && e.code === 'KeyM' && MODO === 'moderno') { closeModal(); return; }
   if (S.modal && S.modal !== 'trade' && S.modal !== 'bank') return;
   const code = e.code;
   if (dirOf(code)) { S.keys.add(code); S.lastKey = code; e.preventDefault(); return; }
@@ -577,6 +590,7 @@ window.addEventListener('keydown', (e) => {
       // Espacio: usa el objeto seleccionado (seleccioná la poción y apretá Espacio para potear)
       case 'Space': useSelected(); e.preventDefault(); return;
       case 'KeyQ': send({ t: 'pick' }); return;
+      case 'KeyM': Mapas.abrirMundo(openModal, send, S.gm, esc); return;
       case 'KeyF': send({ t: 'meditate' }); return;
       case 'KeyE': equipSelected(); return;
       case 'KeyU': useSelected(); return;
@@ -607,7 +621,7 @@ function setModo(m) {
 $('b-keys').onclick = () => {
   setModo(MODO === 'moderno' ? 'clasico' : 'moderno');
   log(MODO === 'moderno'
-    ? 'Modo MODERNO: WASD caminar · Espacio usar (potear) · Ctrl atacar · Q agarrar · F meditar'
+    ? 'Modo MODERNO: WASD caminar · Espacio usar (potear) · Ctrl atacar · Q agarrar · F meditar · M mapa'
     : 'Modo CLÁSICO: flechas caminar · Ctrl atacar · A agarrar · M meditar · U usar · E equipar · T tirar', 'server');
 };
 setModo(MODO);
@@ -708,6 +722,7 @@ function loop(now) {
   if (S.inGame) {
     tryWalk(t);
     Eng.render(t);
+    Mapas.dibujarMinimapa(now, { gm: S.gm });
     // el texto de fps se actualiza una vez por segundo (tocar la página en cada cuadro también traba)
     if (now - fpsShown > 1000) {
       fpsShown = now;
@@ -757,6 +772,7 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
     $('srv-status').textContent = 'Error cargando los gráficos del juego.';
     return;
   }
+  await Mapas.cargarMundo();
   $('l-name').value = localStorage.getItem('ao_ultimo') || '';
   if (QS.get('v')) $('app-ver').textContent = 'Norway AO v' + QS.get('v');
   // El botón de descarga sólo tiene sentido cuando se juega desde el navegador
