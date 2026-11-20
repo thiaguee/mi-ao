@@ -309,6 +309,7 @@ function renderState() {
   if (s.dead) st.push('☠ Estás muerto (/HOGAR o buscá un sacerdote)');
   if (S.paralyzed) st.push('Paralizado');
   if (S.meditando) st.push('Meditando...');
+  if (MACRO.on) st.push(`⚡ MACRO F7 ACTIVA: ${(S.spells[MACRO.slot] || {}).n || ''} (F7 para frenar)`);
   $('bb-state').textContent = st.join(' · ');
 }
 function updatePos() {
@@ -576,7 +577,7 @@ function openHelp() {
   openModal('Ayuda', `<div style="max-width:520px;line-height:1.6">
     <b>Controles — modo ${MODO === 'moderno' ? 'MODERNO' : 'CLÁSICO'}</b> (cambialo con el botón ⌨)<br>
     ${MODO === 'moderno'
-    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · E equipar · T tirar<br>'
+    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · E equipar · T tirar<br><b>F7: macro</b> (elegí un hechizo y apretá F7: le tira solo a los bichos y se potea)<br>'
     : 'Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>U: usar objeto · E: equipar · T: tirar<br>'}
     Enter: hablar · Esc: cancelar · Clic: mirar · Doble clic: comerciar / banco / sacerdote / puertas<br>
     Hechizos: elegí uno en la pestaña Hechizos, tocá "Lanzar" y hacé clic en el objetivo.<br>
@@ -586,6 +587,66 @@ function openHelp() {
     \\nombre mensaje = susurrar · /SALIR<br>
     ${S.gm ? '<br><b style="color:#ff8c1a">Sos GM:</b> <b>clic derecho</b> en el mapa = teletransportarte ahí. Escribí /GMAYUDA en el chat para ver todos tus comandos.' : ''}
   </div>`);
+}
+
+// ================== MACRO F7 ==================
+// Con un hechizo elegido, F7 lo tira solo sobre el bicho elegido (o el más cercano en pantalla),
+// pasa al siguiente cuando muere y toma pociones: azul cuando falta maná, roja si la vida baja.
+const MACRO = { on: false, slot: -1, target: 0, iv: 0, lastCast: 0, lastPot: 0, avisoSinBicho: 0 };
+
+function enPantalla(c) {
+  const px = (c.x - 1) * 32, py = (c.y - 1) * 32;
+  return px >= E.camX - 16 && px <= E.camX + E.viewW - 16 && py >= E.camY - 16 && py <= E.camY + E.viewH - 16;
+}
+function bichoMasCercano() {
+  const me = E.chars.get(S.me);
+  let mejor = null, d = 1e9;
+  for (const c of E.chars.values()) {
+    if (!c.npc || c.col !== 'npc_h' || !enPantalla(c)) continue;
+    const dd = Math.abs(c.x - me.x) + Math.abs(c.y - me.y);
+    if (dd < d) { d = dd; mejor = c; }
+  }
+  return mejor;
+}
+function iniciarMacro() {
+  const sp = S.spells[S.selSpell];
+  if (!sp || !sp.id) { log('Para usar la macro: elegí un hechizo en la pestaña HECHIZOS y apretá F7.', 'warn'); return; }
+  MACRO.on = true; MACRO.slot = S.selSpell;
+  const obj = E.chars.get(S.objetivo);
+  MACRO.target = obj && obj.npc && enPantalla(obj) ? obj.id : 0;
+  MACRO.iv = setInterval(tickMacro, 100);
+  log(`Macro F7 activada con ${sp.n}. Apretá F7 de nuevo (o caminá) para frenarla.`, 'server');
+  renderState();
+}
+function pararMacro(motivo) {
+  if (!MACRO.on) return;
+  MACRO.on = false; clearInterval(MACRO.iv);
+  log(`Macro F7 desactivada${motivo ? ` (${motivo})` : ''}.`, 'server');
+  renderState();
+}
+function tickMacro() {
+  if (!S.inGame) return pararMacro();
+  const s = S.stats;
+  if (s.dead) return pararMacro('estás muerto');
+  const now = Date.now();
+  const sp = S.spells[MACRO.slot];
+  if (!sp || !sp.id) return pararMacro('no hay hechizo');
+  // autopoteo (una poción cada 0,4 s como máximo)
+  if (now - MACRO.lastPot > 400) {
+    const poc = (tipo) => S.inv.find((x) => x && x.ty === 11 && x.pt === tipo);
+    if (s.maxHp && s.hp < s.maxHp * 0.5 && poc(3)) { send({ t: 'use', i: poc(3).i }); MACRO.lastPot = now; return; }
+    if (s.maxMan && s.man < Math.max(sp.mana, s.maxMan * 0.35) && poc(4)) { send({ t: 'use', i: poc(4).i }); MACRO.lastPot = now; return; }
+  }
+  // tirar el hechizo
+  if (now - MACRO.lastCast < 1050 || s.man < sp.mana) return;
+  let t = E.chars.get(MACRO.target);
+  if (!t || !enPantalla(t)) { t = bichoMasCercano(); MACRO.target = t ? t.id : 0; }
+  if (!t) {
+    if (now - MACRO.avisoSinBicho > 5000) { MACRO.avisoSinBicho = now; log('Macro F7: no hay bichos en pantalla, esperando...', 'info'); }
+    return;
+  }
+  MACRO.lastCast = now;
+  send({ t: 'cast', i: MACRO.slot, x: t.x, y: t.y });
 }
 
 // ================== CONTROLES ==================
@@ -614,10 +675,11 @@ window.addEventListener('keydown', (e) => {
   if (S.modal === 'mundo' && e.code === 'KeyM' && MODO === 'moderno') { closeModal(); return; }
   if (S.modal && S.modal !== 'trade' && S.modal !== 'bank') return;
   const code = e.code;
-  if (dirOf(code)) { S.keys.add(code); S.lastKey = code; e.preventDefault(); return; }
+  if (dirOf(code)) { S.keys.add(code); S.lastKey = code; e.preventDefault(); if (MACRO.on) pararMacro('te moviste'); return; }
   if (e.key === 'Enter') { chat.focus(); e.preventDefault(); return; }
   if (e.key === 'Escape') { setTarget(null); return; }
   if (e.key === 'F1') { openHelp(); e.preventDefault(); return; }
+  if (e.key === 'F7') { e.preventDefault(); if (!e.repeat) (MACRO.on ? pararMacro('F7') : iniciarMacro()); return; }
   if (e.key === 'Control') { atacar(); return; }
   if (e.repeat && code !== 'Space') return;
   if (MODO === 'moderno') {
@@ -699,6 +761,8 @@ view.addEventListener('click', (e) => {
   if (S.targetMode === 'cast') { send({ t: 'cast', i: S.selSpell, x: t.x, y: t.y }); setTarget(null); return; }
   if (S.targetMode === 'shoot') { send({ t: 'shoot', x: t.x, y: t.y }); setTarget(null); return; }
   send({ t: 'click', x: t.x, y: t.y });
+  const c = Eng.charAt(t.x, t.y, false);
+  if (c && c.npc) { S.objetivo = c.id; if (MACRO.on) MACRO.target = c.id; }
 });
 view.addEventListener('dblclick', (e) => {
   const t = Eng.screenToTile(e.clientX, e.clientY);

@@ -537,6 +537,36 @@ P.dropNewbieItems = function (p) {
     if (it && this.data.objs[it.id] && this.data.objs[it.id].newbie) this.removeFromSlot(p, i, it.amount);
   }
   this.msg(p, 'Ya no sos newbie: tus objetos newbie desaparecieron.', 'warn');
+  this.darSetPostNewbie(p);
+};
+
+// Set que se recibe al dejar de ser newbie (nivel 13). No se cae al morir hasta el nivel 30.
+const SET_POST_NEWBIE = {
+  38: [239, 661, 659], // Mago: Túnica Roja, Sombrero de Aprendiz, Bastón Nudoso
+  44: [239, 165, 404, 132], // Bardo: Túnica Roja, Daga +1, Escudo de Tortuga, Casco de Hierro
+  42: [239, 2, 404, 132], // Clérigo: Túnica Roja, Espada Larga, Escudo de Tortuga, Casco de Hierro
+  41: [239, 2, 404, 132], // Paladín
+};
+const SET_RESTO = [239, 15]; // las demás clases: Túnica Roja y Daga
+const TUNICA_CHICOS = { 239: 524 }; // enanos y gnomos: Túnica Roja Especial (E/G)
+const SET_NO_CAE_HASTA = 30;
+P.darSetPostNewbie = function (p) {
+  let ids = SET_POST_NEWBIE[p.clase] || SET_RESTO;
+  if (G.ES_RAZA_BAJA(p.raza)) ids = ids.map((id) => TUNICA_CHICOS[id] || id);
+  const nombres = [];
+  for (const id of ids) {
+    const o = this.data.objs[id];
+    if (!o) continue;
+    const slot = p.inv.findIndex((x) => !x);
+    if (slot < 0) { this.msg(p, 'No tenés lugar en el inventario para recibir todo el set.', 'warn'); break; }
+    p.inv[slot] = { id, amount: 1, nc: SET_NO_CAE_HASTA };
+    nombres.push(o.name);
+    this.sendSlot(p, slot);
+    if (this.canUseObj(p, o) === true) this.equip(p, slot);
+  }
+  if (nombres.length) {
+    this.msg(p, `¡Recibiste tu set de aventurero! ${nombres.join(', ')}. No se te cae al morir hasta el nivel ${SET_NO_CAE_HASTA}.`, 'server');
+  }
 };
 
 P.checkClassUp = function (p) {
@@ -623,6 +653,7 @@ P.killPlayer = function (p, killer) {
       if (!it) continue;
       const o = this.data.objs[it.id];
       if (!o || o.newbie || o.noSeCae) continue;
+      if (it.nc && s.lvl <= it.nc) continue; // set post-newbie: no se cae hasta el nivel indicado
       if (this.dropObj(p.map, p.x, p.y, it.id, it.amount)) {
         for (const k of Object.keys(p.eq)) if (p.eq[k] === i) p.eq[k] = -1;
         p.inv[i] = null;

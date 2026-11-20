@@ -173,6 +173,8 @@ Hay dos modos de teclas. Se cambia con el botón **⌨** del panel derecho y vie
 | Meditar | F | M |
 | Lanzar hechizo | Pestaña Hechizos → Lanzar → clic en el objetivo | Igual |
 | Equipar · Tirar | E · T | E · T |
+| Macro de hechizos | **F7** (elegí el hechizo, F7 lo tira solo a los bichos y se potea) | F7 |
+| Mapa del mundo | M | Botón MAPA |
 | Hablar | Enter | Enter |
 | Mirar · Interactuar | Clic · Doble clic | Clic · Doble clic |
 

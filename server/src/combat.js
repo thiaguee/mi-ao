@@ -19,6 +19,10 @@ C.spawnAllNpcs = function () {
       if (this.spawnNpc(s.id, mp.n, s.x, s.y, true)) n++;
     }
   }
+  // NPCs agregados por nosotros (data/npcs-extra.json)
+  for (const e of this.data.npcsExtra || []) {
+    if (e.spawn && this.spawnNpc(e.num, e.spawn[0], e.spawn[1], e.spawn[2], true)) n++;
+  }
   console.log(`NPCs creados: ${n}`);
 };
 
@@ -412,7 +416,7 @@ C.shoot = function (p, x, y) {
   if (p.dead) return;
   const ammoSlot = p.eq.ammo;
   if (w.municion && (ammoSlot < 0 || !p.inv[ammoSlot])) return this.msg(p, 'No tenés municiones equipadas.', 'warn');
-  if (Math.abs(x - p.x) > 8 || Math.abs(y - p.y) > 6) return this.msg(p, 'Estás muy lejos para disparar.', 'warn');
+  if (Math.abs(x - p.x) > 40 || Math.abs(y - p.y) > 30) return this.msg(p, 'Estás muy lejos para disparar.', 'warn');
   const mp = this.maps[p.map];
   const id = mp.occ[idx(x, y)];
   const target = id ? this.entity(id) : null;

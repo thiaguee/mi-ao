@@ -324,6 +324,24 @@ function aplicarAjustes(spells) {
   }
 }
 
+// NPCs nuevos (que no están en los .dat del AO): data/npcs-extra.json
+function cargarNpcsExtra(npcs) {
+  const p = path.join(DATA, 'npcs-extra.json');
+  if (!fs.existsSync(p)) return [];
+  let lista;
+  try { lista = JSON.parse(fs.readFileSync(p, 'utf8')).npcs || []; } catch (e) { console.error('npcs-extra.json tiene un error:', e.message); return []; }
+  for (const e of lista) {
+    npcs[e.num] = {
+      id: e.num, name: e.name, desc: e.desc || '', type: e.tipo || 0, body: e.body, head: e.head || 0,
+      heading: e.heading || 3, movement: e.movimiento || 1, attackable: false, respawn: true, hostile: false,
+      comercia: !!e.items, tipoItems: e.tipoItems || 0, exp: 0, gld: 0, minHp: 1, maxHp: 1, minHit: 0, maxHit: 0,
+      def: 0, defM: 0, ataque: 0, evasion: 0, veneno: false, aguaValida: false, tierraInvalida: false,
+      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [],
+    };
+  }
+  return lista;
+}
+
 function loadCities() {
   const ini = readIni(path.join(DAT, 'ciudades.dat'));
   const out = {};
@@ -344,10 +362,11 @@ function loadAll() {
   }
   const cities = loadCities();
   aplicarAjustes(spells);
+  const npcsExtra = cargarNpcsExtra(npcs);
   console.log(`Datos cargados en ${Date.now() - t}ms: ${objs.filter(Boolean).length} objetos, ` +
     `${npcs.filter(Boolean).length} NPCs, ${spells.filter(Boolean).length} hechizos, ` +
     `${maps.filter(Boolean).length} mapas`);
-  return { objs, npcs, spells, maps, cities, numMaps };
+  return { objs, npcs, spells, maps, cities, numMaps, npcsExtra };
 }
 
 module.exports = {

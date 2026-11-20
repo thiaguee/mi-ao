@@ -3,7 +3,7 @@ import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap } fro
 import { idx } from './mapdata.js';
 
 export const TILE = 32;
-export const WALK_MS = 200; // velocidad nominal: un paso cada 200 ms
+export const WALK_MS = 180; // velocidad: un paso cada 180 ms (igual en cualquier pantalla)
 // La velocidad de caminata es SIEMPRE la misma (200 ms por baldosa), en cualquier pantalla o monitor.
 export const walkMs = () => WALK_MS;
 export function ajustarCaminata(frameMs) { E.frameMs = frameMs; }
@@ -347,7 +347,16 @@ export function render(now) {
     const row = byRow.get(y);
     if (row) {
       row.sort((a, b) => a.x - b.x);
-      for (const c of row) drawChar(ctx, c, sx(c.x) + c.offX, sy(c.y) + c.offY, now, me);
+      for (const c of row) {
+        const px = sx(c.x) + c.offX, py = sy(c.y) + c.offY;
+        drawChar(ctx, c, px, py, now, me);
+        // El nombre se dibuja junto con el personaje: así las paredes, carteles y techos que
+        // están más adelante lo tapan (antes quedaba encima de todo).
+        if (c.n && E.showNames && !(c.inv && c.id !== E.me)) {
+          const hover = E.mouseTile && E.mouseTile.x === c.x && E.mouseTile.y === c.y;
+          if (!c.npc || hover) drawName(ctx, c, px, py);
+        }
+      }
     }
     for (let x = bx0; x <= bx1; x++) {
       const g = map.l3[idx(x, y)];
@@ -366,13 +375,11 @@ export function render(now) {
     }
   }
 
-  // nombres y diálogos encima de todo
+  // diálogos (lo que dicen) encima de todo
   for (const c of E.chars.values()) {
     if (c.y < y0 - 1 || c.y > by1 || c.x < x0 - 1 || c.x > x1 + 1) continue;
     const px = sx(c.x) + c.offX, py = sy(c.y) + c.offY;
     if (c.inv && c.id !== E.me) continue;
-    const hover = E.mouseTile && E.mouseTile.x === c.x && E.mouseTile.y === c.y;
-    if (c.n && (!c.npc || hover) && E.showNames) drawName(ctx, c, px, py);
     if (c.say) {
       if (now > c.say.until) c.say = null; else drawSay(ctx, c, px, py);
     }

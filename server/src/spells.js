@@ -21,7 +21,8 @@ S.castSpell = function (p, slot, x, y) {
     if (s.sta < sp.sta) return this.msg(p, 'Estás muy cansado para lanzar este hechizo.', 'warn');
     if (p.skills[SK['Magia']] < sp.minSkill) return this.msg(p, 'No tenés suficientes puntos de magia para lanzar este hechizo.', 'warn');
   }
-  if (Math.abs(x - p.x) > 9 || Math.abs(y - p.y) > 7) return this.msg(p, 'Estás demasiado lejos.', 'warn');
+  // Sin límite de alcance: si lo ves en tu pantalla, lo podés atacar (el límite es sólo anti-trampas)
+  if (Math.abs(x - p.x) > 40 || Math.abs(y - p.y) > 30) return this.msg(p, 'Estás demasiado lejos.', 'warn');
   const mp = this.maps[p.map];
   if (!this.inMap(x, y)) return;
   let target = null;

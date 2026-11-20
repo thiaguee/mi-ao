@@ -1,0 +1,15 @@
+{
+  "_ayuda": "NPCs agregados al mundo. num: número nuevo (mayor a 1000). spawn: [mapa, x, y]. items: [[objeto, cantidad]] (10000 = no se acaba). tipoItems: qué tipo de objetos le compra al jugador (31 = barcos).",
+  "npcs": [
+    {
+      "num": 1001,
+      "name": "Marinero",
+      "desc": "¡Ahoy! Si querés navegar, te vendo una barca. Usala parado al lado del agua.",
+      "body": 3,
+      "head": 2,
+      "items": [[474, 10000]],
+      "tipoItems": 31,
+      "spawn": [1, 63, 49]
+    }
+  ]
+}
