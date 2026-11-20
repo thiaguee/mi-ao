@@ -190,6 +190,8 @@ def main():
     jobs = []
     for num in files:
         src = os.path.join(CLI, 'Graficos', f'{num}.png')
+        if not os.path.exists(src):
+            src = os.path.join(CLI, 'Graficos', f'{num}.PNG')  # algunos vienen con la extensión en mayúsculas
         if os.path.exists(src):
             jobs.append((src, os.path.join(GFX, f'{num}.png')))
     print('Convirtiendo', len(jobs), 'imágenes de', len(files), 'referenciadas')

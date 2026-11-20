@@ -115,7 +115,9 @@ function loadObjs() {
       minHit: num(v.MINHIT), maxHit: num(v.MAXHIT),
       minDef: num(v.MINDEF), maxDef: num(v.MAXDEF),
       ropaje: num(v.NUMROPAJE), anim: num(v.ANIM), anim_bajos: num(v.RAZAENANAANIM),
-      casco: num(v.CASCOANIM), escudo: num(v.ESCUDOANIM),
+      // En los archivos del AO Libre el dibujo de cascos y escudos está en "Anim" (en otros AO en CascoAnim/EscudoAnim)
+      casco: num(v.CASCOANIM) || (num(v.OBJTYPE) === 17 ? num(v.ANIM) : 0),
+      escudo: num(v.ESCUDOANIM) || (num(v.OBJTYPE) === 16 ? num(v.ANIM) : 0),
       minHam: num(v.MINHAM), minSed: num(v.MINAGU),
       pocion: num(v.TIPOPOCION), minMod: num(v.MINMODIFICADOR), maxMod: num(v.MAXMODIFICADOR),
       duracion: num(v.DURACIONEFECTO),

@@ -52,7 +52,7 @@ const AYUDA_USUARIO = [
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
-  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /IR nombre /DONDE nombre /INVISIBLE /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
+  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
     '/CARCEL nombre minutos /SILENCIAR nombre minutos /TRABAJANDO /ONLINEGM /MOSTRARGM'],
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
@@ -166,6 +166,11 @@ K.command = function (p, text) {
       const t = target(rest); if (!t) return;
       gmLog();
       return this.warp(p, t.map, t.x, t.y + 1);
+    }
+    case 'MAPAGM': { // mapas de GMs: /MAPAGM (49), /MAPAGM 2 (169), /MAPAGM JUZGADO (280)
+      if (!need(1)) return;
+      const destino = { '': 49, '1': 49, '2': 169, 'JUZGADO': 280, '3': 280 }[rest.toUpperCase()] || 49;
+      return this.warp(p, destino, 50, 50);
     }
     case 'DONDE': {
       if (!need(1)) return;
