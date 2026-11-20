@@ -1,0 +1,47 @@
+# Construye el instalador de Windows de Norway AO y lo publica en "Releases".
+# Se ejecuta solo cada vez que se suben cambios, o a mano desde la pestaña Actions.
+name: Instalador de Windows
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  instalador:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Preparar el servidor (va incluido en la aplicación)
+        working-directory: server
+        run: npm ci --omit=dev
+
+      - name: Preparar la aplicación
+        working-directory: launcher
+        run: npm ci
+
+      - name: Crear el instalador
+        working-directory: launcher
+        run: npx electron-builder --win nsis --x64 --publish never -c.win.signAndEditExecutable=true
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Publicar en Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.${{ github.run_number }}
+          name: Norway AO v1.${{ github.run_number }}
+          make_latest: true
+          body: |
+            **Descargá `NorwayAO-Instalador.exe`** (abajo, en Assets), ejecutalo y listo.
+            La aplicación trae el servidor adentro: se juega en tu PC sin instalar nada más.
+            Administradores: Thiago y Lautaro.
+          files: launcher/dist/NorwayAO-Instalador.exe
