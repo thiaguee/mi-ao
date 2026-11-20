@@ -25,6 +25,17 @@
       {
         "from": "../client",
         "to": "client"
+      },
+      {
+        "from": "../server",
+        "to": "server",
+        "filter": [
+          "**/*",
+          "!cuentas/**",
+          "!logs/**",
+          "!config.json",
+          "!baneados.json"
+        ]
       }
     ],
     "win": {

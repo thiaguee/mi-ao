@@ -502,7 +502,7 @@ function openHelp() {
     <b>Comandos útiles</b><br>
     /ONLINE /EST /MEDITAR /SEGURO /HOGAR /GM mensaje /GLOBAL mensaje<br>
     \\nombre mensaje = susurrar · /SALIR<br>
-    ${S.gm ? '<br><b style="color:#5fe05f">Sos GM:</b> escribí /GMAYUDA en el chat para ver todos tus comandos.' : ''}
+    ${S.gm ? '<br><b style="color:#5fe05f">Sos GM:</b> <b>clic derecho</b> en el mapa = teletransportarte ahí. Escribí /GMAYUDA en el chat para ver todos tus comandos.' : ''}
   </div>`);
 }
 
@@ -585,7 +585,9 @@ function tryWalk(now) {
   const key = S.keys.has(S.lastKey) ? S.lastKey : [...S.keys][0];
   const d = dirOf(key);
   if (!d) return;
-  S.lastStep = now;
+  // Si venía caminando, el paso nuevo empieza justo cuando terminó el anterior (sin pausas)
+  const encadenado = now - S.lastStep < WALK_MS + 60;
+  S.lastStep = encadenado ? S.lastStep + WALK_MS : now;
   if (S.paralyzed && !S.gm) { if (me.h !== d) { me.h = d; send({ t: 'turn', d }); } return; }
   const [dx, dy] = DXY[d];
   const nx = me.x + dx, ny = me.y + dy;
@@ -598,7 +600,7 @@ function tryWalk(now) {
     if (S.gm >= 2 && blockedTile && !occupied) send({ t: 'move', d });
     return;
   }
-  Eng.moveChar(S.me, nx, ny, d);
+  Eng.moveChar(S.me, nx, ny, d, S.lastStep);
   send({ t: 'move', d, x: nx, y: ny });
   updatePos();
 }
@@ -617,7 +619,15 @@ view.addEventListener('dblclick', (e) => {
   const t = Eng.screenToTile(e.clientX, e.clientY);
   send({ t: 'dclick', x: t.x, y: t.y });
 });
-view.addEventListener('contextmenu', (e) => { e.preventDefault(); setTarget(null); });
+view.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  if (S.targetMode) { setTarget(null); return; }
+  // GMs: clic derecho = teletransportarse a ese lugar
+  if (S.gm > 0) {
+    const t = Eng.screenToTile(e.clientX, e.clientY);
+    send({ t: 'tp', x: t.x, y: t.y });
+  }
+});
 
 // ================== BUCLE PRINCIPAL ==================
 function loop(now) {

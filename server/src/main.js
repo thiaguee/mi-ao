@@ -14,14 +14,19 @@ const CLIENT_DIR = process.env.AO_CLIENT_DIR || path.join(ROOT, '..', 'client');
 const LOGS = path.join(ROOT, 'logs');
 fs.mkdirSync(LOGS, { recursive: true });
 
+// Administradores fijos: siempre tienen todos los poderes
+const ADMINS_FIJOS = ['Thiago', 'Lautaro'];
+const VERSION_CONFIG = 3;
+
 const DEFAULT_CONFIG = {
+  versionConfig: VERSION_CONFIG,
   nombreServidor: 'Norway AO',
   puerto: 7666,
   maxJugadores: 300,
   primerPersonajeEsAdmin: false,
   gms: { admins: ['Thiago', 'Lautaro'], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
-  multiplicadorExp: 50, // experiencia x50: se sube rápido de nivel
+  multiplicadorExp: 100, // experiencia x100: se sube rápido de nivel
   multiplicadorOro: 50, // oro x50 de los monstruos
   oroInicial: 1000, // oro con el que arranca cada personaje nuevo
   respawnSegundos: 30,
@@ -37,8 +42,17 @@ const DEFAULT_CONFIG = {
 function loadConfig() {
   let cfg = {};
   if (fs.existsSync(CONFIG_PATH)) cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+  // Si el archivo es de una versión vieja, se actualizan los valores de experiencia y oro
+  if ((cfg.versionConfig || 0) < VERSION_CONFIG) {
+    for (const k of ['multiplicadorExp', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin']) delete cfg[k];
+    cfg.versionConfig = VERSION_CONFIG;
+  }
   cfg = Object.assign({}, DEFAULT_CONFIG, cfg);
   cfg.gms = Object.assign({ admins: [], dioses: [], semidioses: [], consejeros: [] }, cfg.gms);
+  for (const n of ADMINS_FIJOS) {
+    for (const k of Object.keys(cfg.gms)) cfg.gms[k] = cfg.gms[k].filter((x) => x.toLowerCase() !== n.toLowerCase());
+    cfg.gms.admins.push(n);
+  }
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
   return cfg;
 }
@@ -109,7 +123,7 @@ function handle(sock, msg) {
       // control de velocidad tolerante al lag: máximo N pasos cada 2 segundos
       if (now - (p.moveWin || 0) > 2000) { p.moveWin = now; p.moveCount = 0; }
       p.moveCount = (p.moveCount || 0) + 1;
-      if (p.gm < 2 && (p.moveCount > Math.ceil(2000 / config.intervaloCaminar) || now - p.lastMove < 60)) {
+      if (p.gm < 2 && (p.moveCount > Math.ceil(2000 / config.intervaloCaminar) || now - p.lastMove < 35)) {
         world.send(p, { t: 'pos', x: p.x, y: p.y }); return;
       }
       p.lastMove = now;
@@ -130,6 +144,10 @@ function handle(sock, msg) {
       p.lastClick = { x: +msg.x, y: +msg.y };
       return world.look(p, +msg.x, +msg.y);
     case 'dclick': return world.interact(p, +msg.x, +msg.y);
+    case 'tp': // teletransporte de GM con clic derecho
+      if (p.gm < 1) return;
+      if (!world.inMap(+msg.x, +msg.y)) return;
+      return world.warp(p, p.map, +msg.x, +msg.y);
     case 'cast': return world.castSpell(p, +msg.i, +msg.x, +msg.y);
     case 'shoot': return world.shoot(p, +msg.x, +msg.y);
     case 'meditate': return world.toggleMeditate(p);
@@ -248,6 +266,10 @@ setInterval(() => {
 process.on('SIGINT', () => world.shutdown('El servidor se está apagando.'));
 process.on('SIGTERM', () => world.shutdown('El servidor se está apagando.'));
 
+server.on('error', (e) => {
+  if (e.code === 'EADDRINUSE') world.log(`El puerto ${config.puerto} ya está en uso (¿el servidor ya está abierto?).`);
+  else world.log('Error del servidor: ' + e.message);
+});
 server.listen(config.puerto, () => {
   world.log(`${config.nombreServidor} escuchando en el puerto ${config.puerto}`);
   if (config.gms.admins.length === 0) world.log('Todavía no hay administrador: el primer personaje que se cree será el ADMIN.');

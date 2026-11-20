@@ -3,7 +3,7 @@ import { A, drawGrh, frameOf, animDuration } from './assets.js';
 import { idx } from './mapdata.js';
 
 export const TILE = 32;
-export const WALK_MS = 210;
+export const WALK_MS = 200;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
 const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#38e038', npc: '#d8d8d8', npc_h: '#ffb0b0' };
 const SAY_COLORS = { talk: '#ffffff', gm: '#38e038', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
@@ -59,13 +59,20 @@ export function addChar(c) {
   return ch;
 }
 
-export function moveChar(id, x, y, h) {
+// Mueve un personaje un tile. "start" permite encadenar pasos sin pausas.
+export function moveChar(id, x, y, h, start) {
   const c = E.chars.get(id);
   if (!c) return;
+  const now = performance.now();
   const dx = x - c.x, dy = y - c.y;
   if (Math.abs(dx) + Math.abs(dy) === 1) {
-    c.offX = -dx * TILE; c.offY = -dy * TILE;
-    c.moveStart = performance.now();
+    // si todavía no terminó el paso anterior, arranca desde donde está (sin saltos)
+    const restX = c.walking ? c.offX : 0, restY = c.walking ? c.offY : 0;
+    // la animación de caminar sigue corriendo si venía caminando
+    if (!c.walking && now - (c.walkEnd || 0) > 80) c.animStart = now;
+    c.fromX = restX - dx * TILE; c.fromY = restY - dy * TILE;
+    c.offX = c.fromX; c.offY = c.fromY;
+    c.moveStart = start !== undefined ? Math.min(start, now) : now;
     c.walking = true;
   } else {
     c.offX = 0; c.offY = 0; c.walking = false;
@@ -147,9 +154,9 @@ export function render(now) {
   for (const c of E.chars.values()) {
     if (c.walking) {
       const t = (now - c.moveStart) / WALK_MS;
-      if (t >= 1) { c.offX = 0; c.offY = 0; c.walking = false; } else {
-        const k = 1 - t;
-        c.offX = Math.sign(c.offX) * TILE * k; c.offY = Math.sign(c.offY) * TILE * k;
+      if (t >= 1) { c.offX = 0; c.offY = 0; c.walking = false; c.walkEnd = now; } else {
+        const k = 1 - Math.max(0, t);
+        c.offX = c.fromX * k; c.offY = c.fromY * k;
       }
     }
   }
@@ -271,7 +278,7 @@ function drawChar(ctx, c, px, py, now, me) {
   if (ghost) ctx.globalAlpha = c.inv ? 0.45 : 0.6;
   const body = A.bodies[c.b];
   const h = c.h || 3;
-  const walkT = c.walking ? now - c.moveStart : 0;
+  const walkT = c.walking ? now - (c.animStart || c.moveStart) : 0;
   if (body) {
     const bg = body.w[h - 1];
     // la animación de caminar sólo avanza mientras se mueve

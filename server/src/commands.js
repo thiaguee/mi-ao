@@ -52,7 +52,7 @@ const AYUDA_USUARIO = [
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
-  1: ['[Consejero] /IR nombre /DONDE nombre /INVISIBLE /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
+  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /IR nombre /DONDE nombre /INVISIBLE /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
     '/CARCEL nombre minutos /SILENCIAR nombre minutos /TRABAJANDO /ONLINEGM /MOSTRARGM'],
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
@@ -60,7 +60,7 @@ const AYUDA_GM = {
   3: ['[Dios] /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
-    '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los NPCs te ataquen) /GRABAR /LLUVIA'],
+    '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
   4: ['[Admin] /DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
 
@@ -383,7 +383,7 @@ K.command = function (p, text) {
     case 'ATACABLE':
       if (!need(1)) return;
       p.gmAtacable = !p.gmAtacable;
-      return this.msg(p, p.gmAtacable ? 'Ahora los NPCs y usuarios te pueden atacar.' : 'Ya no te pueden atacar.', 'gm');
+      return this.msg(p, p.gmAtacable ? 'Ahora los bichos y usuarios te pueden atacar (para probar).' : 'Ya no te pueden atacar.', 'gm');
     case 'LIMPIAR': {
       if (!need(3)) return;
       const mp = this.maps[p.map];
