@@ -80,6 +80,8 @@ o editá la lista `gms` en `server/config.json`.
 
 ## 3. Tus poderes de GM
 
+**Clic derecho en el mapa = te teletransportás ahí.**
+
 Escribís los comandos en el chat del juego (Enter, el comando y Enter otra vez).
 Con `/GMAYUDA` ves la lista completa adentro del juego.
 
@@ -198,13 +200,14 @@ Todos empiezan como **Ciudadano**:
 
 ---
 
-## 6. Probarlo en tu PC, sin servidor
+## 6. Jugar en tu PC (sin alquilar nada)
 
-1. En la página del repositorio en GitHub tocá **Code** y después **Download ZIP**.
-2. Descomprimí el ZIP (clic derecho → **Extraer todo**).
-3. Doble clic en **`JUGAR-EN-MI-PC.bat`**.
-   - La primera vez descarga solo lo que necesita (unos 30 MB) y tarda un par de minutos.
-   - Si Windows avisa "Windows protegió su PC": **Más información** → **Ejecutar de todas formas**.
-4. El juego se abre solo en el navegador. **No cierres la ventana negra** mientras jugás.
+1. Entrá a la página de descargas: **https://github.com/thiaguee/mi-ao/releases/latest**
+2. Abajo, en **Assets**, descargá **`NorwayAO-Instalador.exe`**.
+3. Ejecutalo e instalá. Si Windows avisa "Windows protegió su PC": **Más información** → **Ejecutar de todas formas**.
+4. Se crea el ícono **Norway AO** en el escritorio. Abrilo y jugá.
 
+La aplicación trae el servidor adentro: no hace falta instalar nada más ni abrir el navegador.
 Así juega solamente tu PC. Para que entren otros jugadores hace falta el servidor alquilado (punto 2).
+
+Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo y lo publica en esa misma página.

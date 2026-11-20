@@ -30,7 +30,7 @@ jobs:
 
       - name: Crear el instalador
         working-directory: launcher
-        run: npx electron-builder --win nsis --x64 --publish never -c.win.signAndEditExecutable=true
+        run: npx electron-builder --win nsis --x64 --publish never --config.win.signAndEditExecutable=true
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
