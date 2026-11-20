@@ -146,3 +146,15 @@ export function abrirMundo(openModal, send, gm, esc) {
     if (z) send({ t: 'talk', text: `/TELEP YO ${z[0]} 50 50` });
   });
 }
+
+// Zonas vecinas (arriba, abajo, izquierda, derecha) de un mapa, según el mapa del mundo
+export function vecinas(n) {
+  const d = MUNDO.data;
+  const m = d && d.mapas[n];
+  if (!m || m.g === undefined) return [];
+  const out = [];
+  for (const [k, v] of Object.entries(d.mapas)) {
+    if (v.g === m.g && Math.abs(v.x - m.x) + Math.abs(v.y - m.y) === 1) out.push(+k);
+  }
+  return out;
+}

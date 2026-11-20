@@ -4,6 +4,7 @@ export const A = {
   bodies: [], heads: [], helmets: [], weapons: [], shields: [], fxs: [],
   images: new Map(), // archivo -> HTMLImageElement
   failed: new Set(), // archivos que no existen
+  listas: 0, // cuántas imágenes terminaron de cargar (para saber cuándo redibujar)
   pending: 0,
 };
 
@@ -26,7 +27,8 @@ export function image(file) {
   img.decoding = 'async';
   img.onerror = () => A.failed.add(file);
   // Se decodifica en segundo plano antes de usarla: así dibujar una imagen nueva no frena el juego
-  img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(() => { img._ok = true; }); };
+  img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(() => { img._ok = true; A.listas++; }); };
+  img.addEventListener('error', () => { A.listas++; });
   img.src = `assets/g/${file}.png`;
   A.images.set(file, img);
   return null;
@@ -73,6 +75,24 @@ export function drawGrh(ctx, grhIndex, x, y, center, time = 0) {
   ctx.drawImage(img, sx, sy, w, h, Math.round(x * SNAP) / SNAP, Math.round(y * SNAP) / SNAP, w, h);
   return true;
 }
+
+// Archivos de imagen que usa un Grh (todos los frames si es animado)
+export function archivosDe(grhIndex, out) {
+  const g = A.grh[grhIndex];
+  if (!g) return;
+  if (Array.isArray(g)) { out.add(g[0]); return; }
+  for (const f of g.f) { const fg = A.grh[f]; if (Array.isArray(fg)) out.add(fg[0]); }
+}
+
+// Empieza a cargar (de a poco, sin trabar) una lista de imágenes
+const colaPrecarga = [];
+export function precargar(archivos) {
+  for (const f of archivos) if (!A.images.has(f)) colaPrecarga.push(f);
+}
+setInterval(() => {
+  // unas pocas por vez: se decodifican en segundo plano
+  for (let i = 0; i < 12 && colaPrecarga.length; i++) image(colaPrecarga.shift());
+}, 30);
 
 // Número de frame actual de una animación (para saber cuándo cambia)
 export function frameIndex(grhIndex, time) {

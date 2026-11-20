@@ -96,15 +96,17 @@ I.priest = function (p, npc) {
 
 I.toggleDoor = function (p, x, y, o, od) {
   if (Math.abs(p.x - x) > 2 || Math.abs(p.y - y) > 2) return this.msg(p, 'Estás muy lejos.', 'warn');
-  if (od.llave && od.cerrada && p.gm === 0) {
+  // Está abierta si es el objeto "abierto" de su par (en los .dat del AO Libre el campo Abierta está al revés)
+  const abierta = o.id === od.indexAbierta;
+  if (!abierta && od.llave && p.gm === 0) {
     return this.msg(p, 'La puerta está cerrada con llave.', 'warn');
   }
-  const newId = od.cerrada ? od.indexAbierta : od.indexCerrada;
+  const newId = abierta ? od.indexCerrada : od.indexAbierta;
   const nd = this.data.objs[newId];
-  if (!nd) return;
+  if (!nd || !newId) return;
   o.id = newId;
   const mp = this.maps[p.map];
-  const block = nd.cerrada ? 1 : 0;
+  const block = abierta ? 1 : 0; // si estaba abierta, ahora queda cerrada y bloquea
   for (const tx of [x, x - 1]) {
     if (this.inMap(tx, y)) mp.d.blocked[idx(tx, y)] = block;
   }

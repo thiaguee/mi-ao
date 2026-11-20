@@ -558,6 +558,18 @@ P.chooseClass = function (p, c) {
     p.stats.maxMan = Math.floor(f * p.attrs[2] * Math.max(1, p.stats.lvl - 5));
     p.stats.man = p.stats.maxMan;
   }
+  // Al elegir "Con uso de maná" recibe el Dardo Mágico enseguida (y maná para usarlo), para levelear rápido
+  if (c === 36) {
+    p.stats.maxMan = Math.max(p.stats.maxMan, 100 + p.attrs[2] * 3);
+    p.stats.man = p.stats.maxMan;
+    const dardo = this.data.spells.findIndex((s) => s && /dardo m/i.test(s.name));
+    if (dardo > 0 && !p.spells.includes(dardo)) {
+      let slot = 0; while (p.spells[slot]) slot++;
+      p.spells[slot] = dardo;
+      this.sendSpells(p);
+      this.msg(p, '¡Aprendiste el hechizo Dardo Mágico! Abrí la pestaña HECHIZOS, tocá LANZAR y hacé clic en un bicho.', 'server');
+    }
+  }
   this.msg(p, `¡Ahora sos ${G.CLASES[c]}!`, 'server');
   this.toMap(p.map, { t: 'fx', id: p.id, fx: G.FX.WARP, loops: 0 });
   this.sendAllStats(p);

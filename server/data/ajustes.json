@@ -1,0 +1,6 @@
+{
+  "_ayuda": "Ajustes de balance. 'danio' multiplica el daño del hechizo, 'mana' cambia el maná que gasta, 'skill' el skill de magia necesario. Los números son los del hechizo (ver la lista en el juego con /HECHIZO nombre 0).",
+  "hechizos": {
+    "2": { "danio": 20, "skill": 0, "_nombre": "Dardo Mágico" }
+  }
+}

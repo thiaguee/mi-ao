@@ -1,5 +1,5 @@
 // Cliente de Norway AO: pantallas, controles y comunicación con el servidor.
-import { A, loadIndexes, drawGrh, drawIcon } from './assets.js';
+import { A, loadIndexes, drawGrh, drawIcon, archivosDe, precargar } from './assets.js';
 import { loadMap, idx } from './mapdata.js';
 import * as Eng from './engine.js';
 import { E, walkMs } from './engine.js';
@@ -145,6 +145,8 @@ on('map', async (m) => {
     E.me = m.me;
     $('map-name').textContent = `${m.name}${m.pk ? '' : ' (segura)'}`;
     Snd.music(m.music);
+    precargarZona(map, m.objs);
+    setTimeout(() => precargarVecinas(m.map), 1500);
   } catch (e) {
     log('Error cargando el mapa: ' + e.message, 'warn');
   }
@@ -172,7 +174,40 @@ on('pos', (m) => {
   S.pendingMoves = 0;
   updatePos();
 });
-on('obj', (m) => { if (m.g) E.objs.set(idx(m.x, m.y), m.g); else E.objs.delete(idx(m.x, m.y)); });
+on('obj', (m) => Eng.cambiarObjeto(idx(m.x, m.y), m.g));
+
+// Carga por adelantado todos los gráficos de la zona (y de las zonas vecinas), así al caminar
+// no hay que esperar imágenes nuevas.
+function archivosDeMapa(map, objs) {
+  const set = new Set();
+  for (const capa of [map.l1, map.l2, map.l3, map.l4]) {
+    const vistos = new Set();
+    for (let k = 0; k < capa.length; k++) { const g = capa[k]; if (g && !vistos.has(g)) { vistos.add(g); archivosDe(g, set); } }
+  }
+  for (const o of objs || []) archivosDe(o[2], set);
+  return set;
+}
+function precargarZona(map, objs) {
+  // primero lo que rodea al personaje, después el resto del mapa
+  const me = E.chars.get(S.me);
+  if (me) {
+    const cerca = new Set();
+    for (let y = Math.max(1, me.y - 14); y <= Math.min(100, me.y + 14); y++) {
+      for (let x = Math.max(1, me.x - 20); x <= Math.min(100, me.x + 20); x++) {
+        const k = idx(x, y);
+        for (const capa of [map.l1, map.l2, map.l3, map.l4]) if (capa[k]) archivosDe(capa[k], cerca);
+      }
+    }
+    precargar(cerca);
+  }
+  precargar(archivosDeMapa(map, objs));
+}
+async function precargarVecinas(n) {
+  for (const v of Mapas.vecinas(n)) {
+    if (E.mapNum !== n) return; // ya cambió de zona
+    try { const mv = await loadMap(v); precargar(archivosDeMapa(mv)); } catch (e) { /* nada */ }
+  }
+}
 on('blk', (m) => { for (const [x, y, b] of m.tiles) if (x >= 1 && E.blocked) E.blocked[idx(x, y)] = b; });
 on('fx', (m) => Eng.setFx(m.id, m.fx, m.loops));
 on('snd', (m) => Snd.play(m.w));
@@ -708,9 +743,11 @@ function tick(now) {
   const step = real > CLK.frame * 1.6 ? Math.min(real, 100) : CLK.frame;
   CLK.t += step;
   // corrección suave para no desfasarse del tiempo real
+  // corrección suave para no desfasarse del tiempo real, SIN ir nunca para atrás
+  // (si el reloj saltaba para atrás, el personaje se quedaba quieto un instante)
   const drift = now - CLK.t;
-  if (Math.abs(drift) > 250) CLK.t = now;
-  else if (Math.abs(drift) > CLK.frame) CLK.t += drift * 0.05; // sólo si se desfasó más de un cuadro
+  if (drift > 250) CLK.t = now;
+  else if (Math.abs(drift) > CLK.frame) CLK.t += Math.max(-step * 0.5, drift * 0.05);
   if (DIAG.on) DIAG.frames.push(real);
   return CLK.t;
 }

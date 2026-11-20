@@ -4,15 +4,9 @@ import { idx } from './mapdata.js';
 
 export const TILE = 32;
 export const WALK_MS = 200; // velocidad nominal: un paso cada 200 ms
-// Duración real de un paso: se ajusta al monitor para que la cámara avance la MISMA cantidad de
-// píxeles de pantalla en todos los cuadros (ver ajustarCaminata).
-export const walkMs = () => E.walkMs || WALK_MS;
-export function ajustarCaminata(frameMs) {
-  const dev = 32 * (E.zoom || 1); // píxeles de pantalla por baldosa
-  const k = Math.max(1, Math.round(dev * frameMs / WALK_MS)); // píxeles por cuadro
-  E.walkMs = (dev / k) * frameMs;
-  E.frameMs = frameMs;
-}
+// La velocidad de caminata es SIEMPRE la misma (200 ms por baldosa), en cualquier pantalla o monitor.
+export const walkMs = () => WALK_MS;
+export function ajustarCaminata(frameMs) { E.frameMs = frameMs; }
 // Velocidad de la animación de las piernas: igual que el AO original (Movement_Speed = 0.5)
 const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
@@ -24,6 +18,7 @@ const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', npc: '#ffffff', spell: '#ff
 export const clock = () => (E.time || performance.now());
 
 export const E = {
+  objAnim: new Map(),
   canvas: null, ctx: null,
   map: null, mapNum: 0, blocked: null,
   objs: new Map(), // idx -> grh
@@ -144,15 +139,17 @@ function drawGround(ctx, now, x0, y0, x1, y1) {
         cv.width = CH * TILE; cv.height = CH * TILE;
         const c = cv.getContext('2d');
         c.imageSmoothingEnabled = false;
-        ch = { cv, ctx: c, complete: false, sig: -1, anim: chunkAnimTiles(map, cx, cy) };
+        ch = { cv, ctx: c, complete: false, sig: -1, listas: -1, anim: chunkAnimTiles(map, cx, cy) };
         chunks.set(key, ch);
       }
       // se redibuja si faltaban imágenes o si cambió el frame de alguna animación (agua)
       let sig = 0;
       for (let i = 0; i < ch.anim.length; i++) sig = (sig * 31 + frameIndex(ch.anim[i], now)) | 0;
-      const needs = !ch.complete || sig !== ch.sig;
+      // si faltaban imágenes, sólo se redibuja cuando llegó alguna nueva (antes era en cada cuadro y trababa)
+      const needs = (!ch.complete && ch.listas !== A.listas) || sig !== ch.sig;
       // los visibles tienen prioridad; los de alrededor se preparan de a uno por cuadro
       if (needs && (visible ? rebuilt < 3 : rebuilt < 1)) {
+        ch.listas = A.listas;
         buildChunk(ch, map, cx, cy, now);
         ch.sig = sig;
         rebuilt++;
@@ -162,7 +159,23 @@ function drawGround(ctx, now, x0, y0, x1, y1) {
   }
 }
 
+// ---------- puertas: transición suave al abrir o cerrar ----------
+const PUERTA_MS = 260;
+export function cambiarObjeto(k, nuevo) {
+  const viejo = E.objs.get(k);
+  if (viejo && nuevo && viejo !== nuevo) E.objAnim.set(k, { from: viejo, start: clock() });
+  if (nuevo) E.objs.set(k, nuevo); else E.objs.delete(k);
+}
+function drawPuerta(ctx, an, nuevo, x, y, now) {
+  const t = Math.min(1, (now - an.start) / PUERTA_MS);
+  const e = t * t * (3 - 2 * t); // suavizado
+  ctx.globalAlpha = 1 - e; drawGrh(ctx, an.from, x, y, true, now);
+  ctx.globalAlpha = e; drawGrh(ctx, nuevo, x, y, true, now);
+  ctx.globalAlpha = 1;
+}
+
 export function setMap(map, objs) {
+  E.objAnim = new Map();
   chunks.clear();
   E.map = map;
   E.mapNum = map.n;
@@ -325,7 +338,11 @@ export function render(now) {
     for (let x = bx0; x <= bx1; x++) {
       const k = idx(x, y);
       const og = E.objs.get(k);
-      if (og && x >= x0 && x <= x1) drawGrh(ctx, og, sx(x), sy(y), true, now);
+      if (og && x >= x0 && x <= x1) {
+        const an = E.objAnim.get(k);
+        if (an && now - an.start < PUERTA_MS) drawPuerta(ctx, an, og, sx(x), sy(y), now);
+        else { if (an) E.objAnim.delete(k); drawGrh(ctx, og, sx(x), sy(y), true, now); }
+      }
     }
     const row = byRow.get(y);
     if (row) {
