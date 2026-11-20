@@ -137,7 +137,7 @@ input:focus, select:focus { border-color: var(--gold); }
 .pop { position: absolute; right: 108px; bottom: 60px; z-index: 5; display: flex; flex-direction: column; gap: 4px;
   background: #110e0a; border: 2px solid #5a4628; border-radius: 6px; padding: 8px; box-shadow: 0 6px 24px #000; min-width: 160px; }
 #modal { position: fixed; inset: 0; background: #0008; display: flex; align-items: center; justify-content: center; z-index: 10; }
-.modal-box { min-width: 340px; max-width: 760px; max-height: 86vh; display: flex; flex-direction: column; }
+.modal-box { min-width: 340px; max-width: 940px; max-height: 86vh; display: flex; flex-direction: column; }
 .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .modal-head h3 { margin: 0; color: var(--gold); font-family: Georgia, serif; }
 #m-body { overflow-y: auto; }
@@ -166,3 +166,37 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .mundo-info { width: 210px; font-size: 12px; line-height: 1.6; }
 .mundo-info b { color: var(--gold); }
 #mundo-hover { min-height: 40px; color: #ffd84a; font-weight: bold; }
+
+/* ===== clanes ===== */
+.c-guild { color: #7fe3a0; }
+.clanes-win { width: 640px; max-width: 80vw; }
+.mi-clan { background: #0006; border: 1px solid #3a2e1c; border-radius: 6px; padding: 10px; margin-bottom: 10px; }
+.mc-cab { display: flex; gap: 12px; align-items: center; }
+.mc-cab canvas, .tc-fila canvas, .ce-prev canvas { image-rendering: pixelated; border: 1px solid #3a2e1c; border-radius: 4px; }
+.mc-nombre { font-family: Georgia, serif; font-size: 24px; color: var(--gold); font-weight: bold; }
+.mc-desc { color: #c9b089; font-style: italic; font-size: 12px; }
+.mc-tit { font-family: Georgia, serif; color: #c9b089; font-weight: bold; margin: 10px 0 4px; letter-spacing: 1px; }
+.mc-lista { background: #050403; border: 1px solid #3a2e1c; border-radius: 4px; max-height: 210px; overflow-y: auto; }
+.mc-fila { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-bottom: 1px solid #1d1710; }
+.mc-info { color: var(--muted); font-size: 12px; margin-right: auto; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #555; flex: none; }
+.dot.on { background: #4fe04f; box-shadow: 0 0 6px #4fe04f; }
+.tag-lider { background: #8a5a1c; color: #ffe9a0; font-size: 10px; padding: 1px 5px; border-radius: 3px; font-weight: bold; }
+.todos-clanes { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.tc-fila { display: flex; align-items: center; gap: 10px; background: #0006; border: 1px solid #3a2e1c; border-radius: 6px; padding: 6px; }
+.tc-datos { display: flex; flex-direction: column; margin-right: auto; }
+.tc-datos b { font-size: 16px; color: var(--gold); }
+.tc-datos span { font-size: 12px; color: var(--muted); }
+.clan-editor { display: flex; gap: 18px; }
+.ce-izq { width: 300px; display: flex; flex-direction: column; gap: 8px; }
+.ce-colores { display: flex; gap: 8px; }
+.ce-colores label { flex: 1; font-size: 12px; }
+.ce-colores input[type=color] { width: 100%; height: 34px; padding: 2px; cursor: pointer; }
+.ce-titulo { color: #c9b089; font-size: 12px; }
+.ce-emblemas { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+.ce-emb { padding: 3px; background: #0d0a07; border: 2px solid #3a2e1c; border-radius: 4px; cursor: pointer; }
+.ce-emb.sel { border-color: var(--gold); box-shadow: 0 0 8px #e0b45a88; }
+.ce-emb canvas { width: 32px; height: 32px; display: block; }
+.ce-der { display: flex; gap: 10px; align-items: flex-start; }
+.ce-prev { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); font-size: 12px; }
+.ce-prev canvas { width: 140px; height: 140px; }

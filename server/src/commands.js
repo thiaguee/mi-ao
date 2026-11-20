@@ -49,6 +49,7 @@ const AYUDA_USUARIO = [
   'Comandos: /ONLINE /EST /MEDITAR /SEGURO /HOGAR /RESUCITAR /CURAR /DESC texto',
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
+  'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
@@ -155,6 +156,14 @@ K.command = function (p, text) {
       this.toAll({ t: 'msg', text: `[Global] ${p.name}: ${rest}`, color: 'global' });
       return this.chatLog(`[global] ${p.name}: ${rest}`);
     }
+    case 'CAPA':
+      return this.alternarCapa(p);
+    case 'FUNDARCLAN':
+      return this.abrirFundar(p);
+    case 'CLANES':
+      return this.send(p, { t: 'abrirClanes' });
+    case 'CL': case 'CLAN':
+      return this.chatClan(p, rest);
     case 'GMAYUDA':
       if (!need(1)) return;
       for (let l = 1; l <= gm; l++) (AYUDA_GM[l] || []).forEach((x) => this.msg(p, x, 'gm'));

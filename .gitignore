@@ -8,3 +8,4 @@ server/config.json
 *.log
 motor/
 server/teleports-gm.json
+server/clanes.json

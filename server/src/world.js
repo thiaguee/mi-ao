@@ -134,6 +134,7 @@ class World {
       col: e.gm > 0 && !e.hideGm ? 'gm' : (e.crim ? 'cri' : 'ciu'),
       inv: e.invisible || e.hidden ? 1 : 0, dead: e.dead ? 1 : 0,
       nav: e.sailing ? 1 : 0,
+      cap: e.dead || e.sailing || !this.capaInfo ? null : this.capaInfo(e), // capa del clan
     };
   }
 

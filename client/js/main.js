@@ -6,6 +6,7 @@ import { E, walkMs } from './engine.js';
 import { connect, send, on, N, serverUrl } from './net.js';
 import * as Snd from './audio.js';
 import * as Mapas from './mapas.js';
+import * as ClanesUI from './clanesui.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
@@ -126,6 +127,7 @@ $('c-ok').onclick = async () => {
 // ================== MENSAJES DEL SERVIDOR ==================
 on('welcome', (m) => {
   S.me = m.id; S.name = m.name; S.gm = m.gm; S.inGame = true;
+  $('b-capa').textContent = 'Capa: ' + (m.capa === 0 ? 'no' : 'sí');
   E.me = m.id;
   $('b-login').disabled = false; $('c-ok').disabled = false;
   $('console').innerHTML = '';
@@ -426,6 +428,11 @@ $('b-help').onclick = () => openHelp();
 $('b-sound').textContent = Snd.AU.on ? '🔊 Sonido: sí' : '🔇 Sonido: no';
 $('b-sound').onclick = () => { $('b-sound').textContent = Snd.toggle() ? '🔊 Sonido: sí' : '🔇 Sonido: no'; };
 $('b-mapa').onclick = () => Mapas.abrirMundo(openModal, send, S.gm, esc);
+ClanesUI.init({ openModal, closeModal, send, esc, log, S });
+ClanesUI.mensajes(on);
+$('b-clanes').onclick = () => ClanesUI.abrir();
+$('b-capa').onclick = () => send({ t: 'capa' });
+on('capaEstado', (m) => { $('b-capa').textContent = 'Capa: ' + (m.on ? 'sí' : 'no'); });
 $('minimap').addEventListener('click', (e) => Mapas.minimapaClic(e, send, S.gm));
 $('minimap').addEventListener('dblclick', () => Mapas.abrirMundo(openModal, send, S.gm, esc));
 const miniOn = localStorage.getItem('ao_minimapa') !== '0';

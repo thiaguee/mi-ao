@@ -1,5 +1,6 @@
 // Motor gráfico: dibuja el mapa, objetos, personajes, efectos, nombres y diálogos.
 import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap } from './assets.js';
+import { dibujarCapa, dibujarAura } from './capas.js';
 import { idx } from './mapdata.js';
 
 export const TILE = 32;
@@ -423,8 +424,11 @@ function drawChar(ctx, c, px, py, now, me) {
   const walkT = c.walking ? now - (c.animStart || c.moveStart) : 0;
   if (body) {
     const bg = body.w[h - 1];
+    const cap = !ghost && !c.npc ? c.cap : null; // capa del clan
+    if (cap) { dibujarAura(ctx, cap, px, py, now); dibujarCapa(ctx, cap, px, py, h, 'atras', now, c.walking); }
     // la animación de caminar sólo avanza mientras se mueve
     drawGrh(ctx, bg, px, py, true, c.walking ? walkT * WALK_ANIM : 0);
+    if (cap) dibujarCapa(ctx, cap, px, py, h, 'adelante', now, c.walking);
     const head = A.heads[c.hd];
     if (head && head[h - 1]) drawGrh(ctx, head[h - 1], px + body.ox, py + body.oy, true, 0);
     const helm = A.helmets[c.c];

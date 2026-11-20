@@ -94,8 +94,9 @@ P.login = function (sock, req) {
   const pos = this.closestLegalPos(map, x, y) || { x, y };
   p.map = map; p.x = pos.x; p.y = pos.y;
   this.recalcEquip(p);
+  this.revisarClanAlEntrar(p);
   this.place(p, p.map, p.x, p.y);
-  this.send(p, { t: 'welcome', id: p.id, name: p.name, gm: p.gm, motd: this.config.motd,
+  this.send(p, { t: 'welcome', id: p.id, name: p.name, gm: p.gm, motd: this.config.motd, capa: p.capaOculta ? 0 : 1,
     server: this.config.nombreServidor });
   this.sendMapState(p);
   this.sendAllStats(p);
@@ -148,7 +149,7 @@ P.toRecord = function (p) {
     eq: p.eq, spells: p.spells, bank: p.bank, bankGld: p.bankGld,
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
-    lastLogin: Date.now(), guild: p.guild || '',
+    lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta,
   };
 };
 
