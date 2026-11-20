@@ -64,63 +64,97 @@
 <!-- ===== JUEGO ===== -->
 <div id="scr-game" class="screen hidden">
   <div id="game-main">
-    <div id="view-wrap">
+    <!-- consola y chat ARRIBA del juego -->
+    <div id="console-wrap" class="frame">
+      <div id="console"></div>
+      <input id="chat" maxlength="300" placeholder="Enter para hablar · /AYUDA para ver los comandos">
+    </div>
+    <div id="view-wrap" class="frame">
       <canvas id="view"></canvas>
       <div id="announce" class="hidden"></div>
-      <div id="map-name"></div>
       <div id="fps"></div>
     </div>
-    <div id="console-wrap">
-      <div id="console"></div>
-      <input id="chat" maxlength="300" placeholder="Presioná Enter para hablar. /AYUDA para ver comandos">
+    <div id="bottom-bar" class="frame">
+      <div class="bb-item" title="Golpe del arma equipada"><span class="ic">⚔</span><b id="bb-hit">-</b></div>
+      <div class="bb-item" title="Defensa (armadura + casco + escudo)"><span class="ic">🛡</span><b id="bb-def">0/0</b></div>
+      <div class="bb-sep"></div>
+      <div class="bb-attr"><small>AGILIDAD</small><b id="bb-ag">-</b></div>
+      <div class="bb-attr"><small>FUERZA</small><b id="bb-fu">-</b></div>
+      <div class="bb-sep"></div>
+      <div id="bb-state"></div>
+      <div id="bb-gm" class="hidden">GM</div>
     </div>
   </div>
-  <div id="side">
+
+  <div id="side" class="frame">
     <div class="char-head">
       <div id="s-name">-</div>
-      <div id="s-class">-</div>
-      <div id="s-level">Nivel 1</div>
+      <div class="lvl-row"><span id="s-level">Nivel 1</span><span id="s-exp-pct">[0%]</span></div>
+      <div class="exp-row"><span id="s-class">-</span></div>
       <div class="bar exp"><div id="b-exp"></div><span id="t-exp"></span></div>
     </div>
-    <div class="bars">
-      <div class="bar hp"><div id="b-hp"></div><span id="t-hp"></span></div>
-      <div class="bar man"><div id="b-man"></div><span id="t-man"></span></div>
-      <div class="bar sta"><div id="b-sta"></div><span id="t-sta"></span></div>
-      <div class="row2">
-        <div class="bar ham"><div id="b-ham"></div><span id="t-ham"></span></div>
-        <div class="bar sed"><div id="b-sed"></div><span id="t-sed"></span></div>
-      </div>
-    </div>
-    <div class="gold-row"><span>🪙 <b id="s-gold">0</b></span><span id="s-pos"></span></div>
+
     <div class="tabs">
-      <button class="tab active" data-tab="inv">Inventario</button>
-      <button class="tab" data-tab="spells">Hechizos</button>
+      <button class="tab active" data-tab="inv">INVENTARIO</button>
+      <button class="tab" data-tab="spells">HECHIZOS</button>
     </div>
-    <div id="tab-inv" class="tab-body">
-      <div id="inv-grid"></div>
-      <div id="inv-info"></div>
-      <div class="row btns">
-        <button class="btn sm" id="b-use" title="U">Usar</button>
-        <button class="btn sm" id="b-equip" title="E">Equipar</button>
-        <button class="btn sm" id="b-drop" title="T">Tirar</button>
+    <div class="tab-wrap">
+      <div id="tab-inv" class="tab-body">
+        <div id="inv-grid"></div>
+        <div id="inv-info"></div>
+        <div class="row btns">
+          <button class="btn sm" id="b-use" title="Espacio / U">Usar</button>
+          <button class="btn sm" id="b-equip" title="E">Equipar</button>
+          <button class="btn sm" id="b-drop" title="T">Tirar</button>
+        </div>
+      </div>
+      <div id="tab-spells" class="tab-body hidden">
+        <div class="spell-box">
+          <div id="spell-list"></div>
+          <div class="spell-arrows">
+            <button class="btn sm" id="b-sp-up" title="Subir">▲</button>
+            <button class="btn sm" id="b-sp-down" title="Bajar">▼</button>
+          </div>
+        </div>
+        <div class="row big-btns">
+          <button class="btn big" id="b-cast">LANZAR</button>
+          <button class="btn big" id="b-spinfo">INFO</button>
+        </div>
       </div>
     </div>
-    <div id="tab-spells" class="tab-body hidden">
-      <div id="spell-list"></div>
-      <div class="row btns">
-        <button class="btn sm main" id="b-cast">Lanzar</button>
-        <button class="btn sm" id="b-sp-up">▲</button>
-        <button class="btn sm" id="b-sp-down">▼</button>
+
+    <div class="stats-box">
+      <div class="stats-bars">
+        <div class="st"><label>SALUD</label><div class="bar hp"><div id="b-hp"></div><span id="t-hp"></span></div></div>
+        <div class="st"><label>ENERGÍA</label><div class="bar sta"><div id="b-sta"></div><span id="t-sta"></span></div></div>
+        <div class="st"><label>MANÁ</label><div class="bar man"><div id="b-man"></div><span id="t-man"></span></div></div>
+        <div class="st"><label>HAMBRE</label><div class="bar ham"><div id="b-ham"></div><span id="t-ham"></span></div></div>
+        <div class="st"><label>SED</label><div class="bar sed"><div id="b-sed"></div><span id="t-sed"></span></div></div>
+      </div>
+      <div class="side-btns">
+        <div class="gold-box"><div class="gold-title">ORO</div><b id="s-gold">0</b></div>
+        <button class="btn mid" id="b-opts">OPCIONES</button>
+        <button class="btn mid" id="b-skills">SKILLS</button>
+        <button class="btn mid" id="b-menu">MENÚ</button>
       </div>
     </div>
-    <div class="row btns bottom">
-      <button class="btn sm" id="b-skills">Skills</button>
-      <button class="btn sm" id="b-stats">Stats</button>
-      <button class="btn sm" id="b-med">Meditar</button>
-      <button class="btn sm" id="b-help">Ayuda</button>
-      <button class="btn sm" id="b-keys">⌨ Moderno</button>
-      <button class="btn sm" id="b-sound">🔊</button>
-      <button class="btn sm" id="b-exit">Salir</button>
+
+    <div class="loc-box">
+      <div id="map-name">-</div>
+      <div id="s-pos"></div>
+    </div>
+
+    <!-- menús desplegables -->
+    <div id="pop-menu" class="pop hidden">
+      <button class="btn" id="b-stats">Estadísticas</button>
+      <button class="btn" id="b-med">Meditar</button>
+      <button class="btn" id="b-help">Ayuda y teclas</button>
+      <button class="btn" id="b-exit">Salir del juego</button>
+    </div>
+    <div id="pop-opts" class="pop hidden">
+      <button class="btn" id="b-keys">⌨ Moderno</button>
+      <button class="btn" id="b-sound">🔊</button>
+      <button class="btn" id="b-names">Nombres: sí</button>
     </div>
   </div>
 </div>

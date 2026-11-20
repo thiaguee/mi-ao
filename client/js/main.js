@@ -142,7 +142,7 @@ on('map', async (m) => {
     Eng.setMap(map, m.objs);
     for (const c of m.chars) Eng.addChar(c);
     E.me = m.me;
-    $('map-name').textContent = `${m.name}${m.pk ? '' : ' (zona segura)'}`;
+    $('map-name').textContent = `${m.name}${m.pk ? '' : ' (segura)'}`;
     Snd.music(m.music);
   } catch (e) {
     log('Error cargando el mapa: ' + e.message, 'warn');
@@ -180,8 +180,8 @@ on('dmg', (m) => Eng.addDamage(m.id, m.v));
 on('shot', (m) => Eng.addShot(m.from, m.to));
 on('msg', (m) => log(m.text, m.color));
 on('rain', (m) => { E.rain = !!m.on; });
-on('para', (m) => { S.paralyzed = !!m.on; if (m.on) log('¡Estás paralizado!', 'warn'); });
-on('meditate', (m) => { $('b-med').classList.toggle('main', !!m.on); });
+on('para', (m) => { S.paralyzed = !!m.on; if (m.on) log('¡Estás paralizado!', 'warn'); renderState(); });
+on('meditate', (m) => { S.meditando = !!m.on; $('b-med').classList.toggle('main', !!m.on); renderState(); });
 on('announce', (m) => {
   const a = $('announce');
   a.textContent = m.text; a.classList.remove('hidden');
@@ -199,6 +199,7 @@ on('stats', (m) => {
 on('inv', (m) => {
   S.inv[m.i] = m.id ? m : null;
   renderSlot(m.i);
+  renderBottomWeapon();
   if (m.i === S.selSlot) showSlotInfo();
   if (S.trade) renderTrade();
   if (S.bank) renderBank();
@@ -246,20 +247,37 @@ function bar(id, v, max) {
 }
 function renderStats() {
   const s = S.stats;
-  $('s-name').textContent = S.name + (S.gm ? ' [GM]' : '');
-  $('s-name').style.color = S.gm ? '#5fe05f' : s.crim ? '#ff5a4a' : '#6fa8ff';
-  $('s-class').textContent = `${s.clase || ''} ${s.raza || ''}`;
-  $('s-level').textContent = `Nivel ${s.lvl || 1}` + (s.skillPts ? ` — ${s.skillPts} skillpoints libres` : '');
+  $('s-name').textContent = S.name;
+  $('s-name').style.color = S.gm ? '#5fe05f' : s.crim ? '#ff5a4a' : '#e0b45a';
+  $('s-class').textContent = `${s.clase || ''} ${s.raza || ''}` + (s.skillPts ? ` · ${s.skillPts} skillpoints libres` : '');
+  $('s-level').innerHTML = `Nivel <b>${s.lvl || 1}</b>`;
+  const pct = s.elu ? Math.floor((s.exp / s.elu) * 10000) / 100 : 100;
+  $('s-exp-pct').textContent = `[${pct.toLocaleString('es-AR')}%]`;
   bar('hp', s.hp, s.maxHp); bar('man', s.man, s.maxMan); bar('sta', s.sta, s.maxSta);
   bar('ham', s.ham, 100); bar('sed', s.sed, 100);
-  $('t-ham').textContent = `Hambre ${s.ham}`; $('t-sed').textContent = `Sed ${s.sed}`;
   bar('exp', s.exp, s.elu);
-  $('t-exp').textContent = s.elu ? `${s.exp}/${s.elu}` : 'Nivel máximo';
+  $('t-exp').textContent = s.elu ? `Exp: ${s.exp}/${s.elu}` : 'Nivel máximo';
   $('s-gold').textContent = (s.gld || 0).toLocaleString('es-AR');
+  $('bb-ag').textContent = s.ag ?? '-';
+  $('bb-fu').textContent = s.fu ?? '-';
+  if (s.def) $('bb-def').textContent = `${s.def[0]}/${s.def[1]}`;
+  $('bb-gm').classList.toggle('hidden', !S.gm);
+  renderState();
+}
+function renderBottomWeapon() {
+  const w = S.inv.find((x) => x && x.eq && x.ty === 2);
+  $('bb-hit').textContent = w ? `${w.mh}/${w.xh}` : '-';
+}
+function renderState() {
+  const s = S.stats, st = [];
+  if (s.dead) st.push('☠ Estás muerto (/HOGAR o buscá un sacerdote)');
+  if (S.paralyzed) st.push('Paralizado');
+  if (S.meditando) st.push('Meditando...');
+  $('bb-state').textContent = st.join(' · ');
 }
 function updatePos() {
   const c = E.chars.get(S.me);
-  if (c) $('s-pos').textContent = `Mapa ${E.mapNum} (${c.x}, ${c.y})`;
+  if (c) $('s-pos').textContent = `(${E.mapNum}, ${c.x}, ${c.y})`;
 }
 
 // ================== INVENTARIO ==================
@@ -333,7 +351,8 @@ function renderSpells() {
   S.spells.forEach((s, i) => {
     const d = document.createElement('div');
     d.className = 'spell' + (s.id ? '' : ' empty') + (i === S.selSpell ? ' sel' : '');
-    d.textContent = s.id ? `${s.n} (${s.mana})` : '(Nada)';
+    d.textContent = s.id ? s.n : '(Nada)';
+    if (s.id) d.title = `Maná: ${s.mana}`;
     d.onclick = () => { S.selSpell = i; renderSpells(); };
     d.ondblclick = () => { S.selSpell = i; startCast(); };
     l.appendChild(d);
@@ -367,8 +386,24 @@ $('b-skills').onclick = () => openSkills();
 $('b-stats').onclick = () => send({ t: 'talk', text: '/EST' });
 $('b-med').onclick = () => send({ t: 'meditate' });
 $('b-help').onclick = () => openHelp();
-$('b-sound').onclick = () => { $('b-sound').textContent = Snd.toggle() ? '🔊' : '🔇'; };
-$('b-sound').textContent = Snd.AU.on ? '🔊' : '🔇';
+$('b-sound').textContent = Snd.AU.on ? '🔊 Sonido: sí' : '🔇 Sonido: no';
+$('b-sound').onclick = () => { $('b-sound').textContent = Snd.toggle() ? '🔊 Sonido: sí' : '🔇 Sonido: no'; };
+$('b-names').onclick = () => { E.showNames = !E.showNames; $('b-names').textContent = 'Nombres: ' + (E.showNames ? 'sí' : 'no'); };
+// Menús desplegables de OPCIONES y MENÚ
+function togglePop(id) {
+  for (const p of ['pop-menu', 'pop-opts']) $(p).classList.toggle('hidden', p !== id || !$(p).classList.contains('hidden'));
+}
+$('b-menu').onclick = (e) => { e.stopPropagation(); togglePop('pop-menu'); };
+$('b-opts').onclick = (e) => { e.stopPropagation(); togglePop('pop-opts'); };
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.pop')) { $('pop-menu').classList.add('hidden'); $('pop-opts').classList.add('hidden'); }
+});
+$('b-spinfo').onclick = () => {
+  const sp = S.spells[S.selSpell];
+  if (!sp || !sp.id) return log('Elegí un hechizo de la lista.', 'warn');
+  openModal(sp.n, `<div style="max-width:420px;line-height:1.5">${esc(sp.d || '')}<br><br>
+    <b>Maná:</b> ${sp.mana} · <b>Skill de magia necesario:</b> ${sp.sk || 0}${sp.w ? `<br><b>Palabras mágicas:</b> ${esc(sp.w)}` : ''}</div>`);
+};
 $('b-exit').onclick = () => { S.byeText = 'Saliste del juego.'; send({ t: 'logout' }); };
 
 // ================== VENTANAS ==================
@@ -662,4 +697,8 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
 document.addEventListener('click', (e) => {
   const b = e.target.closest && e.target.closest('button');
   if (b) b.blur();
+});
+// Al elegir una opción del MENÚ, el menú se cierra
+document.getElementById('pop-menu').addEventListener('click', (e) => {
+  if (e.target.closest('button')) document.getElementById('pop-menu').classList.add('hidden');
 });

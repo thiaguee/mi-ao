@@ -214,7 +214,7 @@ P.sendSpells = function (p) {
   const list = [];
   for (let i = 0; i < SPELL_SLOTS; i++) {
     const s = this.data.spells[p.spells[i]];
-    list.push(s ? { i, id: s.id, n: s.name, mana: s.mana } : { i, id: 0 });
+    list.push(s ? { i, id: s.id, n: s.name, mana: s.mana, d: s.desc, sk: s.minSkill, w: s.words } : { i, id: 0 });
   }
   this.send(p, { t: 'spells', list });
 };
