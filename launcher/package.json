@@ -51,10 +51,20 @@
       "shortcutName": "Norway AO",
       "artifactName": "NorwayAO-Instalador.exe",
       "language": "3082"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "thiaguee",
+        "repo": "mi-ao"
+      }
+    ]
   },
   "devDependencies": {
     "electron": "^33.4.11",
     "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

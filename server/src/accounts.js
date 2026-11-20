@@ -4,7 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DIR = path.join(__dirname, '..', 'cuentas');
+// Los personajes se guardan en AO_DATA_DIR (la aplicación de Windows usa una carpeta propia
+// del usuario, así las actualizaciones no los borran) o, si no, al lado del servidor.
+const DIR = path.join(process.env.AO_DATA_DIR || path.join(__dirname, '..'), 'cuentas');
 fs.mkdirSync(DIR, { recursive: true });
 
 const fileOf = (name) => path.join(DIR, name.toLowerCase().replace(/[^a-z0-9 ]/g, '_') + '.json');

@@ -9,9 +9,11 @@ const World = require('./world');
 const accounts = require('./accounts');
 
 const ROOT = path.join(__dirname, '..');
-const CONFIG_PATH = path.join(ROOT, 'config.json');
+const DATA_DIR = process.env.AO_DATA_DIR || ROOT; // datos que se guardan (personajes, config, logs)
+fs.mkdirSync(DATA_DIR, { recursive: true });
+const CONFIG_PATH = path.join(DATA_DIR, 'config.json');
 const CLIENT_DIR = process.env.AO_CLIENT_DIR || path.join(ROOT, '..', 'client');
-const LOGS = path.join(ROOT, 'logs');
+const LOGS = path.join(DATA_DIR, 'logs');
 fs.mkdirSync(LOGS, { recursive: true });
 
 // Administradores fijos: siempre tienen todos los poderes
@@ -73,7 +75,7 @@ world.chatLog = (line) => appendLog('chat', line);
 world.sos = [];
 world.raining = false;
 
-const BANS_PATH = path.join(ROOT, 'baneados.json');
+const BANS_PATH = path.join(DATA_DIR, 'baneados.json');
 world.bans = new Set(fs.existsSync(BANS_PATH) ? JSON.parse(fs.readFileSync(BANS_PATH, 'utf8')) : []);
 world.saveBans = () => fs.writeFileSync(BANS_PATH, JSON.stringify([...world.bans], null, 2));
 world.saveConfig = () => fs.writeFileSync(CONFIG_PATH, JSON.stringify(world.config, null, 2));

@@ -4,6 +4,8 @@ import { idx } from './mapdata.js';
 
 export const TILE = 32;
 export const WALK_MS = 200;
+// Velocidad de la animación de las piernas: igual que el AO original (Movement_Speed = 0.5)
+const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
 const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#38e038', npc: '#d8d8d8', npc_h: '#ffb0b0' };
 const SAY_COLORS = { talk: '#ffffff', gm: '#38e038', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
@@ -33,14 +35,24 @@ export function init(canvas) {
 
 export function resize() {
   const r = E.canvas.parentElement.getBoundingClientRect();
-  // Zoom entero para que los píxeles queden nítidos
-  const zoom = r.width > 1500 && r.height > 900 ? 2 : 1;
+  // Trabajamos en píxeles reales de la pantalla: con la escala de Windows en 125% o 150%
+  // el navegador estiraba la imagen y el movimiento se veía a los saltos.
+  const dpr = window.devicePixelRatio || 1;
+  const devW = Math.round(r.width * dpr), devH = Math.round(r.height * dpr);
+  // Zoom entero (1x, 2x, 3x) para que los píxeles queden nítidos y parejos
+  const zoom = Math.max(1, Math.round(Math.min(devW / (32 * 22), devH / (32 * 15))));
   E.zoom = zoom;
-  E.canvas.width = Math.floor(r.width / zoom);
-  E.canvas.height = Math.floor(r.height / zoom);
+  E.canvas.width = Math.floor(devW / zoom);
+  E.canvas.height = Math.floor(devH / zoom);
+  E.canvas.style.width = (E.canvas.width * zoom / dpr) + 'px';
+  E.canvas.style.height = (E.canvas.height * zoom / dpr) + 'px';
   E.viewW = E.canvas.width; E.viewH = E.canvas.height;
   E.ctx.imageSmoothingEnabled = false;
 }
+
+// Si cambia la escala de la pantalla (por ejemplo al mover la ventana a otro monitor)
+let lastDpr = window.devicePixelRatio;
+setInterval(() => { if (window.devicePixelRatio !== lastDpr && E.canvas) { lastDpr = window.devicePixelRatio; resize(); } }, 1000);
 
 export function setMap(map, objs) {
   E.map = map;
@@ -66,13 +78,19 @@ export function moveChar(id, x, y, h, start) {
   const now = performance.now();
   const dx = x - c.x, dy = y - c.y;
   if (Math.abs(dx) + Math.abs(dy) === 1) {
-    // si todavía no terminó el paso anterior, arranca desde donde está (sin saltos)
-    const restX = c.walking ? c.offX : 0, restY = c.walking ? c.offY : 0;
+    const t0 = start !== undefined ? Math.min(start, now) : now;
+    // Lo que le faltaba recorrer al paso anterior en el momento en que empieza el nuevo
+    // (si el paso nuevo arranca justo cuando terminó el anterior, no falta nada: sin frenos)
+    let restX = 0, restY = 0;
+    if (c.walking) {
+      const k = 1 - Math.min(1, Math.max(0, (t0 - c.moveStart) / WALK_MS));
+      restX = c.fromX * k; restY = c.fromY * k;
+    }
     // la animación de caminar sigue corriendo si venía caminando
     if (!c.walking && now - (c.walkEnd || 0) > 80) c.animStart = now;
     c.fromX = restX - dx * TILE; c.fromY = restY - dy * TILE;
     c.offX = c.fromX; c.offY = c.fromY;
-    c.moveStart = start !== undefined ? Math.min(start, now) : now;
+    c.moveStart = t0;
     c.walking = true;
   } else {
     c.offX = 0; c.offY = 0; c.walking = false;
@@ -166,6 +184,7 @@ export function render(now) {
   const my = (me.y - 1) * TILE + me.offY + TILE / 2;
   E.camX = Math.round(mx - E.viewW / 2);
   E.camY = Math.round(my - E.viewH / 2);
+  if (E.trace) E.trace.push([now, E.camY, me.y, Math.round(me.offY * 10) / 10, me.walking ? 1 : 0, Math.round(me.moveStart)]); // para medir la fluidez en las pruebas
   const x0 = Math.max(1, Math.floor(E.camX / TILE) + 1 - 1);
   const y0 = Math.max(1, Math.floor(E.camY / TILE) + 1 - 1);
   const x1 = Math.min(100, Math.ceil((E.camX + E.viewW) / TILE) + 1);
@@ -282,15 +301,15 @@ function drawChar(ctx, c, px, py, now, me) {
   if (body) {
     const bg = body.w[h - 1];
     // la animación de caminar sólo avanza mientras se mueve
-    drawGrh(ctx, bg, px, py, true, c.walking ? walkT * 1.6 : 0);
+    drawGrh(ctx, bg, px, py, true, c.walking ? walkT * WALK_ANIM : 0);
     const head = A.heads[c.hd];
     if (head && head[h - 1]) drawGrh(ctx, head[h - 1], px + body.ox, py + body.oy, true, 0);
     const helm = A.helmets[c.c];
     if (helm && helm[h - 1]) drawGrh(ctx, helm[h - 1], px + body.ox + 1, py + body.oy - 34, true, 0);
     const wpn = A.weapons[c.w];
-    if (wpn && wpn[h - 1]) drawGrh(ctx, wpn[h - 1], px, py, true, c.walking ? walkT * 1.6 : 0);
+    if (wpn && wpn[h - 1]) drawGrh(ctx, wpn[h - 1], px, py, true, c.walking ? walkT * WALK_ANIM : 0);
     const sh = A.shields[c.s];
-    if (sh && sh[h - 1]) drawGrh(ctx, sh[h - 1], px, py, true, c.walking ? walkT * 1.6 : 0);
+    if (sh && sh[h - 1]) drawGrh(ctx, sh[h - 1], px, py, true, c.walking ? walkT * WALK_ANIM : 0);
   }
   ctx.globalAlpha = 1;
   if (c.fx) {

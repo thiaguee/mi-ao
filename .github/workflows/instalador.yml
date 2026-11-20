@@ -26,7 +26,9 @@ jobs:
 
       - name: Preparar la aplicación
         working-directory: launcher
-        run: npm ci
+        run: |
+          npm ci
+          npm pkg set version=1.${{ github.run_number }}.0
 
       - name: Crear el instalador
         working-directory: launcher
@@ -37,11 +39,15 @@ jobs:
       - name: Publicar en Releases
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.${{ github.run_number }}
+          tag_name: v1.${{ github.run_number }}.0
           name: Norway AO v1.${{ github.run_number }}
           make_latest: true
           body: |
             **Descargá `NorwayAO-Instalador.exe`** (abajo, en Assets), ejecutalo y listo.
             La aplicación trae el servidor adentro: se juega en tu PC sin instalar nada más.
             Administradores: Thiago y Lautaro.
-          files: launcher/dist/NorwayAO-Instalador.exe
+            Si ya lo tenés instalado, el juego se actualiza solo al abrirlo.
+          files: |
+            launcher/dist/NorwayAO-Instalador.exe
+            launcher/dist/NorwayAO-Instalador.exe.blockmap
+            launcher/dist/latest.yml

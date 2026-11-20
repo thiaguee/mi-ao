@@ -11,7 +11,7 @@ const path = require('path');
   await win.waitForTimeout(3000);
   console.log('estado:', await win.textContent('#srv-status'));
   await win.click('#b-goto-create'); await win.waitForTimeout(800);
-  await win.fill('#c-name', 'Thiago'); await win.fill('#c-pass', '1234'); await win.fill('#c-pass2', '1234');
+  await win.fill('#c-name', 'Lautaro'); await win.fill('#c-pass', '1234'); await win.fill('#c-pass2', '1234');
   await win.click('#c-ok'); await win.waitForTimeout(2500);
   const pos = () => win.evaluate(() => { const m = window.__AO.E.chars.get(window.__AO.S.me); return [m.x, m.y]; });
   console.log('en juego como', await win.textContent('#s-name'), 'en', await pos());

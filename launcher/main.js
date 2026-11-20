@@ -23,6 +23,18 @@ function servidorRemoto() {
 
 function arrancarServidorLocal() {
   process.env.AO_CLIENT_DIR = CLIENT;
+  // Los personajes y la configuración van a la carpeta del usuario (AppData), no a la de
+  // instalación: así las actualizaciones nunca los borran.
+  const datos = path.join(app.getPath('userData'), 'datos');
+  process.env.AO_DATA_DIR = datos;
+  try {
+    // Si había personajes de una versión vieja dentro de la instalación, se copian
+    const viejos = path.join(SERVER, 'cuentas');
+    if (fs.existsSync(viejos) && !fs.existsSync(path.join(datos, 'cuentas'))) {
+      fs.mkdirSync(datos, { recursive: true });
+      fs.cpSync(viejos, path.join(datos, 'cuentas'), { recursive: true });
+    }
+  } catch (e) { /* nada */ }
   try {
     world = require(path.join(SERVER, 'src', 'main.js'));
   } catch (e) {
@@ -59,6 +71,33 @@ function createWindow() {
   });
 }
 
+// Actualización automática: al abrir el juego se fija si hay una versión nueva en GitHub,
+// la descarga en segundo plano y ofrece reiniciar para instalarla.
+function buscarActualizacion() {
+  if (!app.isPackaged) return;
+  let autoUpdater;
+  try { ({ autoUpdater } = require('electron-updater')); } catch (e) { return; }
+  autoUpdater.autoDownload = true;
+  autoUpdater.on('update-downloaded', (info) => {
+    const w = BrowserWindow.getAllWindows()[0];
+    dialog.showMessageBox(w, {
+      type: 'info',
+      title: 'Norway AO',
+      message: `Hay una versión nueva de Norway AO (${info.version}).`,
+      detail: '¿Querés reiniciar el juego ahora para instalarla? Tus personajes no se pierden.',
+      buttons: ['Reiniciar y actualizar', 'Más tarde'],
+      defaultId: 0,
+    }).then(({ response }) => {
+      if (response === 0) {
+        if (world && world.saveAll) world.saveAll();
+        autoUpdater.quitAndInstall();
+      }
+    });
+  });
+  autoUpdater.on('error', () => { /* sin internet o sin versión nueva: se sigue jugando */ });
+  autoUpdater.checkForUpdates().catch(() => {});
+}
+
 // Una sola ventana del juego a la vez
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -69,6 +108,7 @@ if (!app.requestSingleInstanceLock()) {
   });
   app.whenReady().then(() => {
     if (!servidorRemoto()) arrancarServidorLocal();
+    buscarActualizacion();
     // le damos un instante al servidor para que cargue los mapas
     setTimeout(createWindow, world ? 300 : 0);
   });
