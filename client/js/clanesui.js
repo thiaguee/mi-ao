@@ -3,6 +3,7 @@
 import { A, drawGrh } from './assets.js';
 import { E } from './engine.js';
 import { dibujarCapa, dibujarAura, dibujarEmblema } from './capas.js';
+import { confirmar, preguntar } from './dialogo.js';
 
 let H = null; // { openModal, closeModal, send, esc, log, S }
 const C = { datos: null, emblemas: [], costo: 15000000, editor: null, anim: 0 };
@@ -162,13 +163,13 @@ function render() {
   on('[data-cancel]', (b) => H.send({ t: 'clan', a: 'cancelarSolicitud', clan: b.dataset.cancel }));
   on('[data-acep]', (b) => H.send({ t: 'clan', a: 'aceptar', nombre: b.dataset.acep }));
   on('[data-rech]', (b) => H.send({ t: 'clan', a: 'rechazar', nombre: b.dataset.rech }));
-  on('[data-exp]', (b) => { if (confirm(`¿Expulsar a ${b.dataset.exp} del clan?`)) H.send({ t: 'clan', a: 'expulsar', nombre: b.dataset.exp }); });
-  on('[data-lider]', (b) => { if (confirm(`¿Pasarle el liderazgo a ${b.dataset.lider}? Vas a dejar de ser el líder.`)) H.send({ t: 'clan', a: 'lider', nombre: b.dataset.lider }); });
+  on('[data-exp]', async (b) => { if (await confirmar(`¿Expulsar a ${b.dataset.exp} del clan?`)) H.send({ t: 'clan', a: 'expulsar', nombre: b.dataset.exp }); });
+  on('[data-lider]', async (b) => { if (await confirmar(`¿Pasarle el liderazgo a ${b.dataset.lider}? Vas a dejar de ser el líder.`)) H.send({ t: 'clan', a: 'lider', nombre: b.dataset.lider }); });
   on('#cl-fundar', () => H.send({ t: 'clan', a: 'abrirFundar' }));
-  on('#cl-salir', () => { if (confirm('¿Seguro que querés salir del clan?')) H.send({ t: 'clan', a: 'salir' }); });
+  on('#cl-salir', async () => { if (await confirmar('¿Seguro que querés salir del clan?')) H.send({ t: 'clan', a: 'salir' }); });
   on('#cl-capa', () => abrirEditor('editar', mio.capa));
-  on('#cl-disolver', () => { if (confirm(`¿Disolver el clan ${mio.n}? Todos los integrantes van a quedar sin clan.`)) H.send({ t: 'clan', a: 'disolver' }); });
-  on('#cl-desc', () => { const t = prompt('Descripción del clan (máximo 120 letras):', mio.desc || ''); if (t !== null) H.send({ t: 'clan', a: 'desc', desc: t }); });
+  on('#cl-disolver', async () => { if (await confirmar(`¿Disolver el clan ${mio.n}? Todos los integrantes van a quedar sin clan.`)) H.send({ t: 'clan', a: 'disolver' }); });
+  on('#cl-desc', async () => { const t = await preguntar('Descripción del clan (máximo 120 letras):', mio.desc || '', 120); if (t !== null) H.send({ t: 'clan', a: 'desc', desc: t }); });
   animarPreviews();
 }
 

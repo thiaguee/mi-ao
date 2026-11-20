@@ -7,6 +7,7 @@ import { connect, send, on, N, serverUrl } from './net.js';
 import * as Snd from './audio.js';
 import * as Mapas from './mapas.js';
 import * as ClanesUI from './clanesui.js';
+import { preguntar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
@@ -62,9 +63,9 @@ $('b-login').onclick = async () => {
 };
 $('l-pass').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('b-login').click(); });
 $('l-name').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('l-pass').focus(); });
-$('b-server').onclick = (e) => {
+$('b-server').onclick = async (e) => {
   e.preventDefault();
-  const v = prompt('Dirección del servidor (ej: ws://123.45.67.89:7666). Dejá vacío para usar el predeterminado.', localStorage.getItem('ao_servidor') || '');
+  const v = await preguntar('Dirección del servidor (ej: ws://123.45.67.89:7666). Dejá vacío para usar el predeterminado.', localStorage.getItem('ao_servidor') || '');
   if (v === null) return;
   if (v.trim()) localStorage.setItem('ao_servidor', v.trim()); else localStorage.removeItem('ao_servidor');
   if (N.ws) N.ws.close();
@@ -678,6 +679,8 @@ window.addEventListener('keydown', (e) => {
   if (!S.inGame) return;
   if (document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
   if (S.modal && e.key === 'Escape') { closeModal(); return; }
+  // Enter con una ventana abierta: la cierra y te deja escribir en el chat
+  if (S.modal && e.key === 'Enter' && !['ask', 'clanEditor', 'trade', 'bank'].includes(S.modal)) { closeModal(); chat.focus(); e.preventDefault(); return; }
   if (S.modal === 'mundo' && e.code === 'KeyM' && MODO === 'moderno') { closeModal(); return; }
   if (S.modal && S.modal !== 'trade' && S.modal !== 'bank') return;
   const code = e.code;
