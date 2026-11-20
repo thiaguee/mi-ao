@@ -248,7 +248,7 @@ function bar(id, v, max) {
 function renderStats() {
   const s = S.stats;
   $('s-name').textContent = S.name;
-  $('s-name').style.color = S.gm ? '#5fe05f' : s.crim ? '#ff5a4a' : '#e0b45a';
+  $('s-name').style.color = S.gm ? '#ff8c1a' : s.crim ? '#ff5a4a' : '#e0b45a';
   $('s-class').textContent = `${s.clase || ''} ${s.raza || ''}` + (s.skillPts ? ` · ${s.skillPts} skillpoints libres` : '');
   $('s-level').innerHTML = `Nivel <b>${s.lvl || 1}</b>`;
   const pct = s.elu ? Math.floor((s.exp / s.elu) * 10000) / 100 : 100;
@@ -537,7 +537,7 @@ function openHelp() {
     <b>Comandos útiles</b><br>
     /ONLINE /EST /MEDITAR /SEGURO /HOGAR /GM mensaje /GLOBAL mensaje<br>
     \\nombre mensaje = susurrar · /SALIR<br>
-    ${S.gm ? '<br><b style="color:#5fe05f">Sos GM:</b> <b>clic derecho</b> en el mapa = teletransportarte ahí. Escribí /GMAYUDA en el chat para ver todos tus comandos.' : ''}
+    ${S.gm ? '<br><b style="color:#ff8c1a">Sos GM:</b> <b>clic derecho</b> en el mapa = teletransportarte ahí. Escribí /GMAYUDA en el chat para ver todos tus comandos.' : ''}
   </div>`);
 }
 

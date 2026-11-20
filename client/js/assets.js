@@ -16,12 +16,17 @@ export async function loadIndexes() {
   Object.assign(A, chars);
 }
 
+let SNAP = 1;
+export function setSnap(z) { SNAP = z || 1; }
+
 export function image(file) {
   let img = A.images.get(file);
-  if (img) return img.complete && img.naturalWidth ? img : null;
+  if (img) return img._ok ? img : null;
   img = new Image();
   img.decoding = 'async';
   img.onerror = () => A.failed.add(file);
+  // Se decodifica en segundo plano antes de usarla: así dibujar una imagen nueva no frena el juego
+  img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(() => { img._ok = true; }); };
   img.src = `assets/g/${file}.png`;
   A.images.set(file, img);
   return null;
@@ -65,7 +70,7 @@ export function drawGrh(ctx, grhIndex, x, y, center, time = 0) {
     if (w !== 32) x -= Math.floor((w - 32) / 2);
     if (h !== 32) y -= h - 32;
   }
-  ctx.drawImage(img, sx, sy, w, h, Math.round(x), Math.round(y), w, h);
+  ctx.drawImage(img, sx, sy, w, h, Math.round(x * SNAP) / SNAP, Math.round(y * SNAP) / SNAP, w, h);
   return true;
 }
 

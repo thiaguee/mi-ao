@@ -1,5 +1,5 @@
 // Motor gráfico: dibuja el mapa, objetos, personajes, efectos, nombres y diálogos.
-import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex } from './assets.js';
+import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap } from './assets.js';
 import { idx } from './mapdata.js';
 
 export const TILE = 32;
@@ -7,8 +7,8 @@ export const WALK_MS = 200;
 // Velocidad de la animación de las piernas: igual que el AO original (Movement_Speed = 0.5)
 const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
-const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#38e038', npc: '#d8d8d8', npc_h: '#ffb0b0' };
-const SAY_COLORS = { talk: '#ffffff', gm: '#38e038', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
+const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#ff8c1a', npc: '#d8d8d8', npc_h: '#ffb0b0' };
+const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
 
 export const E = {
   canvas: null, ctx: null,
@@ -42,12 +42,15 @@ export function resize() {
   // Zoom entero (1x, 2x, 3x) para que los píxeles queden nítidos y parejos
   const zoom = Math.max(1, Math.round(Math.min(devW / (32 * 22), devH / (32 * 15))));
   E.zoom = zoom;
-  E.canvas.width = Math.floor(devW / zoom);
-  E.canvas.height = Math.floor(devH / zoom);
-  E.canvas.style.width = (E.canvas.width * zoom / dpr) + 'px';
-  E.canvas.style.height = (E.canvas.height * zoom / dpr) + 'px';
-  E.viewW = E.canvas.width; E.viewH = E.canvas.height;
+  // El canvas tiene la resolución REAL de la pantalla: así la cámara puede moverse de a 1 píxel
+  // de pantalla (con zoom 2, antes avanzaba de a 4 o 6 píxeles y se veía a tirones)
+  E.canvas.width = devW;
+  E.canvas.height = devH;
+  E.canvas.style.width = (devW / dpr) + 'px';
+  E.canvas.style.height = (devH / dpr) + 'px';
+  E.viewW = devW / zoom; E.viewH = devH / zoom;
   E.ctx.imageSmoothingEnabled = false;
+  setSnap(zoom);
 }
 
 // Si cambia la escala de la pantalla (por ejemplo al mover la ventana a otro monitor)
@@ -98,8 +101,11 @@ function drawGround(ctx, now, x0, y0, x1, y1) {
   const cx0 = Math.floor((x0 - 1) / CH), cx1 = Math.floor((x1 - 1) / CH);
   const cy0 = Math.floor((y0 - 1) / CH), cy1 = Math.floor((y1 - 1) / CH);
   let rebuilt = 0;
-  for (let cy = cy0; cy <= cy1; cy++) {
-    for (let cx = cx0; cx <= cx1; cx++) {
+  // Se preparan también los bloques de alrededor (antes de que entren en pantalla), así al
+  // caminar nunca hay que dibujar un bloque entero de golpe.
+  for (let cy = Math.max(0, cy0 - 1); cy <= Math.min(12, cy1 + 1); cy++) {
+    for (let cx = Math.max(0, cx0 - 1); cx <= Math.min(12, cx1 + 1); cx++) {
+      const visible = cx >= cx0 && cx <= cx1 && cy >= cy0 && cy <= cy1;
       const key = cy * 100 + cx;
       let ch = chunks.get(key);
       if (!ch) {
@@ -107,17 +113,20 @@ function drawGround(ctx, now, x0, y0, x1, y1) {
         cv.width = CH * TILE; cv.height = CH * TILE;
         const c = cv.getContext('2d');
         c.imageSmoothingEnabled = false;
-        ch = { cv, ctx: c, complete: false, sig: '', anim: chunkAnimTiles(map, cx, cy) };
+        ch = { cv, ctx: c, complete: false, sig: -1, anim: chunkAnimTiles(map, cx, cy) };
         chunks.set(key, ch);
       }
       // se redibuja si faltaban imágenes o si cambió el frame de alguna animación (agua)
-      const sig = ch.anim.length ? ch.anim.map((g) => frameIndex(g, now)).join(',') : '';
-      if ((!ch.complete || sig !== ch.sig) && rebuilt < 6) {
+      let sig = 0;
+      for (let i = 0; i < ch.anim.length; i++) sig = (sig * 31 + frameIndex(ch.anim[i], now)) | 0;
+      const needs = !ch.complete || sig !== ch.sig;
+      // los visibles tienen prioridad; los de alrededor se preparan de a uno por cuadro
+      if (needs && (visible ? rebuilt < 3 : rebuilt < 1)) {
         buildChunk(ch, map, cx, cy, now);
         ch.sig = sig;
         rebuilt++;
       }
-      ctx.drawImage(ch.cv, cx * CH * TILE - E.camX, cy * CH * TILE - E.camY);
+      if (visible) ctx.drawImage(ch.cv, cx * CH * TILE - E.camX, cy * CH * TILE - E.camY);
     }
   }
 }
@@ -221,8 +230,8 @@ function wrap(text, n) {
 // ---------- coordenadas ----------
 export function screenToTile(sx, sy) {
   const r = E.canvas.getBoundingClientRect();
-  const px = (sx - r.left) / (r.width / E.canvas.width) + E.camX;
-  const py = (sy - r.top) / (r.height / E.canvas.height) + E.camY;
+  const px = (sx - r.left) * (E.canvas.width / r.width) / E.zoom + E.camX;
+  const py = (sy - r.top) * (E.canvas.height / r.height) / E.zoom + E.camY;
   return { x: Math.floor(px / TILE) + 1, y: Math.floor(py / TILE) + 1 };
 }
 
@@ -231,8 +240,13 @@ export function render(now) {
   const ctx = E.ctx;
   E.frames++;
   if (now - E.fpsTime > 1000) { E.fps = E.frames; E.frames = 0; E.fpsTime = now; }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, E.viewW, E.viewH);
+  ctx.fillRect(0, 0, E.canvas.width, E.canvas.height);
+  const Z = E.zoom;
+  ctx.setTransform(Z, 0, 0, Z, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  const snap = (v) => Math.round(v * Z) / Z; // a la grilla de píxeles reales de la pantalla
   const map = E.map;
   const me = E.chars.get(E.me);
   if (!map || !me) return;
@@ -243,7 +257,7 @@ export function render(now) {
       const t = (now - c.moveStart) / WALK_MS;
       if (t >= 1) { c.offX = 0; c.offY = 0; c.walking = false; c.walkEnd = now; } else {
         const k = 1 - Math.max(0, t);
-        c.offX = c.fromX * k; c.offY = c.fromY * k;
+        c.offX = snap(c.fromX * k); c.offY = snap(c.fromY * k);
       }
     }
   }
@@ -251,8 +265,8 @@ export function render(now) {
   // cámara centrada en mi personaje
   const mx = (me.x - 1) * TILE + me.offX + TILE / 2;
   const my = (me.y - 1) * TILE + me.offY + TILE / 2;
-  E.camX = Math.round(mx - E.viewW / 2);
-  E.camY = Math.round(my - E.viewH / 2);
+  E.camX = snap(mx - E.viewW / 2);
+  E.camY = snap(my - E.viewH / 2);
   if (E.trace) E.trace.push([now, E.camY, me.y, Math.round(me.offY * 10) / 10, me.walking ? 1 : 0, Math.round(me.moveStart)]); // para medir la fluidez en las pruebas
   const x0 = Math.max(1, Math.floor(E.camX / TILE) + 1 - 1);
   const y0 = Math.max(1, Math.floor(E.camY / TILE) + 1 - 1);

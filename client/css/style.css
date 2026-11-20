@@ -74,7 +74,7 @@ input:focus, select:focus { border-color: var(--gold); }
 .bb-attr b { background: #000; border: 1px solid #3a2e1c; border-radius: 3px; padding: 0 12px; color: #fff; }
 .bb-sep { width: 1px; height: 28px; background: #3a2e1c; }
 #bb-state { flex: 1; color: #ffb84a; font-size: 12px; }
-#bb-gm { font-family: Georgia, serif; font-size: 26px; font-weight: bold; color: #4fe04f; text-shadow: 0 0 8px #3f3, 2px 2px 0 #000; }
+#bb-gm { font-family: Georgia, serif; font-size: 26px; font-weight: bold; color: #ff8c1a; text-shadow: 0 0 8px #f80, 2px 2px 0 #000; }
 
 /* panel derecho */
 #side { width: 290px; display: flex; flex-direction: column; padding: 10px; gap: 8px; position: relative; overflow-y: auto; }
