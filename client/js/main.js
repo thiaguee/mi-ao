@@ -163,7 +163,7 @@ on('char', (m) => {
     Eng.moveChar(c.id, c.x, c.y, c.h);
   } else Eng.addChar(c);
 });
-on('rm', (m) => E.chars.delete(m.id));
+on('rm', (m) => { E.chars.delete(m.id); if (MACRO.on && m.id === MACRO.target) pararMacro(`${MACRO.nombre || 'el bicho'} murió`); });
 on('mv', (m) => Eng.moveChar(m.id, m.x, m.y, m.h));
 on('turn', (m) => { const c = E.chars.get(m.id); if (c) c.h = m.h; });
 on('pos', (m) => {
@@ -309,7 +309,7 @@ function renderState() {
   if (s.dead) st.push('☠ Estás muerto (/HOGAR o buscá un sacerdote)');
   if (S.paralyzed) st.push('Paralizado');
   if (S.meditando) st.push('Meditando...');
-  if (MACRO.on) st.push(`⚡ MACRO F7 ACTIVA: ${(S.spells[MACRO.slot] || {}).n || ''} (F7 para frenar)`);
+  if (MACRO.on) st.push(`⚡ MACRO F7: ${(S.spells[MACRO.slot] || {}).n || ''} sobre ${MACRO.nombre || ''}`);
   $('bb-state').textContent = st.join(' · ');
 }
 function updatePos() {
@@ -577,7 +577,7 @@ function openHelp() {
   openModal('Ayuda', `<div style="max-width:520px;line-height:1.6">
     <b>Controles — modo ${MODO === 'moderno' ? 'MODERNO' : 'CLÁSICO'}</b> (cambialo con el botón ⌨)<br>
     ${MODO === 'moderno'
-    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · E equipar · T tirar<br><b>F7: macro</b> (elegí un hechizo y apretá F7: le tira solo a los bichos y se potea)<br>'
+    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · E equipar · T tirar<br><b>F7: macro</b> (elegí un hechizo y apretá F7: le tira solo a un bicho hasta que muere, y se potea)<br>'
     : 'Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>U: usar objeto · E: equipar · T: tirar<br>'}
     Enter: hablar · Esc: cancelar · Clic: mirar · Doble clic: comerciar / banco / sacerdote / puertas<br>
     Hechizos: elegí uno en la pestaña Hechizos, tocá "Lanzar" y hacé clic en el objetivo.<br>
@@ -590,8 +590,9 @@ function openHelp() {
 }
 
 // ================== MACRO F7 ==================
-// Con un hechizo elegido, F7 lo tira solo sobre el bicho elegido (o el más cercano en pantalla),
-// pasa al siguiente cuando muere y toma pociones: azul cuando falta maná, roja si la vida baja.
+// Con un hechizo elegido, F7 lo tira solo sobre UN bicho (el que clickeaste o, si no, el más
+// cercano en pantalla) y toma pociones: azul cuando falta maná, roja si la vida baja.
+// Cuando ese bicho muere (o desaparece), la macro se apaga sola: se vuelve a activar con F7.
 const MACRO = { on: false, slot: -1, target: 0, iv: 0, lastCast: 0, lastPot: 0, avisoSinBicho: 0 };
 
 function enPantalla(c) {
@@ -611,11 +612,12 @@ function bichoMasCercano() {
 function iniciarMacro() {
   const sp = S.spells[S.selSpell];
   if (!sp || !sp.id) { log('Para usar la macro: elegí un hechizo en la pestaña HECHIZOS y apretá F7.', 'warn'); return; }
-  MACRO.on = true; MACRO.slot = S.selSpell;
   const obj = E.chars.get(S.objetivo);
-  MACRO.target = obj && obj.npc && enPantalla(obj) ? obj.id : 0;
+  const t = obj && obj.npc && enPantalla(obj) ? obj : bichoMasCercano();
+  if (!t) { log('Macro F7: no hay ningún bicho en pantalla.', 'warn'); return; }
+  MACRO.on = true; MACRO.slot = S.selSpell; MACRO.target = t.id; MACRO.nombre = t.n;
   MACRO.iv = setInterval(tickMacro, 100);
-  log(`Macro F7 activada con ${sp.n}. Apretá F7 de nuevo (o caminá) para frenarla.`, 'server');
+  log(`Macro F7 activada: ${sp.n} sobre ${t.n}. Se apaga sola cuando muere (F7 o caminar también la frenan).`, 'server');
   renderState();
 }
 function pararMacro(motivo) {
@@ -639,12 +641,9 @@ function tickMacro() {
   }
   // tirar el hechizo
   if (now - MACRO.lastCast < 1050 || s.man < sp.mana) return;
-  let t = E.chars.get(MACRO.target);
-  if (!t || !enPantalla(t)) { t = bichoMasCercano(); MACRO.target = t ? t.id : 0; }
-  if (!t) {
-    if (now - MACRO.avisoSinBicho > 5000) { MACRO.avisoSinBicho = now; log('Macro F7: no hay bichos en pantalla, esperando...', 'info'); }
-    return;
-  }
+  const t = E.chars.get(MACRO.target);
+  if (!t) return pararMacro(`${MACRO.nombre || 'el bicho'} murió`);
+  if (!enPantalla(t)) return pararMacro(`${MACRO.nombre || 'el bicho'} se fue de la pantalla`);
   MACRO.lastCast = now;
   send({ t: 'cast', i: MACRO.slot, x: t.x, y: t.y });
 }

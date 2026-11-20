@@ -63,7 +63,8 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'));
+  require('./interact'), require('./commands'), require('./teleports'));
+world.dataDir = DATA_DIR;
 
 // ---------- logs, bans y guardado ----------
 const day = () => new Date().toISOString().slice(0, 10);
@@ -101,6 +102,7 @@ world.createCharacter = function (sock, req) {
   return res;
 };
 
+world.cargarTeleports();
 world.spawnAllNpcs();
 
 // ---------- mensajes del cliente ----------

@@ -1,0 +1,6 @@
+{
+  "_ayuda": "Portales fijos. mapa/x/y: dónde está el portal. destino: [mapa, x, y] a donde lleva. Los GMs también pueden crear portales en el juego con /CREARTP mapa x y.",
+  "teleports": [
+    { "nombre": "Portal a la Dungeon Newbie", "mapa": 1, "x": 53, "y": 51, "destino": [168, 50, 56] }
+  ]
+}

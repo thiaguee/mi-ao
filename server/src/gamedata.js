@@ -309,7 +309,7 @@ function isWaterGrh(g) {
 
 // Ajustes de balance sin tocar los .dat: data/ajustes.json
 // { "hechizos": { "2": { "danio": 20 } } }  -> el hechizo 2 hace 20 veces más daño
-function aplicarAjustes(spells) {
+function aplicarAjustes(spells, objs) {
   const p = path.join(DATA, 'ajustes.json');
   if (!fs.existsSync(p)) return;
   let aj;
@@ -321,6 +321,12 @@ function aplicarAjustes(spells) {
     if (a.mana !== undefined) s.mana = a.mana;
     if (a.skill !== undefined) s.minSkill = a.skill;
     console.log(`Ajuste: ${s.name} -> daño ${s.minHp}-${s.maxHp}, maná ${s.mana}`);
+  }
+  for (const [id, a] of Object.entries(aj.objetos || {})) {
+    const o = objs[+id];
+    if (!o) continue;
+    if (a.valor !== undefined) o.value = a.valor;
+    console.log(`Ajuste: ${o.name} -> valor ${o.value}`);
   }
 }
 
@@ -361,7 +367,7 @@ function loadAll() {
     try { maps[n] = loadMap(n); } catch (e) { console.error('Error cargando mapa', n, e.message); }
   }
   const cities = loadCities();
-  aplicarAjustes(spells);
+  aplicarAjustes(spells, objs);
   const npcsExtra = cargarNpcsExtra(npcs);
   console.log(`Datos cargados en ${Date.now() - t}ms: ${objs.filter(Boolean).length} objetos, ` +
     `${npcs.filter(Boolean).length} NPCs, ${spells.filter(Boolean).length} hechizos, ` +

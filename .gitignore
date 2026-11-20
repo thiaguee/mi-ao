@@ -7,3 +7,4 @@ server/baneados.json
 server/config.json
 *.log
 motor/
+server/teleports-gm.json

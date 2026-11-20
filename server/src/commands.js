@@ -60,7 +60,7 @@ const AYUDA_GM = {
   3: ['[Dios] /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
-    '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
+    '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
   4: ['[Admin] /DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
 
@@ -471,6 +471,17 @@ K.command = function (p, text) {
       gmLog();
       return this.msg(p, `Modificado ${campo} de ${t.name} a ${v}.`, 'gm');
     }
+    case 'CREARTP': // crea un portal donde estás parado: /CREARTP mapa x y
+      if (!need(3)) return;
+      gmLog();
+      return this.crearTeleport(p, +args[0], +args[1], +args[2]);
+    case 'BORRARTP':
+      if (!need(3)) return;
+      gmLog();
+      return this.borrarTeleport(p);
+    case 'TPS':
+      if (!need(2)) return;
+      return this.listarTeleports(p);
     case 'GRABAR':
       if (!need(3)) return;
       this.saveAll();
