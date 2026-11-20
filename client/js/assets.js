@@ -3,6 +3,7 @@ export const A = {
   grh: null, // número -> [archivo, x, y, ancho, alto] o {f:[frames], s:velocidad}
   bodies: [], heads: [], helmets: [], weapons: [], shields: [], fxs: [],
   images: new Map(), // archivo -> HTMLImageElement
+  failed: new Set(), // archivos que no existen
   pending: 0,
 };
 
@@ -20,6 +21,7 @@ export function image(file) {
   if (img) return img.complete && img.naturalWidth ? img : null;
   img = new Image();
   img.decoding = 'async';
+  img.onerror = () => A.failed.add(file);
   img.src = `assets/g/${file}.png`;
   A.images.set(file, img);
   return null;
@@ -51,18 +53,27 @@ export function animDuration(grhIndex) {
 }
 
 // Dibuja un Grh. center = centrado al estilo AO (horizontalmente y apoyado abajo).
+// Devuelve false sólo si la imagen todavía se está descargando.
 export function drawGrh(ctx, grhIndex, x, y, center, time = 0) {
-  if (!grhIndex) return;
+  if (!grhIndex) return true;
   const fr = frameOf(grhIndex, time);
-  if (!fr) return;
+  if (!fr) return true;
   const [file, sx, sy, w, h] = fr;
   const img = image(file);
-  if (!img) return;
+  if (!img) return A.failed.has(file);
   if (center) {
     if (w !== 32) x -= Math.floor((w - 32) / 2);
     if (h !== 32) y -= h - 32;
   }
   ctx.drawImage(img, sx, sy, w, h, Math.round(x), Math.round(y), w, h);
+  return true;
+}
+
+// Número de frame actual de una animación (para saber cuándo cambia)
+export function frameIndex(grhIndex, time) {
+  const g = A.grh[grhIndex];
+  if (!g || Array.isArray(g) || !g.f.length) return 0;
+  return Math.floor(time / ((g.s || 100) / g.f.length)) % g.f.length;
 }
 
 // Dibuja el primer frame de un Grh ajustado a un recuadro (para íconos)

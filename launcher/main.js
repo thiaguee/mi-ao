@@ -2,7 +2,7 @@
 // - Abre el juego en su propia ventana (no en el navegador).
 // - Si el juego no apunta a un servidor de internet, arranca el servidor ADENTRO de la
 //   aplicación, así se puede jugar en la PC sin instalar nada más.
-const { app, BrowserWindow, Menu, shell, dialog } = require('electron');
+const { app, BrowserWindow, Menu, shell, dialog, utilityProcess } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -10,7 +10,8 @@ const RES = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 const CLIENT = path.join(RES, 'client');
 const SERVER = path.join(RES, 'server');
 
-let world = null;
+let servidor = null; // proceso aparte donde corre el servidor (no traba la ventana del juego)
+let servidorListo = false;
 
 // ¿El cliente tiene configurado un servidor de internet?
 function servidorRemoto() {
@@ -36,10 +37,25 @@ function arrancarServidorLocal() {
     }
   } catch (e) { /* nada */ }
   try {
-    world = require(path.join(SERVER, 'src', 'main.js'));
+    servidor = utilityProcess.fork(path.join(SERVER, 'src', 'main.js'), [], {
+      env: Object.assign({}, process.env), serviceName: 'Servidor Norway AO', stdio: 'inherit',
+    });
+    servidor.on('message', (m) => { if (m === 'listo') servidorListo = true; });
+    servidor.on('exit', () => { servidor = null; });
   } catch (e) {
     dialog.showErrorBox('Norway AO', 'No se pudo iniciar el servidor del juego:\n' + e.message);
   }
+}
+
+// Espera a que el servidor termine de cargar los mapas (máximo 8 segundos)
+function esperarServidor() {
+  return new Promise((resolve) => {
+    if (!servidor) return resolve();
+    const t0 = Date.now();
+    const iv = setInterval(() => {
+      if (servidorListo || !servidor || Date.now() - t0 > 8000) { clearInterval(iv); resolve(); }
+    }, 50);
+  });
 }
 
 function createWindow() {
@@ -89,14 +105,17 @@ function buscarActualizacion() {
       defaultId: 0,
     }).then(({ response }) => {
       if (response === 0) {
-        if (world && world.saveAll) world.saveAll();
-        autoUpdater.quitAndInstall();
+        if (servidor) servidor.postMessage({ cmd: 'guardar' });
+        setTimeout(() => autoUpdater.quitAndInstall(), 500);
       }
     });
   });
   autoUpdater.on('error', () => { /* sin internet o sin versión nueva: se sigue jugando */ });
   autoUpdater.checkForUpdates().catch(() => {});
 }
+
+// Usar la placa de video aunque Chrome la tenga en su lista de "no recomendadas" (más fluidez)
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
 
 // Una sola ventana del juego a la vez
 if (!app.requestSingleInstanceLock()) {
@@ -109,9 +128,17 @@ if (!app.requestSingleInstanceLock()) {
   app.whenReady().then(() => {
     if (!servidorRemoto()) arrancarServidorLocal();
     buscarActualizacion();
-    // le damos un instante al servidor para que cargue los mapas
-    setTimeout(createWindow, world ? 300 : 0);
+    esperarServidor().then(createWindow);
   });
-  app.on('before-quit', () => { if (world && world.saveAll) world.saveAll(); });
+  // Al cerrar: el servidor guarda todos los personajes antes de apagarse
+  let cerrando = false;
+  app.on('before-quit', (e) => {
+    if (!servidor || cerrando) return;
+    cerrando = true;
+    e.preventDefault();
+    servidor.postMessage({ cmd: 'apagar' });
+    setTimeout(() => { if (servidor) servidor.kill(); app.exit(0); }, 1500);
+    servidor.on('exit', () => app.exit(0));
+  });
   app.on('window-all-closed', () => app.quit());
 }

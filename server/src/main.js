@@ -266,6 +266,15 @@ setInterval(() => {
 }, 60000);
 
 process.on('SIGINT', () => world.shutdown('El servidor se está apagando.'));
+// Cuando corre adentro de la aplicación de Windows, la aplicación le avisa cuándo guardar o apagarse
+if (process.parentPort) {
+  process.parentPort.on('message', (e) => {
+    const m = e && e.data;
+    if (!m) return;
+    if (m.cmd === 'guardar') world.saveAll();
+    if (m.cmd === 'apagar') world.shutdown('El juego se cerró.');
+  });
+}
 process.on('SIGTERM', () => world.shutdown('El servidor se está apagando.'));
 
 server.on('error', (e) => {
@@ -275,6 +284,7 @@ server.on('error', (e) => {
 server.listen(config.puerto, () => {
   world.log(`${config.nombreServidor} escuchando en el puerto ${config.puerto}`);
   if (config.gms.admins.length === 0) world.log('Todavía no hay administrador: el primer personaje que se cree será el ADMIN.');
+  if (process.parentPort) process.parentPort.postMessage('listo');
 });
 
 module.exports = world;

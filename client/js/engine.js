@@ -1,5 +1,5 @@
 // Motor gráfico: dibuja el mapa, objetos, personajes, efectos, nombres y diálogos.
-import { A, drawGrh, frameOf, animDuration } from './assets.js';
+import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex } from './assets.js';
 import { idx } from './mapdata.js';
 
 export const TILE = 32;
@@ -54,7 +54,76 @@ export function resize() {
 let lastDpr = window.devicePixelRatio;
 setInterval(() => { if (window.devicePixelRatio !== lastDpr && E.canvas) { lastDpr = window.devicePixelRatio; resize(); } }, 1000);
 
+// ---------- piso en bloques (para que vaya fluido en cualquier PC) ----------
+const CH = 8; // baldosas por lado de cada bloque
+const MARGEN = 4; // los gráficos grandes de la capa 2 pueden asomar desde baldosas vecinas
+const chunks = new Map();
+
+function chunkAnimTiles(map, cx, cy) {
+  // baldosas animadas (agua, fuego...) que afectan a este bloque
+  const list = [];
+  const xa = cx * CH + 1, ya = cy * CH + 1;
+  for (let y = Math.max(1, ya - MARGEN); y <= Math.min(100, ya + CH - 1 + MARGEN); y++) {
+    for (let x = Math.max(1, xa - MARGEN); x <= Math.min(100, xa + CH - 1 + MARGEN); x++) {
+      const k = idx(x, y);
+      const inside = x >= xa && x < xa + CH && y >= ya && y < ya + CH;
+      if (inside && numFrames(map.l1[k]) > 1) list.push(map.l1[k]);
+      if (map.l2[k] && numFrames(map.l2[k]) > 1) list.push(map.l2[k]);
+    }
+  }
+  return list;
+}
+
+function buildChunk(ch, map, cx, cy, now) {
+  const c = ch.ctx;
+  c.clearRect(0, 0, CH * TILE, CH * TILE);
+  const xa = cx * CH + 1, ya = cy * CH + 1;
+  let ok = true;
+  for (let y = ya; y < ya + CH && y <= 100; y++) {
+    for (let x = xa; x < xa + CH && x <= 100; x++) {
+      ok = drawGrh(c, map.l1[idx(x, y)], (x - xa) * TILE, (y - ya) * TILE, false, now) && ok;
+    }
+  }
+  for (let y = Math.max(1, ya - MARGEN); y <= Math.min(100, ya + CH - 1 + MARGEN); y++) {
+    for (let x = Math.max(1, xa - MARGEN); x <= Math.min(100, xa + CH - 1 + MARGEN); x++) {
+      const g = map.l2[idx(x, y)];
+      if (g) ok = drawGrh(c, g, (x - xa) * TILE, (y - ya) * TILE, true, now) && ok;
+    }
+  }
+  ch.complete = ok;
+}
+
+function drawGround(ctx, now, x0, y0, x1, y1) {
+  const map = E.map;
+  const cx0 = Math.floor((x0 - 1) / CH), cx1 = Math.floor((x1 - 1) / CH);
+  const cy0 = Math.floor((y0 - 1) / CH), cy1 = Math.floor((y1 - 1) / CH);
+  let rebuilt = 0;
+  for (let cy = cy0; cy <= cy1; cy++) {
+    for (let cx = cx0; cx <= cx1; cx++) {
+      const key = cy * 100 + cx;
+      let ch = chunks.get(key);
+      if (!ch) {
+        const cv = document.createElement('canvas');
+        cv.width = CH * TILE; cv.height = CH * TILE;
+        const c = cv.getContext('2d');
+        c.imageSmoothingEnabled = false;
+        ch = { cv, ctx: c, complete: false, sig: '', anim: chunkAnimTiles(map, cx, cy) };
+        chunks.set(key, ch);
+      }
+      // se redibuja si faltaban imágenes o si cambió el frame de alguna animación (agua)
+      const sig = ch.anim.length ? ch.anim.map((g) => frameIndex(g, now)).join(',') : '';
+      if ((!ch.complete || sig !== ch.sig) && rebuilt < 6) {
+        buildChunk(ch, map, cx, cy, now);
+        ch.sig = sig;
+        rebuilt++;
+      }
+      ctx.drawImage(ch.cv, cx * CH * TILE - E.camX, cy * CH * TILE - E.camY);
+    }
+  }
+}
+
 export function setMap(map, objs) {
+  chunks.clear();
   E.map = map;
   E.mapNum = map.n;
   E.blocked = new Uint8Array(map.blocked);
@@ -194,19 +263,8 @@ export function render(now) {
   const sx = (x) => (x - 1) * TILE - E.camX;
   const sy = (y) => (y - 1) * TILE - E.camY;
 
-  // capa 1 (piso) y capa 2
-  for (let y = y0; y <= y1; y++) {
-    for (let x = x0; x <= x1; x++) {
-      const k = idx(x, y);
-      drawGrh(ctx, map.l1[k], sx(x), sy(y), false, now);
-    }
-  }
-  for (let y = y0; y <= y1; y++) {
-    for (let x = x0; x <= x1; x++) {
-      const g = map.l2[idx(x, y)];
-      if (g) drawGrh(ctx, g, sx(x), sy(y), true, now);
-    }
-  }
+  // capa 1 (piso) y capa 2: se dibujan una sola vez en "bloques" y después sólo se copian
+  drawGround(ctx, now, x0, y0, x1, y1);
 
   // agrupar personajes por fila
   const byRow = new Map();
