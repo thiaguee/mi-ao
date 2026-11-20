@@ -67,11 +67,29 @@ Tarda unos 10 minutos. Al terminar te muestra dos links:
 - `http://TU_IP:7666/descargar` → el **instalador para Windows**, que es lo que les pasás a los jugadores.
 - `http://TU_IP:7666` → para **jugar desde el navegador**, sin instalar nada.
 
-### Paso 4: crear los personajes administradores primero
+### Paso 4: crear los personajes administradores
 
-Los personajes **Thiago** y **Lautaro** quedan como **ADMINISTRADORES** apenas se crean.
-Creen esos dos personajes **antes** de pasarle el link a nadie. Si no, otra persona podría
-crear un personaje con ese nombre y quedarse con los poderes.
+Los nombres **tsk**, **heaveN** y **peladoh** están **reservados** para los dueños y son
+**ADMINISTRADORES**. Nadie puede crearlos desde el juego hasta que cada uno les ponga
+contraseña en el servidor. Cada dueño, conectado al servidor como en el paso 2, escribe
+(con su nombre):
+
+```
+cd norwayao
+```
+
+```
+node tools/clave-admin.js heaveN
+```
+
+Te pide la contraseña dos veces (no se ve al escribirla). Usá una contraseña nueva, de
+8 caracteres o más, que no sea tu DNI ni tu fecha de nacimiento. Después entrás al juego,
+creás el personaje con ese nombre y esa contraseña, y listo.
+
+El mismo comando sirve para **cambiar la contraseña** si alguien la olvida o se la roban.
+Las contraseñas nunca se suben a GitHub: quedan cifradas solo en el servidor.
+
+En la aplicación de Windows (jugando solo en tu PC) estos nombres se crean directo, sin este paso.
 
 Para sumar o sacar administradores después, usá `/DARGM nombre nivel` adentro del juego,
 o editá la lista `gms` en `server/config.json`.

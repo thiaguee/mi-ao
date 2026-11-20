@@ -16,9 +16,16 @@ const CLIENT_DIR = process.env.AO_CLIENT_DIR || path.join(ROOT, '..', 'client');
 const LOGS = path.join(DATA_DIR, 'logs');
 fs.mkdirSync(LOGS, { recursive: true });
 
-// Administradores fijos: siempre tienen todos los poderes
-const ADMINS_FIJOS = ['Thiago', 'Lautaro'];
-const VERSION_CONFIG = 4;
+// Nombres reservados para los dueños del servidor: nadie más puede crearlos y vienen como
+// Administradores. En un servidor de internet se crean con su contraseña usando
+// "node tools/clave-admin.js NOMBRE" (ver GUIA.md).
+const NOMBRES_RESERVADOS = accounts.RESERVADOS;
+const VERSION_CONFIG = 5;
+
+// Valores de balance que el dueño puede cambiar. Si el dueño los dejó como venían, se
+// actualizan solos cuando cambia el valor por defecto; si los cambió, se respeta lo suyo.
+const AJUSTABLES = ['multiplicadorExp', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin',
+  'intervaloCaminar', 'intervaloGolpe', 'intervaloHechizo'];
 
 const DEFAULT_CONFIG = {
   versionConfig: VERSION_CONFIG,
@@ -26,7 +33,7 @@ const DEFAULT_CONFIG = {
   puerto: 7666,
   maxJugadores: 300,
   primerPersonajeEsAdmin: false,
-  gms: { admins: ['Thiago', 'Lautaro'], dioses: [], semidioses: [], consejeros: [] },
+  gms: { admins: [...NOMBRES_RESERVADOS], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
   multiplicadorExp: 100, // experiencia x100: se sube rápido de nivel
   multiplicadorOro: 50, // oro x50 de los monstruos
@@ -39,22 +46,32 @@ const DEFAULT_CONFIG = {
   guardadoMinutos: 5,
   carcel: { map: 66, x: 75, y: 47 },
   nombresProhibidos: ['admin', 'gm ', 'game master', 'dios'],
+  // Solo poner en true si el servidor está detrás de un proxy propio (nginx, Cloudflare)
+  // que agrega la IP real del jugador. Si no, cualquiera podría inventarse una IP.
+  proxyConfiable: false,
 };
 
 function loadConfig() {
   let cfg = {};
   if (fs.existsSync(CONFIG_PATH)) cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
-  // Si el archivo es de una versión vieja, se actualizan los valores de experiencia y oro
-  if ((cfg.versionConfig || 0) < VERSION_CONFIG) {
-    for (const k of ['multiplicadorExp', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin', 'intervaloCaminar']) delete cfg[k];
-    cfg.versionConfig = VERSION_CONFIG;
+  const version = cfg.versionConfig || 0;
+  // Archivos muy viejos (antes de la versión 4): se vuelven a los valores por defecto
+  if (version < 4) for (const k of AJUSTABLES) delete cfg[k];
+  // Valores ajustables: si el dueño no los tocó (siguen igual al defecto anterior), toman el defecto nuevo
+  const anteriores = cfg._porDefecto || {};
+  for (const k of AJUSTABLES) {
+    if (k in anteriores && JSON.stringify(cfg[k]) === JSON.stringify(anteriores[k])) delete cfg[k];
   }
   cfg = Object.assign({}, DEFAULT_CONFIG, cfg);
+  cfg._porDefecto = Object.fromEntries(AJUSTABLES.map((k) => [k, DEFAULT_CONFIG[k]]));
   cfg.gms = Object.assign({ admins: [], dioses: [], semidioses: [], consejeros: [] }, cfg.gms);
-  for (const n of ADMINS_FIJOS) {
-    for (const k of Object.keys(cfg.gms)) cfg.gms[k] = cfg.gms[k].filter((x) => x.toLowerCase() !== n.toLowerCase());
-    cfg.gms.admins.push(n);
+  // Versión 5: los admins pasan a ser los nombres reservados (se sacan Thiago y Lautaro)
+  if (version < 5) {
+    const sacar = ['thiago', 'lautaro', ...NOMBRES_RESERVADOS.map((n) => n.toLowerCase())];
+    for (const k of Object.keys(cfg.gms)) cfg.gms[k] = cfg.gms[k].filter((x) => !sacar.includes(x.toLowerCase()));
+    cfg.gms.admins.push(...NOMBRES_RESERVADOS);
   }
+  cfg.versionConfig = VERSION_CONFIG;
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
   return cfg;
 }
@@ -65,6 +82,9 @@ const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
   require('./interact'), require('./commands'), require('./teleports'), require('./clanes'));
 world.dataDir = DATA_DIR;
+// Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
+// reservados se pueden crear sin contraseña previa.
+world.modoLocal = !!process.parentPort;
 world.cargarClanes();
 
 // ---------- logs, bans y guardado ----------
@@ -224,7 +244,10 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocketServer({ server, maxPayload: 16 * 1024 });
 const perIp = new Map();
 wss.on('connection', (sock, req) => {
-  const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').toString().split(',')[0].trim();
+  // La IP sale de la conexión real. El encabezado X-Forwarded-For lo puede inventar cualquiera,
+  // así que solo se usa si el dueño avisó que hay un proxy propio adelante (proxyConfiable).
+  const xff = config.proxyConfiable ? (req.headers['x-forwarded-for'] || '').toString().split(',').pop().trim() : '';
+  const ip = (xff || req.socket.remoteAddress || '').toString().replace(/^::ffff:/, '');
   sock._ip = ip;
   const n = (perIp.get(ip) || 0) + 1;
   perIp.set(ip, n);

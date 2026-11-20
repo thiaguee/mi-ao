@@ -51,3 +51,34 @@ function list() {
 }
 
 module.exports = { validName, exists, hashPass, checkPass, load, save, list, DIR };
+
+// ---------- nombres reservados ----------
+// Personajes de los dueños del servidor. Nadie puede crearlos desde el juego salvo que antes,
+// en la máquina del servidor, se les haya puesto contraseña con "node tools/clave-admin.js NOMBRE".
+// Esa contraseña se guarda cifrada en reservas.json (que no se sube a GitHub).
+const RESERVADOS = ['tsk', 'heaveN', 'peladoh'];
+const RESERVAS_PATH = path.join(process.env.AO_DATA_DIR || path.join(__dirname, '..'), 'reservas.json');
+
+const esReservado = (name) => RESERVADOS.some((n) => n.toLowerCase() === String(name).toLowerCase());
+
+function leerReservas() {
+  try { return JSON.parse(fs.readFileSync(RESERVAS_PATH, 'utf8')); } catch (e) { return {}; }
+}
+
+function guardarReservas(r) {
+  fs.writeFileSync(RESERVAS_PATH, JSON.stringify(r, null, 2));
+}
+
+// ¿La contraseña coincide con la que se reservó para ese nombre?
+function reservaValida(name, pass) {
+  const r = leerReservas()[String(name).toLowerCase()];
+  return !!r && checkPass({ pass: r }, pass);
+}
+
+function borrarReserva(name) {
+  const r = leerReservas();
+  delete r[String(name).toLowerCase()];
+  guardarReservas(r);
+}
+
+Object.assign(module.exports, { RESERVADOS, RESERVAS_PATH, esReservado, leerReservas, guardarReservas, reservaValida, borrarReserva });

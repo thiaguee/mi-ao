@@ -67,8 +67,9 @@ echo "      http://$IP:$PUERTO/descargar"
 echo "  Jugar desde el navegador:"
 echo "      http://$IP:$PUERTO"
 echo
-echo "  IMPORTANTE: los personajes Thiago y Lautaro son ADMINISTRADORES."
-echo "  Crealos ustedes ANTES de pasarle el link a nadie."
+echo "  ADMINISTRADORES: tsk, heaveN y peladoh (nombres reservados)."
+echo "  Cada uno pone su contraseña con:  node tools/clave-admin.js NOMBRE"
+echo "  y después crea el personaje en el juego con esa contraseña."
 echo
 echo "  Comandos útiles en esta máquina:"
 echo "    systemctl restart norwayao    (reiniciar el servidor)"

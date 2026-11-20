@@ -45,7 +45,7 @@ jobs:
           body: |
             **Descargá `NorwayAO-Instalador.exe`** (abajo, en Assets), ejecutalo y listo.
             La aplicación trae el servidor adentro: se juega en tu PC sin instalar nada más.
-            Administradores: Thiago y Lautaro.
+            Administradores: tsk, heaveN y peladoh.
             Si ya lo tenés instalado, el juego se actualiza solo al abrirlo.
           files: |
             launcher/dist/NorwayAO-Instalador.exe

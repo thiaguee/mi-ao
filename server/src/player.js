@@ -29,6 +29,10 @@ P.createCharacter = function (sock, req) {
   if (pass.length < 4) return { error: 'La contraseña debe tener al menos 4 caracteres.' };
   if (!G.RAZAS[raza]) return { error: 'Raza inválida.' };
   if (accounts.exists(name)) return { error: 'Ya existe un personaje con ese nombre.' };
+  const reservado = accounts.esReservado(name);
+  if (reservado && !this.modoLocal && !accounts.reservaValida(name, pass)) {
+    return { error: 'Ese nombre está reservado.' };
+  }
   if (this.config.nombresProhibidos.some((n) => name.toLowerCase().includes(n))) {
     return { error: 'Ese nombre no está permitido.' };
   }
@@ -66,6 +70,7 @@ P.createCharacter = function (sock, req) {
   rec.eq.armor = 5;
   accounts.save(rec);
   this.log('Personaje creado: ' + name);
+  if (reservado) accounts.borrarReserva(name);
   return this.login(sock, { name, pass });
 };
 
@@ -154,7 +159,13 @@ P.toRecord = function (p) {
 };
 
 P.savePlayer = function (p) {
-  try { accounts.save(this.toRecord(p)); } catch (e) { console.error('Error guardando', p.name, e); }
+  try {
+    const rec = this.toRecord(p);
+    // La contraseña manda la del archivo: así tools/clave-admin.js puede cambiarla con el servidor prendido
+    const disco = accounts.load(p.name);
+    if (disco && disco.pass) rec.pass = disco.pass;
+    accounts.save(rec);
+  } catch (e) { console.error('Error guardando', p.name, e); }
 };
 
 P.logout = function (p) {
