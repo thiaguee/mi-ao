@@ -1,0 +1,8 @@
+node_modules/
+launcher/dist/
+launcher/icono.ico
+server/cuentas/
+server/logs/
+server/baneados.json
+server/config.json
+*.log

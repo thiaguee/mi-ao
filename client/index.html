@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fénix AO</title>
+<link rel="icon" href="assets/ui/icono.png">
+<link rel="stylesheet" href="css/style.css">
+<script src="config.js"></script>
+</head>
+<body>
+
+<!-- ===== PANTALLA DE INGRESO ===== -->
+<div id="scr-login" class="screen">
+  <div class="panel login-box">
+    <h1 class="logo">Fénix <span>AO</span></h1>
+    <p class="sub" id="srv-status">Conectando...</p>
+    <label>Personaje<input id="l-name" maxlength="20" autocomplete="username"></label>
+    <label>Contraseña<input id="l-pass" type="password" maxlength="40" autocomplete="current-password"></label>
+    <button id="b-login" class="btn main">Entrar</button>
+    <button id="b-goto-create" class="btn">Crear personaje</button>
+    <p class="err" id="l-err"></p>
+    <a class="btn download" id="b-download" href="/descargar">⬇ Descargar para Windows</a>
+    <div class="srv-cfg"><a href="#" id="b-server">Cambiar servidor</a></div>
+  </div>
+</div>
+
+<!-- ===== CREACIÓN DE PERSONAJE ===== -->
+<div id="scr-create" class="screen hidden">
+  <div class="panel create-box">
+    <h2>Crear personaje</h2>
+    <div class="cols">
+      <div class="col">
+        <label>Nombre<input id="c-name" maxlength="20"></label>
+        <label>Contraseña<input id="c-pass" type="password" maxlength="40"></label>
+        <label>Repetir contraseña<input id="c-pass2" type="password" maxlength="40"></label>
+        <label>Raza
+          <select id="c-raza">
+            <option value="1">Humano</option><option value="3">Elfo</option><option value="4">Elfo oscuro</option>
+            <option value="2">Enano</option><option value="5">Gnomo</option>
+          </select>
+        </label>
+        <label>Género
+          <select id="c-genero"><option value="h">Hombre</option><option value="m">Mujer</option></select>
+        </label>
+      </div>
+      <div class="col center">
+        <canvas id="c-preview" width="96" height="96"></canvas>
+        <div class="row"><button class="btn sm" id="c-head-prev">◀</button><span>Cabeza</span><button class="btn sm" id="c-head-next">▶</button></div>
+        <div class="attrs" id="c-attrs"></div>
+        <button class="btn" id="c-dice">🎲 Tirar dados</button>
+        <p class="hint">Todos empiezan como <b>Ciudadano</b>. Al subir de nivel elegís tu camino:
+          Trabajador o Luchador, y después Mago, Paladín, Guerrero, Asesino, Bardo, Druida...</p>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" id="c-back">Volver</button>
+      <button class="btn main" id="c-ok">Crear</button>
+    </div>
+    <p class="err" id="c-err"></p>
+  </div>
+</div>
+
+<!-- ===== JUEGO ===== -->
+<div id="scr-game" class="screen hidden">
+  <div id="game-main">
+    <div id="view-wrap">
+      <canvas id="view"></canvas>
+      <div id="announce" class="hidden"></div>
+      <div id="map-name"></div>
+      <div id="fps"></div>
+    </div>
+    <div id="console-wrap">
+      <div id="console"></div>
+      <input id="chat" maxlength="300" placeholder="Presioná Enter para hablar. /AYUDA para ver comandos">
+    </div>
+  </div>
+  <div id="side">
+    <div class="char-head">
+      <div id="s-name">-</div>
+      <div id="s-class">-</div>
+      <div id="s-level">Nivel 1</div>
+      <div class="bar exp"><div id="b-exp"></div><span id="t-exp"></span></div>
+    </div>
+    <div class="bars">
+      <div class="bar hp"><div id="b-hp"></div><span id="t-hp"></span></div>
+      <div class="bar man"><div id="b-man"></div><span id="t-man"></span></div>
+      <div class="bar sta"><div id="b-sta"></div><span id="t-sta"></span></div>
+      <div class="row2">
+        <div class="bar ham"><div id="b-ham"></div><span id="t-ham"></span></div>
+        <div class="bar sed"><div id="b-sed"></div><span id="t-sed"></span></div>
+      </div>
+    </div>
+    <div class="gold-row"><span>🪙 <b id="s-gold">0</b></span><span id="s-pos"></span></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="inv">Inventario</button>
+      <button class="tab" data-tab="spells">Hechizos</button>
+    </div>
+    <div id="tab-inv" class="tab-body">
+      <div id="inv-grid"></div>
+      <div id="inv-info"></div>
+      <div class="row btns">
+        <button class="btn sm" id="b-use" title="U">Usar</button>
+        <button class="btn sm" id="b-equip" title="E">Equipar</button>
+        <button class="btn sm" id="b-drop" title="T">Tirar</button>
+      </div>
+    </div>
+    <div id="tab-spells" class="tab-body hidden">
+      <div id="spell-list"></div>
+      <div class="row btns">
+        <button class="btn sm main" id="b-cast">Lanzar</button>
+        <button class="btn sm" id="b-sp-up">▲</button>
+        <button class="btn sm" id="b-sp-down">▼</button>
+      </div>
+    </div>
+    <div class="row btns bottom">
+      <button class="btn sm" id="b-skills">Skills</button>
+      <button class="btn sm" id="b-stats">Stats</button>
+      <button class="btn sm" id="b-med">Meditar</button>
+      <button class="btn sm" id="b-help">Ayuda</button>
+      <button class="btn sm" id="b-sound">🔊</button>
+      <button class="btn sm" id="b-exit">Salir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VENTANAS ===== -->
+<div id="modal" class="hidden">
+  <div class="panel modal-box">
+    <div class="modal-head"><h3 id="m-title"></h3><button class="btn sm" id="m-close">✕</button></div>
+    <div id="m-body"></div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

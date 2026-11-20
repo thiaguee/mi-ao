@@ -1,0 +1,49 @@
+{
+  "name": "fenix-ao",
+  "productName": "Fenix AO",
+  "version": "1.0.0",
+  "description": "Fénix AO - cliente del juego",
+  "main": "main.js",
+  "private": true,
+  "license": "AGPL-3.0",
+  "author": "Fenix AO",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "build": {
+    "appId": "ar.fenixao.cliente",
+    "productName": "Fenix AO",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../client",
+        "to": "client"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icono.png",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Fenix AO",
+      "artifactName": "FenixAO-Instalador.exe",
+      "language": "3082"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  }
+}

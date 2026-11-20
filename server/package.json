@@ -1,0 +1,14 @@
+{
+  "name": "fenix-ao-server",
+  "version": "0.1.0",
+  "description": "Servidor de Fénix AO (reescritura en Node.js)",
+  "main": "src/main.js",
+  "private": true,
+  "license": "AGPL-3.0",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "ws": "^8.23.0"
+  }
+}
