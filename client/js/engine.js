@@ -380,6 +380,7 @@ export function render(now) {
   for (const c of E.chars.values()) {
     if (c.y < y0 - 1 || c.y > by1 || c.x < x0 - 1 || c.x > x1 + 1) continue;
     const px = sx(c.x) + c.offX, py = sy(c.y) + c.offY;
+    if (c.mis) signoMision(ctx, px + 16, py - 40 + Math.sin(now / 250) * 2);
     if (c.inv && c.id !== E.me) continue;
     if (c.say) {
       if (now > c.say.until) c.say = null; else drawSay(ctx, c, px, py);
@@ -445,6 +446,28 @@ function drawChar(ctx, c, px, py, now, me) {
   }
 }
 
+// "!" amarillo arriba de los Maestros de Misiones
+function signoMision(ctx, x, y) {
+  ctx.save();
+  ctx.font = 'bold 18px Georgia, serif'; ctx.textAlign = 'center';
+  ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.strokeText('!', x, y);
+  ctx.fillStyle = '#ffd84a'; ctx.fillText('!', x, y);
+  ctx.restore();
+}
+
+function estrella(ctx, x, y, r, color) {
+  ctx.save();
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r;
+    ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+  }
+  ctx.closePath();
+  ctx.lineWidth = 1.5; ctx.strokeStyle = '#000'; ctx.stroke();
+  ctx.fillStyle = color; ctx.fill();
+  ctx.restore();
+}
+
 function drawName(ctx, c, px, py) {
   ctx.font = 'bold 11px Tahoma, sans-serif';
   ctx.textAlign = 'center';
@@ -455,6 +478,11 @@ function drawName(ctx, c, px, py) {
   ctx.fillText(parts[0], px + 17, y + 1);
   ctx.fillStyle = col;
   ctx.fillText(parts[0], px + 16, y);
+  // estrella del ranking de kills (oro, plata, bronce) a la izquierda del nombre
+  if (c.rk >= 1 && c.rk <= 3) {
+    const w = ctx.measureText(parts[0]).width;
+    estrella(ctx, px + 16 - w / 2 - 7, y - 4, 5, ['#ffd700', '#d8d8e0', '#d08a3a'][c.rk - 1]);
+  }
   if (parts[1]) {
     const g = '<' + parts[1];
     ctx.fillStyle = '#000'; ctx.fillText(g, px + 17, y + 13);

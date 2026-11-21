@@ -103,8 +103,10 @@ P.login = function (sock, req) {
   if (!this.maps[map]) ({ map, x, y } = this.data.cities.ULLATHORPE);
   const pos = this.closestLegalPos(map, x, y) || { x, y };
   p.map = map; p.x = pos.x; p.y = pos.y;
+  this.revisarGuerraAlEntrar(p);
   this.recalcEquip(p);
   this.revisarClanAlEntrar(p);
+  this.misDe(p);
   this.place(p, p.map, p.x, p.y);
   this.send(p, { t: 'welcome', id: p.id, name: p.name, gm: p.gm, motd: this.config.motd, capa: p.capaOculta ? 0 : 1,
     server: this.config.nombreServidor });
@@ -117,6 +119,8 @@ P.login = function (sock, req) {
   for (const line of this.config.motd) this.msg(p, line, 'server');
   if (p.gm > 0) this.msg(p, `Tenés poderes de ${this.gmTitle(p.gm)}. Escribí /GMAYUDA para ver tus comandos.`, 'gm');
   this.checkClassUp(p);
+  this.enviarSeguimiento(p);
+  this.pagarPendientesClan(p);
   this.log(`Ingresó ${p.name} (${p.ip})`);
   return { ok: true };
 };
@@ -159,7 +163,8 @@ P.toRecord = function (p) {
     eq: p.eq, spells: p.spells, bank: p.bank, bankGld: p.bankGld,
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
-    lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta,
+    lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
+    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0,
   };
 };
 
@@ -175,6 +180,7 @@ P.savePlayer = function (p) {
 
 P.logout = function (p) {
   if (!this.players.has(p.id)) return;
+  if (p.enGuerra && this.guerra) this.guerra.participantes.delete(p.name.toLowerCase());
   this.endTrade(p);
   this.savePlayer(p);
   this.remove(p);
@@ -528,7 +534,7 @@ P.checkLevel = function (p) {
     const sta = 15;
     const manaF = G.MANA_POR_NIVEL[p.clase] || 0;
     const man = Math.floor(manaF * p.attrs[2]);
-    s.maxHp = Math.min(999, s.maxHp + hp);
+    s.maxHp = Math.min(2500, s.maxHp + hp);
     s.maxSta = Math.min(999, s.maxSta + sta);
     s.maxMan = Math.min(3000, s.maxMan + man);
     s.minHit = Math.min(99, s.minHit + hit);
@@ -536,6 +542,10 @@ P.checkLevel = function (p) {
     const pts = s.lvl === 2 ? 10 : 5;
     s.skillPts += pts;
     this.msg(p, `¡Has subido al nivel ${s.lvl}!`, 'server');
+    if (s.lvl === G.NIVEL_DESBLOQUEO) {
+      this.msg(p, `¡Llegaste al nivel ${G.NIVEL_DESBLOQUEO}! Se desbloquearon 10 niveles más (hasta el ${G.MAX_NIVEL}) y las MISIONES DE ÉLITE en los Maestros de Misiones.`, 'server');
+      this.toAll({ t: 'msg', text: `¡${p.name} llegó al nivel ${G.NIVEL_DESBLOQUEO} y desbloqueó los niveles de élite!`, color: 'server' });
+    }
     this.msg(p, `Ganaste ${hp} de vida, ${sta} de energía${man ? `, ${man} de maná` : ''}, ${hit} de golpe y ${pts} skillpoints.`, 'info');
     if (s.lvl > NEWBIE_LVL && s.lvl - 1 === NEWBIE_LVL) this.dropNewbieItems(p);
   }
@@ -662,7 +672,9 @@ P.killPlayer = function (p, killer) {
   p.deaths = (p.deaths || 0) + 1;
   this.msg(p, '¡¡¡Estás muerto!!! Buscá un sacerdote para que te resucite, o escribí /HOGAR.', 'warn');
   this.toMap(p.map, { t: 'snd', w: G.SND.USERMUERTE });
-  const zonaPelea = this.trigger(p.map, p.x, p.y) === G.TRIGGER.ZONAPELEA;
+  // en la guerra (o en zona de pelea) no se cae nada ni cambia ciudadano/criminal
+  const enGuerra = !!p.enGuerra;
+  const zonaPelea = enGuerra || this.trigger(p.map, p.x, p.y) === G.TRIGGER.ZONAPELEA;
   // Se caen los objetos (no los newbies ni los "no se cae"), salvo en zona de pelea o si es newbie
   if (!zonaPelea && s.lvl > NEWBIE_LVL && p.gm === 0) {
     for (let i = 0; i < INV_SLOTS; i++) {
@@ -686,6 +698,7 @@ P.killPlayer = function (p, killer) {
   this.recalcEquip(p);
   this.sendCharToMap(p);
   this.sendAllStats(p);
+  if (enGuerra) this.muerteEnGuerra(p, killer);
   if (killer && killer.kind === 'pc' && killer.id !== p.id && !zonaPelea) {
     if (!p.crim) {
       killer.kills.ciu++;
@@ -701,6 +714,7 @@ P.killPlayer = function (p, killer) {
     this.msg(p, `${killer.name} te ha matado!`, 'fight');
     this.giveExp(killer, Math.floor(p.stats.lvl * 2));
     this.send(killer, { t: 'stats', kills: killer.kills, crim: killer.crim });
+    this.sumarKillRanking(killer);
   }
 };
 

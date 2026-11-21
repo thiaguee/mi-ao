@@ -5,6 +5,7 @@
 const { app, BrowserWindow, Menu, shell, dialog, utilityProcess } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 const RES = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 const CLIENT = path.join(RES, 'client');
@@ -80,7 +81,11 @@ function createWindow() {
   // Le pasamos al juego la versión y el estado de la placa de video (para el diagnóstico F3)
   let gpu = '';
   try { const g = app.getGPUFeatureStatus(); gpu = `${g['2d_canvas']}/${g.gpu_compositing}`; } catch (e) { /* nada */ }
-  win.loadFile(path.join(CLIENT, 'index.html'), { query: { v: app.getVersion(), gpu } });
+  // IPs de esta PC (para mostrarle al jugador cuál pasarle a sus amigos; la de Radmin empieza con 26.)
+  const ips = [];
+  for (const lista of Object.values(os.networkInterfaces())) for (const a of lista || []) if (a.family === 'IPv4' && !a.internal) ips.push(a.address);
+  ips.sort((a, b) => (b.startsWith('26.') ? 1 : 0) - (a.startsWith('26.') ? 1 : 0));
+  win.loadFile(path.join(CLIENT, 'index.html'), { query: { v: app.getVersion(), gpu, ips: ips.join(','), local: servidor ? '1' : '' } });
   // Los links externos se abren en el navegador
   win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: 'deny' }; });
   // F11 = pantalla completa, Ctrl+F12 = herramientas (para soporte)

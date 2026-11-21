@@ -50,6 +50,7 @@ const AYUDA_USUARIO = [
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
   'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
+  'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills)',
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
@@ -113,6 +114,7 @@ K.command = function (p, text) {
     case 'HOGAR': {
       if (!p.dead) return this.msg(p, 'Sólo podés usar /HOGAR estando muerto.', 'warn');
       if (p.jailUntil) return this.msg(p, 'Estás en la cárcel.', 'warn');
+      if (p.enGuerra) return this.msg(p, 'Estás en la guerra: vas a reaparecer en tu base. Para irte: /SALIRGUERRA', 'warn');
       const c = this.data.cities[p.hogar] || this.data.cities.ULLATHORPE;
       return this.warp(p, c.map, c.x, c.y);
     }
@@ -158,6 +160,14 @@ K.command = function (p, text) {
     }
     case 'CAPA':
       return this.alternarCapa(p);
+    case 'GUERRA':
+      return this.comandoGuerra(p, rest);
+    case 'SALIRGUERRA':
+      return this.salirDeGuerra(p, 'Saliste de la guerra.');
+    case 'RANKING':
+      return this.mostrarRanking(p);
+    case 'MISIONES':
+      return this.enviarMisiones(p, !!this.cercaDeMaestro(p));
     case 'FUNDARCLAN':
       return this.abrirFundar(p);
     case 'CLANES':

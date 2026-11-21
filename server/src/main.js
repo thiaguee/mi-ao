@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -103,6 +103,8 @@ if (config.adminsDePrueba) {
   console.log('ATENCIÓN: adminsDePrueba está activado (tsk, heaveN y peladoh con contraseña 123). Desactivarlo antes de abrir el servidor al público.');
 }
 world.cargarClanes();
+world.cargarMisiones();
+world.cargarRanking();
 
 // ---------- logs, bans y guardado ----------
 const day = () => new Date().toISOString().slice(0, 10);
@@ -142,6 +144,7 @@ world.createCharacter = function (sock, req) {
 
 world.cargarTeleports();
 world.spawnAllNpcs();
+world.iniciarGuerras();
 
 // ---------- mensajes del cliente ----------
 function handle(sock, msg) {
@@ -217,6 +220,7 @@ function handle(sock, msg) {
       return;
     }
     case 'clan': return world.accionClan(p, msg);
+    case 'mis': return world.accionMision(p, msg);
     case 'capa': return world.alternarCapa(p);
     case 'ping': return world.send(p, { t: 'pong', ts: msg.ts });
     case 'logout': return world.logout(p);

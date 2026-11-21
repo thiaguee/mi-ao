@@ -1,5 +1,5 @@
 {
-  "_ayuda": "NPCs agregados al mundo. num: número nuevo (mayor a 1000). spawn: [mapa, x, y]. items: [[objeto, cantidad]] (10000 = no se acaba). tipoItems: qué tipo de objetos le compra al jugador (31 = barcos).",
+  "_ayuda": "NPCs agregados al mundo. num: número nuevo (mayor a 1000). spawn: [mapa, x, y]. items: [[objeto, cantidad]] (10000 = no se acaba). tipoItems: qué tipo de objetos le compra al jugador (31 = barcos). misiones: true = Maestro de Misiones (doble clic abre las misiones).",
   "npcs": [
     {
       "num": 1001,
@@ -7,9 +7,83 @@
       "desc": "¡Ahoy! Si querés navegar, te vendo una barca. Usala parado al lado del agua.",
       "body": 3,
       "head": 2,
-      "items": [[474, 10000]],
+      "items": [
+        [
+          474,
+          10000
+        ]
+      ],
       "tipoItems": 31,
-      "spawn": [1, 63, 49]
+      "spawn": [
+        1,
+        63,
+        49
+      ]
+    },
+    {
+      "num": 1010,
+      "name": "Maestro de Misiones",
+      "desc": "¡Bienvenido a Ullathorpe, aventurero! Tengo trabajo para vos: hacé doble clic para ver las misiones.",
+      "body": 339,
+      "head": 101,
+      "misiones": true,
+      "spawn": [
+        1,
+        60,
+        46
+      ]
+    },
+    {
+      "num": 1011,
+      "name": "Maestro de Misiones",
+      "desc": "¡Bienvenido a Nix, aventurero! Tengo trabajo para vos: hacé doble clic para ver las misiones.",
+      "body": 339,
+      "head": 101,
+      "misiones": true,
+      "spawn": [
+        34,
+        46,
+        87
+      ]
+    },
+    {
+      "num": 1012,
+      "name": "Maestro de Misiones",
+      "desc": "¡Bienvenido a Banderbill, aventurero! Tengo trabajo para vos: hacé doble clic para ver las misiones.",
+      "body": 339,
+      "head": 101,
+      "misiones": true,
+      "spawn": [
+        59,
+        52,
+        51
+      ]
+    },
+    {
+      "num": 1013,
+      "name": "Maestro de Misiones",
+      "desc": "¡Bienvenido a Lindos, aventurero! Tengo trabajo para vos: hacé doble clic para ver las misiones.",
+      "body": 339,
+      "head": 101,
+      "misiones": true,
+      "spawn": [
+        62,
+        74,
+        42
+      ]
+    },
+    {
+      "num": 1014,
+      "name": "Maestro de Misiones",
+      "desc": "¡Bienvenido a Arghal, aventurero! Tengo trabajo para vos: hacé doble clic para ver las misiones.",
+      "body": 339,
+      "head": 101,
+      "misiones": true,
+      "spawn": [
+        196,
+        54,
+        75
+      ]
     }
   ]
 }

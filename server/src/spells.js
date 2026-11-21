@@ -58,7 +58,7 @@ S.castSpell = function (p, slot, x, y) {
   if (sp.fx) this.toMap(p.map, { t: 'fx', id: target.id, fx: sp.fx, loops: sp.loops || 0 });
   if (sp.wav) this.toMap(p.map, { t: 'snd', w: sp.wav });
 
-  if (ofensivo && target.kind === 'pc' && !p.crim && !target.crim) {
+  if (ofensivo && target.kind === 'pc' && !p.crim && !target.crim && !this.peleaDeGuerra(p, target)) {
     p.crim = true;
     this.msg(p, '¡Te has convertido en criminal por atacar a un ciudadano!', 'warn');
     this.sendCharToMap(p);

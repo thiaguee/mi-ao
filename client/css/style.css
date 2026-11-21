@@ -206,3 +206,55 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .dlg { min-width: 320px; max-width: 460px; }
 .dlg p { margin: 0 0 10px; line-height: 1.5; }
 .dlg-in { width: 100%; }
+
+/* ===== misiones ===== */
+.pts-row { float: right; color: #ffd84a; }
+#mis-seg { position: absolute; left: 10px; top: 10px; z-index: 2; background: #000b; border: 1px solid #5a4628; border-radius: 6px;
+  padding: 6px 10px; min-width: 190px; max-width: 260px; pointer-events: none; font-size: 12px; text-shadow: 1px 1px 0 #000; }
+.ms-tit { font-family: Georgia, serif; color: #ffd84a; font-weight: bold; letter-spacing: 1px; margin-bottom: 2px; }
+.ms-item { margin-top: 4px; }
+.ms-n { color: #e8dcc3; font-weight: bold; }
+.ms-o { color: #c9b089; padding-left: 8px; }
+.ms-o.ok { color: #6fe06f; }
+.mis-win { width: 860px; max-width: 86vw; }
+.mi-top { display: flex; gap: 22px; color: #e8dcc3; margin-bottom: 6px; }
+.mi-top b { color: #ffd84a; }
+.mi-cols { display: flex; gap: 14px; }
+.mi-col { flex: 1; max-height: 64vh; overflow-y: auto; padding-right: 4px; }
+.mi-card { background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 7px 9px; margin-bottom: 6px; }
+.mi-card.bloq { opacity: .55; }
+.mi-card.hecha { border-color: #2f6a2f; }
+.mi-cab { display: flex; align-items: center; gap: 6px; }
+.mi-cab b { color: #ffe9a0; font-size: 14px; margin-right: auto; }
+.mi-lvl { color: var(--muted); font-size: 11px; }
+.mi-tag { font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 3px; }
+.mi-tag.elite { background: #7a1a8a; color: #f6d0ff; } .mi-tag.diaria { background: #8a6a1a; color: #fff0c0; } .mi-tag.clan { background: #1a5a8a; color: #d0ecff; }
+.mi-desc { color: #c9b089; font-size: 12px; font-style: italic; margin: 2px 0 4px; }
+.mi-obj { display: grid; grid-template-columns: 1fr auto; font-size: 12px; gap: 0 8px; margin-bottom: 3px; }
+.mi-obj b { color: #ffd84a; }
+.mi-barra { grid-column: 1 / 3; height: 5px; background: #000; border-radius: 3px; overflow: hidden; }
+.mi-barra div { height: 100%; background: linear-gradient(90deg, #c08a20, #ffd84a); }
+.mi-rec { display: block; font-size: 12px; color: #e8dcc3; margin-top: 3px; }
+.mi-bloq { color: #ff9a6a; font-size: 12px; margin-top: 4px; }
+.mi-ok { color: #6fe06f; font-weight: bold; font-size: 12px; margin-top: 4px; }
+.mi-vacio { padding: 6px; }
+
+/* botones del panel en dos columnas (entran todos) */
+.side-btns { width: 156px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; align-content: start; }
+.side-btns .gold-box { grid-column: 1 / 3; }
+.side-btns .btn.mid { font-size: 10.5px; padding: 6px 1px; letter-spacing: 0; }
+
+/* ===== guerra ===== */
+#guerra-hud { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3; pointer-events: none;
+  background: linear-gradient(#2a0d0dcc, #120606cc); border: 2px solid #8a2a1a; border-radius: 8px; padding: 6px 16px; text-align: center;
+  box-shadow: 0 0 14px #c0301a66; text-shadow: 1px 1px 0 #000; min-width: 330px; }
+.gh-tit { font-family: Georgia, serif; color: #ffb84a; font-weight: bold; letter-spacing: 2px; }
+.gh-marc { display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 15px; margin: 2px 0; }
+.gh-ciu { color: #6fa8ff; } .gh-cri { color: #ff6b5a; } .gh-vs { color: #c9b089; font-size: 12px; }
+.gh-ciu b, .gh-cri b { font-size: 20px; }
+.gh-ciu.yo, .gh-cri.yo { text-decoration: underline; }
+.gh-yo { font-size: 11px; color: #e8dcc3; }
+.gh-yo b { color: #ffd84a; }
+
+.mundo-box { background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 8px 10px; text-align: center; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.mi-ip { font-size: 22px; font-weight: bold; color: #ffd84a; letter-spacing: 1px; margin: 4px 0; user-select: text; }
