@@ -139,6 +139,7 @@ function loadObjs() {
       bajos: num(v.RAZAENANA) === 1, // sólo enanos/gnomos
       drow: num(v.RAZADROW) === 1,
       real: num(v.REAL) === 1, caos: num(v.CAOS) === 1,
+      soloGM: num(v.SOLOGM) === 1, // ropa de staff: sólo la usan Consejeros y GMs
       prohibidas,
       texto: v.TEXTO || '',
       minSkill: num(v.MINSKILL),

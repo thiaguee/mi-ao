@@ -27,6 +27,22 @@
     "2013": {
       "clases": ["Bardo"],
       "_nombre": "Daga Celestial (sólo Bardos)"
+    },
+    "2025": {
+      "clases": ["Asesino"],
+      "_nombre": "Túnica del Asesino (sólo Asesinos)"
+    },
+    "2029": {
+      "clases": ["Paladín"],
+      "_nombre": "Armadura Sagrada (sólo Paladines)"
+    },
+    "2037": {
+      "clases": ["Druida"],
+      "_nombre": "Túnica de Druida Ancestral (sólo Druidas)"
+    },
+    "2038": {
+      "clases": ["Bardo"],
+      "_nombre": "Túnica de Bardo (sólo Bardos)"
     }
   },
   "vendedores": {

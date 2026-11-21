@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2024
+NumOBJs=2040
 
 
 
@@ -15519,6 +15519,187 @@ NumRopaje=707
 Agarrable=0
 MinDef=50
 MaxDef=60
+Valor=675000
+Crucial=0
+
+[OBJ2025] 'Norway AO: del Mega Pack de graficos (Cuerpos/60b420f7e98dc37d38969decae80a4e2.png)
+Name=Tunica del Asesino
+GrhIndex=33492
+ObjType=3
+NumRopaje=708
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2026] 'Norway AO: del Mega Pack de graficos (Cuerpos/7f0208bf66138a38bbe7f5ca3ea14d16.png)
+Name=Coraza Divina 2
+GrhIndex=33519
+ObjType=3
+NumRopaje=709
+Agarrable=0
+MinDef=50
+MaxDef=60
+Valor=675000
+Crucial=0
+
+[OBJ2027] 'Norway AO: del Mega Pack de graficos (Cuerpos/894cd6793a220f1db9932abab15e343f.png)
+Name=Tunica de Game Master 1
+GrhIndex=33546
+ObjType=3
+NumRopaje=710
+Agarrable=0
+SoloGM=1
+MinDef=30
+MaxDef=35
+Valor=0
+Crucial=0
+
+[OBJ2028] 'Norway AO: del Mega Pack de graficos (Cuerpos/9c4fdd25bf134afa6735f0e40c57eca4.png)
+Name=Tunica de Rey 3
+GrhIndex=33573
+ObjType=3
+NumRopaje=711
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2029] 'Norway AO: del Mega Pack de graficos (Cuerpos/9d8657092a52f3e345f7637f537c2b4f.png)
+Name=Armadura Sagrada
+GrhIndex=33600
+ObjType=3
+NumRopaje=712
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2030] 'Norway AO: del Mega Pack de graficos (Cuerpos/a3d40b898c3f054b177d7000aef222db.png)
+Name=Coraza del Campeon
+GrhIndex=33627
+ObjType=3
+NumRopaje=713
+Agarrable=0
+MinDef=50
+MaxDef=60
+Valor=0
+Crucial=0
+
+[OBJ2031] 'Norway AO: del Mega Pack de graficos (Cuerpos/a992e8783fbd40f7e72ae283af1eab4f.png)
+Name=Chupin de Mujer
+GrhIndex=33654
+ObjType=3
+NumRopaje=714
+Agarrable=0
+Mujer=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2032] 'Norway AO: del Mega Pack de graficos (Cuerpos/b8a932af5a7f43037a85803787c67c5c.png)
+Name=Tunica del Ermitano
+GrhIndex=33681
+ObjType=3
+NumRopaje=715
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2033] 'Norway AO: del Mega Pack de graficos (Cuerpos/bcfd061b8525ce193b73508f1e28de2f.png)
+Name=Tunica de Game Master 2
+GrhIndex=33708
+ObjType=3
+NumRopaje=716
+Agarrable=0
+SoloGM=1
+MinDef=30
+MaxDef=35
+Valor=0
+Crucial=0
+
+[OBJ2034] 'Norway AO: del Mega Pack de graficos (Cuerpos/cd2830fe2cb3f701045439bfc6558ff2.png)
+Name=Tunica del Espectro
+GrhIndex=33735
+ObjType=3
+NumRopaje=717
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2035] 'Norway AO: del Mega Pack de graficos (Cuerpos/d96ecd1c4cc13f0655e39c5c55b687c2.png)
+Name=Chupin de Consejero Alianza
+GrhIndex=33762
+ObjType=3
+NumRopaje=718
+Agarrable=0
+Real=1
+MinDef=45
+MaxDef=50
+Valor=675000
+Crucial=0
+
+[OBJ2036] 'Norway AO: del Mega Pack de graficos (Cuerpos/ddd523ecd89bf957f51dfaf4aba831f8.png)
+Name=Tunica de Game Master 3
+GrhIndex=33789
+ObjType=3
+NumRopaje=719
+Agarrable=0
+SoloGM=1
+MinDef=30
+MaxDef=35
+Valor=0
+Crucial=0
+
+[OBJ2037] 'Norway AO: del Mega Pack de graficos (Cuerpos/ee2d34da016868e6f99e8e5fb3e407ee.png)
+Name=Tunica de Druida Ancestral
+GrhIndex=33816
+ObjType=3
+NumRopaje=720
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2038] 'Norway AO: del Mega Pack de graficos (Cuerpos/f34ebc6ed0fa1ed4fb95ebcba66324f0.png)
+Name=Tunica de Bardo
+GrhIndex=33843
+ObjType=3
+NumRopaje=721
+Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2039] 'Norway AO: del Mega Pack de graficos (Cuerpos/f126a4c60836e83f02468f46fcf0489e.png), redibujada a altura de alto desde la version de enanos
+Name=Coraza del Mal 2
+GrhIndex=33870
+ObjType=3
+NumRopaje=722
+Agarrable=0
+MinDef=50
+MaxDef=60
+Valor=675000
+Crucial=0
+
+[OBJ2040] 'Norway AO: del Mega Pack de graficos (Cuerpos/f97e954f8589a3a87ef4110e3c9f01ed.png)
+Name=Tunica del Inquisidor
+GrhIndex=33897
+ObjType=3
+NumRopaje=723
+Agarrable=0
+MinDef=30
+MaxDef=35
 Valor=675000
 Crucial=0
 

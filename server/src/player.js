@@ -305,6 +305,7 @@ P.takeItem = function (p, id, amount) {
 
 P.canUseObj = function (p, o) {
   if (p.gm >= 2) return true;
+  if (o.soloGM && !p.gm) return 'Sólo los Game Masters pueden usar esto.';
   if (o.soloClases) {
     if (!o.soloClases.includes(G.normClase(G.CLASES[p.clase] || ''))) return 'Tu clase no puede usar este objeto.';
   } else {
