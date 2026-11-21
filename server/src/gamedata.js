@@ -357,7 +357,7 @@ function cargarNpcsExtra(npcs) {
       heading: e.heading || 3, movement: e.movimiento || 1, attackable: false, respawn: true, hostile: false,
       comercia: !!e.items, tipoItems: e.tipoItems || 0, exp: 0, gld: 0, minHp: 1, maxHp: 1, minHit: 0, maxHit: 0,
       def: 0, defM: 0, ataque: 0, evasion: 0, veneno: false, aguaValida: false, tierraInvalida: false,
-      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [], misiones: !!e.misiones, comandante: e.comandante || '',
+      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [], misiones: !!e.misiones, comandante: e.comandante || '', hechizos: !!e.hechizos,
     };
   }
   return lista;

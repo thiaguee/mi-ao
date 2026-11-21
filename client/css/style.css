@@ -416,3 +416,7 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .ti-win input, .ti-win select { font-size: 11px; padding: 3px 5px; }
 .ti-c3 select { width: 86px; flex: none; }
 .ti-c3 .ob-filtros { min-width: 0; }
+
+/* solapas de la Casa de Hechizos */
+.tr-tabs { display: flex; gap: 3px; margin-bottom: 6px; flex-wrap: wrap; }
+.tr-tabs .tab { flex: 1; padding: 4px 6px; font-size: 11px; border-radius: 4px; }

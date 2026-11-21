@@ -267,8 +267,10 @@ C.canAttack = function (p, target) {
     if (this.peleaDeGuerra(p, target)) return true; // en la guerra se pelea siempre
     if (target.gm > 0 && !target.gmAtacable) { this.msg(p, 'No podés atacar a un GM.', 'warn'); return false; }
     if (p.gm > 0 && p.gm < 3) { this.msg(p, 'Los GMs no pueden atacar usuarios.', 'warn'); return false; }
+    // Zona de pelea (los cuadrados de "plante"): adentro se pueden pegar los dos, sin volverse criminal
+    if (this.enZonaPelea(p) && this.enZonaPelea(target)) return true;
     if (this.isSafe(p) || this.isSafe(target)) {
-      this.msg(p, 'No podés pelear en zona segura.', 'warn'); return false;
+      this.msg(p, this.enZonaPelea(p) ? 'Tu rival tiene que estar adentro de la zona de pelea.' : 'No podés pelear en zona segura.', 'warn'); return false;
     }
     if (!p.crim && !target.crim && !p.seguroOff) {
       this.msg(p, 'Para atacar ciudadanos sacá el seguro con /SEGURO (te vas a volver criminal).', 'warn');
@@ -316,7 +318,7 @@ C.attack = function (p) {
 C.hitTarget = function (p, target, ranged) {
   if (!this.canAttack(p, target)) return;
   if (p.hidden) { p.hidden = false; this.sendCharToMap(p); }
-  if (target.kind === 'pc' && !p.crim && !target.crim && !this.peleaDeGuerra(p, target)) {
+  if (target.kind === 'pc' && !p.crim && !target.crim && !this.peleaDeGuerra(p, target) && !(this.enZonaPelea(p) && this.enZonaPelea(target))) {
     p.crim = true;
     this.msg(p, '¡Te has convertido en criminal por atacar a un ciudadano!', 'warn');
     this.sendCharToMap(p);

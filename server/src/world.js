@@ -52,6 +52,10 @@ class World {
     return mp && this.inMap(x, y) ? mp.d.trigger[idx(x, y)] : 0;
   }
 
+  enZonaPelea(e) {
+    return this.trigger(e.map, e.x, e.y) === TRIGGER.ZONAPELEA;
+  }
+
   isSafe(e) {
     const mp = this.maps[e.map];
     return this.trigger(e.map, e.x, e.y) === TRIGGER.ZONASEGURA || (mp && !mp.d.pk);
