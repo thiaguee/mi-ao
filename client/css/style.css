@@ -255,3 +255,6 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .gh-ciu.yo, .gh-cri.yo { text-decoration: underline; }
 .gh-yo { font-size: 11px; color: #e8dcc3; }
 .gh-yo b { color: #ffd84a; }
+
+.mundo-box { background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 8px 10px; text-align: center; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.mi-ip { font-size: 22px; font-weight: bold; color: #ffd84a; letter-spacing: 1px; margin: 4px 0; user-select: text; }

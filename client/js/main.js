@@ -42,11 +42,53 @@ async function ensureConnected(errEl) {
 
 function statusLine() {
   connect().then(() => send({ t: 'info' })).catch(() => {
-    $('srv-status').textContent = 'Servidor desconectado (' + serverUrl() + ')';
+    $('srv-status').textContent = servidorAmigo() ? 'No se pudo conectar con tu amigo. ¿Tiene el juego abierto y están en la misma red de Radmin?' : 'Servidor desconectado (' + serverUrl() + ')';
   });
 }
 
 on('info', (m) => { $('srv-status').textContent = `${m.name} — ${m.online} jugando`; });
+
+// ---------- Jugar con amigos (Radmin VPN o red local) ----------
+function servidorAmigo() {
+  const s = localStorage.getItem('ao_servidor') || '';
+  const m = /^wss?:\/\/([^:/]+)/.exec(s);
+  return m ? m[1] : '';
+}
+function pintarMundo() {
+  const amigo = servidorAmigo();
+  const ips = (QS.get('ips') || '').split(',').filter(Boolean);
+  const radmin = ips.find((x) => x.startsWith('26.'));
+  const local = QS.get('local') === '1';
+  let txt = '';
+  if (amigo) {
+    txt = `Estás conectado al mundo de un amigo (<b>${esc(amigo)}</b>).`;
+  } else if (local) {
+    txt = radmin
+      ? `Estás en <b>tu propio mundo</b>. Para que tus amigos entren, pasales este número:<div class="mi-ip">${esc(radmin)}</div><span class="hint">Ellos tocan "Unirme al mundo de un amigo" y lo escriben. No cierres el juego mientras juegan.</span>`
+      : `Estás en <b>tu propio mundo</b>. Para jugar con amigos, abrí Radmin VPN y conectate a la red de ellos.`;
+  }
+  $('mundo-txt').innerHTML = txt;
+  $('mundo-box').classList.toggle('hidden', !local && !amigo);
+  $('b-unirme').classList.toggle('hidden', !!amigo);
+  $('b-volver').classList.toggle('hidden', !amigo);
+}
+$('b-unirme').onclick = async () => {
+  const v = await preguntar('Escribí el número de tu amigo (el de Radmin VPN, empieza con 26.). Ejemplo: 26.123.45.67', '');
+  if (v === null) return;
+  const ip = v.trim().replace(/^wss?:\/\//, '').replace(/:\d+.*$/, '');
+  if (!/^[0-9a-zA-Z.-]+$/.test(ip)) { $('l-err').textContent = 'Ese número no es válido.'; return; }
+  localStorage.setItem('ao_servidor', `ws://${ip}:7666`);
+  if (N.ws) N.ws.close();
+  $('srv-status').textContent = 'Conectando al mundo de tu amigo...';
+  pintarMundo();
+  setTimeout(statusLine, 300);
+};
+$('b-volver').onclick = () => {
+  localStorage.removeItem('ao_servidor');
+  if (N.ws) N.ws.close();
+  pintarMundo();
+  setTimeout(statusLine, 300);
+};
 on('error', (m) => {
   const el = $('scr-create').classList.contains('hidden') ? $('l-err') : $('c-err');
   el.textContent = m.text;
@@ -905,6 +947,7 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
   }
   await Mapas.cargarMundo();
   $('l-name').value = localStorage.getItem('ao_ultimo') || '';
+  pintarMundo();
   if (QS.get('v')) $('app-ver').textContent = 'Norway AO v' + QS.get('v');
   // El botón de descarga sólo tiene sentido cuando se juega desde el navegador
   if (location.protocol === 'file:') $('b-download').classList.add('hidden');
