@@ -50,7 +50,7 @@ const AYUDA_USUARIO = [
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
   'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
-  'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills)',
+  'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills) · /NOBLEZA',
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
@@ -59,7 +59,8 @@ const AYUDA_GM = {
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
     '/TELEPLOC (teleport a donde hiciste clic) /BUSCARNPC texto /BUSCAROBJ texto'],
-  3: ['[Dios] /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
+  3: ['[Dios] /PONERNPC número (pone un NPC fijo donde hiciste clic) /SACARNPC (saca el NPC señalado) /NPCSPUESTOS',
+    '/TIENDAS (elegir qué vende cada NPC) /NOBLE nombre (dar o sacar nobleza) /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
@@ -166,6 +167,8 @@ K.command = function (p, text) {
       return this.comandoGuerra(p, rest);
     case 'SALIRGUERRA':
       return this.salirDeGuerra(p, 'Saliste de la guerra.');
+    case 'NOBLEZA':
+      return this.comandoNobleza(p);
     case 'PREMIOS':
       return this.enviarCanje(p, p.crim ? 'cri' : 'ciu', true);
     case 'RANKING':
@@ -361,6 +364,9 @@ K.command = function (p, text) {
       this.sendStat(t, ['gld']);
       return this.msg(p, `${t.name} ahora tiene ${t.stats.gld} de oro.`, 'gm');
     }
+    case 'NOBLE':
+      if (!need(3)) return;
+      return this.gmNoble(p, args[0]);
     case 'NIVEL': {
       if (!need(3)) return;
       const t = target(args[0]); if (!t) return;
@@ -419,6 +425,10 @@ K.command = function (p, text) {
     }
     case 'OBJETOS': return this.abrirPanelObjetos(p);
     case 'TESTEO': return this.abrirTesteo(p);
+    case 'TIENDAS': return this.abrirTiendas(p);
+    case 'PONERNPC': return this.ponerNpc(p, args[0]);
+    case 'SACARNPC': return this.sacarNpc(p);
+    case 'NPCSPUESTOS': return this.listarNpcsGm(p);
     case 'PUNTOSTORNEO': return this.comandoPuntosTorneo(p, args);
     case 'TIENDATORNEO': return this.comandoTiendaTorneo(p, args);
     case 'ELIMINARESTRUCTURA': return this.eliminarEstructura(p);

@@ -167,7 +167,7 @@ P.toRecord = function (p) {
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
-    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [],
+    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
     nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
   };
 };
@@ -306,6 +306,8 @@ P.takeItem = function (p, id, amount) {
 P.canUseObj = function (p, o) {
   if (p.gm >= 2) return true;
   if (o.soloGM && !p.gm) return 'Sólo los Game Masters pueden usar esto.';
+  // Túnicas de noble: las usa cualquier noble, sea la clase o la raza que sea; nadie más
+  if (this.esTunicaNoble && this.esTunicaNoble(o.id)) return p.noble ? true : 'Sólo los Nobles pueden usar esta túnica.';
   if (o.soloClases) {
     if (!o.soloClases.includes(G.normClase(G.CLASES[p.clase] || ''))) return 'Tu clase no puede usar este objeto.';
   } else {

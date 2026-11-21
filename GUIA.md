@@ -298,3 +298,32 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - **Ranking de kills** (/RANKING): los 3 que más mataron llevan una estrella de **oro, plata y bronce** al lado del nombre.
 - GMs: **/GUERRA INICIAR** y **/GUERRA TERMINAR**. Horarios y duración: sección `guerra` de `server/config.json`
   (cadaMinutos, duracionMinutos, avisoMinutos, puntosTorneoGanador).
+
+---
+
+## Nobleza
+
+- Juntando **las gemas de nobleza** en el inventario (**Gema Roja**, que suelta Smaug en el mapa 309; **Gema Verde**, Ryu en el mapa 315; y **Gema Violeta**, Hydra en el mapa 303) y escribiendo **/NOBLEZA**, el personaje se vuelve **Noble** (las gemas se gastan).
+- El noble sigue siendo ciudadano o criminal, pero su **nombre se ve amarillo** y al hacerle clic aparece la etiqueta **NOBLE**.
+- Beneficio: elige **una** de las 3 túnicas de noble (Túnica de Noble, Túnica de Noble 2 y Túnica de Noble 3). La puede usar **cualquier noble, sea la clase que sea**; nadie más. No se cae al morir. /NOBLEZA vuelve a abrir la ventana.
+- GMs (Dios o más): **/NOBLE nombre** da o saca la nobleza.
+- Las gemas y las túnicas se configuran en `server/data/nobleza.json` (la Túnica de Noble 3 está en 0 hasta que se suba).
+
+---
+
+## Tiendas (/TIENDAS)
+
+- Comando de GM (Dios o Admin). Abre un panel con **todos los NPCs que venden cosas** (77 tipos), con su número y en qué ciudades están.
+- Elegís un vendedor y ves lo que vende, con su precio. Con **✕** lo sacás, con **▲ ▼** cambiás el orden.
+- A la derecha está **la lista de todos los objetos del juego** (buscador por nombre o número y filtro por tipo). Con **+** (o doble clic) se agrega a la tienda.
+- El cambio es inmediato, vale para ese NPC en todas las ciudades donde aparece y queda guardado en `tiendas.json` (carpeta de datos del servidor), así que sigue después de reiniciar.
+- El precio de compra es el valor del objeto (con descuento por skill de Comercio).
+
+---
+
+## NPCs fijos puestos por GMs
+
+- **/PONERNPC número** (Dios o Admin): pone un NPC en la última baldosa donde hiciste clic (o adelante tuyo si no clickeaste). Queda ahí aunque se reinicie el servidor.
+- **/SACARNPC**: clic en un NPC y /SACARNPC lo saca para siempre (sirve también para los que venían en el mapa).
+- **/NPCSPUESTOS**: lista de los NPCs puestos.
+- Vendedores por clase listos para poner: **1030** Magos · **1031** Paladines · **1032** Clérigos · **1033** Asesinos · **1034** Bardos (lo que venden se cambia con /TIENDAS).

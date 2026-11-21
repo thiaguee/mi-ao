@@ -11,7 +11,8 @@ import * as MisionesUI from './misionesui.js';
 import * as ObjetosUI from './objetosui.js';
 import * as PuntosUI from './puntosui.js';
 import * as TesteoUI from './testeoui.js';
-import { preguntar } from './dialogo.js';
+import * as TiendasUI from './tiendasui.js';
+import { preguntar, confirmar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
@@ -299,6 +300,21 @@ on('trade', (m) => { S.trade = m; S.tradeSel = S.tradeSel || { npc: -1, inv: -1 
 on('tradeEnd', () => { if (S.modal === 'trade') closeModal(); S.trade = null; });
 on('bank', (m) => { S.bank = m; S.bankSel = S.bankSel || { bank: -1, inv: -1 }; renderBank(); });
 on('bankEnd', () => { if (S.modal === 'bank') closeModal(); S.bank = null; });
+on('nobleza', (m) => {
+  const cartas = m.tunicas.map((t) => {
+    const est = !t.obj ? '<span class="cj-falta">Próximamente</span>'
+      : m.elegida === t.obj ? '<span class="cj-ok">✔ Tu elección</span>'
+      : m.elegida ? '' : `<button class="btn sm main" data-nb="${t.obj}">Elegir</button>`;
+    return `<div class="cj-fila${m.elegida === t.obj ? ' hecho' : ''}">${t.obj ? `<canvas width="32" height="32" data-g="${t.g}"></canvas>` : '<div style="width:32px;text-align:center;font-size:20px">?</div>'}
+      <div class="cj-info"><b>${esc(t.n)}</b><span>${t.obj ? `Def ${t.md}-${t.xd}` : 'Todavía no está en el juego'}</span>${t.aviso ? `<span class="cj-aviso">${esc(t.aviso)}</span>` : ''}</div>${est}</div>`;
+  }).join('');
+  openModal('👑 Nobleza', `<div class="cj-win"><p class="hint">${m.elegida ? 'Ya elegiste tu túnica de noble.' : 'Como Noble podés elegir <b>una</b> de estas túnicas. Sólo la pueden usar los nobles y <b>no se cae al morir</b>.'}</p>${cartas}</div>`, 'nobleza');
+  paintIcons(document.querySelector('.cj-win'));
+  document.querySelectorAll('[data-nb]').forEach((b) => { b.onclick = async () => {
+    const n = b.closest('.cj-fila').querySelector('b').textContent;
+    if (await confirmar(`¿Elegís la ${n}? Sólo se puede elegir una vez.`, 'Elegir')) send({ t: 'noble', obj: +b.dataset.nb });
+  }; });
+});
 on('canje', (m) => {
   const filas = m.premios.map((x) => {
     const est = x.hecho ? '<span class="cj-ok">✔ Reclamado</span>'
@@ -334,11 +350,22 @@ on('ver', (m) => {
   const el = $('console');
   const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
   const d = document.createElement('div');
-  d.className = 'c-ver ver-' + m.k;
-  d.innerHTML = `<span class="ver-n">${esc(m.n)}</span>${m.clan ? `<span class="ver-clan">del clan <b>${esc(m.clan)}</b></span>` : ''}<span class="ver-tag">${esc(m.tipo)}</span>${m.muerto ? '<span class="ver-muerto">✝ Muerto</span>' : ''}${m.desc ? `<span class="ver-desc">“${esc(m.desc)}”</span>` : ''}`;
+  d.className = 'c-ver ver-' + m.k + (m.noble && m.k !== 'gm' ? ' ver-nb' : '');
+  d.innerHTML = `<span class="ver-n">${esc(m.n)}</span>${m.clan ? `<span class="ver-clan">del clan <b>${esc(m.clan)}</b></span>` : ''}<span class="ver-tag">${esc(m.tipo)}</span>${m.noble ? '<span class="ver-tag ver-noble">Noble</span>' : ''}${m.muerto ? '<span class="ver-muerto">✝ Muerto</span>' : ''}${m.desc ? `<span class="ver-desc">“${esc(m.desc)}”</span>` : ''}`;
   el.appendChild(d);
   if (atBottom) el.scrollTop = el.scrollHeight;
 });
+
+// ================== 800x600 ==================
+// La pantalla de juego mide siempre 800x600 (como el AO original) y se agranda o achica
+// entera para llenar la ventana, sin importar el tamaño de la pantalla.
+function escalar() {
+  const s = Math.min(window.innerWidth / 800, window.innerHeight / 600);
+  document.documentElement.style.setProperty('--s', s);
+  if (E.canvas) Eng.resize();
+}
+window.addEventListener('resize', escalar);
+escalar();
 
 function log(text, color = 'info') {
   const el = $('console');
@@ -509,6 +536,8 @@ MisionesUI.init({ openModal, send, esc, S });
 MisionesUI.mensajes(on);
 ObjetosUI.init({ openModal, closeModal, send, esc, S });
 ObjetosUI.mensajes(on);
+TiendasUI.init({ openModal, closeModal, send, esc, S });
+TiendasUI.mensajes(on);
 PuntosUI.init({ openModal, send, esc, abrirMisiones: () => MisionesUI.abrir() });
 PuntosUI.mensajes(on);
 TesteoUI.init({ openModal, closeModal, send, esc });
@@ -979,6 +1008,7 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
 // ================== INICIO ==================
 (async function start() {
   Eng.init($('view'));
+  escalar();
   $('srv-status').textContent = 'Cargando gráficos...';
   try {
     await loadIndexes();

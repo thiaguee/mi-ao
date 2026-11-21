@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./testeo'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -106,6 +106,8 @@ world.cargarClanes();
 world.cargarMisiones();
 world.cargarRanking();
 world.cargarFaccion();
+world.cargarNobleza();
+world.cargarTiendas();
 
 // ---------- logs, bans y guardado ----------
 const day = () => new Date().toISOString().slice(0, 10);
@@ -147,6 +149,7 @@ world.cargarTeleports();
 world.cargarEstructuras(); // después de los teleports: puede borrar portales fijos
 world.cargarTiendaTorneo();
 world.spawnAllNpcs();
+world.cargarNpcsGm();
 world.iniciarGuerras();
 
 // ---------- mensajes del cliente ----------
@@ -229,6 +232,8 @@ function handle(sock, msg) {
     case 'clan': return world.accionClan(p, msg);
     case 'mis': return world.accionMision(p, msg);
     case 'canje': return world.reclamarPremio(p, msg.i);
+    case 'noble': return world.elegirTunicaNoble(p, msg.obj);
+    case 'tienda': return world.accionTienda(p, msg);
     case 'capa': return world.alternarCapa(p);
     case 'ping': return world.send(p, { t: 'pong', ts: msg.ts });
     case 'logout': return world.logout(p);

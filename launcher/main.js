@@ -2,7 +2,7 @@
 // - Abre el juego en su propia ventana (no en el navegador).
 // - Si el juego no apunta a un servidor de internet, arranca el servidor ADENTRO de la
 //   aplicación, así se puede jugar en la PC sin instalar nada más.
-const { app, BrowserWindow, Menu, shell, dialog, utilityProcess } = require('electron');
+const { app, BrowserWindow, Menu, shell, dialog, utilityProcess, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -60,10 +60,14 @@ function esperarServidor() {
 }
 
 function createWindow() {
+  // El juego es 800x600 (4:3): la ventana abre en esa proporción, lo más grande que entre en la pantalla
+  const area = screen.getPrimaryDisplay().workAreaSize;
+  const esc = Math.max(1, Math.min((area.width * 0.92) / 800, (area.height * 0.92) / 600));
   const win = new BrowserWindow({
-    width: 1280,
-    height: 800,
-    minWidth: 960,
+    width: Math.round(800 * esc),
+    height: Math.round(600 * esc),
+    useContentSize: true,
+    minWidth: 800,
     minHeight: 600,
     title: 'Norway AO',
     icon: path.join(CLIENT, 'assets', 'ui', 'icono.png'),

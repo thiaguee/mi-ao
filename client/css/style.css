@@ -322,3 +322,97 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .ts-fila canvas { width: 40px; height: 40px; image-rendering: pixelated; }
 .ts-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .ts-info span { font-size: 11px; color: var(--muted); }
+
+/* ===================== 800x600 =====================
+   La pantalla de juego mide 800x600 y se escala entera (variable --s, la calcula main.js). */
+#scr-game.screen { inset: auto; left: 50%; top: 50%; width: 800px; height: 600px; padding: 4px; gap: 4px;
+  transform: translate(-50%, -50%) scale(var(--s, 1)); transform-origin: center center; }
+body:has(#scr-game:not(.hidden)) { background: #000; }
+#game-main { gap: 4px; }
+#console-wrap { height: 92px; }
+#console { font-size: 11px; line-height: 14px; padding: 2px 8px; }
+#chat { padding: 3px 8px; font-size: 11px; height: 22px; }
+#bottom-bar { height: 30px; gap: 10px; padding: 0 10px; font-size: 11px; }
+.bb-item .ic { font-size: 14px; }
+.bb-item b { padding: 0 6px; min-width: 40px; font-size: 11px; }
+.bb-attr small { font-size: 8px; }
+.bb-attr b { padding: 0 8px; font-size: 11px; }
+.bb-sep { height: 20px; }
+#bb-state { font-size: 10px; }
+#bb-gm { font-size: 18px; }
+#fps { font-size: 9px; top: 3px; right: 5px; }
+#minimap { width: 96px; height: 96px; right: 6px; bottom: 6px; border-width: 1px; }
+#mis-seg { left: 6px; top: 6px; transform: scale(.8); transform-origin: top left; }
+#announce { font-size: 13px; padding: 6px 12px; top: 24px; }
+
+#side { width: 214px; padding: 5px; gap: 4px; overflow: hidden; }
+.char-head { padding: 3px 6px; }
+#s-name { font-size: 16px; letter-spacing: .5px; }
+.lvl-row { font-size: 11px; margin-top: 0; }
+.exp-row { font-size: 9px; margin: 0 0 2px; display: flex; justify-content: space-between; }
+.exp { height: 7px; } .exp span { font-size: 7px; line-height: 7px; }
+.tab { padding: 3px 2px; font-size: 10px; letter-spacing: .5px; }
+.tab-wrap { padding: 4px; margin-top: -4px; }
+.tab-body { gap: 3px; }
+#inv-grid { grid-template-columns: repeat(5, 36px); gap: 3px; }
+.slot { width: 36px; height: 36px; }
+.slot canvas { left: 1px; top: 1px; width: 32px; height: 32px; }
+.slot .amt { font-size: 9px; left: 2px; top: 0; }
+.slot .eq { font-size: 9px; right: 2px; bottom: 0; }
+#inv-info { min-height: 14px; font-size: 9px; line-height: 11px; }
+.btn.sm { padding: 2px 8px; font-size: 10px; }
+#spell-list { height: 168px; }
+.spell { font-size: 11px; padding: 1px 6px; }
+.btn.big { font-size: 12px; padding: 4px; }
+.stats-box { flex-direction: column; gap: 4px; }
+.stats-bars { gap: 2px; }
+.st { gap: 4px; }
+.st label { width: 50px; font-size: 9px; }
+.bar { height: 13px; }
+.bar span { font-size: 9px; line-height: 12px; }
+.side-btns { width: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.gold-box { grid-column: 1 / -1; display: flex; justify-content: center; align-items: baseline; gap: 8px; padding: 1px 4px; }
+.gold-title { font-size: 11px; }
+#s-gold { font-size: 11px; }
+.btn.mid { font-size: 9px; padding: 3px 1px; letter-spacing: 0; }
+.loc-box { padding: 2px 4px; }
+#map-name { font-size: 10px; }
+#s-pos { font-size: 9px; }
+.pop { right: 6px; bottom: 40px; min-width: 130px; padding: 5px; }
+.pop .btn { font-size: 10px; padding: 3px 6px; }
+/* ventanas: también a escala 800x600 mientras se juega */
+body:has(#scr-game:not(.hidden)) .modal-box { transform: scale(var(--s, 1)); max-width: 784px; max-height: 584px; padding: 10px 12px; font-size: 12px; }
+body:has(#scr-game:not(.hidden)) .modal-head { margin-bottom: 6px; }
+body:has(#scr-game:not(.hidden)) .mis-win { width: 756px; max-width: none; font-size: 11px; }
+body:has(#scr-game:not(.hidden)) .clanes-win { width: 620px; max-width: none; }
+body:has(#scr-game:not(.hidden)) .mi-col { min-width: 0; max-height: 470px; }
+body:has(#scr-game:not(.hidden)) .list { height: 240px; }
+body:has(#scr-game:not(.hidden)) .dlg-fondo > * { transform: scale(var(--s, 1)); }
+body:has(#scr-game:not(.hidden)) #mundo-cv { max-width: 540px; max-height: 520px; }
+body:has(#scr-game:not(.hidden)) .mundo-info { width: 190px; font-size: 11px; line-height: 1.5; }
+body:has(#scr-game:not(.hidden)) .pt-tienda { width: 520px; }
+body:has(#scr-game:not(.hidden)) .pt-lista { max-height: 380px; }
+body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
+
+.ver-noble { color: #ffd633 !important; text-shadow: 0 0 6px #ffd63388; }
+.ver-nb .ver-n { color: #ffd633; }
+
+/* ===== /TIENDAS ===== */
+.ti-win { display: flex; gap: 8px; width: 760px; height: 500px; font-size: 11px; }
+.ti-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ti-c1 { width: 170px; } .ti-c2 { flex: 1; } .ti-c3 { width: 260px; }
+.ti-lista { flex: 1; overflow-y: auto; border: 1px solid var(--border); background: var(--panel2); }
+.ti-v { padding: 4px 6px; border-bottom: 1px solid #00000040; cursor: pointer; display: flex; flex-direction: column; }
+.ti-v b { color: #f0d9a0; font-size: 12px; } .ti-v span { color: var(--muted); font-size: 10px; }
+.ti-v:hover { background: #1a140e; } .ti-v.sel { background: #3a2c1a; box-shadow: inset 3px 0 0 var(--gold); }
+.ti-mod { color: #ffb84a; font-size: 10px; }
+.ti-tit { color: var(--gold); font-weight: bold; font-family: Georgia, serif; font-size: 12px; min-height: 16px; }
+.ti-win .li { gap: 4px; padding: 1px 4px; cursor: default; }
+.ti-win .li .btn.sm { padding: 0 5px; font-size: 10px; }
+.ti-n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ti-x { color: #ff8a7a; }
+.ti-ya { opacity: .5; } .ti-tag { font-size: 9px; color: #9fd28a; }
+.ti-cuenta { text-align: left; margin: 0; }
+.ti-win input, .ti-win select { font-size: 11px; padding: 3px 5px; }
+.ti-c3 select { width: 86px; flex: none; }
+.ti-c3 .ob-filtros { min-width: 0; }
