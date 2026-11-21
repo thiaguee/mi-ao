@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=1248
+NumOBJs=2011
 
 
 
@@ -5545,28 +5545,6 @@ LingH=1000
 LingP=1000
 LingO=1000
 SkHerreria=100
-
-[OBJ484]
-Name=Tunica Austera
-GrhIndex=760
-ObjType=3
-NumRopaje=93
-Agarrable=0
-MaxDef=15
-MinDef=10
-Valor=4620
-Crucial=0
-CP1=MAGO
-CP2=DRUIDA
-CP3=LADRON
-CP4=BARDO
-CP5=CLERIGO
-CP6=PIRATA
-CP7=ASESINO
-LingH=66
-LingP=0
-LingO=0
-SkHerreria=50
 
 [OBJ485]
 Name=Armadura Legendaria
@@ -14420,31 +14398,6 @@ CP8=DRUIDA
 CP9=TRABAJADOR
 CP10=MAGO
 
-[OBJ1153]
-Name=Coraza del Mal
-GrhIndex=29392
-ObjType=3
-NumRopaje=605
-Agarrable=0
-MAXDEF=60
-MINDEF=50
-Valor=10000000
-Crucial=0
-LingH=10000
-LingP=10000
-LingO=10000
-SkHerreria=110
-CP1=PIRATA
-CP2=CAZADOR
-CP3=CLERIGO
-CP4=ASESINO
-CP5=LADRON
-CP6=BANDIDO
-CP7=BARDO
-CP8=DRUIDA
-CP9=TRABAJADOR
-CP10=MAGO
-
 [OBJ1154]
 Name=Espada Llameante (JiEm)
 GrhIndex=29435
@@ -15206,7 +15159,58 @@ ObjType=8
 Agarrable=1
 Texto=Tenemos las mejores monturas para los mas feroces aventureros.
 
-[OBJ1241] 'Norway AO: tunica nueva (stats provisorios)
+'=====================================================================
+' NORWAY AO: objetos nuevos o arreglados (desde el 2000)
+'=====================================================================
+
+[OBJ2000] 'Norway AO: antes era el 1153
+Name=Coraza del Mal
+GrhIndex=29392
+ObjType=3
+NumRopaje=605
+Agarrable=0
+MAXDEF=60
+MINDEF=50
+Valor=10000000
+Crucial=0
+LingH=10000
+LingP=10000
+LingO=10000
+SkHerreria=110
+CP1=PIRATA
+CP2=CAZADOR
+CP3=CLERIGO
+CP4=ASESINO
+CP5=LADRON
+CP6=BANDIDO
+CP7=BARDO
+CP8=DRUIDA
+CP9=TRABAJADOR
+CP10=MAGO
+
+[OBJ2001] 'Norway AO: antes era el 484
+Name=Tunica Austera
+GrhIndex=760
+ObjType=3
+NumRopaje=93
+Agarrable=0
+MaxDef=15
+MinDef=10
+Valor=4620
+Crucial=0
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=CLERIGO
+CP6=PIRATA
+CP7=ASESINO
+LingH=66
+LingP=0
+LingO=0
+SkHerreria=50
+
+[OBJ2002] 'antes 1241. Norway AO: tunica nueva (stats provisorios)
 Name=Tunica Santa 1
 GrhIndex=32896
 ObjType=3
@@ -15217,7 +15221,7 @@ MaxDef=12
 Valor=0
 Crucial=0
 
-[OBJ1242] 'Norway AO: tunica nueva (defensa igual a la Coraza del Mal, tienda de torneo)
+[OBJ2003] 'antes 1242. Norway AO: tunica nueva (defensa igual a la Coraza del Mal, tienda de torneo)
 Name=Tunica Divina 1
 GrhIndex=32923
 ObjType=3
@@ -15228,7 +15232,7 @@ MaxDef=60
 Valor=0
 Crucial=0
 
-[OBJ1243] 'Norway AO: version clara de la Coraza del Mal
+[OBJ2004] 'antes 1243. Norway AO: version clara de la Coraza del Mal
 Name=Coraza Divina
 GrhIndex=32950
 ObjType=3
@@ -15253,7 +15257,7 @@ CP8=DRUIDA
 CP9=TRABAJADOR
 CP10=MAGO
 
-[OBJ1244] 'Norway AO: variante de la Tunica Austera (capa gris, verde agua, cruz en la espalda)
+[OBJ2005] 'antes 1244. Norway AO: variante de la Tunica Austera (capa gris, verde agua, cruz en la espalda)
 Name=Manto de Noble
 GrhIndex=32977
 ObjType=3
@@ -15275,7 +15279,7 @@ LingP=0
 LingO=0
 SkHerreria=50
 
-[OBJ1245] 'Norway AO: variante de la Tunica Austera (capa negra, verde agua, cruz en la espalda)
+[OBJ2006] 'antes 1245. Norway AO: variante de la Tunica Austera (capa negra, verde agua, cruz en la espalda)
 Name=Tunica de Noble II
 GrhIndex=33004
 ObjType=3
@@ -15297,7 +15301,7 @@ LingP=0
 LingO=0
 SkHerreria=50
 
-[OBJ1246] 'Norway AO: Tunica de Monje en negro carbon con pliegues grises y cordon color hueso
+[OBJ2007] 'antes 1246. Norway AO: Tunica de Monje en negro carbon con pliegues grises y cordon color hueso
 Name=Tunica del Penitente
 GrhIndex=33031
 ObjType=3
@@ -15308,7 +15312,7 @@ MinDef=15
 Valor=10500
 Crucial=1
 
-[OBJ1247] 'Norway AO: Armadura de Placas Completa en hierro gastado con cuero oscuro
+[OBJ2008] 'antes 1247. Norway AO: Armadura de Placas Completa en hierro gastado con cuero oscuro
 Name=Armadura del Centinela
 GrhIndex=33058
 ObjType=3
@@ -15332,7 +15336,7 @@ LingO=0
 Upgrade=390
 SkHerreria=70
 
-[OBJ1248] 'Norway AO: caballo alazan sin jinete (a partir del sprite del Unicornio, sin cuerno)
+[OBJ2009] 'antes 1248. Norway AO: caballo alazan sin jinete (a partir del sprite del Unicornio, sin cuerno)
 Name=Montura de Corcel Alazan
 GrhIndex=33079
 ObjType=25
@@ -15343,3 +15347,24 @@ MinDef=120
 NoSeCae=1
 Valor=2400000
 Crucial=0
+
+[OBJ2010] 'Norway AO: version negra y bordo de la White Lady (488)
+Name=Black Lady
+GrhIndex=33106
+ObjType=3
+NumRopaje=701
+Agarrable=0
+Mujer=1
+MaxDef=11
+MinDef=9
+Valor=3000
+Crucial=1
+
+[OBJ2011] 'Norway AO: pergamino del hechizo Castigo (51), lo vende el Mago de Ullathorpe
+Name=Castigo
+GrhIndex=609
+ObjType=24
+Agarrable=0
+Valor=100000
+Crucial=1
+HechizoIndex=51

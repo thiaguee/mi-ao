@@ -12,7 +12,7 @@
 '4.....Terreno.
 
 [INIT]
-NumeroHechizos=50
+NumeroHechizos=51
 
 
 [HECHIZO1]
@@ -3129,4 +3129,23 @@ StaffAffected=1
 NeedStaff=0
 Resis=1
 
-
+[HECHIZO51] 'Norway AO
+Nombre=Castigo
+Desc=Un juicio sagrado que cae sobre las criaturas. Sólo afecta a las criaturas, nunca a otros aventureros. A veces golpea con fuerza crítica (doble) y, muy rara vez, con furia divina (triple).
+PalabrasMagicas=Iudicium Lux
+HechizeroMsg=Has lanzado Castigo sobre 
+TargetMsg=lanzó Castigo sobre ti.
+Tipo=1
+WAV=27
+FXgrh=13
+Loops=0
+MinSkill=0
+ManaRequerido=100
+StaRequerido=5
+Target=2
+SubeHP=2
+MinHP=400
+MaxHP=450
+Critico=25
+Divino=10
+StaffAffected=1

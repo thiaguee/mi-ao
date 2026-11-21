@@ -130,6 +130,8 @@ P.gmTitle = (lvl) => ['Usuario', 'Consejero', 'Semidiós', 'Dios', 'Administrado
 
 P.playerFromRecord = function (rec) {
   const p = Object.assign({}, rec);
+  // objetos renumerados al 2000+: el personaje guardado con el número viejo pasa al nuevo
+  for (const lista of [p.inv, p.bank]) for (const it of lista || []) if (it && it.id) it.id = G.nuevoId(it.id);
   p.kind = 'pc';
   p.id = this.nextId++;
   p.heading = 3;

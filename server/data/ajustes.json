@@ -12,11 +12,11 @@
       "valor": 150000,
       "_nombre": "Barca"
     },
-    "1153": {
+    "2000": {
       "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
       "_nombre": "Coraza del Mal (sólo estas clases la pueden usar)"
     },
-    "1243": {
+    "2004": {
       "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
       "_nombre": "Coraza Divina (sólo estas clases la pueden usar)"
     }
@@ -27,7 +27,8 @@
       532,
       206,
       530,
-      207
+      207,
+      2011
     ],
     "47": [
       532,

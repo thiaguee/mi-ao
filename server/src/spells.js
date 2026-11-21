@@ -87,8 +87,15 @@ S.applySpell = function (p, t, sp) {
   if (t.kind === 'npc') {
     if (sp.subeHp === 2) {
       let dmg = this.spellDamage(p, sp);
+      // Crítico y divino (por ejemplo Castigo): una sola tirada -> divino x3, crítico x2 o normal
+      let golpe = '';
+      if (sp.critico || sp.divino) {
+        const r = Math.random() * 100;
+        if (r < (sp.divino || 0)) { dmg *= 3; golpe = '¡CASTIGO DIVINO! '; }
+        else if (r < (sp.divino || 0) + (sp.critico || 0)) { dmg *= 2; golpe = '¡Golpe crítico! '; }
+      }
       dmg = Math.max(1, dmg - (t.def.defM || 0));
-      this.msg(p, `¡Le has quitado ${dmg} puntos de vida a ${t.name}!`, 'spell');
+      this.msg(p, `${golpe}¡Le has quitado ${dmg} puntos de vida a ${t.name}!`, 'spell');
       this.damageNpc(t, dmg, p, true);
       return;
     }

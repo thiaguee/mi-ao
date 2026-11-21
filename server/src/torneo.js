@@ -21,6 +21,7 @@ T.cargarTiendaTorneo = function () {
   this.tiendaTorneoPath = path.join(this.dataDir, 'tienda-torneo.json');
   const leer = (p) => { try { return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')).items : null; } catch (e) { console.error('Error leyendo', p, e.message); return null; } };
   this.tiendaTorneo = (leer(this.tiendaTorneoPath) || leer(TIENDA_FIJA) || [])
+    .map((it) => Object.assign(it, { obj: require('./gamedata').nuevoId(it.obj) })) // números viejos -> 2000+
     .filter((it) => this.data.objs[it.obj] && it.precio > 0);
   console.log(`Tienda de torneo: ${this.tiendaTorneo.length} objetos`);
 };

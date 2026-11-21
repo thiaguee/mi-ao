@@ -17,6 +17,11 @@ const OBJ = {
   MONTURA: 25, MOCHILA: 37,
 };
 
+// ---- Objetos de Norway AO renumerados al 2000+ (número viejo -> nuevo) ----
+// Los personajes, estructuras y tiendas guardados con el número viejo se convierten solos al cargar.
+const RENUMERADOS = { 1153: 2000, 484: 2001, 1241: 2002, 1242: 2003, 1243: 2004, 1244: 2005, 1245: 2006, 1246: 2007, 1247: 2008, 1248: 2009 };
+const nuevoId = (id) => RENUMERADOS[id] || id;
+
 // ---- Árbol de clases de Norway AO ----
 const CLASES = {
   1: 'Ciudadano', 2: 'Trabajador', 3: 'Experto en minerales', 4: 'Minero', 8: 'Herrero',
@@ -230,6 +235,7 @@ function loadSpells() {
       ceguera: num(v.CEGUERA) === 1, estupidez: num(v.ESTUPIDEZ) === 1,
       invoca: num(v.INVOCA) === 1, numNpc: num(v.NUMNPC), cant: num(v.CANT),
       staffAffected: num(v.STAFFAFFECTED) === 1,
+      critico: num(v.CRITICO), divino: num(v.DIVINO), // % de golpe crítico (x2) y divino (x3), una sola tirada
     };
   }
   return spells;
@@ -390,7 +396,7 @@ function loadAll() {
 }
 
 module.exports = {
-  loadAll, normClase, idx, XY, OBJ, CLASES, EVOLUCION, esClaseBase, claseConMana, RESTA, AUMENTO_HIT,
+  loadAll, normClase, RENUMERADOS, nuevoId, idx, XY, OBJ, CLASES, EVOLUCION, esClaseBase, claseConMana, RESTA, AUMENTO_HIT,
   MANA_POR_NIVEL, NOMBRE_DAT_CLASE, RAZAS, MOD_RAZA, APARIENCIA, ES_RAZA_BAJA, SKILLS, SK, ELU,
   MAX_NIVEL, NIVEL_DESBLOQUEO, CUERPO_MUERTO, CABEZA_MUERTO, FX, TRIGGER, SND,
 };

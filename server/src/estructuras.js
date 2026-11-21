@@ -68,6 +68,7 @@ E.cargarEstructuras = function () {
     if (fs.existsSync(this.estrPath)) this.estr = JSON.parse(fs.readFileSync(this.estrPath, 'utf8')).cambios || {};
   } catch (e) { console.error('Error leyendo estructuras.json:', e.message); }
   let n = 0;
+  for (const k of Object.keys(this.estr)) this.estr[k] = G.nuevoId(this.estr[k]); // números viejos -> 2000+
   for (const [clave, id] of Object.entries(this.estr)) {
     const [m, x, y] = clave.split(',').map(Number);
     if (this.aplicarEstructura(m, x, y, id, false)) n++;

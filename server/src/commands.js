@@ -63,7 +63,7 @@ const AYUDA_GM = {
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
-  4: ['[Admin] /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
+  4: ['[Admin] /TESTEO (panel con todo lo nuestro: objetos, hechizos y NPCs desde el 2000) /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
     '/PUNTOSTORNEO nombre cantidad (negativo quita) /TIENDATORNEO [agregar numero precio | quitar numero]',
     '/DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
@@ -418,6 +418,7 @@ K.command = function (p, text) {
       return this.msg(p, `Se limpiaron ${c} objetos tirados en el mapa.`, 'gm');
     }
     case 'OBJETOS': return this.abrirPanelObjetos(p);
+    case 'TESTEO': return this.abrirTesteo(p);
     case 'PUNTOSTORNEO': return this.comandoPuntosTorneo(p, args);
     case 'TIENDATORNEO': return this.comandoTiendaTorneo(p, args);
     case 'ELIMINARESTRUCTURA': return this.eliminarEstructura(p);
