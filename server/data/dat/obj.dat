@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2055
+NumOBJs=2056
 
 
 
@@ -15880,6 +15880,31 @@ MinDef=30
 MaxDef=35
 Valor=675000
 Crucial=0
+
+[OBJ2056] 'Norway AO: baculo de mago del Mega Pack (Armas/e4a64ecb0d31b959342c2e7b38ae9c6e.png), con su icono
+Name=Baculo del Archimago
+GrhIndex=34329
+ObjType=2
+Agarrable=0
+Anim=116
+RazaEnanaAnim=116
+MinHit=5
+MaxHit=15
+StaffPower=2
+StaffDamageBonus=38
+Valor=1000000
+Crucial=0
+CP1=PIRATA
+CP2=CAZADOR
+CP3=PALADIN
+CP4=CLERIGO
+CP5=ASESINO
+CP6=LADRON
+CP7=BANDIDO
+CP8=GUERRERO
+CP9=BARDO
+CP10=DRUIDA
+CP11=TRABAJADOR
 
 [OBJ2019] 'Norway AO: Cuerpos/da2426c0edca4e8cad211350c3e5d105.png del Mega Pack en blanco calido con faja dorado frio
 Name=Tunica Angelical
