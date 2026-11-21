@@ -339,6 +339,17 @@ on('ver', (m) => {
   if (atBottom) el.scrollTop = el.scrollHeight;
 });
 
+// ================== 800x600 ==================
+// La pantalla de juego mide siempre 800x600 (como el AO original) y se agranda o achica
+// entera para llenar la ventana, sin importar el tamaño de la pantalla.
+function escalar() {
+  const s = Math.min(window.innerWidth / 800, window.innerHeight / 600);
+  document.documentElement.style.setProperty('--s', s);
+  if (E.canvas) Eng.resize();
+}
+window.addEventListener('resize', escalar);
+escalar();
+
 function log(text, color = 'info') {
   const el = $('console');
   const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
@@ -976,6 +987,7 @@ setInterval(() => { if (S.inGame) send({ t: 'ping', ts: Date.now() }); }, 5000);
 // ================== INICIO ==================
 (async function start() {
   Eng.init($('view'));
+  escalar();
   $('srv-status').textContent = 'Cargando gráficos...';
   try {
     await loadIndexes();

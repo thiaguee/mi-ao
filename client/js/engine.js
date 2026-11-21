@@ -43,39 +43,38 @@ export function init(canvas) {
 }
 
 export function resize() {
-  const r = E.canvas.parentElement.getBoundingClientRect();
-  // Trabajamos en píxeles reales de la pantalla: con la escala de Windows en 125% o 150%
-  // el navegador estiraba la imagen y el movimiento se veía a los saltos.
+  const wrap = E.canvas.parentElement;
+  const r = wrap.getBoundingClientRect();
+  // La pantalla de juego mide siempre 800x600 y se agranda entera para llenar la ventana.
+  // logW x logH = tamaño del mapa en píxeles del AO; r = tamaño real en la pantalla.
+  const logW = wrap.clientWidth, logH = wrap.clientHeight;
+  if (!logW || !logH) return;
   const dpr = window.devicePixelRatio || 1;
-  const devW = Math.round(r.width * dpr), devH = Math.round(r.height * dpr);
-  // Zoom entero (1x, 2x, 3x) para que los píxeles queden nítidos y parejos
-  const zoom = Math.max(1, Math.round(Math.min(devW / (32 * 22), devH / (32 * 15))));
-  E.zoom = zoom;
+  const esc = r.width / wrap.offsetWidth; // cuánto está agrandada la pantalla de juego
+  const devW = Math.round(logW * esc * dpr), devH = Math.round(logH * esc * dpr);
+  const zoom = devW / logW; // puede no ser entero (por ejemplo 1,8 en una pantalla Full HD)
+  E.zoom = Math.round(zoom * 100) / 100;
+  E.canvas.style.width = logW + 'px';
+  E.canvas.style.height = logH + 'px';
+  E.viewW = logW; E.viewH = logH;
   // Si la PC no tiene aceleración de video para el juego, usamos un modo más liviano:
-  // se dibuja en baja resolución y la pantalla lo agranda.
+  // se dibuja a 800x600 y la pantalla lo agranda.
   const gpu = new URLSearchParams(location.search).get('gpu') || '';
   E.lowRes = /software|disabled|unavailable/.test(gpu);
   if (E.lowRes) {
-    E.canvas.width = Math.floor(devW / zoom);
-    E.canvas.height = Math.floor(devH / zoom);
-    E.canvas.style.width = (E.canvas.width * zoom / dpr) + 'px';
-    E.canvas.style.height = (E.canvas.height * zoom / dpr) + 'px';
-    E.viewW = E.canvas.width; E.viewH = E.canvas.height;
+    E.canvas.width = logW; E.canvas.height = logH;
     E.zoomDraw = 1;
     E.ctx.imageSmoothingEnabled = false;
     setSnap(1);
     if (E.frameMs) ajustarCaminata(E.frameMs);
     return;
   }
-  E.zoomDraw = zoom;
-  if (E.frameMs) ajustarCaminata(E.frameMs);
   // El canvas tiene la resolución REAL de la pantalla: así la cámara puede moverse de a 1 píxel
-  // de pantalla (con zoom 2, antes avanzaba de a 4 o 6 píxeles y se veía a tirones)
+  // de pantalla y se ve fluido aunque esté agrandado.
   E.canvas.width = devW;
   E.canvas.height = devH;
-  E.canvas.style.width = (devW / dpr) + 'px';
-  E.canvas.style.height = (devH / dpr) + 'px';
-  E.viewW = devW / zoom; E.viewH = devH / zoom;
+  E.zoomDraw = zoom;
+  if (E.frameMs) ajustarCaminata(E.frameMs);
   E.ctx.imageSmoothingEnabled = false;
   setSnap(zoom);
 }
@@ -155,7 +154,14 @@ function drawGround(ctx, now, x0, y0, x1, y1) {
         ch.sig = sig;
         rebuilt++;
       }
-      if (visible) ctx.drawImage(ch.cv, cx * CH * TILE - E.camX, cy * CH * TILE - E.camY);
+      if (visible) {
+        // borde de cada bloque en un píxel exacto de la pantalla (con zoom no entero no quedan rayitas)
+        const Z = E.zoomDraw || 1;
+        const lx = cx * CH * TILE - E.camX, ly = cy * CH * TILE - E.camY;
+        const x0 = Math.round(lx * Z), y0 = Math.round(ly * Z);
+        const x1 = Math.round((lx + CH * TILE) * Z), y1 = Math.round((ly + CH * TILE) * Z);
+        ctx.drawImage(ch.cv, x0 / Z, y0 / Z, (x1 - x0) / Z, (y1 - y0) / Z);
+      }
     }
   }
 }

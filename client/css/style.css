@@ -312,3 +312,73 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .pt-info { flex: 1; display: flex; flex-direction: column; }
 .pt-nopuede { font-size: 11px; color: #e08a5a; }
 .pt-precio { color: var(--gold); white-space: nowrap; }
+
+/* ===================== 800x600 =====================
+   La pantalla de juego mide 800x600 y se escala entera (variable --s, la calcula main.js). */
+#scr-game.screen { inset: auto; left: 50%; top: 50%; width: 800px; height: 600px; padding: 4px; gap: 4px;
+  transform: translate(-50%, -50%) scale(var(--s, 1)); transform-origin: center center; }
+body:has(#scr-game:not(.hidden)) { background: #000; }
+#game-main { gap: 4px; }
+#console-wrap { height: 92px; }
+#console { font-size: 11px; line-height: 14px; padding: 2px 8px; }
+#chat { padding: 3px 8px; font-size: 11px; height: 22px; }
+#bottom-bar { height: 30px; gap: 10px; padding: 0 10px; font-size: 11px; }
+.bb-item .ic { font-size: 14px; }
+.bb-item b { padding: 0 6px; min-width: 40px; font-size: 11px; }
+.bb-attr small { font-size: 8px; }
+.bb-attr b { padding: 0 8px; font-size: 11px; }
+.bb-sep { height: 20px; }
+#bb-state { font-size: 10px; }
+#bb-gm { font-size: 18px; }
+#fps { font-size: 9px; top: 3px; right: 5px; }
+#minimap { width: 96px; height: 96px; right: 6px; bottom: 6px; border-width: 1px; }
+#mis-seg { left: 6px; top: 6px; transform: scale(.8); transform-origin: top left; }
+#announce { font-size: 13px; padding: 6px 12px; top: 24px; }
+
+#side { width: 214px; padding: 5px; gap: 4px; overflow: hidden; }
+.char-head { padding: 3px 6px; }
+#s-name { font-size: 16px; letter-spacing: .5px; }
+.lvl-row { font-size: 11px; margin-top: 0; }
+.exp-row { font-size: 9px; margin: 0 0 2px; display: flex; justify-content: space-between; }
+.exp { height: 7px; } .exp span { font-size: 7px; line-height: 7px; }
+.tab { padding: 3px 2px; font-size: 10px; letter-spacing: .5px; }
+.tab-wrap { padding: 4px; margin-top: -4px; }
+.tab-body { gap: 3px; }
+#inv-grid { grid-template-columns: repeat(5, 36px); gap: 3px; }
+.slot { width: 36px; height: 36px; }
+.slot canvas { left: 1px; top: 1px; width: 32px; height: 32px; }
+.slot .amt { font-size: 9px; left: 2px; top: 0; }
+.slot .eq { font-size: 9px; right: 2px; bottom: 0; }
+#inv-info { min-height: 14px; font-size: 9px; line-height: 11px; }
+.btn.sm { padding: 2px 8px; font-size: 10px; }
+#spell-list { height: 168px; }
+.spell { font-size: 11px; padding: 1px 6px; }
+.btn.big { font-size: 12px; padding: 4px; }
+.stats-box { flex-direction: column; gap: 4px; }
+.stats-bars { gap: 2px; }
+.st { gap: 4px; }
+.st label { width: 50px; font-size: 9px; }
+.bar { height: 13px; }
+.bar span { font-size: 9px; line-height: 12px; }
+.side-btns { width: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.gold-box { grid-column: 1 / -1; display: flex; justify-content: center; align-items: baseline; gap: 8px; padding: 1px 4px; }
+.gold-title { font-size: 11px; }
+#s-gold { font-size: 11px; }
+.btn.mid { font-size: 9px; padding: 3px 1px; letter-spacing: 0; }
+.loc-box { padding: 2px 4px; }
+#map-name { font-size: 10px; }
+#s-pos { font-size: 9px; }
+.pop { right: 6px; bottom: 40px; min-width: 130px; padding: 5px; }
+.pop .btn { font-size: 10px; padding: 3px 6px; }
+/* ventanas: también a escala 800x600 mientras se juega */
+body:has(#scr-game:not(.hidden)) .modal-box { transform: scale(var(--s, 1)); max-width: 784px; max-height: 584px; padding: 10px 12px; font-size: 12px; }
+body:has(#scr-game:not(.hidden)) .modal-head { margin-bottom: 6px; }
+body:has(#scr-game:not(.hidden)) .mis-win { width: 756px; max-width: none; font-size: 11px; }
+body:has(#scr-game:not(.hidden)) .clanes-win { width: 620px; max-width: none; }
+body:has(#scr-game:not(.hidden)) .mi-col { min-width: 0; max-height: 470px; }
+body:has(#scr-game:not(.hidden)) .list { height: 240px; }
+body:has(#scr-game:not(.hidden)) .dlg-fondo > * { transform: scale(var(--s, 1)); }
+body:has(#scr-game:not(.hidden)) #mundo-cv { max-width: 540px; max-height: 520px; }
+body:has(#scr-game:not(.hidden)) .mundo-info { width: 190px; font-size: 11px; line-height: 1.5; }
+body:has(#scr-game:not(.hidden)) .pt-tienda { width: 520px; }
+body:has(#scr-game:not(.hidden)) .pt-lista { max-height: 380px; }
