@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2042
+NumOBJs=2050
 
 
 
@@ -15720,6 +15720,107 @@ GrhIndex=33951
 ObjType=3
 NumRopaje=725
 Agarrable=0
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2043] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/1085ee392134b3ccb62cd46b59365861.png)
+Name=Chupin de Consejero del Mal
+GrhIndex=33978
+ObjType=3
+NumRopaje=726
+Agarrable=0
+Hombre=1
+Caos=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2044] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/25c557eed894835e1bd13fbbd97fe4ac.png), con contorno gris agregado
+Name=Chupin Divino
+GrhIndex=34005
+ObjType=3
+NumRopaje=727
+Agarrable=0
+Hombre=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2045] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/2f8882e7bca3d97d5a82f8adb227de72.png)
+Name=Chupin de Consejero del Bien
+GrhIndex=34032
+ObjType=3
+NumRopaje=728
+Agarrable=0
+Hombre=1
+Real=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2046] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/36847455a99eb0f8bf25880337c5db11.png)
+Name=Chupin de GM
+GrhIndex=34059
+ObjType=3
+NumRopaje=729
+Agarrable=0
+Hombre=1
+SoloGM=1
+MinDef=30
+MaxDef=35
+Valor=0
+Crucial=0
+
+[OBJ2047] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/49cfd67454c8fb0be076fc3c57edafb7.png)
+Name=Chupin de Lider Neutral
+GrhIndex=34086
+ObjType=3
+NumRopaje=730
+Agarrable=0
+Hombre=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2048] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/2ee8878a9bddff76ff1fdd5d097508f9.png)
+Name=Chupin de Lider Neutral (Mujer)
+GrhIndex=34113
+ObjType=3
+NumRopaje=731
+Agarrable=0
+Mujer=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2049] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/62a8b5104e6403807327def3515656e7.png)
+Name=Chupin de Consejero del Bien (Mujer)
+GrhIndex=34140
+ObjType=3
+NumRopaje=732
+Agarrable=0
+Mujer=1
+Real=1
+MinDef=30
+MaxDef=35
+Valor=675000
+Crucial=0
+
+[OBJ2050] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/a5463a408e1b59dbd1cf4bea1a2075b3.png)
+Name=Chupin de Consejero del Mal (Mujer)
+GrhIndex=34167
+ObjType=3
+NumRopaje=733
+Agarrable=0
+Mujer=1
+Caos=1
 MinDef=30
 MaxDef=35
 Valor=675000
