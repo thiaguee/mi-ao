@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2013
+NumOBJs=2016
 
 
 
@@ -15396,3 +15396,53 @@ Apunala=1
 BloqueaMana=50
 Valor=1000000
 Crucial=0
+
+[OBJ2014] 'Norway AO: madera de roble con aro de hierro y tachas (a partir del Escudo de Tortuga)
+Name=Escudo de Roble
+GrhIndex=33187
+ObjType=16
+NumRopaje=2
+Agarrable=0
+Anim=27
+MaxDef=1
+MinDef=1
+Valor=350
+Crucial=1
+CP1=MAGO
+CP2=DRUIDA
+
+[OBJ2015] 'Norway AO: partido en naranja y azul con emblema blanco (a partir del Escudo Imperial, sin faccion)
+Name=Escudo del Alba
+GrhIndex=33214
+ObjType=16
+NumRopaje=2
+Agarrable=0
+Anim=28
+MaxDef=4
+MinDef=1
+Valor=7800
+Crucial=0
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=PIRATA
+CP6=ASESINO
+
+[OBJ2016] 'Norway AO: rojo vino con plata gastada (a partir del Escudo Infernal, sin faccion)
+Name=Escudo Carmesi
+GrhIndex=33241
+ObjType=16
+NumRopaje=2
+Agarrable=0
+Anim=29
+MaxDef=4
+MinDef=1
+Valor=7800
+Crucial=0
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=PIRATA
+CP6=ASESINO
