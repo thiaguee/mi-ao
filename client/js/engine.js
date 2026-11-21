@@ -455,6 +455,19 @@ function signoMision(ctx, x, y) {
   ctx.restore();
 }
 
+function estrella(ctx, x, y, r, color) {
+  ctx.save();
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r;
+    ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+  }
+  ctx.closePath();
+  ctx.lineWidth = 1.5; ctx.strokeStyle = '#000'; ctx.stroke();
+  ctx.fillStyle = color; ctx.fill();
+  ctx.restore();
+}
+
 function drawName(ctx, c, px, py) {
   ctx.font = 'bold 11px Tahoma, sans-serif';
   ctx.textAlign = 'center';
@@ -465,6 +478,11 @@ function drawName(ctx, c, px, py) {
   ctx.fillText(parts[0], px + 17, y + 1);
   ctx.fillStyle = col;
   ctx.fillText(parts[0], px + 16, y);
+  // estrella del ranking de kills (oro, plata, bronce) a la izquierda del nombre
+  if (c.rk >= 1 && c.rk <= 3) {
+    const w = ctx.measureText(parts[0]).width;
+    estrella(ctx, px + 16 - w / 2 - 7, y - 4, 5, ['#ffd700', '#d8d8e0', '#d08a3a'][c.rk - 1]);
+  }
   if (parts[1]) {
     const g = '<' + parts[1];
     ctx.fillStyle = '#000'; ctx.fillText(g, px + 17, y + 13);

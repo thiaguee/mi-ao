@@ -437,6 +437,23 @@ MisionesUI.init({ openModal, send, esc, S });
 MisionesUI.mensajes(on);
 $('b-misiones').onclick = () => MisionesUI.abrir();
 $('b-capa').onclick = () => send({ t: 'capa' });
+// Marcador de la guerra (arriba al centro del juego)
+const GUERRA = { fin: 0, iv: 0, datos: null };
+function pintarGuerra() {
+  const el = $('guerra-hud'), g = GUERRA.datos;
+  if (!g || !g.activa || !g.bando) { el.classList.add('hidden'); clearInterval(GUERRA.iv); GUERRA.iv = 0; return; }
+  const resta = Math.max(0, GUERRA.fin - Date.now());
+  const mm = String(Math.floor(resta / 60000)).padStart(2, '0'), ss = String(Math.floor((resta % 60000) / 1000)).padStart(2, '0');
+  el.classList.remove('hidden');
+  el.innerHTML = `<div class="gh-tit">⚔ GUERRA · ${mm}:${ss}</div>
+    <div class="gh-marc"><span class="gh-ciu${g.bando === 'ciu' ? ' yo' : ''}">Ciudadanos <b>${g.ciu}</b></span><span class="gh-vs">vs</span><span class="gh-cri${g.bando === 'cri' ? ' yo' : ''}"><b>${g.cri}</b> Criminales</span></div>
+    <div class="gh-yo">Tus kills en esta guerra: <b>${g.mias}</b> · Kills para canjear: <b>${g.total}</b></div>`;
+}
+on('guerraEstado', (m) => {
+  GUERRA.datos = m; GUERRA.fin = Date.now() + (m.quedan || 0);
+  if (m.activa && m.bando && !GUERRA.iv) GUERRA.iv = setInterval(pintarGuerra, 1000);
+  pintarGuerra();
+});
 on('capaEstado', (m) => { $('b-capa').textContent = 'Capa: ' + (m.on ? 'sí' : 'no'); });
 $('minimap').addEventListener('click', (e) => Mapas.minimapaClic(e, send, S.gm));
 $('minimap').addEventListener('dblclick', () => Mapas.abrirMundo(openModal, send, S.gm, esc));

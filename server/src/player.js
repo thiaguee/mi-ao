@@ -93,6 +93,7 @@ P.login = function (sock, req) {
   if (!this.maps[map]) ({ map, x, y } = this.data.cities.ULLATHORPE);
   const pos = this.closestLegalPos(map, x, y) || { x, y };
   p.map = map; p.x = pos.x; p.y = pos.y;
+  this.revisarGuerraAlEntrar(p);
   this.recalcEquip(p);
   this.revisarClanAlEntrar(p);
   this.misDe(p);
@@ -153,6 +154,7 @@ P.toRecord = function (p) {
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
+    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0,
   };
 };
 
@@ -162,6 +164,7 @@ P.savePlayer = function (p) {
 
 P.logout = function (p) {
   if (!this.players.has(p.id)) return;
+  if (p.enGuerra && this.guerra) this.guerra.participantes.delete(p.name.toLowerCase());
   this.endTrade(p);
   this.savePlayer(p);
   this.remove(p);
@@ -653,7 +656,9 @@ P.killPlayer = function (p, killer) {
   p.deaths = (p.deaths || 0) + 1;
   this.msg(p, '¡¡¡Estás muerto!!! Buscá un sacerdote para que te resucite, o escribí /HOGAR.', 'warn');
   this.toMap(p.map, { t: 'snd', w: G.SND.USERMUERTE });
-  const zonaPelea = this.trigger(p.map, p.x, p.y) === G.TRIGGER.ZONAPELEA;
+  // en la guerra (o en zona de pelea) no se cae nada ni cambia ciudadano/criminal
+  const enGuerra = !!p.enGuerra;
+  const zonaPelea = enGuerra || this.trigger(p.map, p.x, p.y) === G.TRIGGER.ZONAPELEA;
   // Se caen los objetos (no los newbies ni los "no se cae"), salvo en zona de pelea o si es newbie
   if (!zonaPelea && s.lvl > NEWBIE_LVL && p.gm === 0) {
     for (let i = 0; i < INV_SLOTS; i++) {
@@ -677,6 +682,7 @@ P.killPlayer = function (p, killer) {
   this.recalcEquip(p);
   this.sendCharToMap(p);
   this.sendAllStats(p);
+  if (enGuerra) this.muerteEnGuerra(p, killer);
   if (killer && killer.kind === 'pc' && killer.id !== p.id && !zonaPelea) {
     if (!p.crim) {
       killer.kills.ciu++;
@@ -692,6 +698,7 @@ P.killPlayer = function (p, killer) {
     this.msg(p, `${killer.name} te ha matado!`, 'fight');
     this.giveExp(killer, Math.floor(p.stats.lvl * 2));
     this.send(killer, { t: 'stats', kills: killer.kills, crim: killer.crim });
+    this.sumarKillRanking(killer);
   }
 };
 

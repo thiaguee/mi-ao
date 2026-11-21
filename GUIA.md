@@ -228,3 +228,17 @@ Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo 
 - **Élite**: al llegar al **nivel 50** se desbloquean 10 niveles más (hasta el 60) y misiones de élite.
 - **Puntos de misión**: no se pierden al morir. Más adelante se van a poder canjear por objetos.
 - Las misiones están en `server/data/misiones.json` (se regenera con `python3 tools/misiones.py`).
+
+---
+
+## 8. Guerra y ranking
+
+- **Cada hora en punto** empieza una **guerra de 15 minutos** entre Ciudadanos y Criminales
+  (2 minutos antes se avisa a todos). Se entra con **/GUERRA** y se sale con **/SALIRGUERRA**.
+- Se pelea en la Arena (mapa 273). Al morir no se cae nada y reaparecés en tu base.
+- Cada muerte del otro bando suma **1 kill de guerra** (no se pierde; se va a canjear en la ciudad natal:
+  Banderbill para ciudadanos, Arghal para criminales).
+- Al que **más mata** en la guerra se le dan **5 puntos de torneo** (no se pierden).
+- **Ranking de kills** (/RANKING): los 3 que más mataron llevan una estrella de **oro, plata y bronce** al lado del nombre.
+- GMs: **/GUERRA INICIAR** y **/GUERRA TERMINAR**. Horarios y duración: sección `guerra` de `server/config.json`
+  (cadaMinutos, duracionMinutos, avisoMinutos, puntosTorneoGanador).

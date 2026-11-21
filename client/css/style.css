@@ -243,3 +243,15 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .side-btns { width: 156px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; align-content: start; }
 .side-btns .gold-box { grid-column: 1 / 3; }
 .side-btns .btn.mid { font-size: 10.5px; padding: 6px 1px; letter-spacing: 0; }
+
+/* ===== guerra ===== */
+#guerra-hud { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3; pointer-events: none;
+  background: linear-gradient(#2a0d0dcc, #120606cc); border: 2px solid #8a2a1a; border-radius: 8px; padding: 6px 16px; text-align: center;
+  box-shadow: 0 0 14px #c0301a66; text-shadow: 1px 1px 0 #000; min-width: 330px; }
+.gh-tit { font-family: Georgia, serif; color: #ffb84a; font-weight: bold; letter-spacing: 2px; }
+.gh-marc { display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 15px; margin: 2px 0; }
+.gh-ciu { color: #6fa8ff; } .gh-cri { color: #ff6b5a; } .gh-vs { color: #c9b089; font-size: 12px; }
+.gh-ciu b, .gh-cri b { font-size: 20px; }
+.gh-ciu.yo, .gh-cri.yo { text-decoration: underline; }
+.gh-yo { font-size: 11px; color: #e8dcc3; }
+.gh-yo b { color: #ffd84a; }

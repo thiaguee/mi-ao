@@ -135,6 +135,7 @@ class World {
       inv: e.invisible || e.hidden ? 1 : 0, dead: e.dead ? 1 : 0,
       nav: e.sailing ? 1 : 0,
       cap: e.dead || e.sailing || !this.capaInfo ? null : this.capaInfo(e), // capa del clan
+      rk: this.puestoDe ? this.puestoDe(e) : 0, // puesto en el ranking de kills (1, 2 o 3 = estrella)
     };
   }
 

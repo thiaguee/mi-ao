@@ -263,6 +263,8 @@ C.canAttack = function (p, target) {
   if (p.dead) { this.msg(p, '¡¡Estás muerto!! Los muertos no pueden atacar.', 'warn'); return false; }
   if (target.kind === 'pc') {
     if (target.dead) { this.msg(p, 'No podés atacar a un espíritu.', 'warn'); return false; }
+    if (this.mismoBandoGuerra(p, target)) { this.msg(p, 'Es de tu bando.', 'warn'); return false; }
+    if (this.peleaDeGuerra(p, target)) return true; // en la guerra se pelea siempre
     if (target.gm > 0 && !target.gmAtacable) { this.msg(p, 'No podés atacar a un GM.', 'warn'); return false; }
     if (p.gm > 0 && p.gm < 3) { this.msg(p, 'Los GMs no pueden atacar usuarios.', 'warn'); return false; }
     if (this.isSafe(p) || this.isSafe(target)) {
@@ -314,7 +316,7 @@ C.attack = function (p) {
 C.hitTarget = function (p, target, ranged) {
   if (!this.canAttack(p, target)) return;
   if (p.hidden) { p.hidden = false; this.sendCharToMap(p); }
-  if (target.kind === 'pc' && !p.crim && !target.crim) {
+  if (target.kind === 'pc' && !p.crim && !target.crim && !this.peleaDeGuerra(p, target)) {
     p.crim = true;
     this.msg(p, '¡Te has convertido en criminal por atacar a un ciudadano!', 'warn');
     this.sendCharToMap(p);

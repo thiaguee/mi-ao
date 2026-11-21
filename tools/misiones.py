@@ -14,7 +14,8 @@ def puntos(nivel):
     return 1 if nivel <= 10 else 2 if nivel <= 20 else 3 if nivel <= 30 else 4 if nivel <= 40 else 5 if nivel <= 50 else 8 + (nivel - 51) // 4
 
 def recompensa(nivel, factor=1.0):
-    return {'oro': int((nivel * nivel * 800 + 5000) * factor), 'exp': int(ELU[nivel] * 0.6 * factor), 'puntos': max(1, round(puntos(nivel) * factor))}
+    # recompensas moderadas: ~25% de un nivel de experiencia y la mitad de oro que antes
+    return {'oro': int((nivel * nivel * 400 + 2500) * factor), 'exp': int(ELU[nivel] * 0.25 * factor), 'puntos': max(1, round(puntos(nivel) * factor))}
 
 # (id, nivel, nombre, descripción, [(bichos, cantidad)])  — bichos: número o lista de números
 NORMALES = [
@@ -72,10 +73,10 @@ ELITE = [
 DIARIAS = [(f'd_{m[0]}', m[1], 'Diaria: ' + m[2], m[3], [(b, max(10, c * 2)) for b, c in m[4]]) for m in NORMALES + ELITE]
 # De clan: semanales, cuentan las muertes de TODOS los integrantes
 CLAN = [
-    ('c_cazadores', 'Cazadores del clan', 'Entre todos, maten 500 bichos de cualquier tipo.', [('*', 500)], {'oro': 300000, 'puntos': 5, 'expPct': 0.3}),
-    ('c_nomuertos', 'Exterminio de no-muertos', 'Entre todos, maten 150 no-muertos (esqueletos, zombies, liches, momias).', [([503, 508, 502, 507, 554, 758, 932, 583], 150)], {'oro': 500000, 'puntos': 8, 'expPct': 0.4}),
-    ('c_bestias', 'Bestias salvajes', 'Entre todos, maten 200 lobos, osos, tigres o gorilas.', [([501, 703, 765, 766, 538, 521, 515, 165, 166], 200)], {'oro': 400000, 'puntos': 6, 'expPct': 0.35}),
-    ('c_dragones', 'Matadragones', 'Entre todos, maten 15 dragones.', [([509, 542, 518, 585, 622, 624], 15)], {'oro': 1500000, 'puntos': 15, 'expPct': 0.6}),
+    ('c_cazadores', 'Cazadores del clan', 'Entre todos, maten 500 bichos de cualquier tipo.', [('*', 500)], {'oro': 150000, 'puntos': 5, 'expPct': 0.12}),
+    ('c_nomuertos', 'Exterminio de no-muertos', 'Entre todos, maten 150 no-muertos (esqueletos, zombies, liches, momias).', [([503, 508, 502, 507, 554, 758, 932, 583], 150)], {'oro': 250000, 'puntos': 8, 'expPct': 0.15}),
+    ('c_bestias', 'Bestias salvajes', 'Entre todos, maten 200 lobos, osos, tigres o gorilas.', [([501, 703, 765, 766, 538, 521, 515, 165, 166], 200)], {'oro': 200000, 'puntos': 6, 'expPct': 0.15}),
+    ('c_dragones', 'Matadragones', 'Entre todos, maten 15 dragones.', [([509, 542, 518, 585, 622, 624], 15)], {'oro': 750000, 'puntos': 15, 'expPct': 0.25}),
 ]
 
 def armar(lista, tipo, factor=1.0):

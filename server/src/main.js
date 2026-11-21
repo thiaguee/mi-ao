@@ -63,10 +63,11 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'));
 world.dataDir = DATA_DIR;
 world.cargarClanes();
 world.cargarMisiones();
+world.cargarRanking();
 
 // ---------- logs, bans y guardado ----------
 const day = () => new Date().toISOString().slice(0, 10);
@@ -106,6 +107,7 @@ world.createCharacter = function (sock, req) {
 
 world.cargarTeleports();
 world.spawnAllNpcs();
+world.iniciarGuerras();
 
 // ---------- mensajes del cliente ----------
 function handle(sock, msg) {
