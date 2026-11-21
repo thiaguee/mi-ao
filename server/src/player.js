@@ -154,7 +154,7 @@ P.toRecord = function (p) {
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
-    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0,
+    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [],
   };
 };
 
@@ -294,6 +294,8 @@ P.canUseObj = function (p, o) {
   if (o.mujer && p.genero !== 'm') return 'Sólo las mujeres pueden usar esto.';
   if (o.hombre && p.genero !== 'h') return 'Sólo los hombres pueden usar esto.';
   if (o.newbie && p.stats.lvl > NEWBIE_LVL) return 'Sólo los newbies pueden usar este objeto.';
+  if (this.puedeUsarPorBando) { const b = this.puedeUsarPorBando(p, o); if (b !== true) return b; }
+  if (o.type === OBJ.BARCO && p.stats.lvl < 20) return 'Necesitás nivel 20 para usar una barca.';
   return true;
 };
 
@@ -417,6 +419,7 @@ P.useItem = function (p, i) {
 
 P.toggleSail = function (p, i) {
   const o = this.data.objs[p.inv[i].id];
+  if (!p.sailing && p.stats.lvl < 20 && p.gm < 2) return this.msg(p, 'Necesitás nivel 20 para navegar.', 'warn');
   if (!p.sailing) {
     // tiene que haber agua adelante
     const d = World.DIRS[p.heading];
@@ -761,6 +764,7 @@ P.playerTick = function (p, now) {
   }
   if (p.dead) return;
   p.tick = (p.tick || 0) + 1;
+  if (p.tick % 3 === 0 && this.revisarTunicaDeBando) this.revisarTunicaDeBando(p);
   // Hambre y sed bajan de a poco (más lento que el original para que sea más amigable)
   if (p.tick % 90 === 0 && p.gm === 0) {
     if (s.ham > 0) { s.ham = Math.max(0, s.ham - 5); changed.push('ham'); }

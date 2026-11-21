@@ -84,6 +84,32 @@
         54,
         75
       ]
+    },
+    {
+      "num": 1020,
+      "name": "Comandante de la Armada",
+      "desc": "¡Ciudadano! Traeme pruebas de tus victorias contra los criminales y te recompensaré.",
+      "body": 339,
+      "head": 101,
+      "comandante": "ciu",
+      "spawn": [
+        59,
+        48,
+        51
+      ]
+    },
+    {
+      "num": 1021,
+      "name": "Comandante del Caos",
+      "desc": "Cada ciudadano caído vale su recompensa. Mostrame tus muertes.",
+      "body": 194,
+      "head": 105,
+      "comandante": "cri",
+      "spawn": [
+        196,
+        50,
+        75
+      ]
     }
   ]
 }

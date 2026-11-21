@@ -228,7 +228,9 @@ class World {
   afterPlayerMove(p) {
     const mp = this.maps[p.map];
     const k = idx(p.x, p.y);
-    const ex = mp.d.exits.get(k);
+    let ex = mp.d.exits.get(k);
+    // Salir de la Dungeon Newbie por la salida te deja en Ullathorpe
+    if (ex && this.maps[ex.map] && /newbie/i.test(mp.d.name) && !/newbie/i.test(this.maps[ex.map].d.name)) ex = { map: 1, x: 55, y: 49 };
     if (ex && this.maps[ex.map]) {
       const pos = this.closestLegalPos(ex.map, ex.x, ex.y, { water: !!p.sailing }) || { x: ex.x, y: ex.y };
       this.warp(p, ex.map, pos.x, pos.y, false);

@@ -12,5 +12,23 @@
       "valor": 150000,
       "_nombre": "Barca"
     }
+  },
+  "vendedores": {
+    "_ayuda": "Objetos que se agregan a la venta de un NPC (número de NPC -> lista de objetos).",
+    "46": [
+      532
+    ],
+    "47": [
+      532
+    ],
+    "61": [
+      532
+    ],
+    "69": [
+      532
+    ],
+    "99": [
+      532
+    ]
   }
 }

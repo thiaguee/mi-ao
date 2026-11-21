@@ -236,8 +236,27 @@ Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo 
 - **Cada hora en punto** empieza una **guerra de 15 minutos** entre Ciudadanos y Criminales
   (2 minutos antes se avisa a todos). Se entra con **/GUERRA** y se sale con **/SALIRGUERRA**.
 - Se pelea en la Arena (mapa 273). Al morir no se cae nada y reaparecés en tu base.
-- Cada muerte del otro bando suma **1 kill de guerra** (no se pierde; se va a canjear en la ciudad natal:
-  Banderbill para ciudadanos, Arghal para criminales).
+- Se entra desde **nivel 25**.
+- Cada muerte del otro bando (en la guerra o afuera) suma para los **premios de facción**.
+
+### Premios de facción
+Se reclaman con doble clic en el **Comandante**: el de la Armada en **Banderbill** (ciudadanos) y el del Caos
+en **Arghal** (criminales). Cada premio se da una sola vez, **no se cae al morir** y sólo lo puede usar su bando.
+
+| Kills | Ciudadanos (criminales matados) | Criminales (ciudadanos matados) |
+|---|---|---|
+| 10 | Túnica Conspicua de Mago Imperial | Túnica Conspicua de Mago Imperial |
+| 25 | Túnica de Mago del Imperio | Túnica de Maga Oscura (sólo mujeres) |
+| 50 | Túnica Egregia de Mago Oscuro | Túnica de Líder del Caos |
+| 100 | Túnica de Archimago Imperial | Túnica Egregia de Mago Oscuro |
+| 500 | Alas de ángel | Alas de demonio |
+
+Los premios se cambian en `server/data/recompensas-faccion.json`.
+
+### Otros
+- La **barca** se usa desde **nivel 20**.
+- Salir de la Dungeon Newbie por la salida te deja en **Ullathorpe**.
+- **Apocalipsis** lo venden los magos de todas las ciudades.
 - Al que **más mata** en la guerra se le dan **5 puntos de torneo** (no se pierden).
 - **Ranking de kills** (/RANKING): los 3 que más mataron llevan una estrella de **oro, plata y bronce** al lado del nombre.
 - GMs: **/GUERRA INICIAR** y **/GUERRA TERMINAR**. Horarios y duración: sección `guerra` de `server/config.json`

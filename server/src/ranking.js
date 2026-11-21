@@ -4,7 +4,7 @@
 const accounts = require('./accounts');
 
 const R = {};
-const totalDe = (rec) => ((rec.kills && (rec.kills.ciu || 0) + (rec.kills.cri || 0)) || 0) + (rec.killsGuerra || 0);
+const totalDe = (rec) => (rec.kills ? (rec.kills.ciu || 0) + (rec.kills.cri || 0) : 0);
 
 R.cargarRanking = function () {
   this.rankAll = new Map(); // nombre en minúscula -> { nombre, kills }

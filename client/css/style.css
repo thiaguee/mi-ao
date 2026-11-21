@@ -258,3 +258,11 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 
 .mundo-box { background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 8px 10px; text-align: center; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
 .mi-ip { font-size: 22px; font-weight: bold; color: #ffd84a; letter-spacing: 1px; margin: 4px 0; user-select: text; }
+
+.cj-win { min-width: 420px; }
+.cj-fila { display: flex; align-items: center; gap: 10px; background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 6px 9px; margin-bottom: 6px; }
+.cj-fila.hecho { border-color: #2f6a2f; opacity: .7; }
+.cj-info { flex: 1; display: flex; flex-direction: column; font-size: 12px; }
+.cj-info b { font-size: 13px; color: #f0d9a0; }
+.cj-aviso { color: #e08a5a; }
+.cj-ok { color: #6fd36f; } .cj-falta { color: #aaa; font-size: 12px; }

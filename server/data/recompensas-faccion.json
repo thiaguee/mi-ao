@@ -1,0 +1,23 @@
+{
+  "_ayuda": "Premios por matar al otro bando. Se reclaman (una vez cada uno) con el Comandante de la ciudad natal: Banderbill para ciudadanos y Arghal para criminales. 'kills' = ciudadanos matados (para criminales) o criminales matados (para ciudadanos), dentro o fuera de la guerra. Las túnicas sólo las puede usar el bando en cuya lista están, y no se caen al morir.",
+  "ciudadanos": {
+    "npc": [59, 48, 51],
+    "premios": [
+      { "kills": 10, "obj": 679 },
+      { "kills": 25, "obj": 517 },
+      { "kills": 50, "obj": 634 },
+      { "kills": 100, "obj": 628 },
+      { "kills": 500, "obj": 1144 }
+    ]
+  },
+  "criminales": {
+    "npc": [196, 50, 75],
+    "premios": [
+      { "kills": 10, "obj": 679 },
+      { "kills": 25, "obj": 509 },
+      { "kills": 50, "obj": 637 },
+      { "kills": 100, "obj": 634 },
+      { "kills": 500, "obj": 1145 }
+    ]
+  }
+}
