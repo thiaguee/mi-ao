@@ -1,6 +1,6 @@
 'use strict';
 // Nobleza: juntando todas las gemas y escribiendo /NOBLEZA el personaje se vuelve Noble.
-// Sigue siendo ciudadano o criminal, pero su nombre se ve verde y al hacerle clic dice [NOBLE].
+// Sigue siendo ciudadano o criminal, pero su nombre se ve amarillo y al hacerle clic dice [NOBLE].
 // Beneficio: elige una de las 3 túnicas de noble (sólo las pueden usar los nobles).
 const fs = require('fs');
 const path = require('path');

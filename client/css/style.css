@@ -384,5 +384,5 @@ body:has(#scr-game:not(.hidden)) .pt-tienda { width: 520px; }
 body:has(#scr-game:not(.hidden)) .pt-lista { max-height: 380px; }
 body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 
-.ver-noble { color: #3fe06a !important; text-shadow: 0 0 6px #3fe06a88; }
-.ver-nb .ver-n { color: #3fe06a; }
+.ver-noble { color: #ffd633 !important; text-shadow: 0 0 6px #ffd63388; }
+.ver-nb .ver-n { color: #ffd633; }
