@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2023
+NumOBJs=2024
 
 
 
@@ -15508,6 +15508,17 @@ NumRopaje=705
 Agarrable=0
 MaxDef=0
 MinDef=0
+Valor=675000
+Crucial=0
+
+[OBJ2024] 'Norway AO: tunica negra con faja roja del Mega Pack de graficos (5c8e711a...)
+Name=Tunica Sombria
+GrhIndex=33465
+ObjType=3
+NumRopaje=707
+Agarrable=0
+MinDef=50
+MaxDef=60
 Valor=675000
 Crucial=0
 
