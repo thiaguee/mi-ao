@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=1242
+NumOBJs=1243
 
 
 
@@ -15227,3 +15227,28 @@ MinDef=5
 MaxDef=12
 Valor=0
 Crucial=0
+
+[OBJ1243] 'Norway AO: version clara de la Coraza del Mal
+Name=Coraza Divina
+GrhIndex=32950
+ObjType=3
+NumRopaje=695
+Agarrable=0
+MAXDEF=60
+MINDEF=50
+Valor=10000000
+Crucial=0
+LingH=10000
+LingP=10000
+LingO=10000
+SkHerreria=110
+CP1=PIRATA
+CP2=CAZADOR
+CP3=CLERIGO
+CP4=ASESINO
+CP5=LADRON
+CP6=BANDIDO
+CP7=BARDO
+CP8=DRUIDA
+CP9=TRABAJADOR
+CP10=MAGO

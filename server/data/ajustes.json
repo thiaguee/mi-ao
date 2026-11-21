@@ -15,6 +15,10 @@
     "1153": {
       "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
       "_nombre": "Coraza del Mal (sólo estas clases la pueden usar)"
+    },
+    "1243": {
+      "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
+      "_nombre": "Coraza Divina (sólo estas clases la pueden usar)"
     }
   },
   "vendedores": {
