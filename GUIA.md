@@ -318,3 +318,12 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - A la derecha está **la lista de todos los objetos del juego** (buscador por nombre o número y filtro por tipo). Con **+** (o doble clic) se agrega a la tienda.
 - El cambio es inmediato, vale para ese NPC en todas las ciudades donde aparece y queda guardado en `tiendas.json` (carpeta de datos del servidor), así que sigue después de reiniciar.
 - El precio de compra es el valor del objeto (con descuento por skill de Comercio).
+
+---
+
+## NPCs fijos puestos por GMs
+
+- **/PONERNPC número** (Dios o Admin): pone un NPC en la última baldosa donde hiciste clic (o adelante tuyo si no clickeaste). Queda ahí aunque se reinicie el servidor.
+- **/SACARNPC**: clic en un NPC y /SACARNPC lo saca para siempre (sirve también para los que venían en el mapa).
+- **/NPCSPUESTOS**: lista de los NPCs puestos.
+- Vendedores por clase listos para poner: **1030** Magos · **1031** Paladines · **1032** Clérigos · **1033** Asesinos · **1034** Bardos (lo que venden se cambia con /TIENDAS).

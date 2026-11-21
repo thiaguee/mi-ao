@@ -59,7 +59,8 @@ const AYUDA_GM = {
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
     '/TELEPLOC (teleport a donde hiciste clic) /BUSCARNPC texto /BUSCAROBJ texto'],
-  3: ['[Dios] /TIENDAS (elegir qué vende cada NPC) /NOBLE nombre (dar o sacar nobleza) /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
+  3: ['[Dios] /PONERNPC número (pone un NPC fijo donde hiciste clic) /SACARNPC (saca el NPC señalado) /NPCSPUESTOS',
+    '/TIENDAS (elegir qué vende cada NPC) /NOBLE nombre (dar o sacar nobleza) /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
@@ -424,6 +425,9 @@ K.command = function (p, text) {
     }
     case 'OBJETOS': return this.abrirPanelObjetos(p);
     case 'TIENDAS': return this.abrirTiendas(p);
+    case 'PONERNPC': return this.ponerNpc(p, args[0]);
+    case 'SACARNPC': return this.sacarNpc(p);
+    case 'NPCSPUESTOS': return this.listarNpcsGm(p);
     case 'PUNTOSTORNEO': return this.comandoPuntosTorneo(p, args);
     case 'TIENDATORNEO': return this.comandoTiendaTorneo(p, args);
     case 'ELIMINARESTRUCTURA': return this.eliminarEstructura(p);
