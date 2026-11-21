@@ -324,6 +324,17 @@ N.onClose = () => {
 
 // ================== CONSOLA ==================
 function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
+// Al hacer clic en un personaje: nombre y qué es, bien grande
+on('ver', (m) => {
+  const el = $('console');
+  const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
+  const d = document.createElement('div');
+  d.className = 'c-ver ver-' + m.k;
+  d.innerHTML = `<span class="ver-n">${esc(m.n)}</span>${m.clan ? `<span class="ver-clan">del clan <b>${esc(m.clan)}</b></span>` : ''}<span class="ver-tag">${esc(m.tipo)}</span>${m.muerto ? '<span class="ver-muerto">✝ Muerto</span>' : ''}${m.desc ? `<span class="ver-desc">“${esc(m.desc)}”</span>` : ''}`;
+  el.appendChild(d);
+  if (atBottom) el.scrollTop = el.scrollHeight;
+});
+
 function log(text, color = 'info') {
   const el = $('console');
   const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;

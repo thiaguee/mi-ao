@@ -37,12 +37,10 @@ I.look = function (p, x, y) {
       this.msg(p, txt, 'info');
       if (e.def.desc && !e.def.attackable) this.send(p, { t: 'say', id: e.id, text: e.def.desc, color: 'npc' });
     } else {
-      const estado = e.dead ? ' [MUERTO]' : '';
-      const tipo = e.gm > 0 && !e.hideGm ? ` <${this.gmTitle(e.gm)}>` : e.crim ? ' <CRIMINAL>' : ' <CIUDADANO>';
-      let txt = `Ves a ${e.name}${tipo}${estado} - ${G.CLASES[e.clase]} ${G.RAZAS[e.raza]} nivel ${e.stats.lvl}`;
-      if (p.gm > 0) txt += ` | HP ${e.stats.hp}/${e.stats.maxHp} | Mapa ${e.map} ${e.x} ${e.y}`;
-      this.msg(p, txt, 'info');
-      if (e.desc) this.msg(p, `«${e.desc}»`, 'info');
+      // Sólo nombre, clan y qué es (GM, ciudadano o criminal)
+      const esGm = e.gm > 0 && !e.hideGm;
+      this.send(p, { t: 'ver', n: e.name, clan: e.guild || '', desc: e.desc || '', muerto: e.dead ? 1 : 0,
+        k: esGm ? 'gm' : e.crim ? 'cri' : 'ciu', tipo: esGm ? this.gmTitle(e.gm) : e.crim ? 'Criminal' : 'Ciudadano' });
     }
     return;
   }

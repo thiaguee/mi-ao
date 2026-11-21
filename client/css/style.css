@@ -266,3 +266,16 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 .cj-info b { font-size: 13px; color: #f0d9a0; }
 .cj-aviso { color: #e08a5a; }
 .cj-ok { color: #6fd36f; } .cj-falta { color: #aaa; font-size: 12px; }
+
+/* clic en un personaje */
+#console div.c-ver { margin: 3px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ver-n { font-family: Georgia, 'Times New Roman', serif; font-size: 17px; font-weight: bold; letter-spacing: .5px; text-shadow: 0 0 6px currentColor, 1px 1px 0 #000; }
+.ver-clan { font-family: Georgia, serif; font-size: 13px; color: #c9b089; font-style: italic; }
+.ver-tag { font-family: Georgia, serif; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 1px 8px; border-radius: 10px; border: 1px solid currentColor; background: #0008; }
+.ver-muerto { font-size: 11px; color: #aaa; font-style: italic; }
+.ver-ciu .ver-n, .ver-ciu .ver-tag { color: #4fa3ff; }
+.ver-cri .ver-n, .ver-cri .ver-tag { color: #ff4a4a; }
+.ver-gm .ver-n, .ver-gm .ver-tag { color: #ff9a2e; }
+.ver-clan b { font-style: normal; color: #f3dc9b; }
+.ver-desc { flex-basis: 100%; font-family: Georgia, 'Times New Roman', serif; font-size: 13px; font-style: italic; color: #d9c9a3; padding-left: 2px; }
