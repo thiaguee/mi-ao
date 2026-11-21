@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=1240
+NumOBJs=1242
 
 
 
@@ -15205,3 +15205,25 @@ VGrande=501
 ObjType=8
 Agarrable=1
 Texto=Tenemos las mejores monturas para los mas feroces aventureros.
+
+[OBJ1241] 'Norway AO: tunica nueva (stats provisorios)
+Name=Tunica Santa 1
+GrhIndex=32896
+ObjType=3
+NumRopaje=693
+Agarrable=0
+MinDef=5
+MaxDef=12
+Valor=0
+Crucial=0
+
+[OBJ1242] 'Norway AO: tunica nueva (stats provisorios)
+Name=Tunica Divina 1
+GrhIndex=32923
+ObjType=3
+NumRopaje=694
+Agarrable=0
+MinDef=5
+MaxDef=12
+Valor=0
+Crucial=0
