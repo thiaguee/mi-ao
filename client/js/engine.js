@@ -11,7 +11,7 @@ export function ajustarCaminata(frameMs) { E.frameMs = frameMs; }
 // Velocidad de la animación de las piernas: igual que el AO original (Movement_Speed = 0.5)
 const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
-const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#ff8c1a', npc: '#d8d8d8', npc_h: '#ffb0b0' };
+const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#ff8c1a', npc: '#d8d8d8', npc_h: '#ffb0b0', noble: '#3fe06a' };
 const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
 
 // Reloj del juego: avanza de a cuadros parejos (ver tick en main.js). Todo lo que se mueve usa
@@ -488,7 +488,8 @@ function drawName(ctx, c, px, py) {
   ctx.textAlign = 'center';
   const parts = c.n.split(' <');
   const y = py + 44;
-  const col = c.dead ? '#9bd0ff' : NAME_COLORS[c.col] || '#fff';
+  // los nobles tienen el nombre verde (los GMs siguen en naranja)
+  const col = c.dead ? '#9bd0ff' : c.nb && c.col !== 'gm' ? NAME_COLORS.noble : NAME_COLORS[c.col] || '#fff';
   ctx.fillStyle = '#000';
   ctx.fillText(parts[0], px + 17, y + 1);
   ctx.fillStyle = col;

@@ -1,0 +1,10 @@
+{
+  "_ayuda": "Sistema de nobleza. 'gemas': números de objeto de TODAS las gemas que hay que tener en el inventario para escribir /NOBLEZA (todavía vacío: se completa cuando se agreguen las gemas al juego). 'consumirGemas': si es true, las gemas se gastan al hacerse noble. 'tunicas': las 3 túnicas para elegir (0 = todavía no está). Las túnicas de noble sólo las pueden usar los nobles y no se caen al morir.",
+  "gemas": [],
+  "consumirGemas": true,
+  "tunicas": [
+    { "nombre": "Tunica de Noble", "obj": 1244 },
+    { "nombre": "Tunica de Noble 2", "obj": 1245 },
+    { "nombre": "Tunica de Noble 3", "obj": 0 }
+  ]
+}

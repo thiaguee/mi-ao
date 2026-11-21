@@ -165,7 +165,7 @@ P.toRecord = function (p) {
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
-    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [],
+    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
     nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
   };
 };
@@ -316,6 +316,7 @@ P.canUseObj = function (p, o) {
   if (o.mujer && p.genero !== 'm') return 'Sólo las mujeres pueden usar esto.';
   if (o.hombre && p.genero !== 'h') return 'Sólo los hombres pueden usar esto.';
   if (o.newbie && p.stats.lvl > NEWBIE_LVL) return 'Sólo los newbies pueden usar este objeto.';
+  if (this.esTunicaNoble && this.esTunicaNoble(o.id) && !p.noble) return 'Sólo los Nobles pueden usar esta túnica.';
   if (this.puedeUsarPorBando) { const b = this.puedeUsarPorBando(p, o); if (b !== true) return b; }
   if (o.type === OBJ.BARCO && p.stats.lvl < 20) return 'Necesitás nivel 20 para usar una barca.';
   return true;
