@@ -261,11 +261,17 @@ const server = http.createServer((req, res) => {
   if (!file.startsWith(path.normalize(CLIENT_DIR))) { res.writeHead(403); return res.end(); }
   fs.stat(file, (err, st) => {
     if (err || !st.isFile()) { res.writeHead(404); return res.end('No encontrado'); }
-    res.writeHead(200, {
+    // El navegador guarda los archivos pero pregunta cada vez si cambiaron (ETag): si se agregan o
+    // corrigen gráficos u objetos, los jugadores los ven al entrar sin tener que borrar la caché.
+    const etag = `"${st.size.toString(36)}-${Math.floor(st.mtimeMs).toString(36)}"`;
+    const cab = {
       'Content-Type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream',
-      'Cache-Control': url.startsWith('/assets/') ? 'public, max-age=86400' : 'no-cache',
+      'Cache-Control': 'no-cache',
+      ETag: etag,
       'Access-Control-Allow-Origin': '*',
-    });
+    };
+    if (req.headers['if-none-match'] === etag) { res.writeHead(304, cab); return res.end(); }
+    res.writeHead(200, cab);
     fs.createReadStream(file).pipe(res);
   });
 });

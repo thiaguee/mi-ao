@@ -8,10 +8,14 @@ export const A = {
   pending: 0,
 };
 
+// Las versiones viejas del servidor pedían guardar los gráficos 24 hs sin preguntar: este sufijo hace que esas
+// copias viejas no se usen. Desde ahora el servidor responde con ETag y los cambios se ven solos.
+const V = '?v=2';
+
 export async function loadIndexes() {
   const [grh, chars] = await Promise.all([
-    fetch('assets/data/grh.json').then((r) => r.json()),
-    fetch('assets/data/chars.json').then((r) => r.json()),
+    fetch('assets/data/grh.json' + V).then((r) => r.json()),
+    fetch('assets/data/chars.json' + V).then((r) => r.json()),
   ]);
   A.grh = grh;
   Object.assign(A, chars);
@@ -29,7 +33,7 @@ export function image(file) {
   // Se decodifica en segundo plano antes de usarla: así dibujar una imagen nueva no frena el juego
   img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(() => { img._ok = true; A.listas++; }); };
   img.addEventListener('error', () => { A.listas++; });
-  img.src = `assets/g/${file}.png`;
+  img.src = `assets/g/${file}.png${V}`;
   A.images.set(file, img);
   return null;
 }
