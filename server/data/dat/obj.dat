@@ -15332,8 +15332,8 @@ LingO=0
 Upgrade=390
 SkHerreria=70
 
-[OBJ1248] 'Norway AO: Montura de Caballo en gris tordillo, crines claras, jinete de lino
-Name=Montura de Corcel Ceniciento
+[OBJ1248] 'Norway AO: caballo alazan sin jinete (a partir del sprite del Unicornio, sin cuerno)
+Name=Montura de Corcel Alazan
 GrhIndex=33079
 ObjType=25
 NumRopaje=700
