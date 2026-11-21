@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=1243
+NumOBJs=1245
 
 
 
@@ -5547,7 +5547,7 @@ LingO=1000
 SkHerreria=100
 
 [OBJ484]
-Name=Manto de Noble
+Name=Tunica Austera
 GrhIndex=760
 ObjType=3
 NumRopaje=93
@@ -15252,3 +15252,47 @@ CP7=BARDO
 CP8=DRUIDA
 CP9=TRABAJADOR
 CP10=MAGO
+
+[OBJ1244] 'Norway AO: variante de la Tunica Austera (capa gris, verde agua, cruz en la espalda)
+Name=Manto de Noble
+GrhIndex=32977
+ObjType=3
+NumRopaje=696
+Agarrable=0
+MaxDef=15
+MinDef=10
+Valor=4620
+Crucial=0
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=CLERIGO
+CP6=PIRATA
+CP7=ASESINO
+LingH=66
+LingP=0
+LingO=0
+SkHerreria=50
+
+[OBJ1245] 'Norway AO: variante de la Tunica Austera (capa negra, verde agua, cruz en la espalda)
+Name=Tunica de Noble II
+GrhIndex=33004
+ObjType=3
+NumRopaje=697
+Agarrable=0
+MaxDef=15
+MinDef=10
+Valor=4620
+Crucial=0
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=CLERIGO
+CP6=PIRATA
+CP7=ASESINO
+LingH=66
+LingP=0
+LingO=0
+SkHerreria=50
