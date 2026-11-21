@@ -19,6 +19,7 @@ export async function loadIndexes() {
 
 let SNAP = 1;
 export function setSnap(z) { SNAP = z || 1; }
+export function getSnap() { return SNAP; }
 
 export function image(file) {
   let img = A.images.get(file);
@@ -72,7 +73,9 @@ export function drawGrh(ctx, grhIndex, x, y, center, time = 0) {
     if (w !== 32) x -= Math.floor((w - 32) / 2);
     if (h !== 32) y -= h - 32;
   }
-  ctx.drawImage(img, sx, sy, w, h, Math.round(x * SNAP) / SNAP, Math.round(y * SNAP) / SNAP, w, h);
+  // en la pantalla del juego se ajusta a los píxeles reales; en dibujos aparte (piso, vistas previas) a píxeles enteros
+  const k = ctx.canvas && ctx.canvas.id === 'view' ? SNAP : 1;
+  ctx.drawImage(img, sx, sy, w, h, Math.round(x * k) / k, Math.round(y * k) / k, w, h);
   return true;
 }
 

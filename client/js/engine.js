@@ -1,5 +1,5 @@
 // Motor gráfico: dibuja el mapa, objetos, personajes, efectos, nombres y diálogos.
-import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap } from './assets.js';
+import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap, getSnap } from './assets.js';
 import { dibujarCapa, dibujarAura } from './capas.js';
 import { idx } from './mapdata.js';
 
@@ -104,6 +104,13 @@ function chunkAnimTiles(map, cx, cy) {
 }
 
 function buildChunk(ch, map, cx, cy, now) {
+  // el bloque se dibuja a tamaño real (1x): cada baldosa en un píxel entero, sin rayitas entre ellas
+  const snapAntes = getSnap();
+  setSnap(1);
+  try { armarChunk(ch, map, cx, cy, now); } finally { setSnap(snapAntes); }
+}
+
+function armarChunk(ch, map, cx, cy, now) {
   const c = ch.ctx;
   c.clearRect(0, 0, CH * TILE, CH * TILE);
   const xa = cx * CH + 1, ya = cy * CH + 1;
