@@ -258,3 +258,21 @@ a.btn.download { text-align: center; text-decoration: none; background: linear-g
 
 .mundo-box { background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 8px 10px; text-align: center; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
 .mi-ip { font-size: 22px; font-weight: bold; color: #ffd84a; letter-spacing: 1px; margin: 4px 0; user-select: text; }
+
+/* Panel /OBJETOS (Admin) */
+.ob-win { display: flex; gap: 12px; width: min(820px, 86vw); height: min(560px, 70vh); }
+.ob-izq { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.ob-filtros { display: flex; gap: 6px; }
+.ob-filtros input { flex: 1; min-width: 0; }
+.ob-cuenta { text-align: left; margin: 4px 0; }
+.ob-lista { flex: 1; overflow-y: auto; border: 1px solid var(--border); background: var(--panel2); }
+.ob-num { color: var(--gold); min-width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+.ob-tag { margin-left: auto; font-size: 10px; color: #9fd28a; border: 1px solid #4d6b3a; padding: 0 4px; border-radius: 3px; }
+.ob-ficha { width: 220px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.ob-ficha label { display: flex; flex-direction: column; gap: 2px; width: 100%; font-size: 12px; }
+.ob-grande { width: 96px; height: 96px; image-rendering: pixelated; background: var(--panel2); border: 1px solid var(--border); }
+.ob-nombre { font-weight: bold; color: var(--gold); }
+.ob-dato { font-size: 12px; }
+.ob-donde { font-size: 12px; color: var(--muted); }
+.ob-donde.mapa { color: #9fd28a; }
+.ob-vacio { color: var(--muted); padding: 12px; text-align: center; }

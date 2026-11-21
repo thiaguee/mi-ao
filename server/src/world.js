@@ -190,7 +190,7 @@ class World {
       if (od) objs.push([k % XY + 1, Math.floor(k / XY) + 1, od.grh]);
     }
     this.send(p, { t: 'map', map: p.map, name: mp.d.name, music: mp.d.music, pk: mp.d.pk,
-      chars, objs, me: p.id });
+      chars, objs, me: p.id, blk: mp.blkCambios ? [...mp.blkCambios].map(([k, b]) => [k % XY + 1, Math.floor(k / XY) + 1, b]) : [] });
   }
 
   // ---------- movimiento ----------

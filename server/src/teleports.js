@@ -24,8 +24,9 @@ T.ponerTeleport = function (t, avisar) {
   if (!mp || !this.maps[dm] || !this.inMap(t.x, t.y)) return false;
   const k = idx(t.x, t.y);
   mp.d.exits.set(k, { map: dm, x: dx, y: dy });
-  mp.objs.set(k, { id: OBJ_PORTAL, amount: 1 }); // sin "t": la limpieza de objetos no lo borra
-  if (avisar) this.toMap(t.mapa, { t: 'obj', x: t.x, y: t.y, g: this.data.objs[OBJ_PORTAL].grh });
+  const obj = this.data.objs[t.obj] ? t.obj : OBJ_PORTAL; // los del panel /OBJETOS guardan su objeto
+  mp.objs.set(k, { id: obj, amount: 1 }); // sin "t": la limpieza de objetos no lo borra
+  if (avisar) this.toMap(t.mapa, { t: 'obj', x: t.x, y: t.y, g: this.data.objs[obj].grh });
   return true;
 };
 

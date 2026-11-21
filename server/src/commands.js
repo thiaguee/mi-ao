@@ -63,7 +63,8 @@ const AYUDA_GM = {
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
-  4: ['[Admin] /DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
+  4: ['[Admin] /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
+    '/DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
 
 K.command = function (p, text) {
@@ -423,6 +424,8 @@ K.command = function (p, text) {
       gmLog();
       return this.msg(p, `Se limpiaron ${c} objetos tirados en el mapa.`, 'gm');
     }
+    case 'OBJETOS': return this.abrirPanelObjetos(p);
+    case 'ELIMINARESTRUCTURA': return this.eliminarEstructura(p);
     case 'DESTRUIR': {
       if (!need(3)) return;
       const o = this.objAt(p.map, p.x, p.y);

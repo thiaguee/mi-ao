@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./estructuras'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -143,6 +143,7 @@ world.createCharacter = function (sock, req) {
 };
 
 world.cargarTeleports();
+world.cargarEstructuras(); // después de los teleports: puede borrar portales fijos
 world.spawnAllNpcs();
 world.iniciarGuerras();
 
@@ -186,9 +187,11 @@ function handle(sock, msg) {
     case 'equip': return world.equip(p, +msg.i);
     case 'drop': return msg.gold ? world.dropGold(p, msg.a) : world.dropItem(p, +msg.i, msg.a);
     case 'click':
-      p.lastClick = { x: +msg.x, y: +msg.y };
+      p.lastClick = { x: +msg.x, y: +msg.y, map: p.map };
+      p.lastClickAt = now; // para /ELIMINARESTRUCTURA (hasta 15 segundos después)
       return world.look(p, +msg.x, +msg.y);
     case 'dclick': return world.interact(p, +msg.x, +msg.y);
+    case 'objCrear': return world.crearDesdePanel(p, msg); // panel /OBJETOS de los Admin
     case 'tp': // teletransporte de GM con clic derecho
       if (p.gm < 1) return;
       if (!world.inMap(+msg.x, +msg.y)) return;

@@ -491,7 +491,7 @@ P.pickUp = function (p) {
   const o = this.objAt(p.map, p.x, p.y);
   if (!o) return this.msg(p, 'No hay nada acá.', 'info');
   const od = this.data.objs[o.id];
-  if (!od || !od.agarrable || [OBJ.ARBOL, OBJ.PUERTA, OBJ.CARTEL, OBJ.FORO, OBJ.YACIMIENTO, OBJ.YUNQUE,
+  if (!od || o.fija || !od.agarrable || [OBJ.ARBOL, OBJ.PUERTA, OBJ.CARTEL, OBJ.FORO, OBJ.YACIMIENTO, OBJ.YUNQUE,
     OBJ.FRAGUA, OBJ.TELEPORT].includes(od.type)) {
     return this.msg(p, 'No podés agarrar eso.', 'warn');
   }

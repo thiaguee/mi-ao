@@ -8,6 +8,7 @@ import * as Snd from './audio.js';
 import * as Mapas from './mapas.js';
 import * as ClanesUI from './clanesui.js';
 import * as MisionesUI from './misionesui.js';
+import * as ObjetosUI from './objetosui.js';
 import { preguntar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
@@ -187,6 +188,8 @@ on('map', async (m) => {
   try {
     const map = await loadMap(m.map);
     Eng.setMap(map, m.objs);
+    // Baldosas que cambiaron los Admin al poner o eliminar estructuras
+    for (const [x, y, b] of m.blk || []) if (E.blocked) E.blocked[idx(x, y)] = b;
     for (const c of m.chars) Eng.addChar(c);
     E.me = m.me;
     $('map-name').textContent = `${m.name}${m.pk ? '' : ' (segura)'}`;
@@ -477,6 +480,8 @@ ClanesUI.mensajes(on);
 $('b-clanes').onclick = () => ClanesUI.abrir();
 MisionesUI.init({ openModal, send, esc, S });
 MisionesUI.mensajes(on);
+ObjetosUI.init({ openModal, closeModal, send, esc, S });
+ObjetosUI.mensajes(on);
 $('b-misiones').onclick = () => MisionesUI.abrir();
 $('b-capa').onclick = () => send({ t: 'capa' });
 // Marcador de la guerra (arriba al centro del juego)
