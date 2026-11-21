@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2016
+NumOBJs=2017
 
 
 
@@ -15446,3 +15446,14 @@ CP3=LADRON
 CP4=BARDO
 CP5=PIRATA
 CP6=ASESINO
+
+[OBJ2017] 'Norway AO: oro metalico con gemas azules, pantalon verde y botas de cuero (a partir de la Ropa Legendaria)
+Name=Armadura del Guardian Dorado
+GrhIndex=33268
+ObjType=3
+NumRopaje=702
+Agarrable=0
+MaxDef=14
+MinDef=9
+Valor=3900
+Crucial=1
