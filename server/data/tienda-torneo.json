@@ -1,6 +1,7 @@
 {
   "_ayuda": "Tienda de Torneo: obj = número de objeto, precio = puntos de torneo. Los Admin también la cambian en el juego con /TIENDATORNEO (esos cambios se guardan en la carpeta de datos del servidor y tienen prioridad sobre este archivo).",
   "items": [
-    { "obj": 1153, "precio": 20, "_nombre": "Coraza del Mal" }
+    { "obj": 1153, "precio": 20, "_nombre": "Coraza del Mal" },
+    { "obj": 1242, "precio": 20, "_nombre": "Tunica Divina 1" }
   ]
 }

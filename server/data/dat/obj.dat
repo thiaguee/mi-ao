@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=1245
+NumOBJs=1248
 
 
 
@@ -15217,14 +15217,14 @@ MaxDef=12
 Valor=0
 Crucial=0
 
-[OBJ1242] 'Norway AO: tunica nueva (stats provisorios)
+[OBJ1242] 'Norway AO: tunica nueva (defensa igual a la Coraza del Mal, tienda de torneo)
 Name=Tunica Divina 1
 GrhIndex=32923
 ObjType=3
 NumRopaje=694
 Agarrable=0
-MinDef=5
-MaxDef=12
+MinDef=50
+MaxDef=60
 Valor=0
 Crucial=0
 
@@ -15296,3 +15296,50 @@ LingH=66
 LingP=0
 LingO=0
 SkHerreria=50
+
+[OBJ1246] 'Norway AO: Tunica de Monje en negro carbon con pliegues grises y cordon color hueso
+Name=Tunica del Penitente
+GrhIndex=33031
+ObjType=3
+NumRopaje=698
+Agarrable=0
+MaxDef=20
+MinDef=15
+Valor=10500
+Crucial=1
+
+[OBJ1247] 'Norway AO: Armadura de Placas Completa en hierro gastado con cuero oscuro
+Name=Armadura del Centinela
+GrhIndex=33058
+ObjType=3
+NumRopaje=699
+Agarrable=0
+MaxDef=40
+MinDef=35
+Valor=27440
+Crucial=1
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=PIRATA
+CP6=ASESINO
+CP7=CAZADOR
+CP8=TRABAJADOR
+LingH=392
+LingP=0
+LingO=0
+Upgrade=390
+SkHerreria=70
+
+[OBJ1248] 'Norway AO: Montura de Caballo en gris tordillo, crines claras, jinete de lino
+Name=Montura de Corcel Ceniciento
+GrhIndex=33079
+ObjType=25
+NumRopaje=700
+Agarrable=0
+MaxDef=130
+MinDef=120
+NoSeCae=1
+Valor=2400000
+Crucial=0
