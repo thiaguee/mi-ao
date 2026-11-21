@@ -382,3 +382,4 @@ body:has(#scr-game:not(.hidden)) #mundo-cv { max-width: 540px; max-height: 520px
 body:has(#scr-game:not(.hidden)) .mundo-info { width: 190px; font-size: 11px; line-height: 1.5; }
 body:has(#scr-game:not(.hidden)) .pt-tienda { width: 520px; }
 body:has(#scr-game:not(.hidden)) .pt-lista { max-height: 380px; }
+body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
