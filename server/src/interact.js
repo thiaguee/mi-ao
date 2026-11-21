@@ -32,8 +32,9 @@ I.look = function (p, x, y) {
         const r = e.hp / e.maxHp;
         const estado = r >= 1 ? 'Intacto' : r > 0.75 ? 'Levemente herido' : r > 0.5 ? 'Herido' : r > 0.25 ? 'Muy herido' : 'Agonizando';
         txt += ` [${estado}]`;
-        if (p.gm > 0) txt += ` (${e.hp}/${e.maxHp}) #${e.num}`;
+        if (p.gm > 0) txt += ` (${e.hp}/${e.maxHp})`;
       }
+      if (p.gm > 0) txt += ` · NPC N° ${e.num}`; // los GMs ven el número de cualquier NPC
       this.msg(p, txt, 'info');
       if (e.def.desc && !e.def.attackable) this.send(p, { t: 'say', id: e.id, text: e.def.desc, color: 'npc' });
     } else {
