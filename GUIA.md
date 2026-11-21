@@ -245,10 +245,10 @@ en **Arghal** (criminales). Cada premio se da una sola vez, **no se cae al morir
 
 | Kills | Ciudadanos (criminales matados) | Criminales (ciudadanos matados) |
 |---|---|---|
-| 10 | Túnica Conspicua de Mago Imperial | Túnica Conspicua de Mago Imperial |
-| 25 | Túnica de Mago del Imperio | Túnica de Maga Oscura (sólo mujeres) |
-| 50 | Túnica Egregia de Mago Oscuro | Túnica de Líder del Caos |
-| 100 | Túnica de Archimago Imperial | Túnica Egregia de Mago Oscuro |
+| 10 | Túnica Conspicua de Mago Imperial | Túnica de Maga Oscura (sólo mujeres) |
+| 25 | Túnica de Mago del Imperio | Túnica Conspicua de Mago Imperial |
+| 50 | Túnica Egregia de Mago Oscuro | Túnica Egregia de Mago Oscuro |
+| 100 | Túnica de Archimago Imperial | Túnica de Líder del Caos |
 | 500 | Alas de ángel | Alas de demonio |
 
 Los premios se cambian en `server/data/recompensas-faccion.json`.
@@ -256,7 +256,7 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 ### Otros
 - La **barca** se usa desde **nivel 20**.
 - Salir de la Dungeon Newbie por la salida te deja en **Ullathorpe**.
-- **Apocalipsis** lo venden los magos de todas las ciudades.
+- **Apocalipsis, Paralizar, Inmovilizar y Devolver Movilidad** (saca la parálisis) los venden los magos de todas las ciudades.
 - Al que **más mata** en la guerra se le dan **5 puntos de torneo** (no se pierden).
 - **Ranking de kills** (/RANKING): los 3 que más mataron llevan una estrella de **oro, plata y bronce** al lado del nombre.
 - GMs: **/GUERRA INICIAR** y **/GUERRA TERMINAR**. Horarios y duración: sección `guerra` de `server/config.json`
