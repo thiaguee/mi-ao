@@ -189,7 +189,7 @@ S.npcCast = function (npc, t) {
   if (sp.fx) this.toMap(npc.map, { t: 'fx', id: t.id, fx: sp.fx, loops: sp.loops || 0 });
   if (sp.wav) this.toMap(npc.map, { t: 'snd', w: sp.wav });
   if (sp.subeHp === 2) {
-    const dmg = Math.max(1, rnd(sp.minHp, sp.maxHp));
+    const dmg = this.danioDeNpc(t, Math.max(1, rnd(sp.minHp, sp.maxHp))); // montura de elefante
     if (t.godMode) return;
     t.stats.hp -= dmg;
     this.msg(t, `¡${npc.name} te ha quitado ${dmg} puntos de vida!`, 'spell');

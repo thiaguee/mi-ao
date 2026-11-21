@@ -14,7 +14,7 @@ const OBJ = {
   LLAVE: 9, FORO: 10, POCION: 11, BEBIDA: 13, LENA: 14, FOGATA: 15, ESCUDO: 16, CASCO: 17,
   ANILLO: 18, TELEPORT: 19, YACIMIENTO: 22, MINERAL: 23, PERGAMINO: 24, INSTRUMENTO: 26,
   YUNQUE: 27, FRAGUA: 28, BARCO: 31, FLECHA: 32, BOTELLA_VACIA: 33, BOTELLA_LLENA: 34,
-  MOCHILA: 37,
+  MONTURA: 25, MOCHILA: 37,
 };
 
 // ---- Árbol de clases de Norway AO ----
@@ -311,6 +311,8 @@ function isWaterGrh(g) {
 
 // Ajustes de balance sin tocar los .dat: data/ajustes.json
 // { "hechizos": { "2": { "danio": 20 } } }  -> el hechizo 2 hace 20 veces más daño
+const normClase = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().trim();
+
 function aplicarAjustes(spells, objs) {
   const p = path.join(DATA, 'ajustes.json');
   if (!fs.existsSync(p)) return;
@@ -328,7 +330,8 @@ function aplicarAjustes(spells, objs) {
     const o = objs[+id];
     if (!o) continue;
     if (a.valor !== undefined) o.value = a.valor;
-    console.log(`Ajuste: ${o.name} -> valor ${o.value}`);
+    if (Array.isArray(a.clases)) o.soloClases = a.clases.map(normClase); // sólo estas clases lo pueden usar
+    console.log(`Ajuste: ${o.name} -> valor ${o.value}${o.soloClases ? ', clases: ' + a.clases.join(', ') : ''}`);
   }
 }
 
@@ -387,7 +390,7 @@ function loadAll() {
 }
 
 module.exports = {
-  loadAll, idx, XY, OBJ, CLASES, EVOLUCION, esClaseBase, claseConMana, RESTA, AUMENTO_HIT,
+  loadAll, normClase, idx, XY, OBJ, CLASES, EVOLUCION, esClaseBase, claseConMana, RESTA, AUMENTO_HIT,
   MANA_POR_NIVEL, NOMBRE_DAT_CLASE, RAZAS, MOD_RAZA, APARIENCIA, ES_RAZA_BAJA, SKILLS, SK, ELU,
   MAX_NIVEL, NIVEL_DESBLOQUEO, CUERPO_MUERTO, CABEZA_MUERTO, FX, TRIGGER, SND,
 };

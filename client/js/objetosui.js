@@ -6,7 +6,6 @@ import { drawIcon } from './assets.js';
 
 let H = null; // { openModal, closeModal, send, esc, S }
 const P = { lista: null, filtro: '', tipo: '', sel: 0, cant: 1, mapa: '' };
-const MAX_FILAS = 300; // para que la lista no se trabe: se refina con la búsqueda
 
 const TIPOS = {
   1: 'Comida', 2: 'Armas', 3: 'Armaduras y ropa', 4: 'Árboles', 5: 'Oro', 6: 'Puertas', 7: 'Cofres y baúles',
@@ -38,12 +37,22 @@ function filtrados() {
   });
 }
 
-function pintarIconos(root) {
-  root.querySelectorAll('canvas[data-g]').forEach((c) => {
-    const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = false;
-    const g = +c.dataset.g, tam = c.width;
-    if (!drawIcon(ctx, g, tam)) setTimeout(() => drawIcon(ctx, g, tam), 500);
-  });
+function pintarIcono(c) {
+  const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = false;
+  const g = +c.dataset.g, tam = c.width;
+  if (!drawIcon(ctx, g, tam)) setTimeout(() => drawIcon(ctx, g, tam), 500);
+}
+function pintarIconos(root) { root.querySelectorAll('canvas[data-g]').forEach(pintarIcono); }
+
+// En la lista se dibujan sólo las imágenes que se ven: así se pueden mostrar todos los objetos sin trabar
+let observador = null;
+function pintarIconosAlVer(root) {
+  if (observador) observador.disconnect();
+  if (!('IntersectionObserver' in window)) return pintarIconos(root);
+  observador = new IntersectionObserver((entradas) => {
+    for (const e of entradas) if (e.isIntersecting) { pintarIcono(e.target); observador.unobserve(e.target); }
+  }, { root, rootMargin: '200px' });
+  root.querySelectorAll('canvas[data-g]').forEach((c) => observador.observe(c));
 }
 
 function ficha() {
@@ -77,15 +86,13 @@ function crear(id, cantidad) {
 
 function pintarLista() {
   const lista = filtrados();
-  const filas = lista.slice(0, MAX_FILAS).map((it) => `<div class="li${it.i === P.sel ? ' sel' : ''}" data-ob="${it.i}">
+  const filas = lista.map((it) => `<div class="li${it.i === P.sel ? ' sel' : ''}" data-ob="${it.i}">
       <canvas width="32" height="32" data-g="${it.g}"></canvas><span class="ob-num">${it.i}</span>
       <span>${H.esc(it.n)}</span>${it.m ? '<span class="ob-tag">mapa</span>' : ''}</div>`).join('');
   const el = document.getElementById('ob-lista');
   el.innerHTML = filas || '<div class="ob-vacio">No hay objetos con ese filtro.</div>';
-  document.getElementById('ob-cuenta').textContent = lista.length > MAX_FILAS
-    ? `Mostrando ${MAX_FILAS} de ${lista.length}: escribí algo para achicar la lista.`
-    : `${lista.length} objeto${lista.length === 1 ? '' : 's'}`;
-  pintarIconos(el);
+  document.getElementById('ob-cuenta').textContent = `${lista.length} objeto${lista.length === 1 ? '' : 's'}`;
+  pintarIconosAlVer(el);
   el.querySelectorAll('[data-ob]').forEach((d) => {
     const id = +d.dataset.ob;
     d.onclick = () => { P.sel = id; el.querySelectorAll('.li.sel').forEach((x) => x.classList.remove('sel')); d.classList.add('sel'); pintarFicha(); };

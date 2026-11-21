@@ -11,6 +11,10 @@
     "474": {
       "valor": 150000,
       "_nombre": "Barca"
+    },
+    "1153": {
+      "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
+      "_nombre": "Coraza del Mal (sólo estas clases la pueden usar)"
     }
   },
   "vendedores": {

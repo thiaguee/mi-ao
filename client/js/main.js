@@ -9,6 +9,7 @@ import * as Mapas from './mapas.js';
 import * as ClanesUI from './clanesui.js';
 import * as MisionesUI from './misionesui.js';
 import * as ObjetosUI from './objetosui.js';
+import * as PuntosUI from './puntosui.js';
 import { preguntar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
@@ -507,6 +508,9 @@ MisionesUI.init({ openModal, send, esc, S });
 MisionesUI.mensajes(on);
 ObjetosUI.init({ openModal, closeModal, send, esc, S });
 ObjetosUI.mensajes(on);
+PuntosUI.init({ openModal, send, esc, abrirMisiones: () => MisionesUI.abrir() });
+PuntosUI.mensajes(on);
+$('b-puntos').onclick = () => PuntosUI.abrir();
 $('b-misiones').onclick = () => MisionesUI.abrir();
 $('b-capa').onclick = () => send({ t: 'capa' });
 // Marcador de la guerra (arriba al centro del juego)

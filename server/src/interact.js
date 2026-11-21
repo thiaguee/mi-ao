@@ -175,6 +175,7 @@ I.sell = function (p, slot, amount) {
   if (!it) return;
   const o = this.data.objs[it.id];
   if (o.newbie) return this.msg(p, 'No podés vender objetos newbie.', 'warn');
+  if (this.esDeTorneo(it.id)) return this.msg(p, 'Los objetos de torneo no se pueden vender.', 'warn');
   const tipo = npc.def.tipoItems;
   if (tipo && tipo !== 1000 && tipo !== o.type) return this.msg(p, 'El comerciante no está interesado en ese objeto.', 'warn');
   amount = Math.max(1, Math.min(it.amount, Math.floor(+amount || 1)));

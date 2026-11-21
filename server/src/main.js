@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -145,6 +145,7 @@ world.createCharacter = function (sock, req) {
 
 world.cargarTeleports();
 world.cargarEstructuras(); // después de los teleports: puede borrar portales fijos
+world.cargarTiendaTorneo();
 world.spawnAllNpcs();
 world.iniciarGuerras();
 
@@ -193,6 +194,7 @@ function handle(sock, msg) {
       return world.look(p, +msg.x, +msg.y);
     case 'dclick': return world.interact(p, +msg.x, +msg.y);
     case 'objCrear': return world.crearDesdePanel(p, msg); // panel /OBJETOS de los Admin
+    case 'torneo': return world.accionTorneo(p, msg); // tienda de puntos de torneo
     case 'tp': // teletransporte de GM con clic derecho
       if (p.gm < 1) return;
       if (!world.inMap(+msg.x, +msg.y)) return;

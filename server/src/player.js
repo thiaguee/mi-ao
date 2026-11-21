@@ -11,6 +11,7 @@ const SPELL_SLOTS = 35;
 const BANK_SLOTS = 40;
 const MAX_STACK = 10000;
 const NEWBIE_LVL = 12;
+const ORO_SEGURO = 40000; // al morir con esta cantidad de oro o más, el oro no se cae
 // Cuerpos "desnudos" por raza (Fénix: 1 humano, 2 enano, 3 elfo, 4 elfo oscuro, 5 gnomo)
 const DESNUDO = { 1: { h: 21, m: 39 }, 2: { h: 53, m: 60 }, 3: { h: 210, m: 259 }, 4: { h: 32, m: 40 },
   5: { h: 222, m: 260 } };
@@ -165,6 +166,7 @@ P.toRecord = function (p) {
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
     killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [],
+    nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
   };
 };
 
@@ -301,8 +303,12 @@ P.takeItem = function (p, id, amount) {
 
 P.canUseObj = function (p, o) {
   if (p.gm >= 2) return true;
-  const nombre = G.NOMBRE_DAT_CLASE[p.clase];
-  if (nombre && o.prohibidas.includes(nombre)) return 'Tu clase no puede usar este objeto.';
+  if (o.soloClases) {
+    if (!o.soloClases.includes(G.normClase(G.CLASES[p.clase] || ''))) return 'Tu clase no puede usar este objeto.';
+  } else {
+    const nombre = G.NOMBRE_DAT_CLASE[p.clase];
+    if (nombre && o.prohibidas.includes(nombre)) return 'Tu clase no puede usar este objeto.';
+  }
   if (o.bajos && !G.ES_RAZA_BAJA(p.raza)) return 'Sólo los enanos y gnomos pueden usar esto.';
   if (!o.bajos && (o.type === OBJ.ARMADURA) && G.ES_RAZA_BAJA(p.raza) && o.ropaje !== 0 && !o.newbie && o.ropaje < 300) {
     return 'Tu raza no puede usar esta vestimenta.';
@@ -322,10 +328,20 @@ P.recalcEquip = function (p) {
   p.weaponAnim = w ? (bajo && w.anim_bajos ? w.anim_bajos : w.anim) : 0;
   p.shieldAnim = s ? s.escudo : 0;
   p.helmetAnim = h ? h.casco : 0;
+  const montura = get(p.eq.mount);
   if (!p.sailing) {
-    if (a && a.ropaje) p.body = a.ropaje;
+    if (montura && montura.ropaje) p.body = montura.ropaje; // se ve montado
+    else if (a && a.ropaje) p.body = a.ropaje;
     else p.body = DESNUDO[p.raza][p.genero];
   }
+};
+
+// Montura de Elefante: defensa escondida que sólo sirve contra los NPCs (golpes y hechizos): 75% menos daño
+const MONTURA_ELEFANTE = 1159;
+P.danioDeNpc = function (t, dmg) {
+  const sl = t.eq && t.eq.mount;
+  if (sl >= 0 && t.inv[sl] && t.inv[sl].id === MONTURA_ELEFANTE) return Math.max(1, Math.ceil(dmg * 0.25));
+  return dmg;
 };
 
 P.armorDef = function (p) {
@@ -346,12 +362,12 @@ P.equip = function (p, i) {
   const o = this.data.objs[it.id];
   if (!o) return;
   const kind = { [OBJ.ARMA]: 'weapon', [OBJ.ARMADURA]: 'armor', [OBJ.ESCUDO]: 'shield', [OBJ.CASCO]: 'helmet',
-    [OBJ.FLECHA]: 'ammo' }[o.type];
+    [OBJ.FLECHA]: 'ammo', [OBJ.MONTURA]: 'mount' }[o.type];
   if (!kind) return this.msg(p, 'No podés equipar eso.', 'warn');
   if (p.eq[kind] === i) {
     p.eq[kind] = -1;
   } else {
-    const ok = this.canUseObj(p, o);
+    const ok = kind === 'mount' ? true : this.canUseObj(p, o); // las monturas las usa cualquiera
     if (ok !== true) return this.msg(p, ok, 'warn');
     const old = p.eq[kind];
     p.eq[kind] = i;
@@ -422,7 +438,7 @@ P.useItem = function (p, i) {
         this.msg(p, 'Aprendiste el hechizo ' + (this.data.spells[o.spell] || {}).name + '.', 'info');
       }
       break;
-    case OBJ.ARMA: case OBJ.ARMADURA: case OBJ.ESCUDO: case OBJ.CASCO: case OBJ.FLECHA:
+    case OBJ.ARMA: case OBJ.ARMADURA: case OBJ.ESCUDO: case OBJ.CASCO: case OBJ.FLECHA: case OBJ.MONTURA:
       this.equip(p, i);
       break;
     case OBJ.BARCO:
@@ -472,6 +488,7 @@ P.dropItem = function (p, i, amount) {
   amount = Math.max(1, Math.min(it.amount, Math.floor(+amount || 1)));
   const o = this.data.objs[it.id];
   if (o.newbie && p.gm < 2) return this.msg(p, 'No podés tirar objetos newbie.', 'warn');
+  if (this.esDeTorneo(it.id) && p.gm < 2) return this.msg(p, 'Los objetos de torneo no se pueden tirar.', 'warn');
   if (this.dropObj(p.map, p.x, p.y, it.id, amount)) {
     this.removeFromSlot(p, i, amount);
     if (p.gm > 0) this.log(`GM ${p.name} tiró ${amount} ${o.name} en ${p.map} ${p.x} ${p.y}`);
@@ -631,6 +648,12 @@ P.chooseClass = function (p, c) {
     }
   }
   this.msg(p, `¡Ahora sos ${G.CLASES[c]}!`, 'server');
+  // Si el nivel lo puso un GM con /NIVEL, los stats se recalculan con la clase elegida
+  if (p.nivelGm) {
+    this.ponerStatsMaximos(p);
+    const ev = G.EVOLUCION[p.clase];
+    if (!ev || p.stats.lvl < ev.nivel) p.nivelGm = false; // no quedan carteles por elegir
+  }
   this.toMap(p.map, { t: 'fx', id: p.id, fx: G.FX.WARP, loops: 0 });
   this.sendAllStats(p);
   this.checkClassUp(p);
@@ -684,14 +707,15 @@ P.killPlayer = function (p, killer) {
       const it = p.inv[i];
       if (!it) continue;
       const o = this.data.objs[it.id];
-      if (!o || o.newbie || o.noSeCae) continue;
+      if (!o || o.newbie || o.noSeCae || this.esDeTorneo(it.id)) continue; // los de torneo no se caen
       if (it.nc && s.lvl <= it.nc) continue; // set post-newbie: no se cae hasta el nivel indicado
       if (this.dropObj(p.map, p.x, p.y, it.id, it.amount)) {
         for (const k of Object.keys(p.eq)) if (p.eq[k] === i) p.eq[k] = -1;
         p.inv[i] = null;
       }
     }
-    if (s.gld > 0) {
+    // El oro se cae sólo si tenés menos de 40.000: con 40.000 o más no se pierde nada
+    if (s.gld > 0 && s.gld < ORO_SEGURO) {
       this.dropObj(p.map, p.x, p.y, 12, s.gld);
       s.gld = 0;
     }
@@ -816,6 +840,73 @@ P.playerTick = function (p, now) {
     }
   }
   if (changed.length) this.sendStat(p, [...new Set(changed)]);
+};
+
+// ---------- /NIVEL: llevar a un personaje directo a un nivel ----------
+// Camino de clases desde Ciudadano hasta la clase actual, con el nivel en que empieza cada una
+P.caminoDeClases = function (clase) {
+  const padre = {};
+  for (const [c, ev] of Object.entries(G.EVOLUCION)) for (const h of ev.opciones) padre[h] = { c: +c, nivel: ev.nivel };
+  const camino = [];
+  let c = clase;
+  while (padre[c]) { camino.unshift({ clase: c, desde: padre[c].nivel }); c = padre[c].c; }
+  camino.unshift({ clase: c, desde: 1 });
+  return camino;
+};
+
+// Vida, energía, maná y golpe máximos posibles para su nivel, según su raza (sus atributos)
+// y las clases por las que pasó: como si hubiera sacado la mejor tirada en cada nivel.
+P.ponerStatsMaximos = function (p) {
+  const s = p.stats;
+  const [, ag, int, , co] = p.attrs;
+  const camino = this.caminoDeClases(p.clase);
+  // El nivel L se gana con la clase que tenía en el nivel L-1
+  const claseEn = (nivel) => { let c = camino[0]; for (const x of camino) if (x.desde <= nivel) c = x; return c.clase; };
+  let hp = 15 + Math.floor(co / 3);
+  let sta = 20 + Math.floor(ag / 6) + 1 + 40;
+  let man = 0, hit = 0, conMana = false;
+  for (let L = 2; L <= s.lvl; L++) {
+    const c = claseEn(L - 1);
+    // Al volverse clase mágica recibe el maná de los niveles anteriores (igual que al elegirla jugando)
+    if (!conMana && G.claseConMana(c)) {
+      conMana = true;
+      man += Math.floor((G.MANA_POR_NIVEL[c] || 1) * int * Math.max(1, L - 1 - 5));
+      if (c === 36) man = Math.max(man, 100 + int * 3);
+    }
+    const prom = co / 2 - (G.RESTA[c] || 2);
+    hp += Math.max(1, Math.round(prom + 1));
+    sta += 15;
+    man += Math.floor((G.MANA_POR_NIVEL[c] || 0) * int);
+    hit += G.AUMENTO_HIT[c] || 2;
+  }
+  if (!conMana && G.claseConMana(p.clase)) man = Math.max(Math.floor((G.MANA_POR_NIVEL[p.clase] || 1) * int * Math.max(1, s.lvl - 5)), p.clase === 36 ? 100 + int * 3 : 0);
+  s.maxHp = Math.min(2500, hp); s.hp = s.maxHp;
+  s.maxSta = Math.min(999, sta); s.sta = s.maxSta;
+  s.maxMan = Math.min(3000, man); s.man = s.maxMan;
+  s.minHit = Math.min(99, 1 + hit); s.maxHit = Math.min(99, 2 + hit);
+  this.sendAllStats(p);
+};
+
+const skillPtsHasta = (lvl) => (lvl >= 2 ? 10 + 5 * (lvl - 2) : 0);
+
+P.ponerNivel = function (p, lvl) {
+  const s = p.stats;
+  const antes = s.lvl;
+  s.lvl = lvl;
+  s.exp = 0;
+  // Skillpoints: suma los de los niveles ganados o quita de los libres los de los niveles perdidos
+  s.skillPts = Math.max(0, (s.skillPts || 0) + skillPtsHasta(lvl) - skillPtsHasta(antes));
+  // Al pasar el nivel newbie pierde lo newbie y recibe el set de aventurero, una sola vez
+  // (si un GM lo bajó y lo vuelve a subir, no se le da otro set)
+  if (antes > NEWBIE_LVL && lvl <= NEWBIE_LVL) p.yaNoNewbie = true;
+  if (antes <= NEWBIE_LVL && lvl > NEWBIE_LVL && !p.yaNoNewbie) this.dropNewbieItems(p);
+  p.nivelGm = true;
+  this.ponerStatsMaximos(p);
+  const ev = G.EVOLUCION[p.clase];
+  if (!ev || lvl < ev.nivel) p.nivelGm = false;
+  this.msg(p, 'Ahora sos nivel ' + lvl + '.', 'server');
+  this.sendSkills(p);
+  this.checkClassUp(p); // si le faltan evoluciones, le aparece el cartel (y después los siguientes)
 };
 
 module.exports = Object.assign(P, { INV_SLOTS, SPELL_SLOTS, BANK_SLOTS, NEWBIE_LVL });

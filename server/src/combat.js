@@ -373,6 +373,7 @@ C.damagePlayer = function (t, dmg, attacker) {
   if (t.godMode) return;
   const [dmin, dmax] = this.armorDef(t);
   dmg = Math.max(1, dmg - rnd(dmin, dmax));
+  if (attacker && attacker.kind !== 'pc') dmg = this.danioDeNpc(t, dmg); // montura de elefante
   // Escudo: chance de bloquear
   if (t.eq.shield >= 0 && Math.random() * 100 < 5 + t.skills[SK['Defensa con escudos']] / 5) {
     this.toMap(t.map, { t: 'snd', w: G.SND.ESCUDO });

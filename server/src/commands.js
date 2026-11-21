@@ -64,6 +64,7 @@ const AYUDA_GM = {
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
   4: ['[Admin] /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
+    '/PUNTOSTORNEO nombre cantidad (negativo quita) /TIENDATORNEO [agregar numero precio | quitar numero]',
     '/DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
 
@@ -363,20 +364,10 @@ K.command = function (p, text) {
     case 'NIVEL': {
       if (!need(3)) return;
       const t = target(args[0]); if (!t) return;
-      const lvl = Math.max(1, Math.min(G.MAX_NIVEL, +args[1] || 1));
+      const lvl = Math.floor(+args[1]);
+      if (!(lvl >= 1 && lvl <= G.MAX_NIVEL)) return this.msg(p, `Uso: /NIVEL nombre nivel (1 a ${G.MAX_NIVEL}). Sube o baja, con vida/maná/golpe al máximo de su clase y raza.`, 'warn');
       gmLog();
-      while (t.stats.lvl < lvl) {
-        const prev = t.stats.lvl;
-        t.stats.exp = G.ELU[t.stats.lvl];
-        this.checkLevel(t);
-        if (t.stats.lvl === prev) {
-          // clase base trabada en 14: la evoluciona automáticamente
-          const ev = G.EVOLUCION[t.clase];
-          if (!ev) break;
-          this.chooseClass(t, ev.opciones[0]);
-        }
-      }
-      this.sendAllStats(t);
+      this.ponerNivel(t, lvl);
       return this.msg(p, `${t.name} ahora es nivel ${t.stats.lvl}.`, 'gm');
     }
     case 'EXP': {
@@ -427,6 +418,8 @@ K.command = function (p, text) {
       return this.msg(p, `Se limpiaron ${c} objetos tirados en el mapa.`, 'gm');
     }
     case 'OBJETOS': return this.abrirPanelObjetos(p);
+    case 'PUNTOSTORNEO': return this.comandoPuntosTorneo(p, args);
+    case 'TIENDATORNEO': return this.comandoTiendaTorneo(p, args);
     case 'ELIMINARESTRUCTURA': return this.eliminarEstructura(p);
     case 'DESTRUIR': {
       if (!need(3)) return;
