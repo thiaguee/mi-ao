@@ -297,13 +297,13 @@ on('bankEnd', () => { if (S.modal === 'bank') closeModal(); S.bank = null; });
 on('canje', (m) => {
   const filas = m.premios.map((x) => {
     const est = x.hecho ? '<span class="cj-ok">✔ Reclamado</span>'
-      : x.puede ? `<button class="btn sm main" data-cj="${x.i}">Reclamar</button>`
+      : x.puede ? (m.lejos ? `<span class="cj-ok">¡Listo! Reclamalo en ${esc(m.lejos)}</span>` : `<button class="btn sm main" data-cj="${x.i}">Reclamar</button>`)
       : `<span class="cj-falta">Faltan ${x.kills - m.kills}</span>`;
     const def = x.xd ? ` · Def ${x.md}-${x.xd}` : '';
     return `<div class="cj-fila${x.hecho ? ' hecho' : ''}"><canvas width="32" height="32" data-g="${x.g}"></canvas>
       <div class="cj-info"><b>${esc(x.n)}</b><span>${x.kills} ${esc(m.otro.toLowerCase())} matados${def}</span>${x.aviso ? `<span class="cj-aviso">${esc(x.aviso)}</span>` : ''}</div>${est}</div>`;
   }).join('');
-  openModal(m.bando === 'ciu' ? 'Comandante de la Armada' : 'Comandante del Caos',
+  openModal(m.lejos ? `Premios por kills (${m.nombre})` : m.bando === 'ciu' ? 'Comandante de la Armada' : 'Comandante del Caos',
     `<div class="cj-win"><p class="hint">${esc(m.otro)} matados: <b>${m.kills}</b>. Cada premio se reclama una sola vez y <b>no se cae al morir</b>. Sólo lo pueden usar los ${esc(m.nombre)}.</p>${filas}</div>`, 'canje');
   paintIcons(document.querySelector('.cj-win'));
   document.querySelectorAll('[data-cj]').forEach((b) => { b.onclick = () => send({ t: 'canje', i: +b.dataset.cj }); });

@@ -90,12 +90,12 @@ F.abrirCanje = function (p, npc) {
   this.enviarCanje(p, b);
 };
 
-F.enviarCanje = function (p, b) {
+F.enviarCanje = function (p, b, lejos = false) {
   const lista = this.premiosPara(p, b);
   const k = killsPara(p);
   const hechos = p.canjesFaccion || [];
   this.send(p, {
-    t: 'canje', bando: b, nombre: NOMBRE[b], kills: k, otro: NOMBRE[b === 'ciu' ? 'cri' : 'ciu'],
+    t: 'canje', lejos: lejos ? (b === 'ciu' ? 'Banderbill' : 'Arghal') : '', bando: b, nombre: NOMBRE[b], kills: k, otro: NOMBRE[b === 'ciu' ? 'cri' : 'ciu'],
     premios: lista.map((pr) => {
       const o = this.data.objs[pr.obj] || {};
       const usable = o.id ? this.canUseObj(p, o) : 'No existe';

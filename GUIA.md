@@ -271,6 +271,7 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - Salir de la Dungeon Newbie por la salida te deja en **Ullathorpe**.
 - **Apocalipsis, Paralizar, Inmovilizar y Devolver Movilidad** (saca la parálisis) los venden los magos de todas las ciudades.
 - Al que **más mata** en la guerra se le dan **5 puntos de torneo** (no se pierden).
+- **/PREMIOS**: muestra tus premios por kills, cuántas kills llevás y cuáles ya podés reclamar.
 - **Ranking de kills** (/RANKING): los 3 que más mataron llevan una estrella de **oro, plata y bronce** al lado del nombre.
 - GMs: **/GUERRA INICIAR** y **/GUERRA TERMINAR**. Horarios y duración: sección `guerra` de `server/config.json`
   (cadaMinutos, duracionMinutos, avisoMinutos, puntosTorneoGanador).
