@@ -15478,48 +15478,6 @@ CP7=CAZADOR
 CP8=ASESINO
 CP9=BANDIDO
 
-[OBJ2019] 'Norway AO: calavera plateada con ojos rojos (a partir del Casco de Plata Completo)
-Name=Casco Calavera
-GrhIndex=33300
-ObjType=17
-NumRopaje=2
-Agarrable=0
-Anim=23
-MaxDef=35
-MinDef=30
-Valor=1000000
-Crucial=0
-CP1=MAGO
-CP2=DRUIDA
-CP3=LADRON
-CP4=BARDO
-CP5=PIRATA
-
-[OBJ2020] 'Norway AO: capucha de piel con cornamenta de ciervo (a partir del Casco de Oso)
-Name=Yelmo de Ciervo
-GrhIndex=33305
-ObjType=17
-NumRopaje=2
-Agarrable=0
-Anim=24
-MaxDef=15
-MinDef=10
-DefensaMagicaMin=4
-DefensaMagicaMax=6
-Valor=10500
-Crucial=1
-CP1=MAGO
-CP2=PALADIN
-CP3=LADRON
-CP4=BARDO
-CP5=PIRATA
-CP6=GUERRERO
-CP7=ASESINO
-CP8=BANDIDO
-CP9=CAZADOR
-CP10=CLERIGO
-CP11=TRABAJADOR
-
 [OBJ2021] 'Norway AO: Tunica Real Pretoriana negra con detalles azul oscuro
 Name=Tunica Pretoriana Negra
 GrhIndex=33332
@@ -15552,3 +15510,35 @@ MaxDef=0
 MinDef=0
 Valor=675000
 Crucial=0
+
+[OBJ2019] 'Norway AO: la tunica blanca de las Alas de angel, sin alas, con detalles dorados
+Name=Tunica Angelical
+GrhIndex=33413
+ObjType=3
+NumRopaje=706
+Agarrable=0
+MaxDef=55
+MinDef=50
+Valor=10000000
+
+[OBJ2020] 'Norway AO: Espada Argentum con guarda de cristales dorados (golpe +1)
+Name=Espada Argentum +1
+GrhIndex=33440
+ObjType=2
+Agarrable=0
+Anim=115
+RazaEnanaAnim=115
+MinHit=15
+MaxHit=22
+Apunala=0
+Valor=5000000
+Crucial=0
+CP1=PIRATA
+CP2=CAZADOR
+CP3=ASESINO
+CP4=LADRON
+CP5=BANDIDO
+CP6=BARDO
+CP7=DRUIDA
+CP8=TRABAJADOR
+CP9=MAGO
