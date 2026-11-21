@@ -16,9 +16,9 @@ S.castSpell = function (p, slot, x, y) {
   if (now - p.lastSpell < this.config.intervaloHechizo) return;
   if (this.maps[p.map].d.magiaSinEfecto && p.gm === 0) return this.msg(p, 'Una fuerza oscura te impide canalizar tu energía.', 'warn');
   const s = p.stats;
+  if (s.man < sp.mana) return this.msg(p, 'No tenés suficiente maná.', 'warn');
+  if (s.sta < sp.sta) return this.msg(p, 'Estás muy cansado para lanzar este hechizo.', 'warn');
   if (p.gm < 2) {
-    if (s.man < sp.mana) return this.msg(p, 'No tenés suficiente maná.', 'warn');
-    if (s.sta < sp.sta) return this.msg(p, 'Estás muy cansado para lanzar este hechizo.', 'warn');
     if (p.skills[SK['Magia']] < sp.minSkill) return this.msg(p, 'No tenés suficientes puntos de magia para lanzar este hechizo.', 'warn');
   }
   // Sin límite de alcance: si lo ves en tu pantalla, lo podés atacar (el límite es sólo anti-trampas)
@@ -51,7 +51,7 @@ S.castSpell = function (p, slot, x, y) {
 
   p.lastSpell = now;
   if (p.meditating) this.stopMeditating(p);
-  if (p.gm < 2) { s.man -= sp.mana; s.sta -= sp.sta; }
+  s.man -= sp.mana; s.sta -= sp.sta;
   this.sendStat(p, ['man', 'sta']);
   this.trainSkill(p, SK['Magia']);
   if (sp.words) this.toMap(p.map, { t: 'say', id: p.id, text: sp.words, color: 'spell' });
@@ -170,7 +170,7 @@ S.summon = function (p, sp, x, y, now) {
   p.summons = (p.summons || []).filter((id) => this.npcs.has(id));
   if (p.summons.length >= 3) return this.msg(p, 'No podés invocar más criaturas.', 'warn');
   p.lastSpell = now;
-  if (p.gm < 2) { p.stats.man -= sp.mana; p.stats.sta -= sp.sta; }
+  p.stats.man -= sp.mana; p.stats.sta -= sp.sta;
   this.sendStat(p, ['man', 'sta']);
   for (let i = 0; i < Math.max(1, sp.cant); i++) {
     const n = this.spawnNpc(sp.numNpc, p.map, x, y);

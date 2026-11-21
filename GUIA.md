@@ -259,9 +259,42 @@ Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo 
 - **Cada hora en punto** empieza una **guerra de 15 minutos** entre Ciudadanos y Criminales
   (2 minutos antes se avisa a todos). Se entra con **/GUERRA** y se sale con **/SALIRGUERRA**.
 - Se pelea en la Arena (mapa 273). Al morir no se cae nada y reaparecés en tu base.
-- Cada muerte del otro bando suma **1 kill de guerra** (no se pierde; se va a canjear en la ciudad natal:
-  Banderbill para ciudadanos, Arghal para criminales).
+- Se entra desde **nivel 25**.
+- Cada muerte del otro bando (en la guerra o afuera) suma para los **premios de facción**.
+
+### Premios de facción
+Se reclaman con doble clic en el **Comandante**: el de la Armada en **Banderbill** (ciudadanos) y el del Caos
+en **Arghal** (criminales). Cada premio se da una sola vez, **no se cae al morir** y sólo lo puede usar su bando.
+
+**Magos** (Mago, Nigromante, Hechicero):
+
+| Kills | Ciudadanos (criminales matados) | Criminales (ciudadanos matados) |
+|---|---|---|
+| 10 | Túnica Conspicua de Mago Imperial | Túnica de Maga Oscura (sólo mujeres) |
+| 25 | Túnica de Mago del Imperio | Túnica Conspicua de Mago Imperial |
+| 50 | Túnica Egregia de Mago Oscuro | Túnica Egregia de Mago Oscuro |
+| 100 | Túnica de Archimago Imperial | Túnica de Líder del Caos |
+| 500 | Alas de ángel | Alas de demonio |
+
+**Las demás clases** reciben las armaduras de facción originales del AO para su clase:
+
+| Kills | Clérigo / Bardo / Druida (ciuda · crimi) | Guerrero / Paladín / Asesino / resto (ciuda · crimi) |
+|---|---|---|
+| 10 | Vestimenta Imperial · Vestimenta Legionaria | Vestimenta Imperial · Vestimenta Legionaria |
+| 25 | Manto de Sacerdote del Imperio · Manto de Sacerdote Demoníaco | Armadura Real · Armadura Legionaria |
+| 50 | Armadura de Gran Sacerdote Imperial · ... Demoníaco | Armadura Nobilísima · Armadura Lóbrega |
+| 500 | Alas de ángel · Alas de demonio | Alas de ángel · Alas de demonio |
+
+Los enanos y gnomos reciben la versión (E/G) de cada una.
+
+Los premios se cambian en `server/data/recompensas-faccion.json`.
+
+### Otros
+- La **barca** se usa desde **nivel 20**.
+- Salir de la Dungeon Newbie por la salida te deja en **Ullathorpe**.
+- **Apocalipsis, Paralizar, Inmovilizar y Devolver Movilidad** (saca la parálisis) los venden los magos de todas las ciudades.
 - Al que **más mata** en la guerra se le dan **5 puntos de torneo** (no se pierden).
+- **/PREMIOS**: muestra tus premios por kills, cuántas kills llevás y cuáles ya podés reclamar.
 - **Ranking de kills** (/RANKING): los 3 que más mataron llevan una estrella de **oro, plata y bronce** al lado del nombre.
 - GMs: **/GUERRA INICIAR** y **/GUERRA TERMINAR**. Horarios y duración: sección `guerra` de `server/config.json`
   (cadaMinutos, duracionMinutos, avisoMinutos, puntosTorneoGanador).

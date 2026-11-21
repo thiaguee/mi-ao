@@ -50,7 +50,7 @@ const AYUDA_USUARIO = [
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
   'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
-  'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills)',
+  'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills)',
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
@@ -165,6 +165,8 @@ K.command = function (p, text) {
       return this.comandoGuerra(p, rest);
     case 'SALIRGUERRA':
       return this.salirDeGuerra(p, 'Saliste de la guerra.');
+    case 'PREMIOS':
+      return this.enviarCanje(p, p.crim ? 'cri' : 'ciu', true);
     case 'RANKING':
       return this.mostrarRanking(p);
     case 'MISIONES':
@@ -306,8 +308,8 @@ K.command = function (p, text) {
       const n = this.spawnNpc(+args[0], p.map, p.x, p.y + 1);
       gmLog();
       if (!n) return this.msg(p, 'NPC inexistente.', 'warn');
-      if (cmd === 'ACC') n.def = Object.assign({}, n.def, { respawn: false });
-      return this.msg(p, `Creaste a ${n.name}.`, 'gm');
+      n.spawnOrig = cmd === 'RACC'; // /ACC: no reaparece · /RACC: reaparece en este lugar
+      return this.msg(p, `Creaste a ${n.name}${cmd === 'RACC' ? ' (reaparece cuando muere)' : ''}.`, 'gm');
     }
     case 'MATAR': {
       if (!need(2)) return;

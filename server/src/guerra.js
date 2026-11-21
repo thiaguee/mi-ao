@@ -7,7 +7,7 @@ const W = {};
 
 const DEF = { cadaMinutos: 60, duracionMinutos: 15, avisoMinutos: 2, mapa: 273,
   spawnCiu: [273, 50, 16], spawnCri: [273, 50, 86], puntosTorneoGanador: 5,
-  ciudadCiu: [59, 50, 50], ciudadCri: [196, 52, 75] };
+  ciudadCiu: [59, 50, 50], ciudadCri: [196, 52, 75], nivelMinimo: 25 };
 
 W.iniciarGuerras = function () {
   this.cfgGuerra = Object.assign({}, DEF, this.config.guerra || {});
@@ -32,7 +32,7 @@ W.relojGuerra = function (now) {
   if (g.estado === 'nada' && now >= g.proxima - c.avisoMinutos * 60000) {
     g.estado = 'inscripcion';
     this.toAll({ t: 'announce', text: `⚔ ¡En ${c.avisoMinutos} minutos empieza la GUERRA entre Ciudadanos y Criminales! Escribí /GUERRA para anotarte.` });
-    this.toAll({ t: 'msg', text: `⚔ ¡En ${c.avisoMinutos} minutos empieza la GUERRA entre Ciudadanos y Criminales (${hora(g.proxima)})! Escribí /GUERRA para anotarte.`, color: 'server' });
+    this.toAll({ t: 'msg', text: `⚔ ¡En ${c.avisoMinutos} minutos empieza la GUERRA entre Ciudadanos y Criminales (${hora(g.proxima)})! Escribí /GUERRA para anotarte (nivel ${c.nivelMinimo}+).`, color: 'server' });
   }
   if (g.estado === 'inscripcion' && now >= g.proxima) this.empezarGuerra(now);
   if (g.estado === 'activa') {
@@ -82,6 +82,7 @@ W.comandoGuerra = function (p, arg) {
     const restan = g.estado === 'activa' ? `termina a las ${hora(g.fin)}` : `la próxima es a las ${hora(g.proxima)}`;
     return this.msg(p, `Guerra: ${g.estado} (${restan}). Ciudadanos ${g.totales.ciu} · Criminales ${g.totales.cri} · ${g.participantes.size} participantes. GM: /GUERRA INICIAR o /GUERRA TERMINAR.`, 'gm');
   }
+  if (p.stats.lvl < (this.cfgGuerra.nivelMinimo || 25) && p.gm === 0) return this.msg(p, `Para entrar a la guerra necesitás nivel ${this.cfgGuerra.nivelMinimo || 25}.`, 'warn');
   if (p.dead) return this.msg(p, 'Estás muerto. Resucitá antes de ir a la guerra.', 'warn');
   if (p.jailUntil) return this.msg(p, 'Estás en la cárcel.', 'warn');
   if (g.estado === 'nada') return this.msg(p, `No hay ninguna guerra ahora. La próxima empieza a las ${hora(g.proxima)}.`, 'info');
@@ -122,8 +123,10 @@ W.muerteEnGuerra = function (victima, asesino) {
     if (part) part.kills++;
     g.totales[asesino.enGuerra]++;
     asesino.killsGuerra = (asesino.killsGuerra || 0) + 1;
+    if (victima.enGuerra === 'ciu') asesino.kills.ciu++; else asesino.kills.cri++;
     this.sumarKillRanking(asesino);
-    this.msg(asesino, `¡Mataste a ${victima.name}! Kills de guerra: ${asesino.killsGuerra} (se canjean en tu ciudad natal).`, 'fight');
+    const k = asesino.enGuerra === 'cri' ? asesino.kills.ciu : asesino.kills.cri;
+    this.msg(asesino, `¡Mataste a ${victima.name}! Llevás ${k} ${asesino.enGuerra === 'cri' ? 'ciudadanos' : 'criminales'} matados (los premios se reclaman en ${asesino.enGuerra === 'cri' ? 'Arghal' : 'Banderbill'}).`, 'fight');
     this.msg(victima, `${asesino.name} te mató. Volvés a tu base en unos segundos.`, 'fight');
     this.enviarEstadoGuerra();
   }

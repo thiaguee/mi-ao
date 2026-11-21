@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./estructuras'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -105,6 +105,7 @@ if (config.adminsDePrueba) {
 world.cargarClanes();
 world.cargarMisiones();
 world.cargarRanking();
+world.cargarFaccion();
 
 // ---------- logs, bans y guardado ----------
 const day = () => new Date().toISOString().slice(0, 10);
@@ -224,6 +225,7 @@ function handle(sock, msg) {
     }
     case 'clan': return world.accionClan(p, msg);
     case 'mis': return world.accionMision(p, msg);
+    case 'canje': return world.reclamarPremio(p, msg.i);
     case 'capa': return world.alternarCapa(p);
     case 'ping': return world.send(p, { t: 'pong', ts: msg.ts });
     case 'logout': return world.logout(p);

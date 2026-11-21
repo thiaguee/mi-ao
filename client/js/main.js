@@ -297,6 +297,20 @@ on('trade', (m) => { S.trade = m; S.tradeSel = S.tradeSel || { npc: -1, inv: -1 
 on('tradeEnd', () => { if (S.modal === 'trade') closeModal(); S.trade = null; });
 on('bank', (m) => { S.bank = m; S.bankSel = S.bankSel || { bank: -1, inv: -1 }; renderBank(); });
 on('bankEnd', () => { if (S.modal === 'bank') closeModal(); S.bank = null; });
+on('canje', (m) => {
+  const filas = m.premios.map((x) => {
+    const est = x.hecho ? '<span class="cj-ok">✔ Reclamado</span>'
+      : x.puede ? (m.lejos ? `<span class="cj-ok">¡Listo! Reclamalo en ${esc(m.lejos)}</span>` : `<button class="btn sm main" data-cj="${x.i}">Reclamar</button>`)
+      : `<span class="cj-falta">Faltan ${x.kills - m.kills}</span>`;
+    const def = x.xd ? ` · Def ${x.md}-${x.xd}` : '';
+    return `<div class="cj-fila${x.hecho ? ' hecho' : ''}"><canvas width="32" height="32" data-g="${x.g}"></canvas>
+      <div class="cj-info"><b>${esc(x.n)}</b><span>${x.kills} ${esc(m.otro.toLowerCase())} matados${def}</span>${x.aviso ? `<span class="cj-aviso">${esc(x.aviso)}</span>` : ''}</div>${est}</div>`;
+  }).join('');
+  openModal(m.lejos ? `Premios por kills (${m.nombre})` : m.bando === 'ciu' ? 'Comandante de la Armada' : 'Comandante del Caos',
+    `<div class="cj-win"><p class="hint">${esc(m.otro)} matados: <b>${m.kills}</b>. Cada premio se reclama una sola vez y <b>no se cae al morir</b>. Sólo lo pueden usar los ${esc(m.nombre)}.</p>${filas}</div>`, 'canje');
+  paintIcons(document.querySelector('.cj-win'));
+  document.querySelectorAll('[data-cj]').forEach((b) => { b.onclick = () => send({ t: 'canje', i: +b.dataset.cj }); });
+});
 
 N.onClose = () => {
   if (S.inGame) {
@@ -313,6 +327,17 @@ N.onClose = () => {
 
 // ================== CONSOLA ==================
 function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
+// Al hacer clic en un personaje: nombre y qué es, bien grande
+on('ver', (m) => {
+  const el = $('console');
+  const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
+  const d = document.createElement('div');
+  d.className = 'c-ver ver-' + m.k;
+  d.innerHTML = `<span class="ver-n">${esc(m.n)}</span>${m.clan ? `<span class="ver-clan">del clan <b>${esc(m.clan)}</b></span>` : ''}<span class="ver-tag">${esc(m.tipo)}</span>${m.muerto ? '<span class="ver-muerto">✝ Muerto</span>' : ''}${m.desc ? `<span class="ver-desc">“${esc(m.desc)}”</span>` : ''}`;
+  el.appendChild(d);
+  if (atBottom) el.scrollTop = el.scrollHeight;
+});
+
 function log(text, color = 'info') {
   const el = $('console');
   const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
@@ -716,7 +741,11 @@ function tickMacro() {
     if (s.maxMan && s.man < Math.max(sp.mana, s.maxMan * 0.35) && poc(4)) { send({ t: 'use', i: poc(4).i }); MACRO.lastPot = now; return; }
   }
   // tirar el hechizo
-  if (now - MACRO.lastCast < 1050 || s.man < sp.mana) return;
+  if (s.man < sp.mana) {
+    if (now - (MACRO.avisoMana || 0) > 8000) { MACRO.avisoMana = now; log('Macro F7: no te queda maná ni pociones azules.', 'warn'); }
+    return;
+  }
+  if (now - MACRO.lastCast < 1050) return;
   const t = E.chars.get(MACRO.target);
   if (!t) return pararMacro(`${MACRO.nombre || 'el bicho'} murió`);
   if (!enPantalla(t)) return pararMacro(`${MACRO.nombre || 'el bicho'} se fue de la pantalla`);
