@@ -1,61 +1,34 @@
 {
-  "_ayuda": "Premios por matar al otro bando. Se reclaman (una vez cada uno) con el Comandante de la ciudad natal: Banderbill para ciudadanos y Arghal para criminales. 'kills' = ciudadanos matados (para criminales) o criminales matados (para ciudadanos), dentro o fuera de la guerra. Las túnicas sólo las puede usar el bando en cuya lista están, y no se caen al morir.",
+  "_ayuda": "Premios por matar al otro bando. Se reclaman (una vez cada uno) con el Comandante: Banderbill para ciudadanos y Arghal para criminales. 'kills' = criminales matados (ciudadanos) o ciudadanos matados (criminales), dentro o fuera de la guerra. 'magos' es la lista de los magos (Mago, Nigromante, Hechicero). 'otrasClases' usa las armaduras de facción originales de cada clase (data/dat/armadurasfaccionarias.dat): Min, Med o Alta. Los enanos y gnomos reciben la versión (E/G). Los premios sólo los puede usar su bando y no se caen al morir.",
   "ciudadanos": {
-    "npc": [
-      59,
-      48,
-      51
+    "magos": [
+      { "kills": 10, "obj": 679 },
+      { "kills": 25, "obj": 517 },
+      { "kills": 50, "obj": 634 },
+      { "kills": 100, "obj": 628 },
+      { "kills": 500, "obj": 1144 }
     ],
-    "premios": [
-      {
-        "kills": 10,
-        "obj": 679
-      },
-      {
-        "kills": 25,
-        "obj": 517
-      },
-      {
-        "kills": 50,
-        "obj": 634
-      },
-      {
-        "kills": 100,
-        "obj": 628
-      },
-      {
-        "kills": 500,
-        "obj": 1144
-      }
+    "otrasClases": [
+      { "kills": 10, "rango": "Min" },
+      { "kills": 25, "rango": "Med" },
+      { "kills": 50, "rango": "Alta" },
+      { "kills": 500, "obj": 1144 }
     ]
   },
   "criminales": {
-    "npc": [
-      196,
-      50,
-      75
+    "magos": [
+      { "kills": 10, "obj": 509 },
+      { "kills": 25, "obj": 679 },
+      { "kills": 50, "obj": 634 },
+      { "kills": 100, "obj": 637 },
+      { "kills": 500, "obj": 1145 }
     ],
-    "premios": [
-      {
-        "kills": 10,
-        "obj": 509
-      },
-      {
-        "kills": 25,
-        "obj": 679
-      },
-      {
-        "kills": 50,
-        "obj": 634
-      },
-      {
-        "kills": 100,
-        "obj": 637
-      },
-      {
-        "kills": 500,
-        "obj": 1145
-      }
+    "otrasClases": [
+      { "kills": 10, "rango": "Min" },
+      { "kills": 25, "rango": "Med" },
+      { "kills": 50, "rango": "Alta" },
+      { "kills": 500, "obj": 1145 }
     ]
-  }
+  },
+  "versionEnanoGnomo": { "679": 682, "634": 686, "637": 636, "517": 549, "628": 633 }
 }

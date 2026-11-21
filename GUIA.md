@@ -243,6 +243,8 @@ Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo 
 Se reclaman con doble clic en el **Comandante**: el de la Armada en **Banderbill** (ciudadanos) y el del Caos
 en **Arghal** (criminales). Cada premio se da una sola vez, **no se cae al morir** y sólo lo puede usar su bando.
 
+**Magos** (Mago, Nigromante, Hechicero):
+
 | Kills | Ciudadanos (criminales matados) | Criminales (ciudadanos matados) |
 |---|---|---|
 | 10 | Túnica Conspicua de Mago Imperial | Túnica de Maga Oscura (sólo mujeres) |
@@ -250,6 +252,17 @@ en **Arghal** (criminales). Cada premio se da una sola vez, **no se cae al morir
 | 50 | Túnica Egregia de Mago Oscuro | Túnica Egregia de Mago Oscuro |
 | 100 | Túnica de Archimago Imperial | Túnica de Líder del Caos |
 | 500 | Alas de ángel | Alas de demonio |
+
+**Las demás clases** reciben las armaduras de facción originales del AO para su clase:
+
+| Kills | Clérigo / Bardo / Druida (ciuda · crimi) | Guerrero / Paladín / Asesino / resto (ciuda · crimi) |
+|---|---|---|
+| 10 | Vestimenta Imperial · Vestimenta Legionaria | Vestimenta Imperial · Vestimenta Legionaria |
+| 25 | Manto de Sacerdote del Imperio · Manto de Sacerdote Demoníaco | Armadura Real · Armadura Legionaria |
+| 50 | Armadura de Gran Sacerdote Imperial · ... Demoníaco | Armadura Nobilísima · Armadura Lóbrega |
+| 500 | Alas de ángel · Alas de demonio | Alas de ángel · Alas de demonio |
+
+Los enanos y gnomos reciben la versión (E/G) de cada una.
 
 Los premios se cambian en `server/data/recompensas-faccion.json`.
 
