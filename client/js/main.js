@@ -628,7 +628,7 @@ function askNumber(text, max) {
 
 function itemRow(it, price, sel, attr) {
   return `<div class="li${sel ? ' sel' : ''}" data-${attr}="${it.i}"><canvas width="32" height="32" data-g="${it.g}"></canvas>
-    <span>${esc(itemDesc(it))}${it.a > 1 ? ` (${it.a})` : ''}</span>${price !== null ? `<span class="price">${price}</span>` : ''}</div>`;
+    <span>${esc(itemDesc(it))}${it.a > 1 && it.a < 10000 ? ` (${it.a})` : ''}</span>${price !== null ? `<span class="price">${price}</span>` : ''}</div>`;
 }
 function paintIcons(root) {
   root.querySelectorAll('canvas[data-g]').forEach((c) => {
@@ -643,14 +643,23 @@ function renderTrade() {
   if (!t) return;
   const sel = S.tradeSel;
   const amount = $('m-amount') ? $('m-amount').value : 1;
-  const npcList = t.items.map((it) => itemRow(it, it.price, sel.npc === it.i, 'n')).join('');
+  // Casa de Hechizos: una solapa por clase, cada una con sólo sus hechizos
+  let solapas = '';
+  let lista = t.items;
+  if (t.clases) {
+    if (!S.solapa || !t.clases.includes(S.solapa)) S.solapa = t.miClase || t.clases[0];
+    solapas = `<div class="tr-tabs">${t.clases.map((c) => `<button class="tab${c === S.solapa ? ' active' : ''}" data-sol="${esc(c)}">${esc(c)}${c === t.miClase ? ' ★' : ''}</button>`).join('')}</div>`;
+    lista = t.items.filter((it) => it.cl && it.cl.includes(S.solapa));
+  }
+  const npcList = lista.map((it) => itemRow(it, it.price, sel.npc === it.i, 'n')).join('');
   const invList = S.inv.filter(Boolean).map((it) => itemRow(it, it.v, sel.inv === it.i, 'p')).join('');
-  openModal(`Comerciar con ${t.npc}`, `<div class="trade">
+  openModal(`Comerciar con ${t.npc}`, `${solapas}${t.clases && S.solapa !== t.miClase ? '<p class="hint">Estás viendo los hechizos de otra clase: sólo podés comprar los de la tuya (★).</p>' : ''}<div class="trade">
     <div><b>${esc(t.npc)}</b><div class="list" id="tl-n">${npcList}</div><button class="btn main" id="t-buy">Comprar</button></div>
     <div><b>Tu inventario</b><div class="list" id="tl-p">${invList}</div><button class="btn main" id="t-sell">Vender</button></div>
     </div><div class="row">Cantidad <input id="m-amount" type="number" min="1" value="${amount}" style="width:80px"> &nbsp; Tu oro: <b style="color:var(--gold)">${(S.stats.gld || 0).toLocaleString('es-AR')}</b></div>`, 'trade');
   paintIcons($('m-body'));
   $('m-body').querySelectorAll('[data-n]').forEach((el) => { el.onclick = () => { sel.npc = +el.dataset.n; renderTrade(); }; });
+  $('m-body').querySelectorAll('[data-sol]').forEach((el) => { el.onclick = () => { S.solapa = el.dataset.sol; sel.npc = -1; renderTrade(); }; });
   $('m-body').querySelectorAll('[data-p]').forEach((el) => { el.onclick = () => { sel.inv = +el.dataset.p; renderTrade(); }; });
   $('t-buy').onclick = () => { if (sel.npc >= 0) send({ t: 'buy', i: sel.npc, a: +$('m-amount').value || 1 }); };
   $('t-sell').onclick = () => { if (sel.inv >= 0) send({ t: 'sell', i: sel.inv, a: +$('m-amount').value || 1 }); };

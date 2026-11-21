@@ -133,9 +133,30 @@ I.openTrade = function (p, npc) {
     return o ? { i, id: it.id, n: o.name, g: o.grh, a: it.amount, price: this.buyPrice(p, o, npc), ty: o.type,
       mh: o.minHit, xh: o.maxHit, md: o.minDef, xd: o.maxDef } : null;
   }).filter(Boolean);
-  this.send(p, { t: 'trade', npc: npc.name, items });
+  const msg = { t: 'trade', npc: npc.name, items };
+  if (npc.def.hechizos) {
+    // Casa de Hechizos: cada hechizo dice qué clases lo pueden comprar (una solapa por clase)
+    const hc = this.hechizosClases();
+    for (const it of items) it.cl = Object.keys(hc.clases).filter((c) => hc.permitido(c, it.id));
+    msg.clases = Object.keys(hc.clases);
+    msg.miClase = this.solapaDe(p) || '';
+  }
+  this.send(p, msg);
   this.trainSkill(p, SK['Comercio']);
 };
+
+// Qué hechizos puede comprar cada clase (data/hechizos-clases.json)
+I.hechizosClases = function () {
+  if (!this._hc) {
+    const fs = require('fs'), path = require('path');
+    const d = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'hechizos-clases.json'), 'utf8'));
+    d.permitido = (c, id) => d.todas.includes(id) || (d.clases[c] || []).includes(id);
+    this._hc = d;
+  }
+  return this._hc;
+};
+const SOLAPA = { 38: 'Mago', 37: 'Mago', 36: 'Mago', 39: 'Nigromante', 42: 'Clérigo', 40: 'Clérigo', 45: 'Druida', 43: 'Druida', 44: 'Bardo', 41: 'Paladín', 47: 'Asesino', 46: 'Asesino' };
+I.solapaDe = function (p) { return SOLAPA[p.clase] || null; };
 
 I.endTrade = function (p) {
   if (p.trade) { p.trade = null; this.send(p, { t: 'tradeEnd' }); }
@@ -156,6 +177,10 @@ I.buy = function (p, i, amount) {
   if (!it || it.amount <= 0) return;
   amount = Math.max(1, Math.min(10000, Math.floor(+amount || 1), it.amount));
   const o = this.data.objs[it.id];
+  if (npc.def.hechizos && p.gm < 2) {
+    const c = this.solapaDe(p);
+    if (!c || !this.hechizosClases().permitido(c, it.id)) return this.msg(p, 'Ese hechizo no es para tu clase.', 'warn');
+  }
   const price = this.buyPrice(p, o, npc);
   const total = price * amount;
   if (p.stats.gld < total) return this.msg(p, 'No tenés suficiente oro.', 'warn');
