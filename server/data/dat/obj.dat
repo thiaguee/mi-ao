@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2056
+NumOBJs=2063
 
 
 
@@ -15371,11 +15371,11 @@ HechizoIndex=51
 
 [OBJ2012] 'Norway AO: version roja; 70% de hacer sangrar 20-30 de vida por segundo durante 3-5 s (a partir de la Daga +5)
 Name=Daga Sangrienta
-GrhIndex=33133
+GrhIndex=34545
 ObjType=2
 Agarrable=0
-Anim=112
-RazaEnanaAnim=53
+Anim=124
+RazaEnanaAnim=124
 MinHit=11
 MaxHit=14
 Apunala=1
@@ -15385,11 +15385,11 @@ Crucial=0
 
 [OBJ2013] 'Norway AO: version celeste; 50% de impedir recuperar mana durante 3 s (a partir de la Daga +5)
 Name=Daga Celestial
-GrhIndex=33160
+GrhIndex=34572
 ObjType=2
 Agarrable=0
-Anim=113
-RazaEnanaAnim=53
+Anim=125
+RazaEnanaAnim=125
 MinHit=11
 MaxHit=14
 Apunala=1
@@ -15905,6 +15905,98 @@ CP8=GUERRERO
 CP9=BARDO
 CP10=DRUIDA
 CP11=TRABAJADOR
+
+[OBJ2057] 'Norway AO: arma del Mega Pack (Armas/abf3c80603a39f8f66ad291c2879496e.png), icono d083c06b406cec546dd04f5eb41aab6b.png
+Name=Baculo Alado
+GrhIndex=34356
+ObjType=2
+Agarrable=0
+Anim=117
+RazaEnanaAnim=117
+MinHit=5
+MaxHit=15
+StaffPower=2
+StaffDamageBonus=34
+Valor=1000000
+Crucial=0
+
+[OBJ2058] 'Norway AO: arma del Mega Pack (Armas/e214f8ef6970d0c87861c04f27bcdabc.png), icono 0abfae968f678cc158068f0b18711848.png
+Name=Daga de Saladin
+GrhIndex=34383
+ObjType=2
+Agarrable=0
+Anim=118
+RazaEnanaAnim=118
+MinHit=11
+MaxHit=14
+Apunala=1
+Valor=1000000
+Crucial=0
+
+[OBJ2059] 'Norway AO: arma del Mega Pack (Armas/29d4b2a5f2a337c835771be948f487db.png), icono c1c12af418cf98bbea7bbafb01a501e3.png
+Name=Daga Errante
+GrhIndex=34410
+ObjType=2
+Agarrable=0
+Anim=119
+RazaEnanaAnim=119
+MinHit=9
+MaxHit=12
+Apunala=1
+Valor=1000000
+Crucial=0
+
+[OBJ2060] 'Norway AO: arma del Mega Pack (Armas/cb6ded58d5a020ba719d27ae6b6201db.png), icono af47758cecc36d28f0b572251290d215.png
+Name=Sable de Druida
+GrhIndex=34437
+ObjType=2
+Agarrable=0
+Anim=120
+RazaEnanaAnim=120
+MinHit=9
+MaxHit=16
+Apunala=0
+Valor=1000000
+Crucial=0
+
+[OBJ2061] 'Norway AO: arma del Mega Pack (Armas/054cdb8fc5ab0ae09c158a3d22edde00.png), icono c850d5263fe0e61294017235e28b7f89.png
+Name=Espada Infernal
+GrhIndex=34464
+ObjType=2
+Agarrable=0
+Anim=121
+RazaEnanaAnim=121
+MinHit=14
+MaxHit=21
+Apunala=0
+Valor=1000000
+Crucial=0
+
+[OBJ2062] 'Norway AO: arma del Mega Pack (Armas/16c4557bbcd668ef52f74265f930408c.png), icono 32991a2ceb4d163a0923ca57ca9efeff.png
+Name=Espada de Guerrero
+GrhIndex=34491
+ObjType=2
+Agarrable=0
+Anim=122
+RazaEnanaAnim=122
+MinHit=14
+MaxHit=21
+Apunala=0
+Valor=1000000
+Crucial=0
+
+[OBJ2063] 'Norway AO: arma del Mega Pack (Armas/4851994f669a5427d0f1bcea71f0a229.png), icono 768078faf743d091610af5960848b322.png
+Name=Espada de Clerigo
+GrhIndex=34518
+ObjType=2
+Agarrable=0
+Anim=123
+RazaEnanaAnim=123
+MinHit=8
+MaxHit=15
+Apunala=0
+Valor=1000000
+Crucial=0
 
 [OBJ2019] 'Norway AO: Cuerpos/da2426c0edca4e8cad211350c3e5d105.png del Mega Pack en blanco calido con faja dorado frio
 Name=Tunica Angelical

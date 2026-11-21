@@ -43,6 +43,38 @@
     "2038": {
       "clases": ["Bardo"],
       "_nombre": "Túnica de Bardo (sólo Bardos)"
+    },
+    "2056": {
+      "clases": ["Mago"],
+      "_nombre": "Báculo del Archimago (sólo Magos)"
+    },
+    "2057": {
+      "clases": ["Mago", "Druida", "Bardo"],
+      "_nombre": "Báculo Alado (Magos, Druidas y Bardos)"
+    },
+    "2058": {
+      "clases": ["Bardo"],
+      "_nombre": "Daga de Saladín (sólo Bardos)"
+    },
+    "2059": {
+      "clases": ["Bardo", "Asesino"],
+      "_nombre": "Daga Errante (Bardos y Asesinos)"
+    },
+    "2060": {
+      "clases": ["Druida"],
+      "_nombre": "Sable de Druida (sólo Druidas)"
+    },
+    "2061": {
+      "clases": ["Paladín"],
+      "_nombre": "Espada Infernal (sólo Paladines)"
+    },
+    "2062": {
+      "clases": ["Guerrero"],
+      "_nombre": "Espada de Guerrero (sólo Guerreros)"
+    },
+    "2063": {
+      "clases": ["Clérigo"],
+      "_nombre": "Espada de Clérigo (sólo Clérigos)"
     }
   },
   "vendedores": {
