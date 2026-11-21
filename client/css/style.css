@@ -386,3 +386,23 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 
 .ver-noble { color: #ffd633 !important; text-shadow: 0 0 6px #ffd63388; }
 .ver-nb .ver-n { color: #ffd633; }
+
+/* ===== /TIENDAS ===== */
+.ti-win { display: flex; gap: 8px; width: 760px; height: 500px; font-size: 11px; }
+.ti-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ti-c1 { width: 170px; } .ti-c2 { flex: 1; } .ti-c3 { width: 260px; }
+.ti-lista { flex: 1; overflow-y: auto; border: 1px solid var(--border); background: var(--panel2); }
+.ti-v { padding: 4px 6px; border-bottom: 1px solid #00000040; cursor: pointer; display: flex; flex-direction: column; }
+.ti-v b { color: #f0d9a0; font-size: 12px; } .ti-v span { color: var(--muted); font-size: 10px; }
+.ti-v:hover { background: #1a140e; } .ti-v.sel { background: #3a2c1a; box-shadow: inset 3px 0 0 var(--gold); }
+.ti-mod { color: #ffb84a; font-size: 10px; }
+.ti-tit { color: var(--gold); font-weight: bold; font-family: Georgia, serif; font-size: 12px; min-height: 16px; }
+.ti-win .li { gap: 4px; padding: 1px 4px; cursor: default; }
+.ti-win .li .btn.sm { padding: 0 5px; font-size: 10px; }
+.ti-n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ti-x { color: #ff8a7a; }
+.ti-ya { opacity: .5; } .ti-tag { font-size: 9px; color: #9fd28a; }
+.ti-cuenta { text-align: left; margin: 0; }
+.ti-win input, .ti-win select { font-size: 11px; padding: 3px 5px; }
+.ti-c3 select { width: 86px; flex: none; }
+.ti-c3 .ob-filtros { min-width: 0; }

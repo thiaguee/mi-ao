@@ -7,7 +7,7 @@ import { drawIcon } from './assets.js';
 let H = null; // { openModal, closeModal, send, esc, S }
 const P = { lista: null, filtro: '', tipo: '', sel: 0, cant: 1, mapa: '' };
 
-const TIPOS = {
+export const TIPOS = {
   1: 'Comida', 2: 'Armas', 3: 'Armaduras y ropa', 4: 'Árboles', 5: 'Oro', 6: 'Puertas', 7: 'Cofres y baúles',
   8: 'Carteles y lápidas', 9: 'Llaves', 10: 'Foros', 11: 'Pociones', 12: 'Libros', 13: 'Bebidas', 14: 'Leña',
   15: 'Fogata', 16: 'Escudos', 17: 'Cascos y sombreros', 18: 'Anillos y amuletos', 19: 'Teleports',

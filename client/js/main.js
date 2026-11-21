@@ -10,6 +10,7 @@ import * as ClanesUI from './clanesui.js';
 import * as MisionesUI from './misionesui.js';
 import * as ObjetosUI from './objetosui.js';
 import * as PuntosUI from './puntosui.js';
+import * as TiendasUI from './tiendasui.js';
 import { preguntar, confirmar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
@@ -534,6 +535,8 @@ MisionesUI.init({ openModal, send, esc, S });
 MisionesUI.mensajes(on);
 ObjetosUI.init({ openModal, closeModal, send, esc, S });
 ObjetosUI.mensajes(on);
+TiendasUI.init({ openModal, closeModal, send, esc, S });
+TiendasUI.mensajes(on);
 PuntosUI.init({ openModal, send, esc, abrirMisiones: () => MisionesUI.abrir() });
 PuntosUI.mensajes(on);
 $('b-puntos').onclick = () => PuntosUI.abrir();

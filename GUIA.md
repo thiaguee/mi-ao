@@ -308,3 +308,13 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - Beneficio: elige **una** de las 3 túnicas de noble (Túnica de Noble, Túnica de Noble 2 y Túnica de Noble 3). La puede usar **cualquier noble, sea la clase que sea**; nadie más. No se cae al morir. /NOBLEZA vuelve a abrir la ventana.
 - GMs (Dios o más): **/NOBLE nombre** da o saca la nobleza.
 - Las gemas y las túnicas se configuran en `server/data/nobleza.json` (la Túnica de Noble 3 está en 0 hasta que se suba).
+
+---
+
+## Tiendas (/TIENDAS)
+
+- Comando de GM (Dios o Admin). Abre un panel con **todos los NPCs que venden cosas** (77 tipos), con su número y en qué ciudades están.
+- Elegís un vendedor y ves lo que vende, con su precio. Con **✕** lo sacás, con **▲ ▼** cambiás el orden.
+- A la derecha está **la lista de todos los objetos del juego** (buscador por nombre o número y filtro por tipo). Con **+** (o doble clic) se agrega a la tienda.
+- El cambio es inmediato, vale para ese NPC en todas las ciudades donde aparece y queda guardado en `tiendas.json` (carpeta de datos del servidor), así que sigue después de reiniciar.
+- El precio de compra es el valor del objeto (con descuento por skill de Comercio).
