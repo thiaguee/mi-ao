@@ -141,7 +141,7 @@ S.applySpell = function (p, t, sp) {
     if (s.hp <= 0) { this.killPlayer(t, p); return; }
     this.sendStat(t, ['hp']);
   }
-  if (sp.subeMana === 1) { s.man = Math.min(s.maxMan, s.man + rnd(sp.minMana, sp.maxMana)); this.sendStat(t, ['man']); }
+  if (sp.subeMana === 1 && this.puedeRecuperarMana(t)) { s.man = Math.min(s.maxMan, s.man + rnd(sp.minMana, sp.maxMana)); this.sendStat(t, ['man']); }
   if (sp.subeMana === 2) { s.man = Math.max(0, s.man - rnd(sp.minMana, sp.maxMana)); this.sendStat(t, ['man']); }
   if (sp.subeSta === 1) { s.sta = Math.min(s.maxSta, s.sta + rnd(sp.minSta, sp.maxSta)); this.sendStat(t, ['sta']); }
   if (sp.subeSta === 2) { s.sta = Math.max(0, s.sta - rnd(sp.minSta, sp.maxSta)); this.sendStat(t, ['sta']); }

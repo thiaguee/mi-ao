@@ -345,8 +345,27 @@ C.hitTarget = function (p, target, ranged) {
   }
   this.trainSkill(p, sk);
   if (target.kind === 'npc') this.damageNpc(target, dmg, p);
-  else this.damagePlayer(target, dmg, p);
+  else if (this.damagePlayer(target, dmg, p) && w) this.efectosDeArma(p, target, w);
 };
+
+// Efectos especiales de armas sobre jugadores (campos Sangrado y BloqueaMana de obj.dat)
+C.efectosDeArma = function (p, t, w) {
+  if (t.dead || t.godMode) return;
+  const now = Date.now();
+  if (w.sangrado && Math.random() * 100 < w.sangrado) {
+    t.sangrado = { hasta: now + rnd(3, 5) * 1000, por: p.id };
+    this.msg(t, '¡Estás sangrando!', 'warn');
+    this.msg(p, `¡${t.name} está sangrando!`, 'fight');
+  }
+  if (w.bloqueaMana && Math.random() * 100 < w.bloqueaMana) {
+    t.sinManaHasta = now + 3000;
+    this.msg(t, '¡Una maldición celestial te impide recuperar maná por 3 segundos!', 'warn');
+    this.msg(p, `¡Maldijiste a ${t.name}: no puede recuperar maná por 3 segundos!`, 'fight');
+  }
+};
+
+// ¿Puede recuperar maná ahora? (la maldición de la Daga Celestial lo impide)
+C.puedeRecuperarMana = function (p) { return !(p.sinManaHasta && Date.now() < p.sinManaHasta); };
 
 C.damageNpc = function (npc, dmg, p, magic = false) {
   if (!magic) dmg = Math.max(1, dmg - (npc.def.def || 0));
@@ -380,7 +399,7 @@ C.damagePlayer = function (t, dmg, attacker) {
     this.msg(t, '¡Has rechazado el ataque con el escudo!', 'fight');
     if (attacker && attacker.kind === 'pc') this.msg(attacker, '¡El usuario rechazó el ataque con su escudo!', 'fight');
     this.trainSkill(t, SK['Defensa con escudos']);
-    return;
+    return false;
   }
   t.stats.hp -= dmg;
   if (t.meditating) this.stopMeditating(t);
@@ -391,6 +410,7 @@ C.damagePlayer = function (t, dmg, attacker) {
   if (attacker && attacker.kind === 'pc') this.msg(attacker, `¡Le has pegado a ${t.name} por ${dmg}!`, 'fight');
   if (t.stats.hp <= 0) this.killPlayer(t, attacker);
   else this.sendStat(t, ['hp']);
+  return t.stats.hp > 0;
 };
 
 C.npcAttack = function (npc, t) {

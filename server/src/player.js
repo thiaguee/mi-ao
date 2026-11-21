@@ -409,6 +409,7 @@ P.useItem = function (p, i) {
       const v = rnd(o.minMod, o.maxMod);
       if (o.pocion === 3) { s.hp = Math.min(s.maxHp, s.hp + v); this.sendStat(p, ['hp']); }
       else if (o.pocion === 4) {
+        if (!this.puedeRecuperarMana(p)) { this.msg(p, 'Una maldición te impide recuperar maná.', 'warn'); break; }
         s.man = Math.min(s.maxMan, s.man + Math.max(v, Math.floor(s.maxMan * 0.04) + Math.floor(s.lvl / 2) + 40 / s.lvl));
         s.man = Math.floor(s.man);
         this.sendStat(p, ['man']);
@@ -697,6 +698,7 @@ P.killPlayer = function (p, killer) {
   s.hp = 0;
   p.dead = true;
   p.meditating = false; p.invisible = false; p.hidden = false; p.paralyzed = 0; p.poisoned = false;
+  p.sangrado = null; p.sinManaHasta = 0;
   p.deaths = (p.deaths || 0) + 1;
   this.msg(p, '¡¡¡Estás muerto!!! Buscá un sacerdote para que te resucite, o escribí /HOGAR.', 'warn');
   this.toMap(p.map, { t: 'snd', w: G.SND.USERMUERTE });
@@ -823,6 +825,17 @@ P.playerTick = function (p, now) {
     s.hp = Math.min(s.maxHp, s.hp + Math.max(1, Math.floor(s.maxHp * 0.02) + rnd(0, 2)));
     changed.push('hp');
   }
+  // Sangrado (Daga Sangrienta): 20-30 de vida por segundo mientras dure
+  if (p.sangrado) {
+    if (now > p.sangrado.hasta || p.dead) p.sangrado = null;
+    else if (!p.godMode) {
+      const d = rnd(20, 30);
+      s.hp -= d;
+      this.toMap(p.map, { t: 'dmg', id: p.id, v: d });
+      changed.push('hp');
+      if (s.hp <= 0) { const k = this.players.get(p.sangrado.por); p.sangrado = null; this.killPlayer(p, k || null); return; }
+    }
+  }
   // Veneno
   if (p.poisoned && p.tick % 3 === 0) {
     s.hp -= rnd(1, 5);
@@ -833,7 +846,7 @@ P.playerTick = function (p, now) {
   // Meditación
   if (p.meditating) {
     const med = p.skills[SK['Meditar']];
-    if (now - p.medStart > 1500) {
+    if (now - p.medStart > 1500 && this.puedeRecuperarMana(p)) {
       const gain = Math.max(1, Math.floor(s.maxMan * (0.015 + med / 2500))) + Math.floor(s.lvl / 4);
       s.man = Math.min(s.maxMan, s.man + gain);
       changed.push('man');

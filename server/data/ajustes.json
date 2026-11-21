@@ -19,6 +19,14 @@
     "2004": {
       "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
       "_nombre": "Coraza Divina (sólo estas clases la pueden usar)"
+    },
+    "2012": {
+      "clases": ["Asesino"],
+      "_nombre": "Daga Sangrienta (sólo Asesinos)"
+    },
+    "2013": {
+      "clases": ["Bardo"],
+      "_nombre": "Daga Celestial (sólo Bardos)"
     }
   },
   "vendedores": {

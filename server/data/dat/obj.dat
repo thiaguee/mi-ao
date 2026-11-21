@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2011
+NumOBJs=2013
 
 
 
@@ -15368,3 +15368,31 @@ Agarrable=0
 Valor=100000
 Crucial=1
 HechizoIndex=51
+
+[OBJ2012] 'Norway AO: version roja; 70% de hacer sangrar 20-30 de vida por segundo durante 3-5 s (a partir de la Daga +5)
+Name=Daga Sangrienta
+GrhIndex=33133
+ObjType=2
+Agarrable=0
+Anim=112
+RazaEnanaAnim=53
+MinHit=11
+MaxHit=14
+Apunala=1
+Sangrado=70
+Valor=1000000
+Crucial=0
+
+[OBJ2013] 'Norway AO: version celeste; 50% de impedir recuperar mana durante 3 s (a partir de la Daga +5)
+Name=Daga Celestial
+GrhIndex=33160
+ObjType=2
+Agarrable=0
+Anim=113
+RazaEnanaAnim=53
+MinHit=11
+MaxHit=14
+Apunala=1
+BloqueaMana=50
+Valor=1000000
+Crucial=0

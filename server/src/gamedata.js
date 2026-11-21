@@ -145,6 +145,9 @@ function loadObjs() {
       cerrada: num(v.CERRADA) === 1, indexAbierta: num(v.INDEXABIERTA), indexCerrada: num(v.INDEXCERRADA),
       llave: num(v.LLAVE), clave: num(v.CLAVE),
       apunala: num(v.APUNALA) === 1,
+      // efectos especiales de armas (Norway AO): % de chance por golpe a otro jugador
+      sangrado: num(v.SANGRADO), // pierde 20-30 de vida por segundo durante 3-5 s
+      bloqueaMana: num(v.BLOQUEAMANA), // no puede recuperar maná durante 3 s
       envenena: num(v.ENVENENA) === 1,
       staffPower: num(v.STAFFPOWER), staffDamageBonus: num(v.STAFFDAMAGEBONUS),
       defMagica: num(v.DEFENSAMAGICAMIN) + num(v.DEFENSAMAGICAMAX),
