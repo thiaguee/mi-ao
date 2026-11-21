@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2017
+NumOBJs=2020
 
 
 
@@ -15457,3 +15457,65 @@ MaxDef=14
 MinDef=9
 Valor=3900
 Crucial=1
+
+[OBJ2018] 'Norway AO: hoja ondulada de cristal de hielo celeste (a partir de la Espada de las almas)
+Name=Espada de Cristal
+GrhIndex=33295
+ObjType=2
+Agarrable=0
+Anim=114
+RazaEnanaAnim=63
+MinHit=8
+MaxHit=20
+Valor=6000
+Crucial=0
+CP1=MAGO
+CP3=DRUIDA
+CP4=LADRON
+CP5=BARDO
+CP6=PIRATA
+CP7=CAZADOR
+CP8=ASESINO
+CP9=BANDIDO
+
+[OBJ2019] 'Norway AO: calavera plateada con ojos rojos (a partir del Casco de Plata Completo)
+Name=Casco Calavera
+GrhIndex=33300
+ObjType=17
+NumRopaje=2
+Agarrable=0
+Anim=23
+MaxDef=35
+MinDef=30
+Valor=1000000
+Crucial=0
+CP1=MAGO
+CP2=DRUIDA
+CP3=LADRON
+CP4=BARDO
+CP5=PIRATA
+
+[OBJ2020] 'Norway AO: capucha de piel con cornamenta de ciervo (a partir del Casco de Oso)
+Name=Yelmo de Ciervo
+GrhIndex=33305
+ObjType=17
+NumRopaje=2
+Agarrable=0
+Anim=24
+MaxDef=15
+MinDef=10
+DefensaMagicaMin=4
+DefensaMagicaMax=6
+Valor=10500
+Crucial=1
+CP1=MAGO
+CP2=PALADIN
+CP3=LADRON
+CP4=BARDO
+CP5=PIRATA
+CP6=GUERRERO
+CP7=ASESINO
+CP8=BANDIDO
+CP9=CAZADOR
+CP10=CLERIGO
+CP11=TRABAJADOR
