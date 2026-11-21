@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./client/assets/**)",
+      "Read(./server/data/mapas/**)",
+      "Read(./**/*.png)",
+      "Read(./**/*.map)",
+      "Read(./**/*.wav)",
+      "Read(./**/*.mp3)",
+      "Read(./**/*.xlsx)",
+      "Read(./**/*.zip)",
+      "Read(./**/node_modules/**)",
+      "Read(./**/package-lock.json)",
+      "Read(./launcher/dist/**)",
+      "Read(./server/logs/**)",
+      "Read(./server/cuentas/**)"
+    ]
+  }
+}
