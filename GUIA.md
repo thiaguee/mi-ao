@@ -303,8 +303,8 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 
 ## Nobleza
 
-- Juntando **todas las gemas de nobleza** en el inventario y escribiendo **/NOBLEZA**, el personaje se vuelve **Noble** (las gemas se gastan).
+- Juntando **las gemas de nobleza** en el inventario (**Gema Roja**, que suelta Smaug en el mapa 309; **Gema Verde**, Ryu en el mapa 315; y **Gema Violeta**, Hydra en el mapa 303) y escribiendo **/NOBLEZA**, el personaje se vuelve **Noble** (las gemas se gastan).
 - El noble sigue siendo ciudadano o criminal, pero su **nombre se ve amarillo** y al hacerle clic aparece la etiqueta **NOBLE**.
-- Beneficio: elige **una** de las 3 túnicas de noble (Túnica de Noble, Túnica de Noble 2 y Túnica de Noble 3). Sólo las pueden usar los nobles y no se caen al morir. /NOBLEZA vuelve a abrir la ventana.
+- Beneficio: elige **una** de las 3 túnicas de noble (Túnica de Noble, Túnica de Noble 2 y Túnica de Noble 3). La puede usar **cualquier noble, sea la clase que sea**; nadie más. No se cae al morir. /NOBLEZA vuelve a abrir la ventana.
 - GMs (Dios o más): **/NOBLE nombre** da o saca la nobleza.
-- Las gemas y las túnicas se configuran en `server/data/nobleza.json` (`gemas` todavía está vacío: se completa cuando se agreguen las gemas; la Túnica de Noble 3 está en 0 hasta que se suba).
+- Las gemas y las túnicas se configuran en `server/data/nobleza.json` (la Túnica de Noble 3 está en 0 hasta que se suba).

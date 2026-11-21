@@ -303,6 +303,8 @@ P.takeItem = function (p, id, amount) {
 
 P.canUseObj = function (p, o) {
   if (p.gm >= 2) return true;
+  // Túnicas de noble: las usa cualquier noble, sea la clase o la raza que sea; nadie más
+  if (this.esTunicaNoble && this.esTunicaNoble(o.id)) return p.noble ? true : 'Sólo los Nobles pueden usar esta túnica.';
   if (o.soloClases) {
     if (!o.soloClases.includes(G.normClase(G.CLASES[p.clase] || ''))) return 'Tu clase no puede usar este objeto.';
   } else {
@@ -316,7 +318,6 @@ P.canUseObj = function (p, o) {
   if (o.mujer && p.genero !== 'm') return 'Sólo las mujeres pueden usar esto.';
   if (o.hombre && p.genero !== 'h') return 'Sólo los hombres pueden usar esto.';
   if (o.newbie && p.stats.lvl > NEWBIE_LVL) return 'Sólo los newbies pueden usar este objeto.';
-  if (this.esTunicaNoble && this.esTunicaNoble(o.id) && !p.noble) return 'Sólo los Nobles pueden usar esta túnica.';
   if (this.puedeUsarPorBando) { const b = this.puedeUsarPorBando(p, o); if (b !== true) return b; }
   if (o.type === OBJ.BARCO && p.stats.lvl < 20) return 'Necesitás nivel 20 para usar una barca.';
   return true;
