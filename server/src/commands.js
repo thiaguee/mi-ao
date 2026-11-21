@@ -305,8 +305,8 @@ K.command = function (p, text) {
       const n = this.spawnNpc(+args[0], p.map, p.x, p.y + 1);
       gmLog();
       if (!n) return this.msg(p, 'NPC inexistente.', 'warn');
-      if (cmd === 'ACC') n.def = Object.assign({}, n.def, { respawn: false });
-      return this.msg(p, `Creaste a ${n.name}.`, 'gm');
+      n.spawnOrig = cmd === 'RACC'; // /ACC: no reaparece · /RACC: reaparece en este lugar
+      return this.msg(p, `Creaste a ${n.name}${cmd === 'RACC' ? ' (reaparece cuando muere)' : ''}.`, 'gm');
     }
     case 'MATAR': {
       if (!need(2)) return;

@@ -47,23 +47,23 @@ C.spawnNpc = function (num, m, x, y, orig = false) {
   return npc;
 };
 
+// Los bichos puestos en el mapa siempre reaparecen en el mismo mapa, cerca de donde nacieron.
+// Los que crea un GM (/ACC, /RACC) o los invocados no reaparecen.
 C.respawnNpc = function (npc) {
   const def = npc.def;
+  const o = npc.orig;
   setTimeout(() => {
-    if (npc.spawnOrig && def.posOrig) {
-      this.spawnNpc(npc.num, npc.orig.map, npc.orig.x, npc.orig.y, true);
-    } else {
-      // reaparece en un lugar libre al azar del mismo mapa
-      for (let i = 0; i < 50; i++) {
-        const x = rnd(10, 90), y = rnd(10, 90);
-        if (this.legalPos(npc.orig.map, x, y, { water: def.aguaValida, npc: true }) &&
-          this.trigger(npc.orig.map, x, y) !== G.TRIGGER.ZONASEGURA) {
-          this.spawnNpc(npc.num, npc.orig.map, x, y, npc.spawnOrig);
-          return;
-        }
+    if (!this.maps[o.map]) return;
+    if (def.posOrig || !def.attackable) return void this.spawnNpc(npc.num, o.map, o.x, o.y, true);
+    for (let i = 0; i < 30; i++) {
+      const x = o.x + rnd(-6, 6), y = o.y + rnd(-6, 6);
+      if (this.inMap(x, y) && this.legalPos(o.map, x, y, { water: def.aguaValida, npc: true }) &&
+        this.trigger(o.map, x, y) !== G.TRIGGER.ZONASEGURA) {
+        this.spawnNpc(npc.num, o.map, x, y, true);
+        return;
       }
-      this.spawnNpc(npc.num, npc.orig.map, npc.orig.x, npc.orig.y, npc.spawnOrig);
     }
+    this.spawnNpc(npc.num, o.map, o.x, o.y, true);
   }, this.config.respawnSegundos * 1000);
 };
 
@@ -92,7 +92,7 @@ C.killNpc = function (npc, killer) {
       this.sendCharToMap(killer);
     }
   }
-  if (def.respawn && !npc.summoned) this.respawnNpc(npc);
+  if (npc.spawnOrig && !npc.summoned && !npc.sinRespawn) this.respawnNpc(npc);
 };
 
 // ---------- inteligencia artificial ----------
