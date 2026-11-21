@@ -327,3 +327,15 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - **/SACARNPC**: clic en un NPC y /SACARNPC lo saca para siempre (sirve también para los que venían en el mapa).
 - **/NPCSPUESTOS**: lista de los NPCs puestos.
 - Vendedores por clase listos para poner: **1030** Magos · **1031** Paladines · **1032** Clérigos · **1033** Asesinos · **1034** Bardos (lo que venden se cambia con /TIENDAS).
+
+---
+
+## Ullathorpe nueva
+
+- **Arriba**: casa larga con los 5 vendedores por clase (Bardo, Clérigo, Mago, Asesino, Paladín) y la **capilla** con el sacerdote.
+- **Plaza** donde aparecen los personajes (58, 45) con faroles, banco y flores; **jardín con la fuente** a la derecha.
+- **Banco**: banquero con mesa y cartel al lado del árbol grande. **Pociones**: casa de Lilith abajo de la fuente.
+- **Casa de Hechizos** (abajo de "Anuncio a forasteros"): el Maestro de Hechizos vende todos los hechizos, con una solapa por clase; cada uno sólo compra los de su clase (se cambia en `server/data/hechizos-clases.json`).
+- **Quest**: el Maestro de Misiones está en el rincón con arco de flores y cartel QUEST.
+- **Plantes**: debajo de Quest hay 2 lugares (piedra, 2 cuadrados con sangre, piedra). Adentro de los cuadrados se pueden pegar sin volverse criminal y sin perder nada; afuera es zona segura.
+- **Portal a la Dungeon Newbie**: en el pasto a la derecha de la plaza (67, 48).
