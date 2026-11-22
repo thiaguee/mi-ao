@@ -68,11 +68,16 @@ E.cargarEstructuras = function () {
     if (fs.existsSync(this.estrPath)) this.estr = JSON.parse(fs.readFileSync(this.estrPath, 'utf8')).cambios || {};
   } catch (e) { console.error('Error leyendo estructuras.json:', e.message); }
   let n = 0;
+  // Estructuras que quedaron mal con la Ullathorpe nueva (por ejemplo el escudo tirado en 1,59,49): se borran
+  const SACAR = ['1,59,49'];
+  let sacadas = 0;
+  for (const k of SACAR) if (k in this.estr && this.estr[k]) { this.estr[k] = 0; sacadas++; }
   for (const k of Object.keys(this.estr)) this.estr[k] = G.nuevoId(this.estr[k]); // números viejos -> 2000+
   for (const [clave, id] of Object.entries(this.estr)) {
     const [m, x, y] = clave.split(',').map(Number);
     if (this.aplicarEstructura(m, x, y, id, false)) n++;
   }
+  if (sacadas) this.guardarEstructuras();
   console.log(`Estructuras cambiadas por Admins: ${n}`);
 };
 

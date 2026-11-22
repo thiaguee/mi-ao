@@ -6,6 +6,7 @@ const { idx, SK } = G;
 const rnd = World.rnd;
 
 const S = {};
+const PARALISIS_NPC_MS = 7 * 60 * 1000; // un bicho paralizado queda así 7 minutos (o hasta que muera)
 const TARGET = { USUARIO: 1, NPC: 2, AMBOS: 3, TERRENO: 4 };
 
 S.castSpell = function (p, slot, x, y) {
@@ -104,7 +105,7 @@ S.applySpell = function (p, t, sp) {
       this.msg(p, 'Has curado a la criatura.', 'spell');
     }
     if (sp.paraliza || sp.inmoviliza) {
-      t.paralyzed = Date.now() + 10000;
+      t.paralyzed = Date.now() + PARALISIS_NPC_MS;
       t.target = p.id;
       this.msg(p, `${t.name} quedó paralizado.`, 'spell');
     }
