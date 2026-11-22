@@ -73,12 +73,13 @@ C.killNpc = function (npc, killer) {
   const def = npc.def;
   if (killer && killer.kind === 'pc') {
     // Experiencia restante y oro
-    const exp = npc.expLeft === undefined ? Math.floor(def.exp * this.config.multiplicadorExp) : npc.expLeft;
+    const noche = this.esDeNoche() ? this.cfgCiclo().premioNoche : 1; // de noche dan más
+    const exp = Math.floor((npc.expLeft === undefined ? def.exp * this.config.multiplicadorExp : npc.expLeft) * noche);
     if (exp > 0) this.giveExp(killer, exp);
     killer.kills.npcs++;
     if (this.misionKill) this.misionKill(killer, npc.num);
     this.msg(killer, `¡Has matado a ${npc.name}!`, 'fight');
-    if (def.gld > 0) this.dropObj(npc.map, npc.x, npc.y, 12, Math.floor(def.gld * this.config.multiplicadorOro));
+    if (def.gld > 0) this.dropObj(npc.map, npc.x, npc.y, 12, Math.floor(def.gld * this.config.multiplicadorOro * noche));
     // Drop al azar (uno de la lista)
     if (def.drops.length && Math.random() < 0.9) {
       const [id, amount] = def.drops[rnd(0, def.drops.length - 1)];
@@ -425,7 +426,8 @@ C.npcAttack = function (npc, t) {
     this.trainSkill(t, SK['Tácticas de combate']);
     return;
   }
-  const dmg = rnd(def.minHit, def.maxHit);
+  // de noche los bichos pegan más fuerte
+  const dmg = Math.round(rnd(def.minHit, def.maxHit) * (this.esDeNoche() ? this.cfgCiclo().danioNoche : 1));
   this.damagePlayer(t, dmg, npc);
   if (def.veneno && !t.dead && Math.random() < 0.1) {
     t.poisoned = true;

@@ -121,6 +121,8 @@ P.login = function (sock, req) {
   if (p.gm > 0) this.msg(p, `Tenés poderes de ${this.gmTitle(p.gm)}. Escribí /GMAYUDA para ver tus comandos.`, 'gm');
   this.checkClassUp(p);
   this.enviarSeguimiento(p);
+  this.enviarHora(p);
+  if (this.raining) this.send(p, { t: "rain", on: 1 });
   this.pagarPendientesClan(p);
   this.log(`Ingresó ${p.name} (${p.ip})`);
   return { ok: true };

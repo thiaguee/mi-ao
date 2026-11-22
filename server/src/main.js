@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -118,6 +118,7 @@ world.gmLog = (line) => appendLog('gms', line);
 world.chatLog = (line) => appendLog('chat', line);
 world.sos = [];
 world.raining = false;
+world.iniciarCiclo();
 
 const BANS_PATH = path.join(DATA_DIR, 'baneados.json');
 world.bans = new Set(fs.existsSync(BANS_PATH) ? JSON.parse(fs.readFileSync(BANS_PATH, 'utf8')) : []);

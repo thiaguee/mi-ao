@@ -12,6 +12,7 @@ import * as ObjetosUI from './objetosui.js';
 import * as PuntosUI from './puntosui.js';
 import * as TesteoUI from './testeoui.js';
 import * as TiendasUI from './tiendasui.js';
+import * as Clima from './clima.js';
 import { preguntar, confirmar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
@@ -191,6 +192,7 @@ on('map', async (m) => {
   try {
     const map = await loadMap(m.map);
     Eng.setMap(map, m.objs);
+    Clima.setMapaClima(m);
     // Baldosas que cambiaron los Admin al poner o eliminar estructuras
     for (const [x, y, b] of m.blk || []) if (E.blocked) E.blocked[idx(x, y)] = b;
     for (const c of m.chars) Eng.addChar(c);
@@ -269,6 +271,12 @@ on('emote', (m) => Eng.emote(m.id, m.e));
 on('shot', (m) => Eng.addShot(m.from, m.to));
 on('msg', (m) => log(m.text, m.color));
 on('rain', (m) => { E.rain = !!m.on; });
+on('hora', (m) => Clima.setHora(m.h, m.mpd));
+// el relojito de la caja de ubicación se actualiza solo
+setInterval(() => {
+  const c = S.inGame && E.chars.get(S.me);
+  if (c) $('s-pos').textContent = `(${E.mapNum}, ${c.x}, ${c.y}) · ${Clima.textoHora()}`;
+}, 5000);
 on('para', (m) => { S.paralyzed = !!m.on; if (m.on) log('¡Estás paralizado!', 'warn'); renderState(); });
 on('meditate', (m) => { S.meditando = !!m.on; $('b-med').classList.toggle('main', !!m.on); renderState(); });
 on('announce', (m) => {
@@ -418,7 +426,7 @@ function renderState() {
 }
 function updatePos() {
   const c = E.chars.get(S.me);
-  if (c) $('s-pos').textContent = `(${E.mapNum}, ${c.x}, ${c.y})`;
+  if (c) $('s-pos').textContent = `(${E.mapNum}, ${c.x}, ${c.y}) · ${Clima.textoHora()}`;
 }
 
 // ================== INVENTARIO ==================

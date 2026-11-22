@@ -1,4 +1,5 @@
 // Motor gráfico: dibuja el mapa, objetos, personajes, efectos, nombres y diálogos.
+import { dibujarClima } from './clima.js';
 import { A, drawGrh, frameOf, animDuration, numFrames, frameIndex, setSnap, getSnap } from './assets.js';
 import { dibujarCapa, dibujarAura } from './capas.js';
 import { idx } from './mapdata.js';
@@ -413,6 +414,9 @@ export function render(now) {
       }
     }
   }
+
+  // noche, luces y clima (antes de los nombres y diálogos, así se leen siempre)
+  dibujarClima(ctx, now, sx, sy, me, underRoof);
 
   // diálogos (lo que dicen) encima de todo
   for (const c of E.chars.values()) {
