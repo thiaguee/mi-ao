@@ -13,6 +13,7 @@ import * as PuntosUI from './puntosui.js';
 import * as TesteoUI from './testeoui.js';
 import * as TiendasUI from './tiendasui.js';
 import * as Clima from './clima.js';
+import * as MercadoUI from './mercadoui.js';
 import { preguntar, confirmar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
@@ -549,6 +550,8 @@ ObjetosUI.init({ openModal, closeModal, send, esc, S });
 ObjetosUI.mensajes(on);
 TiendasUI.init({ openModal, closeModal, send, esc, S });
 TiendasUI.mensajes(on);
+MercadoUI.init({ openModal, closeModal, send, esc, S });
+MercadoUI.mensajes(on);
 PuntosUI.init({ openModal, send, esc, abrirMisiones: () => MisionesUI.abrir() });
 PuntosUI.mensajes(on);
 TesteoUI.init({ openModal, closeModal, send, esc });

@@ -819,6 +819,19 @@
       ],
       "tipoItems": 24,
       "hechizos": true
+    },
+    {
+      "num": 1036,
+      "name": "Mercader del Pueblo",
+      "desc": "¡Comprá y vendé con otros aventureros! Lo que publiques queda a la venta aunque no estés.",
+      "body": 3,
+      "head": 2,
+      "mercado": true,
+      "spawn": [
+        1,
+        51,
+        45
+      ]
     }
   ]
 }

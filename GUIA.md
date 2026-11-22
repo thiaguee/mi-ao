@@ -339,3 +339,11 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - **Quest**: el Maestro de Misiones está en el rincón con arco de flores y cartel QUEST.
 - **Plantes**: debajo de Quest hay 2 lugares (piedra, 2 cuadrados con sangre, piedra). Adentro de los cuadrados se pueden pegar sin volverse criminal y sin perder nada; afuera es zona segura.
 - **Portal a la Dungeon Newbie**: en el pasto a la derecha de la plaza (67, 48).
+
+---
+
+## Novedades: emotes, día y noche, mercado
+
+- **Emotes**: /SALUDAR /BAILAR /SENTARSE (al lado de un banco te sentás en el banco) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR. /EMOTES los lista.
+- **Día y noche**: un día dura 1 hora. De noche oscurece, se prenden faroles, antorchas y fogatas, y los bichos pegan 25% más pero dan 50% más experiencia y oro. Llueve de vez en cuando, nieva en los mapas nevados y hay niebla al amanecer. GMs: **/HORA n** cambia la hora (se configura en `config.json` → `ciclo`).
+- **Mercado entre jugadores**: el **Mercader del Pueblo** está en la plaza de Ullathorpe (puesto con cartel MERCADO). Publicás un objeto con su precio, queda a la venta aunque te desconectes y cobrás solo (el mercado se queda con 5%). Hasta 10 publicaciones por personaje; los objetos newbie y los premios no se venden.

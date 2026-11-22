@@ -124,6 +124,7 @@ P.login = function (sock, req) {
   this.enviarHora(p);
   if (this.raining) this.send(p, { t: "rain", on: 1 });
   this.pagarPendientesClan(p);
+  this.cobrarMercado(p);
   this.log(`Ingresó ${p.name} (${p.ip})`);
   return { ok: true };
 };

@@ -64,6 +64,7 @@ I.interact = function (p, x, y) {
     if (p.dead) return this.msg(p, '¡¡Estás muerto!! Sólo podés hablar con sacerdotes.', 'warn');
     if (e.def.misiones) return this.abrirMaestro(p);
     if (e.def.comandante) return this.abrirCanje(p, e);
+    if (e.def.mercado) return this.abrirMercado(p);
     if (t === NPC_TYPE.BANQUERO) return this.openBank(p, e);
     if (e.def.comercia) return this.openTrade(p, e);
     if (t === NPC_TYPE.GOBERNADOR && e.def.ciudad) {
