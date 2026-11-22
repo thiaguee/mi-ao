@@ -429,7 +429,7 @@ function buildInventory() {
     d.className = 'slot'; d.dataset.i = i; d.draggable = true;
     d.innerHTML = '<canvas width="32" height="32"></canvas><span class="amt"></span><span class="eq"></span>';
     d.onclick = () => selectSlot(i);
-    d.ondblclick = () => { selectSlot(i); useSelected(); };
+    d.ondblclick = () => { selectSlot(i); if (EQUIPABLE.has((S.inv[i] || {}).ty)) equipSelected(); else useSelected(); };
     d.ondragstart = (e) => e.dataTransfer.setData('text/plain', String(i));
     d.ondragover = (e) => e.preventDefault();
     d.ondrop = (e) => { e.preventDefault(); const a = +e.dataTransfer.getData('text/plain'); if (a !== i) send({ t: 'swapInv', a, b: i }); };
@@ -468,6 +468,8 @@ function showSlotInfo() {
   const it = S.inv[S.selSlot];
   $('inv-info').textContent = it ? `${itemDesc(it)}${it.a > 1 ? ` (${it.a})` : ''}${it.eq ? ' [equipado]' : ''}` : '';
 }
+// Tipos de objeto que se equipan (arma, armadura, escudo, casco, montura, flechas); el resto se consume
+const EQUIPABLE = new Set([2, 3, 16, 17, 25, 32]);
 function useSelected() { if (S.inv[S.selSlot]) send({ t: 'use', i: S.selSlot }); }
 function equipSelected() { if (S.inv[S.selSlot]) send({ t: 'equip', i: S.selSlot }); }
 async function dropSelected() {
@@ -723,7 +725,7 @@ function openHelp() {
   openModal('Ayuda', `<div style="max-width:520px;line-height:1.6">
     <b>Controles — modo ${MODO === 'moderno' ? 'MODERNO' : 'CLÁSICO'}</b> (cambialo con el botón ⌨)<br>
     ${MODO === 'moderno'
-    ? 'WASD o flechas: caminar · <b>Espacio: usar el objeto seleccionado</b> (seleccioná la poción y apretá Espacio para potear)<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · E equipar · T tirar<br><b>F7: macro</b> (elegí un hechizo y apretá F7: le tira solo a un bicho hasta que muere, y se potea)<br>'
+    ? 'WASD o flechas: caminar · <b>Espacio: consumir</b> (pociones, comida, bebida, pergaminos: seleccioná la poción y apretá Espacio para potear)<br><b>E: equipar / desequipar</b> (armas, armaduras, escudos, cascos, monturas) · doble clic: hace lo que corresponda<br>Ctrl: atacar · Q: agarrar · F: meditar · M: mapa del mundo · T tirar<br><b>F7: macro</b> (elegí un hechizo y apretá F7: le tira solo a un bicho hasta que muere, y se potea)<br>'
     : 'Flechas: caminar · Ctrl: atacar · A: agarrar objeto · M: meditar<br>U: usar objeto · E: equipar · T: tirar<br>'}
     Enter: hablar · Esc: cancelar · Clic: mirar · Doble clic: comerciar / banco / sacerdote / puertas<br>
     Hechizos: elegí uno en la pestaña Hechizos, tocá "Lanzar" y hacé clic en el objetivo.<br>
@@ -869,7 +871,7 @@ function setModo(m) {
 $('b-keys').onclick = () => {
   setModo(MODO === 'moderno' ? 'clasico' : 'moderno');
   log(MODO === 'moderno'
-    ? 'Modo MODERNO: WASD caminar · Espacio usar (potear) · Ctrl atacar · Q agarrar · F meditar · M mapa'
+    ? 'Modo MODERNO: WASD caminar · Espacio consumir (potear) · E equipar · Ctrl atacar · Q agarrar · F meditar · M mapa'
     : 'Modo CLÁSICO: flechas caminar · Ctrl atacar · A agarrar · M meditar · U usar · E equipar · T tirar', 'server');
 };
 setModo(MODO);

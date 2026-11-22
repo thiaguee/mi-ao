@@ -445,7 +445,8 @@ P.useItem = function (p, i) {
       }
       break;
     case OBJ.ARMA: case OBJ.ARMADURA: case OBJ.ESCUDO: case OBJ.CASCO: case OBJ.FLECHA: case OBJ.MONTURA:
-      this.equip(p, i);
+      // "Usar" es para consumir (pociones, comida, bebida, pergaminos...). Lo que se viste se equipa aparte.
+      if (now - (p.avisoEquipar || 0) > 3000) { p.avisoEquipar = now; this.msg(p, `${o.name} no se consume: para equiparlo apretá E (o doble clic).`, 'info'); }
       break;
     case OBJ.BARCO:
       this.toggleSail(p, i);
