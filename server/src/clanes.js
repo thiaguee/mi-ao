@@ -49,6 +49,8 @@ K.capaInfo = function (p) {
   if (p.capaOculta) return null; // el jugador se sacó la capa
   if (p.gm > 0 && !p.hideGm) return CAPA_GM;
   const clan = this.clanDe(p);
+  const cp = this.cosmeticosDe && this.cosmeticosDe(p).capa; // capa ganada en el pase (tapa la del clan)
+  if (cp) return Object.assign({}, cp, { ld: clan && this.esLider(clan, p) ? 1 : 0 });
   if (!clan) return null;
   const c = clan.capa;
   return { c: c.color, b: c.borde, e: c.emblema, ce: c.colorEmblema, ld: this.esLider(clan, p) ? 1 : 0 };

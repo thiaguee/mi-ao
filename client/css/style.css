@@ -435,3 +435,28 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .mk-vender { display: flex; gap: 10px; } .mk-vender .mk-lista { flex: 1; }
 .mk-form { width: 220px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
 .mk-form label { display: flex; flex-direction: column; gap: 2px; width: 100%; }
+
+/* ===== Pase de temporada ===== */
+.ps-win { width: 640px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.ps-cab { display: flex; align-items: center; gap: 12px; }
+.ps-niv { font-family: Georgia, serif; font-size: 14px; color: var(--muted); } .ps-niv b { font-size: 26px; color: var(--gold); }
+.ps-barra { position: relative; flex: 1; height: 14px; background: #000; border: 1px solid #3a2e1c; border-radius: 7px; overflow: hidden; }
+.ps-barra.grande { height: 20px; border-radius: 10px; }
+.ps-barra > div { height: 100%; background: linear-gradient(90deg, #8a5a1c, #ffd23f); }
+.ps-barra em { position: absolute; inset: 0; text-align: center; font-style: normal; font-size: 11px; line-height: 18px; color: #fff; text-shadow: 1px 1px 0 #000; }
+.ps-cuerpo { height: 360px; overflow-y: auto; }
+.ps-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; margin-bottom: 8px; }
+.ps-celda { position: relative; height: 34px; background: #0d0a07; border: 1px solid #3a2e1c; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+.ps-celda .ps-n { position: absolute; left: 3px; top: 1px; font-size: 9px; color: #6a5a40; }
+.ps-celda .ps-ic { font-size: 16px; filter: grayscale(.8) opacity(.6); }
+.ps-celda.premio { border-color: #6a5432; }
+.ps-celda.ok { background: #2a2010; border-color: #b8862f; } .ps-celda.ok .ps-n { color: #ffd23f; } .ps-celda.ok .ps-ic { filter: none; }
+.ps-celda.prox { box-shadow: 0 0 0 2px #ffd23f inset; }
+.ps-lista div { padding: 2px 4px; color: var(--muted); } .ps-lista div.ok { color: #9fe08a; } .ps-lista b { color: #f0d9a0; }
+.ps-retos { display: flex; flex-direction: column; gap: 6px; }
+.ps-reto { display: flex; align-items: center; gap: 10px; background: #0007; border: 1px solid #3a2e1c; border-radius: 6px; padding: 6px 8px; }
+.ps-reto > div:first-child { width: 260px; display: flex; flex-direction: column; } .ps-reto b { color: #f0d9a0; } .ps-reto span { color: var(--muted); font-size: 11px; }
+.ps-reto.ok { border-color: #2f6a2f; }
+.ps-cosm { margin-bottom: 10px; } .ps-cosm > b { color: #f0d9a0; display: block; margin-bottom: 4px; }
+.ps-ops { display: flex; flex-wrap: wrap; gap: 4px; }
+.ps-reto .ps-barra { height: 18px; border-radius: 9px; } .ps-reto .ps-barra em { line-height: 16px; }

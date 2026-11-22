@@ -369,3 +369,10 @@ Cinco dungeons nuevas (mapas 319 a 323), lejos del centro. Por ahora están **va
 | Fortaleza del Vacío (323) | mapa 110, (46, 52) | islote de Morgolock, la esquina más lejana |
 
 Cada una tiene un portal de entrada afuera y uno de salida adentro (en `server/data/teleports.json`). Al entrar navegando te bajás del barco y al salir al agua te volvés a subir.
+
+## Pase de Temporada (1 a 100)
+
+- Botón **PASE** (o /PASE). Cada mes arranca una temporada nueva y los niveles vuelven a 0; **los cosméticos ganados quedan para siempre**.
+- Se gana experiencia de pase matando bichos (más los grandes), con misiones (150, diarias 100), duelos (80 ganado / 25 jugado), guerras (120 + 10 por kill) y ventas en el Mercado (30). Además hay **retos del mes** que dan mucha experiencia de una (matar 500 bichos, 100 de noche, 15 misiones, ganar 5 duelos, 3 guerras, visitar las 5 dungeons nuevas, etc.).
+- Premios **sólo estéticos** cada 5 niveles: títulos (se ven debajo del nombre), auras de colores, capas y, en el nivel 100, la Montura de Corcel Alazán + Aura Arcoíris + título "Leyenda de la Temporada". Se equipan en la pestaña **Mis cosméticos**.
+- Todo (experiencia por nivel, cuánto da cada cosa, retos y premios) se cambia en `server/data/pase.json`. Admins: **/PASEXP nombre cantidad**.

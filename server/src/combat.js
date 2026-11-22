@@ -77,6 +77,7 @@ C.killNpc = function (npc, killer) {
     const exp = Math.floor((npc.expLeft === undefined ? def.exp * this.config.multiplicadorExp : npc.expLeft) * noche);
     if (exp > 0) this.giveExp(killer, exp);
     killer.kills.npcs++;
+    if (this.paseMatarBicho) this.paseMatarBicho(killer, npc);
     if (this.misionKill) this.misionKill(killer, npc.num);
     this.msg(killer, `¡Has matado a ${npc.name}!`, 'fight');
     if (def.gld > 0) this.dropObj(npc.map, npc.x, npc.y, 12, Math.floor(def.gld * this.config.multiplicadorOro * noche));

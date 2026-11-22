@@ -89,7 +89,7 @@ K.accionMercado = function (p, m) {
     this.mercado.publicaciones.splice(i, 1);
     const cobra = Math.floor(x.precio * (1 - COMISION));
     const v = this.findPlayer(x.vendedor);
-    if (v) { v.stats.gld += cobra; this.sendStat(v, ['gld']); this.msg(v, `💰 ${p.name} te compró ${x.a} ${o.name}: cobraste ${cobra.toLocaleString('es-AR')} de oro.`, 'server'); this.savePlayer(v); }
+    if (v) { this.sumarXpPase(v, this.cfgPase.xp.venta); this.retoPase(v, 'ventas'); v.stats.gld += cobra; this.sendStat(v, ['gld']); this.msg(v, `💰 ${p.name} te compró ${x.a} ${o.name}: cobraste ${cobra.toLocaleString('es-AR')} de oro.`, 'server'); this.savePlayer(v); }
     else { const k = x.vendedor.toLowerCase(); this.mercado.cobros[k] = (this.mercado.cobros[k] || 0) + cobra; }
     this.guardarMercado(); this.savePlayer(p);
     this.msg(p, `Compraste ${x.a} ${o.name} por ${x.precio.toLocaleString('es-AR')} de oro.`, 'server');

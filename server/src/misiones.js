@@ -96,6 +96,7 @@ M.completarMision = function (p, def, tipo) {
     if (!m.hechas.includes(def.id)) m.hechas.push(def.id);
   }
   m.totalHechas++;
+  if (this.sumarXpPase) { this.sumarXpPase(p, tipo === 'diaria' ? this.cfgPase.xp.diaria : this.cfgPase.xp.mision); this.retoPase(p, 'misiones'); }
   this.darRecompensa(p, def.recompensa, `Misión cumplida: ${def.nombre}`);
   this.savePlayer(p);
   this.enviarSeguimiento(p);

@@ -54,6 +54,7 @@ const AYUDA_USUARIO = [
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
   'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
+  'Pase de temporada: /PASE (o el botón PASE)',
   'Coliseo: /DUELO nombre [oro] · /DUELO2 compañero rival1 rival2 [oro] · /ACEPTO nombre · /RECHAZO nombre · /APOSTAR nombre oro · /COLISEO (ir a mirar) · /RANKINGDUELOS · /RENDIRSE',
   'Emotes: /SALUDAR /BAILAR /SENTARSE (en un banco o en el piso) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR',
   'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills) · /NOBLEZA',
@@ -70,7 +71,7 @@ const AYUDA_GM = {
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
-  4: ['[Admin] /TESTEO (panel con todo lo nuestro: objetos, hechizos y NPCs desde el 2000) /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
+  4: ['[Admin] /PASEXP nombre cantidad (experiencia del pase) /TESTEO (panel con todo lo nuestro: objetos, hechizos y NPCs desde el 2000) /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
     '/PUNTOSTORNEO nombre cantidad (negativo quita) /TIENDATORNEO [agregar numero precio | quitar numero]',
     '/DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
@@ -439,6 +440,10 @@ K.command = function (p, text) {
     case 'RECHAZO': return this.comandoAcepto(p, args[0], false);
     case 'APOSTAR': return this.comandoApostar(p, args[0], args[1]);
     case 'COLISEO': return this.comandoColiseo(p);
+    case 'PASE': return this.enviarPase(p);
+    case 'PASEXP':
+      if (!need(4)) return;
+      return this.comandoPaseXp(p, args[0], args[1]);
     case 'RANKINGDUELOS': return this.mostrarRankingDuelos(p);
     case 'RENDIRSE': return this.comandoRendirse(p);
     case 'HORA':

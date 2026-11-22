@@ -14,6 +14,7 @@ import * as TesteoUI from './testeoui.js';
 import * as TiendasUI from './tiendasui.js';
 import * as Clima from './clima.js';
 import * as MercadoUI from './mercadoui.js';
+import * as PaseUI from './paseui.js';
 import { preguntar, confirmar } from './dialogo.js';
 
 const $ = (id) => document.getElementById(id);
@@ -552,6 +553,9 @@ TiendasUI.init({ openModal, closeModal, send, esc, S });
 TiendasUI.mensajes(on);
 MercadoUI.init({ openModal, closeModal, send, esc, S });
 MercadoUI.mensajes(on);
+PaseUI.init({ openModal, send, esc, S });
+PaseUI.mensajes(on);
+$('b-pase').onclick = () => PaseUI.pedir();
 PuntosUI.init({ openModal, send, esc, abrirMisiones: () => MisionesUI.abrir() });
 PuntosUI.mensajes(on);
 TesteoUI.init({ openModal, closeModal, send, esc });

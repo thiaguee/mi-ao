@@ -87,7 +87,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'), require('./mercado'), require('./duelos'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'), require('./mercado'), require('./duelos'), require('./pase'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -109,6 +109,7 @@ world.cargarFaccion();
 world.cargarNobleza();
 world.cargarMercado();
 world.cargarDuelos();
+world.cargarPase();
 world.cargarTiendas();
 
 // ---------- logs, bans y guardado ----------
@@ -238,6 +239,7 @@ function handle(sock, msg) {
     case 'noble': return world.elegirTunicaNoble(p, msg.obj);
     case 'tienda': return world.accionTienda(p, msg);
     case 'merc': return world.accionMercado(p, msg);
+    case 'pase': return world.accionPase(p, msg);
     case 'capa': return world.alternarCapa(p);
     case 'ping': return world.send(p, { t: 'pong', ts: msg.ts });
     case 'logout': return world.logout(p);

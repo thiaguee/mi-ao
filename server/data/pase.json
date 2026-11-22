@@ -1,0 +1,38 @@
+{
+  "_ayuda": "Pase de temporada (se reinicia cada mes). 'xpPorNivel': experiencia de pase por nivel (100 niveles). 'xp': cuánto da cada cosa. 'retos': desafíos del mes (cada uno se cumple una vez). 'premios': por nivel; tipos: titulo (texto debajo del nombre), aura (color), capa (colores y emblema: estrella, espadas, escudo, calavera, corona, luna, sol, rayo, cruz, dragon, llama, ojo), objeto (número de objeto; no se cae al morir). Los cosméticos ganados quedan para siempre.",
+  "xpPorNivel": 1000,
+  "xp": { "bichoMin": 3, "bichoMax": 60, "mision": 150, "diaria": 100, "dueloGanado": 80, "dueloJugado": 25, "guerra": 120, "killGuerra": 10, "venta": 30 },
+  "retos": [
+    { "id": "bichos", "n": "Matá 500 bichos", "tipo": "bichos", "meta": 500, "xp": 3000 },
+    { "id": "noche", "n": "Matá 100 bichos de noche", "tipo": "noche", "meta": 100, "xp": 2000 },
+    { "id": "misiones", "n": "Completá 15 misiones", "tipo": "misiones", "meta": 15, "xp": 3000 },
+    { "id": "duelosG", "n": "Ganá 5 duelos en el Coliseo", "tipo": "duelosG", "meta": 5, "xp": 2500 },
+    { "id": "duelos", "n": "Peleá 10 duelos", "tipo": "duelos", "meta": 10, "xp": 1500 },
+    { "id": "guerras", "n": "Participá en 3 guerras", "tipo": "guerras", "meta": 3, "xp": 2500 },
+    { "id": "dungeons", "n": "Visitá las 5 dungeons nuevas", "tipo": "dungeons", "meta": 5, "xp": 4000 },
+    { "id": "ventas", "n": "Vendé 3 cosas en el Mercado", "tipo": "ventas", "meta": 3, "xp": 1500 },
+    { "id": "niveles", "n": "Subí 5 niveles", "tipo": "niveles", "meta": 5, "xp": 2000 }
+  ],
+  "premios": {
+    "5": { "tipo": "titulo", "v": "Aventurero" },
+    "10": { "tipo": "aura", "v": "#d8dde8", "n": "Aura Plateada" },
+    "15": { "tipo": "capa", "n": "Capa del Bosque", "c": "#2f5a2a", "b": "#b8d48a", "e": "estrella", "ce": "#e8f0c0" },
+    "20": { "tipo": "titulo", "v": "Cazador" },
+    "25": { "tipo": "aura", "v": "#5fe07a", "n": "Aura Esmeralda" },
+    "30": { "tipo": "capa", "n": "Capa de Brasas", "c": "#7a1a10", "b": "#ff8a3a", "e": "llama", "ce": "#ffcf5a" },
+    "35": { "tipo": "titulo", "v": "Veterano" },
+    "40": { "tipo": "aura", "v": "#4aa8ff", "n": "Aura Celeste" },
+    "45": { "tipo": "capa", "n": "Capa de Escarcha", "c": "#1d3f6a", "b": "#bfe6ff", "e": "luna", "ce": "#eaf6ff" },
+    "50": { "tipo": "titulo", "v": "Campeón de Temporada" },
+    "55": { "tipo": "aura", "v": "#b06bff", "n": "Aura Arcana" },
+    "60": { "tipo": "capa", "n": "Capa de la Noche", "c": "#141420", "b": "#7a6aff", "e": "ojo", "ce": "#b9b0ff" },
+    "65": { "tipo": "titulo", "v": "Señor de la Guerra" },
+    "70": { "tipo": "aura", "v": "#ff4a3a", "n": "Aura Carmesí" },
+    "75": { "tipo": "capa", "n": "Capa Real", "c": "#4a1a6a", "b": "#ffd86a", "e": "corona", "ce": "#ffd86a" },
+    "80": { "tipo": "titulo", "v": "Leyenda" },
+    "85": { "tipo": "aura", "v": "#ffd23f", "n": "Aura Dorada" },
+    "90": { "tipo": "capa", "n": "Capa del Dragón", "c": "#5a3a08", "b": "#ffcf3a", "e": "dragon", "ce": "#ffe9a0" },
+    "95": { "tipo": "titulo", "v": "Inmortal" },
+    "100": { "tipo": "objeto", "v": 1248, "n": "Montura de Corcel Alazán", "extra": [{ "tipo": "aura", "v": "arcoiris", "n": "Aura Arcoíris" }, { "tipo": "titulo", "v": "Leyenda de la Temporada" }] }
+  }
+}

@@ -138,7 +138,9 @@ class World {
       col: e.gm > 0 && !e.hideGm ? 'gm' : (e.crim ? 'cri' : 'ciu'),
       inv: e.invisible || e.hidden ? 1 : 0, dead: e.dead ? 1 : 0,
       nav: e.sailing ? 1 : 0,
-      cap: e.dead || e.sailing || !this.capaInfo ? null : this.capaInfo(e), // capa del clan
+      cap: e.dead || e.sailing || !this.capaInfo ? null : this.capaInfo(e), // capa del clan (o la del pase)
+      tt: this.cosmeticosDe ? this.cosmeticosDe(e).titulo : '', // título del pase
+      au: e.dead || e.sailing || !this.cosmeticosDe ? '' : this.cosmeticosDe(e).aura, // aura del pase
       sit: e.sentado || 0, // sentado: 1 en el piso, 2 en un banco
       nb: e.noble ? 1 : 0, // noble: nombre en amarillo
       rk: this.puestoDe ? this.puestoDe(e) : 0, // puesto en el ranking de kills (1, 2 o 3 = estrella)
@@ -264,6 +266,7 @@ class World {
 
   warp(p, m, x, y, fx = true) {
     if (!this.maps[m]) return false;
+    if (p.kind === 'pc' && m >= 319 && m <= 323 && this.retoPase) this.retoPase(p, 'dungeons', 1, m); // dungeons nuevas
     const pos = this.closestLegalPos(m, x, y, { water: !!p.sailing }) || { x, y };
     const changed = m !== p.map;
     this.remove(p);

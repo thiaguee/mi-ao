@@ -170,7 +170,7 @@ P.toRecord = function (p) {
     pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
-    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
+    killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], pase: p.pase || null, noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
     nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
   };
 };
@@ -577,6 +577,7 @@ P.checkLevel = function (p) {
     const pts = s.lvl === 2 ? 10 : 5;
     s.skillPts += pts;
     this.msg(p, `¡Has subido al nivel ${s.lvl}!`, 'server');
+    if (this.retoPase) this.retoPase(p, 'niveles');
     if (s.lvl === G.NIVEL_DESBLOQUEO) {
       this.msg(p, `¡Llegaste al nivel ${G.NIVEL_DESBLOQUEO}! Se desbloquearon 10 niveles más (hasta el ${G.MAX_NIVEL}) y las MISIONES DE ÉLITE en los Maestros de Misiones.`, 'server');
       this.toAll({ t: 'msg', text: `¡${p.name} llegó al nivel ${G.NIVEL_DESBLOQUEO} y desbloqueó los niveles de élite!`, color: 'server' });

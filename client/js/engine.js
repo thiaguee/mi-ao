@@ -494,7 +494,11 @@ function drawChar(ctx, c, px, py, now, me) {
     // Monturas sin jinete (body.sj): sólo se ve el animal, sin cabeza, casco, armas ni capa
     const sinJinete = !!body.sj && !ghost;
     const cap = !ghost && !c.npc && !sinJinete ? c.cap : null; // capa del clan
-    if (cap) { dibujarAura(ctx, cap, px, py, now); dibujarCapa(ctx, cap, px, py, h, 'atras', now, c.walking); }
+    if (c.au && !ghost) { // aura del pase de temporada (arcoíris va cambiando de color)
+      const col = c.au === 'arcoiris' ? hsvHex((now / 2000) % 1) : c.au;
+      dibujarAura(ctx, { ld: 1, ce: col, b: c.au === 'arcoiris' ? hsvHex((now / 2000 + 0.5) % 1) : '#ffffff' }, px, py, now);
+    }
+    if (cap) { if (!c.au) dibujarAura(ctx, cap, px, py, now); dibujarCapa(ctx, cap, px, py, h, 'atras', now, c.walking); }
     // la animación de caminar sólo avanza mientras se mueve
     drawGrh(ctx, bg, px, py, true, c.walking ? walkT * WALK_ANIM : 0);
     if (cap) dibujarCapa(ctx, cap, px, py, h, 'adelante', now, c.walking);
@@ -552,11 +556,23 @@ function drawName(ctx, c, px, py) {
     const w = ctx.measureText(parts[0]).width;
     estrella(ctx, px + 16 - w / 2 - 7, y - 4, 5, ['#ffd700', '#d8d8e0', '#d08a3a'][c.rk - 1]);
   }
+  let yy = y;
   if (parts[1]) {
     const g = '<' + parts[1];
     ctx.fillStyle = '#000'; ctx.fillText(g, px + 17, y + 13);
     ctx.fillStyle = col; ctx.fillText(g, px + 16, y + 12);
+    yy += 12;
   }
+  if (c.tt && !c.dead) { // título del pase de temporada
+    ctx.font = 'italic bold 10px Georgia, serif';
+    ctx.fillStyle = '#000'; ctx.fillText('« ' + c.tt + ' »', px + 17, yy + 13);
+    ctx.fillStyle = '#f2c96b'; ctx.fillText('« ' + c.tt + ' »', px + 16, yy + 12);
+  }
+}
+
+function hsvHex(h) {
+  const f = (n) => { const k = (n + h * 6) % 6; return Math.round(255 * (1 - Math.max(0, Math.min(k, 4 - k, 1)))); };
+  return '#' + [f(5), f(3), f(1)].map((v) => v.toString(16).padStart(2, '0')).join('');
 }
 
 function drawSay(ctx, c, px, py) {

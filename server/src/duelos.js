@@ -173,6 +173,13 @@ D.terminarDuelo = function (d, gana) {
     if (paga && x) { x.stats.gld += paga; this.sendStat(x, ['gld']); this.msg(x, `🎲 ${a.lado === gana ? '¡Ganaste la apuesta!' : 'Te devolvimos la apuesta.'} Cobraste ${fmt(paga)} de oro.`, 'server'); }
     else if (!paga && x) this.msg(x, `🎲 Perdiste la apuesta de ${fmt(a.oro)} de oro.`, 'warn');
   }
+  // pase de temporada
+  if (gana) for (const id of ids) {
+    const x = this.players.get(id); if (!x) continue;
+    const gano = ganadores.includes(id);
+    this.sumarXpPase(x, gano ? this.cfgPase.xp.dueloGanado : this.cfgPase.xp.dueloJugado);
+    this.retoPase(x, 'duelos'); if (gano) this.retoPase(x, 'duelosG');
+  }
   // ranking de la temporada (puntos tipo ELO)
   if (gana) {
     const J = this.rankDuelos.jugadores;

@@ -170,6 +170,7 @@ W.terminarGuerra = function () {
     }
     texto += ` El que más mató: ${ganadores.map((x) => x.nombre).join(', ')} con ${top.kills} kills.`;
   }
+  for (const part of g.participantes.values()) { const x = this.findPlayer(part.nombre); if (x && this.sumarXpPase) { this.sumarXpPase(x, this.cfgPase.xp.guerra + part.kills * this.cfgPase.xp.killGuerra); this.retoPase(x, 'guerras'); } }
   this.toAll({ t: 'announce', text: texto });
   this.toAll({ t: 'msg', text: texto, color: 'server' });
   this.log(texto);
