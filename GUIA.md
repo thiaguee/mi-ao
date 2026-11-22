@@ -347,3 +347,11 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - **Emotes**: /SALUDAR /BAILAR /SENTARSE (al lado de un banco te sentás en el banco) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR. /EMOTES los lista.
 - **Día y noche**: un día dura 1 hora. De noche oscurece, se prenden faroles, antorchas y fogatas, y los bichos pegan 25% más pero dan 50% más experiencia y oro. Llueve de vez en cuando, nieva en los mapas nevados y hay niebla al amanecer. GMs: **/HORA n** cambia la hora (se configura en `config.json` → `ciclo`).
 - **Mercado entre jugadores**: el **Mercader del Pueblo** está en la plaza de Ullathorpe (puesto con cartel MERCADO). Publicás un objeto con su precio, queda a la venta aunque te desconectes y cobrás solo (el mercado se queda con 5%). Hasta 10 publicaciones por personaje; los objetos newbie y los premios no se venden.
+
+## Coliseo de Norway (duelos)
+
+- Mapa nuevo **318** con **6 arenas**. Afuera es zona segura para mirar; adentro se pelea (sin perder nada al morir).
+- **/DUELO nombre [oro]**: reta a alguien 1 contra 1 (el oro lo pone cada uno y el ganador se lleva todo). **/DUELO2 compañero rival1 rival2 [oro]**: 2 contra 2. Se responde con **/ACEPTO nombre** o **/RECHAZO nombre**.
+- Antes de pelear hay **30 segundos para apostar**: **/APOSTAR nombre oro** (mínimo 100). Los que aciertan se reparten todo lo apostado (el Coliseo se queda con 5%).
+- **/COLISEO**: ir a mirar los duelos (desde una ciudad) y volver. **/RENDIRSE** abandona. Si en 5 minutos no hay ganador es empate.
+- **/RANKINGDUELOS**: ranking de la temporada (un mes, puntos tipo ELO desde 1000). El **#1 del mes es Campeón del Coliseo** y gana 20 puntos de torneo y 1.000.000 de oro.

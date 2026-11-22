@@ -188,9 +188,14 @@ P.savePlayer = function (p) {
 P.logout = function (p) {
   if (!this.players.has(p.id)) return;
   if (p.enGuerra && this.guerra) this.guerra.participantes.delete(p.name.toLowerCase());
+  // si estaba en un duelo, lo pierde; y no queda guardado adentro del Coliseo
+  let vuelta = null;
+  if (p.duelo) { const d = this.duelos[p.duelo.arena]; vuelta = d && d.vuelta[p.id]; this.muerteEnDuelo(p); p.duelo = null; }
+  else if (p.map === 318) vuelta = p.vueltaColiseo || [1, 58, 45];
   this.endTrade(p);
   this.savePlayer(p);
   this.remove(p);
+  if (vuelta) { [p.map, p.x, p.y] = vuelta; p.vueltaColiseo = null; if (p.dead) this.revive(p, true); this.savePlayer(p); }
   this.players.delete(p.id);
   this.byName.delete(p.name.toLowerCase());
   if (p.sock) { p.sock._player = null; try { p.sock.close(); } catch (e) { /* nada */ } }
@@ -737,6 +742,7 @@ P.killPlayer = function (p, killer) {
   this.sendCharToMap(p);
   this.sendAllStats(p);
   if (enGuerra) this.muerteEnGuerra(p, killer);
+  if (p.duelo) this.muerteEnDuelo(p);
   if (killer && killer.kind === 'pc' && killer.id !== p.id && !zonaPelea) {
     if (!p.crim) {
       killer.kills.ciu++;

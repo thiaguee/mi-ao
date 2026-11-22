@@ -54,6 +54,7 @@ const AYUDA_USUARIO = [
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
   'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
+  'Coliseo: /DUELO nombre [oro] · /DUELO2 compañero rival1 rival2 [oro] · /ACEPTO nombre · /RECHAZO nombre · /APOSTAR nombre oro · /COLISEO (ir a mirar) · /RANKINGDUELOS · /RENDIRSE',
   'Emotes: /SALUDAR /BAILAR /SENTARSE (en un banco o en el piso) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR',
   'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills) · /NOBLEZA',
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
@@ -123,6 +124,7 @@ K.command = function (p, text) {
       if (!p.dead) return this.msg(p, 'Sólo podés usar /HOGAR estando muerto.', 'warn');
       if (p.jailUntil) return this.msg(p, 'Estás en la cárcel.', 'warn');
       if (p.enGuerra) return this.msg(p, 'Estás en la guerra: vas a reaparecer en tu base. Para irte: /SALIRGUERRA', 'warn');
+      if (p.duelo) return this.msg(p, 'Estás en un duelo: al terminar volvés solo.', 'warn');
       const c = this.data.cities[p.hogar] || this.data.cities.ULLATHORPE;
       return this.warp(p, c.map, c.x, c.y);
     }
@@ -431,6 +433,14 @@ K.command = function (p, text) {
     case 'OBJETOS': return this.abrirPanelObjetos(p);
     case 'TESTEO': return this.abrirTesteo(p);
     case 'TIENDAS': return this.abrirTiendas(p);
+    case 'DUELO': return this.comandoDuelo(p, args, false);
+    case 'DUELO2': return this.comandoDuelo(p, args, true);
+    case 'ACEPTO': return this.comandoAcepto(p, args[0], true);
+    case 'RECHAZO': return this.comandoAcepto(p, args[0], false);
+    case 'APOSTAR': return this.comandoApostar(p, args[0], args[1]);
+    case 'COLISEO': return this.comandoColiseo(p);
+    case 'RANKINGDUELOS': return this.mostrarRankingDuelos(p);
+    case 'RENDIRSE': return this.comandoRendirse(p);
     case 'HORA':
       if (!need(3)) return;
       return this.ponerHora(p, args[0]);

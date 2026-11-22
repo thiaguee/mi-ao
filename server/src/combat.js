@@ -264,6 +264,8 @@ C.canAttack = function (p, target) {
   if (p.dead) { this.msg(p, '¡¡Estás muerto!! Los muertos no pueden atacar.', 'warn'); return false; }
   if (target.kind === 'pc') {
     if (target.dead) { this.msg(p, 'No podés atacar a un espíritu.', 'warn'); return false; }
+    const rd = this.reglaDuelo(p, target);
+    if (rd !== null) return rd;
     if (this.mismoBandoGuerra(p, target)) { this.msg(p, 'Es de tu bando.', 'warn'); return false; }
     if (this.peleaDeGuerra(p, target)) return true; // en la guerra se pelea siempre
     if (target.gm > 0 && !target.gmAtacable) { this.msg(p, 'No podés atacar a un GM.', 'warn'); return false; }
