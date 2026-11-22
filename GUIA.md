@@ -355,3 +355,17 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - Antes de pelear hay **30 segundos para apostar**: **/APOSTAR nombre oro** (mínimo 100). Los que aciertan se reparten todo lo apostado (el Coliseo se queda con 5%).
 - **/COLISEO**: ir a mirar los duelos (desde una ciudad) y volver. **/RENDIRSE** abandona. Si en 5 minutos no hay ganador es empate.
 - **/RANKINGDUELOS**: ranking de la temporada (un mes, puntos tipo ELO desde 1000). El **#1 del mes es Campeón del Coliseo** y gana 20 puntos de torneo y 1.000.000 de oro.
+
+## Dungeons nuevas
+
+Cinco dungeons nuevas (mapas 319 a 323), lejos del centro. Por ahora están **vacías** (los bichos se eligen después).
+
+| Dungeon | Entrada | Dónde |
+|---|---|---|
+| Cripta de los Olvidados (319) | mapa 282, (32, 55) | Isla Otto, extremo oeste |
+| Caverna Helada (320) | mapa 297, (50, 16) | Reino Helado, extremo norte |
+| Templo Hundido (321) | mapa 123, (50, 50) | en el Mar Oriental: se entra navegando |
+| Abismo de Fuego (322) | mapa 113, (70, 70) | Isla Nueva Esperanza, sudeste |
+| Fortaleza del Vacío (323) | mapa 110, (46, 52) | islote de Morgolock, la esquina más lejana |
+
+Cada una tiene un portal de entrada afuera y uno de salida adentro (en `server/data/teleports.json`). Al entrar navegando te bajás del barco y al salir al agua te volvés a subir.

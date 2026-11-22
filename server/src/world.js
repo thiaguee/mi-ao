@@ -239,6 +239,15 @@ class World {
     // Salir de la Dungeon Newbie por la salida te deja en Ullathorpe
     if (ex && this.maps[ex.map] && /newbie/i.test(mp.d.name) && !/newbie/i.test(this.maps[ex.map].d.name)) ex = { map: 1, x: 55, y: 49 };
     if (ex && this.maps[ex.map]) {
+      const dest = this.maps[ex.map].d;
+      if (p.kind === 'pc' && p.sailing && dest.zona === 'DUNGEON') {
+        // al entrar a una dungeon (por ejemplo desde un portal en el mar) se baja del barco
+        p.sailing = false; this.recalcEquip(p);
+      } else if (p.kind === 'pc' && !p.sailing && dest.water[idx(ex.x, ex.y)]) {
+        // al salir a un portal en el agua se sube al barco (si tiene uno)
+        const barco = p.inv.find((it) => it && this.data.objs[it.id] && this.data.objs[it.id].type === 31);
+        if (barco) { p.sailing = true; p.body = this.data.objs[barco.id].ropaje || 84; p.weaponAnim = 0; p.shieldAnim = 0; p.helmetAnim = 0; }
+      }
       const pos = this.closestLegalPos(ex.map, ex.x, ex.y, { water: !!p.sailing }) || { x: ex.x, y: ex.y };
       this.warp(p, ex.map, pos.x, pos.y, false);
       return;

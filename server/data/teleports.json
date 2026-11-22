@@ -1,6 +1,126 @@
 {
   "_ayuda": "Portales fijos. mapa/x/y: dónde está el portal. destino: [mapa, x, y] a donde lleva. Los GMs también pueden crear portales en el juego con /CREARTP mapa x y.",
   "teleports": [
-    { "nombre": "Portal a la Dungeon Newbie", "mapa": 1, "x": 67, "y": 48, "destino": [168, 50, 56] }
+    {
+      "nombre": "Portal a la Dungeon Newbie",
+      "mapa": 1,
+      "x": 67,
+      "y": 48,
+      "destino": [
+        168,
+        50,
+        56
+      ]
+    },
+    {
+      "nombre": "Entrada a Cripta de los Olvidados",
+      "mapa": 282,
+      "x": 32,
+      "y": 55,
+      "destino": [
+        319,
+        46,
+        89
+      ]
+    },
+    {
+      "nombre": "Salida de Cripta de los Olvidados",
+      "mapa": 319,
+      "x": 45,
+      "y": 89,
+      "destino": [
+        282,
+        33,
+        55
+      ]
+    },
+    {
+      "nombre": "Entrada a Caverna Helada",
+      "mapa": 297,
+      "x": 50,
+      "y": 16,
+      "destino": [
+        320,
+        88,
+        45
+      ]
+    },
+    {
+      "nombre": "Salida de Caverna Helada",
+      "mapa": 320,
+      "x": 88,
+      "y": 44,
+      "destino": [
+        297,
+        51,
+        16
+      ]
+    },
+    {
+      "nombre": "Entrada a Templo Hundido",
+      "mapa": 123,
+      "x": 50,
+      "y": 50,
+      "destino": [
+        321,
+        39,
+        11
+      ]
+    },
+    {
+      "nombre": "Salida de Templo Hundido",
+      "mapa": 321,
+      "x": 39,
+      "y": 10,
+      "destino": [
+        123,
+        51,
+        50
+      ]
+    },
+    {
+      "nombre": "Entrada a Abismo de Fuego",
+      "mapa": 113,
+      "x": 70,
+      "y": 70,
+      "destino": [
+        322,
+        53,
+        11
+      ]
+    },
+    {
+      "nombre": "Salida de Abismo de Fuego",
+      "mapa": 322,
+      "x": 53,
+      "y": 10,
+      "destino": [
+        113,
+        71,
+        70
+      ]
+    },
+    {
+      "nombre": "Entrada a Fortaleza del Vacío",
+      "mapa": 110,
+      "x": 46,
+      "y": 52,
+      "destino": [
+        323,
+        32,
+        11
+      ]
+    },
+    {
+      "nombre": "Salida de Fortaleza del Vacío",
+      "mapa": 323,
+      "x": 32,
+      "y": 10,
+      "destino": [
+        110,
+        47,
+        52
+      ]
+    }
   ]
 }
