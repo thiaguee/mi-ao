@@ -420,3 +420,5 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 /* solapas de la Casa de Hechizos */
 .tr-tabs { display: flex; gap: 3px; margin-bottom: 6px; flex-wrap: wrap; }
 .tr-tabs .tab { flex: 1; padding: 4px 6px; font-size: 11px; border-radius: 4px; }
+
+.c-emote { color: #f3c6ff; font-style: italic; }

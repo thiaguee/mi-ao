@@ -265,6 +265,7 @@ on('fx', (m) => Eng.setFx(m.id, m.fx, m.loops));
 on('snd', (m) => Snd.play(m.w));
 on('say', (m) => Eng.say(m.id, m.text, m.color));
 on('dmg', (m) => Eng.addDamage(m.id, m.v));
+on('emote', (m) => Eng.emote(m.id, m.e));
 on('shot', (m) => Eng.addShot(m.from, m.to));
 on('msg', (m) => log(m.text, m.color));
 on('rain', (m) => { E.rain = !!m.on; });

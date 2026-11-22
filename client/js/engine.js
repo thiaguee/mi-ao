@@ -233,6 +233,7 @@ export function moveChar(id, x, y, h, start) {
   }
   c.x = x; c.y = y;
   if (h) c.h = h;
+  if (c.sit) c.sit = 0; // al caminar se para
 }
 
 export function isMoving(c) {
@@ -266,7 +267,15 @@ export function say(id, text, color) {
 export function addDamage(id, v) {
   const c = E.chars.get(id);
   if (!c) return;
-  E.dmg.push({ x: c.x, y: c.y, v, t: clock() });
+  E.dmg.push({ id, x: c.x, y: c.y, v, t: clock(), dx: (Math.random() - 0.5) * 14 });
+}
+
+// Emotes: ícono arriba de la cabeza (y bailar hace girar al personaje)
+const EMOTE_ICONO = { saludar: '👋', bailar: '💃', reir: '😂', aplaudir: '👏', llorar: '😢', enojar: '😡', amor: '❤️', pensar: '💭' };
+export function emote(id, e) {
+  const c = E.chars.get(id);
+  if (!c) return;
+  c.emote = { e, t: clock(), h0: c.h || 3 };
 }
 
 export function addShot(fromId, toId) {
@@ -362,8 +371,24 @@ export function render(now) {
     if (row) {
       row.sort((a, b) => a.x - b.x);
       for (const c of row) {
-        const px = sx(c.x) + c.offX, py = sy(c.y) + c.offY;
-        drawChar(ctx, c, px, py, now, me);
+        let px = sx(c.x) + c.offX, py = sy(c.y) + c.offY;
+        const em = c.emote && now - c.emote.t < 5000 ? c.emote : null;
+        if (em && em.e === 'bailar' && !c.walking) {
+          // gira cada 300 ms y da saltitos
+          const paso = Math.floor((now - em.t) / 300);
+          c.h = [3, 2, 1, 4][paso % 4];
+          py -= Math.abs(Math.sin((now - em.t) / 150)) * 4;
+          if (now - em.t > 4800) c.h = em.h0;
+        }
+        if (c.sit && !c.walking) {
+          // sentado: se corre hacia el asiento y no se le ven las piernas
+          const sube = c.sit === 2 ? 20 : -6, corta = c.sit === 2 ? 14 : 10;
+          ctx.save();
+          ctx.beginPath(); ctx.rect(px - 80, py - 200, 200, 232 - corta - sube); ctx.clip();
+          drawChar(ctx, c, px, py - sube, now, me);
+          ctx.restore();
+          py -= sube;
+        } else drawChar(ctx, c, px, py, now, me);
         // El nombre se dibuja junto con el personaje: así las paredes, carteles y techos que
         // están más adelante lo tapan (antes quedaba encima de todo).
         if (c.n && E.showNames && !(c.inv && c.id !== E.me)) {
@@ -398,6 +423,23 @@ export function render(now) {
     if (c.say) {
       if (now > c.say.until) c.say = null; else drawSay(ctx, c, px, py);
     }
+    if (c.emote) {
+      const t = now - c.emote.t;
+      if (t > 3500) { if (t > 5000) c.emote = null; } else {
+        const sube = c.sit === 2 ? 20 : 0;
+        const esc = t < 200 ? 0.4 + t / 333 : 1;
+        ctx.save();
+        ctx.globalAlpha = t > 3000 ? (3500 - t) / 500 : 1;
+        const ey = py - 52 - sube - (c.say ? c.say.lines.length * 12 + 12 : 0) + Math.sin(t / 200) * 2;
+        ctx.fillStyle = 'rgba(255,248,230,.92)'; ctx.strokeStyle = 'rgba(90,70,40,.9)'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(px + 16, ey - 8, 14 * esc, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.font = `${Math.round(20 * esc)}px "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(EMOTE_ICONO[c.emote.e] || '❔', px + 16, ey - 7);
+        ctx.textBaseline = 'alphabetic';
+        ctx.restore();
+      }
+    }
   }
 
   // flechas
@@ -412,14 +454,21 @@ export function render(now) {
 
   // números de daño
   E.dmg = E.dmg.filter((d) => now - d.t < 1000);
-  ctx.font = 'bold 13px Tahoma, sans-serif';
   ctx.textAlign = 'center';
+  ctx.lineJoin = 'round';
   for (const d of E.dmg) {
     const t = (now - d.t) / 1000;
-    const px = sx(d.x) + 16, py = sy(d.y) - 30 - t * 24;
-    ctx.globalAlpha = 1 - t;
-    ctx.fillStyle = '#000'; ctx.fillText('-' + d.v, px + 1, py + 1);
-    ctx.fillStyle = '#ff3b2b'; ctx.fillText('-' + d.v, px, py);
+    // salta, crece un poco y se desvanece
+    const pop = t < 0.12 ? 0.6 + t / 0.12 * 0.6 : t < 0.25 ? 1.2 - (t - 0.12) / 0.13 * 0.2 : 1;
+    const px = sx(d.x) + 16 + d.dx * t, py = sy(d.y) - 26 - t * 30 - Math.sin(Math.min(1, t * 3) * Math.PI) * 6;
+    const mio = d.id === E.me;
+    const grande = d.v >= 100;
+    ctx.globalAlpha = t > 0.7 ? (1 - t) / 0.3 : 1;
+    ctx.font = `bold ${Math.round((grande ? 17 : 14) * pop)}px Georgia, serif`;
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.85)';
+    ctx.strokeText(String(d.v), px, py);
+    ctx.fillStyle = mio ? '#ff4a3a' : grande ? '#ffd23f' : '#fff3c4';
+    ctx.fillText(String(d.v), px, py);
     ctx.globalAlpha = 1;
   }
 
@@ -510,10 +559,25 @@ function drawSay(ctx, c, px, py) {
   ctx.font = '11px Tahoma, sans-serif';
   ctx.textAlign = 'center';
   const lines = c.say.lines;
-  const base = py - 52 - (lines.length - 1) * 12;
+  const sube = c.sit === 2 ? 20 : 0;
+  const ancho = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 12;
+  const alto = lines.length * 12 + 7;
+  const cx = px + 16, abajo = py - 44 - sube;
+  const x0 = Math.round(cx - ancho / 2), y0 = Math.round(abajo - alto);
+  // globo: fondo oscuro, borde del color del texto y una colita hacia el personaje
+  ctx.fillStyle = 'rgba(14,11,8,.8)';
+  ctx.strokeStyle = c.say.color === '#ffffff' ? 'rgba(224,180,90,.85)' : c.say.color;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  const r = 5;
+  ctx.moveTo(x0 + r, y0); ctx.lineTo(x0 + ancho - r, y0); ctx.quadraticCurveTo(x0 + ancho, y0, x0 + ancho, y0 + r);
+  ctx.lineTo(x0 + ancho, y0 + alto - r); ctx.quadraticCurveTo(x0 + ancho, y0 + alto, x0 + ancho - r, y0 + alto);
+  ctx.lineTo(cx + 4, y0 + alto); ctx.lineTo(cx, y0 + alto + 5); ctx.lineTo(cx - 4, y0 + alto);
+  ctx.lineTo(x0 + r, y0 + alto); ctx.quadraticCurveTo(x0, y0 + alto, x0, y0 + alto - r);
+  ctx.lineTo(x0, y0 + r); ctx.quadraticCurveTo(x0, y0, x0 + r, y0);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
   lines.forEach((l, i) => {
-    ctx.fillStyle = '#000'; ctx.fillText(l, px + 17, base + i * 12 + 1);
-    ctx.fillStyle = c.say.color; ctx.fillText(l, px + 16, base + i * 12);
+    ctx.fillStyle = c.say.color; ctx.fillText(l, cx, y0 + 12 + i * 12);
   });
 }
 

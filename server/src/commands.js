@@ -13,7 +13,11 @@ K.handleTalk = function (p, text) {
   const now = Date.now();
   if (now - p.lastTalk < 300) return;
   p.lastTalk = now;
-  if (text[0] === '/') return this.command(p, text);
+  if (text[0] === '/') {
+    const c = text.slice(1).split(' ')[0].toUpperCase();
+    if (this.esEmote(c)) return this.emote(p, c);
+    return this.command(p, text);
+  }
   if (text[0] === '\\') {
     const sp = text.indexOf(' ');
     if (sp > 1) return this.whisper(p, text.slice(1, sp), text.slice(sp + 1));
@@ -50,6 +54,7 @@ const AYUDA_USUARIO = [
   '/BALANCE /DEPOSITAR cant /RETIRAR cant (cerca de un banquero) /GM mensaje (pedir ayuda a un GM)',
   '\\nombre mensaje = susurrar. /SALIR = salir del juego. /PASSWORD vieja nueva',
   'Clanes: /FUNDARCLAN (cuesta 15.000.000 de oro) · /CLANES · /CL mensaje (chat del clan) · /CAPA (ponerte o sacarte la capa)',
+  'Emotes: /SALUDAR /BAILAR /SENTARSE (en un banco o en el piso) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR',
   'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills) · /NOBLEZA',
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];

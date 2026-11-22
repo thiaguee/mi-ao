@@ -257,6 +257,7 @@ function loadMap(n) {
   const map = {
     n,
     blocked: new Uint8Array(XY * XY),
+    bancos: new Set(), // baldosas con un banco de plaza (para /SENTARSE)
     trigger: new Uint8Array(XY * XY),
     water: new Uint8Array(XY * XY),
     exits: new Map(), // idx -> {map,x,y}
@@ -279,7 +280,7 @@ function loadMap(n) {
       if (f & 1) map.blocked[k] = 1;
       const g1 = m.readInt32LE(i); i += 4;
       if (f & 2) i += 4;
-      if (f & 4) i += 4;
+      if (f & 4) { if (m.readInt32LE(i) === 274) map.bancos.add(k); i += 4; }
       if (f & 8) i += 4;
       if (f & 16) { map.trigger[k] = m.readInt16LE(i); i += 2; }
       if (isWaterGrh(g1) && !(f & 2)) map.water[k] = 1;
