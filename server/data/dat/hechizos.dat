@@ -12,7 +12,7 @@
 '4.....Terreno.
 
 [INIT]
-NumeroHechizos=51
+NumeroHechizos=52
 
 
 [HECHIZO1]
@@ -3149,3 +3149,18 @@ MaxHP=450
 Critico=25
 Divino=10
 StaffAffected=1
+
+[HECHIZO52] 'Norway AO: abre un portal a Ullathorpe donde hagas clic (aparece a los 3 segundos y dura 10)
+Nombre=Teleport a Ullathorpe
+Desc=Abre un portal donde hagas clic. Aparece a los 3 segundos, dura 10 segundos y lleva a quien lo pise a la plaza de Ullathorpe.
+PalabrasMagicas=Porta Ullathorpe
+HechizeroMsg=Abriste un portal.
+Tipo=4
+WAV=3
+FXgrh=0
+Loops=0
+MinSkill=30
+ManaRequerido=300
+StaRequerido=20
+Target=4
+PortalUlla=1

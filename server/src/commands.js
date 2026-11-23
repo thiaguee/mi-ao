@@ -7,7 +7,11 @@ const { NPC_TYPE } = require('./combat');
 const K = {};
 const NIVELES = { CONSEJERO: 1, SEMIDIOS: 2, DIOS: 3, ADMIN: 4 };
 
-K.handleTalk = function (p, text) {
+K.handleTalk = function (p, text, cartel) {
+  if (cartel && !p.dead) { // cartelear: un mensaje vacío borra el texto de arriba de la cabeza
+    this.toMap(p.map, { t: 'say', id: p.id, text: '', color: 'talk' });
+    return;
+  }
   text = String(text || '').replace(/[\r\n\t]/g, ' ').trim().slice(0, 300);
   if (!text) return;
   const now = Date.now();
@@ -62,7 +66,7 @@ const AYUDA_USUARIO = [
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
-  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
+  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE o /INVI /ULLA /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
     '/CARCEL nombre minutos /SILENCIAR nombre minutos /TRABAJANDO /ONLINEGM /MOSTRARGM'],
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
@@ -219,7 +223,7 @@ K.command = function (p, text) {
       this.msg(p, `${t.name}: ${G.CLASES[t.clase]} ${G.RAZAS[t.raza]} nivel ${s.lvl} | HP ${s.hp}/${s.maxHp} MAN ${s.man}/${s.maxMan} | Oro ${s.gld} Banco ${t.bankGld || 0}`, 'gm');
       return this.msg(p, `Mapa ${t.map} ${t.x} ${t.y} | IP ${t.ip} | ${t.crim ? 'Criminal' : 'Ciudadano'} | Muertes ${t.deaths || 0}`, 'gm');
     }
-    case 'INVISIBLE':
+    case 'INVISIBLE': case 'INVI':
       if (!need(1)) return;
       p.gmInvis = !p.gmInvis;
       this.remove(p);
@@ -272,6 +276,9 @@ K.command = function (p, text) {
       return this.msg(p, `Usuarios online: ${this.players.size}. Uptime: ${this.uptime()}.`, 'gm');
 
     // ===================== SEMIDIOS (2) =====================
+    case 'ULLA': // GMs: directo a la plaza de Ullathorpe
+      if (!need(1)) return;
+      return this.warp(p, 1, 55, 49);
     case 'TELEP': {
       if (!need(2)) return;
       const t = args[0] && args[0].toUpperCase() === 'YO' ? p : target(args[0]); if (!t) return;

@@ -190,7 +190,7 @@ function handle(sock, msg) {
       return;
     }
     case 'turn': return world.turn(p, +msg.d);
-    case 'talk': return world.handleTalk(p, msg.text);
+    case 'talk': return world.handleTalk(p, msg.text, msg.cartel);
     case 'attack': return world.attack(p);
     case 'pick': return world.pickUp(p);
     case 'use': return world.useItem(p, +msg.i);

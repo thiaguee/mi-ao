@@ -1,4 +1,4 @@
-// Día y noche, luces (faroles, antorchas, fogatas) y clima (nieve, niebla). Se dibuja encima del mapa.
+// Día y noche, luces (faroles, antorchas, fogatas) y clima (nieve). Se dibuja encima del mapa.
 import { E } from './engine.js';
 import { idx } from './mapdata.js';
 
@@ -50,7 +50,7 @@ function lucesDelMapa() {
 
 const capa = document.createElement('canvas');
 const cctx = capa.getContext('2d');
-const copos = [], nieblas = [];
+const copos = [];
 
 // Se llama desde el render, con la cámara ya puesta (coordenadas lógicas: 1 baldosa = 32)
 export function dibujarClima(ctx, now, sx, sy, me, bajoTecho) {
@@ -103,17 +103,6 @@ export function dibujarClima(ctx, now, sx, sy, me, bajoTecho) {
       c.y += c.v; c.x += Math.sin(now / 900 + c.f) * 0.4;
       if (c.y > H) { c.y = -4; c.x = Math.random() * W; }
       ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2); ctx.fill();
-    }
-  }
-  // niebla al amanecer
-  if (h >= 4.5 && h < 8) {
-    const k = h < 6 ? Math.min(1, (h - 4.5) / 0.7) : Math.max(0, (8 - h) / 2);
-    if (nieblas.length < 6) for (let i = 0; i < 6; i++) nieblas.push({ x: Math.random() * W, y: Math.random() * H, r: 120 + Math.random() * 120, v: 0.08 + Math.random() * 0.15 });
-    for (const n of nieblas) {
-      n.x += n.v; if (n.x - n.r > W) n.x = -n.r;
-      const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
-      g.addColorStop(0, `rgba(220,226,235,${0.22 * k})`); g.addColorStop(1, 'rgba(220,226,235,0)');
-      ctx.fillStyle = g; ctx.fillRect(n.x - n.r, n.y - n.r, n.r * 2, n.r * 2);
     }
   }
 }

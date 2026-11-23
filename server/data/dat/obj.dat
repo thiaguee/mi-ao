@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2063
+NumOBJs=2064
 
 
 
@@ -16029,3 +16029,12 @@ CP6=BARDO
 CP7=DRUIDA
 CP8=TRABAJADOR
 CP9=MAGO
+
+[OBJ2064] 'Norway AO: pergamino del hechizo Teleport a Ullathorpe (52), en la Casa de Hechizos para las clases magicas
+Name=Teleport a Ullathorpe
+GrhIndex=609
+ObjType=24
+Agarrable=0
+Valor=150000
+Crucial=1
+HechizoIndex=52

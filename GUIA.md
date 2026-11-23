@@ -346,8 +346,8 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 ## Novedades: emotes, día y noche, mercado
 
 - **Emotes**: /SALUDAR /BAILAR /SENTARSE (al lado de un banco te sentás en el banco) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR. /EMOTES los lista.
-- **Día y noche**: el día dura 3 horas y la noche 30 minutos (se cambia en `config.json` → `ciclo`: minutosDia, minutosNoche). De noche oscurece, se prenden faroles, antorchas y fogatas, y los bichos pegan 25% más pero dan 50% más experiencia y oro. Llueve de vez en cuando, nieva en los mapas nevados y hay niebla al amanecer. GMs: **/HORA n** cambia la hora (se configura en `config.json` → `ciclo`).
-- **Mercado entre jugadores**: el **Mercader del Pueblo** está en la plaza de Ullathorpe (puesto con cartel MERCADO). Publicás un objeto con su precio, queda a la venta aunque te desconectes y cobrás solo (el mercado se queda con 5%). Hasta 10 publicaciones por personaje; los objetos newbie y los premios no se venden.
+- **Día y noche**: el día dura 3 horas y la noche 30 minutos (se cambia en `config.json` → `ciclo`: minutosDia, minutosNoche). De noche oscurece, se prenden faroles, antorchas y fogatas, y los bichos pegan 25% más pero dan 50% más experiencia y oro. Llueve de vez en cuando y nieva en los mapas nevados. GMs: **/HORA n** cambia la hora (se configura en `config.json` → `ciclo`).
+- **Mercado entre jugadores**: el **Mercader del Pueblo** está en la plaza de Ullathorpe (puesto con cartel MERCADO). Publicás un objeto con su precio, queda a la venta aunque te desconectes y cobrás solo (sin comisión: cobrás el precio entero). Hasta 10 publicaciones por personaje; los objetos newbie y los premios no se venden.
 
 ## Coliseo de Norway (duelos)
 
@@ -375,6 +375,14 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 - Se gana experiencia de pase matando bichos (más los grandes), con misiones (150, también las de facción), duelos (80 ganado / 25 jugado), guerras (120 + 10 por kill) y ventas en el Mercado (30). Además hay **retos del mes** que dan mucha experiencia de una (matar 500 bichos, 100 de noche, 15 misiones, ganar 5 duelos, 3 guerras, visitar las 5 dungeons nuevas, etc.).
 - Premios **sólo estéticos** cada 5 niveles: títulos (se ven debajo del nombre), auras de colores, capas y, en el nivel 100, la Montura de Corcel Alazán + Aura Arcoíris + título "Leyenda de la Temporada". Se equipan en la pestaña **Mis cosméticos**.
 - Todo (experiencia por nivel, cuánto da cada cosa, retos y premios) se cambia en `server/data/pase.json`. Admins: **/PASEXP nombre cantidad**.
+
+## Hechizo Teleport a Ullathorpe y comandos nuevos de GM
+
+- **Teleport a Ullathorpe** (pergamino 2064, en la Casa de Hechizos para todas las clases mágicas): hacés clic en cualquier lugar visible, a los **3 segundos** aparece un portal que dura **10 segundos** y lleva a quien lo pise a la plaza de Ullathorpe (1, 58, 44). Gasta 300 de maná y pide 30 de Magia. No anda en duelos, guerras ni la cárcel.
+- **/ULLA** (GMs): te lleva a Ullathorpe (1, 55, 49).
+- **/INVI** (GMs, igual que /INVISIBLE): te volvés invisible para los usuarios; los GMs de tu rango o más te siguen viendo.
+- **Cartelear**: Enter, Espacio, Enter borra lo que dijiste de arriba de tu cabeza.
+- El daño se ve como en el AO original: sólo en la consola (sin números flotantes).
 
 ## Líderes faccionarios
 

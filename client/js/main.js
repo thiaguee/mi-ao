@@ -268,7 +268,7 @@ on('blk', (m) => { for (const [x, y, b] of m.tiles) if (x >= 1 && E.blocked) E.b
 on('fx', (m) => Eng.setFx(m.id, m.fx, m.loops));
 on('snd', (m) => Snd.play(m.w));
 on('say', (m) => Eng.say(m.id, m.text, m.color));
-on('dmg', (m) => Eng.addDamage(m.id, m.v));
+// el daño se ve como en el AO original: sólo en la consola (sin números flotantes)
 on('emote', (m) => Eng.emote(m.id, m.e));
 on('shot', (m) => Eng.addShot(m.from, m.to));
 on('msg', (m) => log(m.text, m.color));
@@ -822,6 +822,7 @@ chat.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const t = chat.value.trim();
     if (t) send({ t: 'talk', text: t });
+    else if (chat.value.length) send({ t: 'talk', text: ' ', cartel: 1 }); // cartelear: Enter, Espacio, Enter borra lo que dijiste
     chat.value = '';
     chat.blur();
     e.preventDefault();

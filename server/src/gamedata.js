@@ -240,6 +240,7 @@ function loadSpells() {
       ceguera: num(v.CEGUERA) === 1, estupidez: num(v.ESTUPIDEZ) === 1,
       invoca: num(v.INVOCA) === 1, numNpc: num(v.NUMNPC), cant: num(v.CANT),
       staffAffected: num(v.STAFFAFFECTED) === 1,
+      portalUlla: num(v.PORTALULLA) === 1, // abre un portal temporal a Ullathorpe
       critico: num(v.CRITICO), divino: num(v.DIVINO), // % de golpe crítico (x2) y divino (x3), una sola tirada
     };
   }

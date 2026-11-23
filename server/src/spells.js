@@ -37,6 +37,7 @@ S.castSpell = function (p, slot, x, y) {
     }
   }
   if (sp.invoca) return this.summon(p, sp, x, y, now);
+  if (sp.portalUlla) return this.portalUlla(p, sp, x, y, now);
   if (!target) return this.msg(p, 'Tenés que apuntar a alguien.', 'warn');
   if (sp.target === TARGET.USUARIO && target.kind !== 'pc') return this.msg(p, 'Este hechizo sólo afecta a usuarios.', 'warn');
   if (sp.target === TARGET.NPC && target.kind !== 'npc') return this.msg(p, 'Este hechizo sólo afecta a criaturas.', 'warn');
@@ -171,6 +172,49 @@ S.applySpell = function (p, t, sp) {
   if (sp.envenena && !t.godMode) t.poisoned = true;
   if (sp.curaVeneno) t.poisoned = false;
   if (sp.subeHp !== 1 && sp.subeHp !== 2) { tellCaster(sp.msgCaster); tellTarget(); }
+};
+
+// Teleport a Ullathorpe: a los 3 segundos aparece un portal donde se hizo clic, dura 10 segundos
+// y lleva a quien lo pise a la plaza de Ullathorpe.
+const PORTAL_ULLA = { espera: 3000, dura: 10000, destino: [1, 58, 44], obj: 378 };
+S.portalUlla = function (p, sp, x, y, now) {
+  const mp = this.maps[p.map];
+  const k = idx(x, y);
+  if (p.duelo || p.enGuerra || p.jailUntil > now) return this.msg(p, 'Acá no podés abrir un portal.', 'warn');
+  if (mp.d.blocked[k] || mp.d.water[k]) return this.msg(p, 'No podés abrir un portal ahí.', 'warn');
+  if (mp.d.exits.has(k) || mp.objs.has(k)) return this.msg(p, 'Ya hay algo en ese lugar.', 'warn');
+  if (this.portalesUlla && [...this.portalesUlla].some((t) => t.map === p.map && t.k === k)) return this.msg(p, 'Ya hay un portal abriéndose ahí.', 'warn');
+  p.lastSpell = now;
+  if (p.meditating) this.stopMeditating(p);
+  p.stats.man -= sp.mana; p.stats.sta -= sp.sta;
+  this.sendStat(p, ['man', 'sta']);
+  this.trainSkill(p, SK['Magia']);
+  if (sp.words) this.toMap(p.map, { t: 'say', id: p.id, text: sp.words, color: 'spell' });
+  if (sp.wav) this.toMap(p.map, { t: 'snd', w: sp.wav });
+  this.msg(p, 'El portal a Ullathorpe se abre en 3 segundos...', 'info');
+  const portal = { map: p.map, k, x, y };
+  this.portalesUlla = this.portalesUlla || new Set();
+  this.portalesUlla.add(portal);
+  const [dm, dx, dy] = PORTAL_ULLA.destino;
+  setTimeout(() => {
+    const m = this.maps[portal.map];
+    if (m.d.exits.has(k) || m.objs.has(k)) { this.portalesUlla.delete(portal); return; } // se ocupó mientras tanto
+    m.d.exits.set(k, { map: dm, x: dx, y: dy });
+    m.objs.set(k, { id: PORTAL_ULLA.obj, amount: 1 });
+    this.toMap(portal.map, { t: 'obj', x, y, g: this.data.objs[PORTAL_ULLA.obj].grh });
+    this.toMap(portal.map, { t: 'snd', w: G.SND.WARP || 3 });
+    // si alguien ya está parado encima, lo lleva
+    const occ = m.occ[k];
+    const o = occ && this.entity(occ);
+    if (o && o.kind === 'pc' && !o.dead) this.warp(o, dm, dx, dy);
+    setTimeout(() => {
+      this.portalesUlla.delete(portal);
+      const e = m.d.exits.get(k);
+      if (e && e.map === dm && e.x === dx && e.y === dy) m.d.exits.delete(k);
+      const ob = m.objs.get(k);
+      if (ob && ob.id === PORTAL_ULLA.obj) { m.objs.delete(k); this.toMap(portal.map, { t: 'obj', x, y, g: 0 }); }
+    }, PORTAL_ULLA.dura);
+  }, PORTAL_ULLA.espera);
 };
 
 S.summon = function (p, sp, x, y, now) {

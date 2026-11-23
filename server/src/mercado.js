@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const K = {};
-const COMISION = 0.05;      // el mercado se queda con el 5%
+const COMISION = 0;         // sin comisión: el vendedor cobra todo
 const MAX_PUBLICACIONES = 10;
 const PRECIO_MAX = 2000000000;
 

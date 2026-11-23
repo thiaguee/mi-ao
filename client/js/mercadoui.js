@@ -55,7 +55,7 @@ export function abrir() {
   const tabs = [['comprar', 'Comprar'], ['vender', 'Vender'], ['mias', 'Mis publicaciones']];
   H.openModal('Mercado del Pueblo', `<div class="mk-win"><div class="tr-tabs">${tabs.map(([k, n]) => `<button class="tab${M.tab === k ? ' active' : ''}" data-tab-mk="${k}">${n}</button>`).join('')}</div>
     ${M.tab === 'comprar' ? comprar() : M.tab === 'vender' ? vender() : mias()}
-    <div class="row hint">Tu oro: <b style="color:var(--gold)">${fmt(M.datos.oro)}</b> · El mercado cobra ${Math.round(M.datos.comision * 100)}% de comisión al vendedor.</div></div>`, 'mercado');
+    <div class="row hint">Tu oro: <b style="color:var(--gold)">${fmt(M.datos.oro)}</b></div></div>`, 'mercado');
   const body = document.querySelector('.mk-win');
   icono(body);
   body.querySelectorAll('[data-tab-mk]').forEach((b) => { b.onclick = () => { M.tab = b.dataset.tabMk; abrir(); }; });

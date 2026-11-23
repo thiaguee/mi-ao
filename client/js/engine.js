@@ -264,6 +264,7 @@ export function setFx(id, fx, loops) {
 export function say(id, text, color) {
   const c = E.chars.get(id);
   if (!c) return;
+  if (!text) { c.say = null; return; } // carteleó: se borra el texto
   c.say = { lines: wrap(text, 22), color: SAY_COLORS[color] || '#fff', until: clock() + 3500 + text.length * 60 };
 }
 
@@ -436,7 +437,7 @@ export function render(now) {
         const esc = t < 200 ? 0.4 + t / 333 : 1;
         ctx.save();
         ctx.globalAlpha = t > 3000 ? (3500 - t) / 500 : 1;
-        const ey = py - 52 - sube - (c.say ? c.say.lines.length * 13 + 12 : 0) + Math.sin(t / 200) * 2;
+        const ey = py - 52 - sube - (c.say ? c.say.lines.length * 13 - 12 : 0) + Math.sin(t / 200) * 2;
         ctx.fillStyle = 'rgba(255,248,230,.92)'; ctx.strokeStyle = 'rgba(90,70,40,.9)'; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.arc(px + 16, ey - 8, 14 * esc, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.font = `${Math.round(20 * esc)}px "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
@@ -623,7 +624,7 @@ function drawSay(ctx, c, px, py) {
   // como en el AO de siempre: sólo las letras en negrita con sombra negra pegada, arriba de la cabeza
   const lines = c.say.lines;
   const sube = c.sit === 2 ? 20 : 0;
-  const base = py - 52 - sube - (lines.length - 1) * 13;
+  const base = py - 27 - sube - (lines.length - 1) * 13; // ni muy arriba ni pegado a la cabeza
   const x = Math.round(px + 16);
   if (MSS.img && MSS.def) {
     const suave = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false;

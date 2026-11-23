@@ -73,6 +73,19 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Matar al mismo jugador dos veces en menos de 30 minutos cuenta una sola vez.
 - [ ] El próximo escalón aparece en el contador de pantalla después de la primera muerte de facción.
 
+## Segunda tanda
+- [ ] El daño sale sólo en la consola, como en el AO original (sin números flotando).
+- [ ] **Cartelear**: escribí algo, después Enter, Espacio, Enter: se borra el texto de arriba de la cabeza.
+- [ ] El texto de lo que dicen está más abajo, sin quedar pegado a la cabeza.
+- [ ] El Mercado ya no cobra comisión: el vendedor cobra el precio entero.
+- [ ] Ya no hay niebla.
+- [ ] **/ULLA** (GM) te lleva a 1, 55, 49.
+- [ ] **/INVI** (GM): los usuarios no te ven y los GMs sí.
+- [ ] Hechizo **Teleport a Ullathorpe**: comprar el pergamino en la Casa de Hechizos con una clase mágica. Lanzarlo con clic en el piso: a los 3 segundos aparece el portal y a los 10 desaparece. Pisarlo te lleva a 1, 58, 44.
+- [ ] Las clases no mágicas no lo pueden comprar.
+- [ ] Abismo de Fuego piso 3: no se puede caminar sobre la lava, sólo por los puentes y la roca.
+- [ ] Templo Hundido: el agua tampoco se camina.
+
 ## Pendiente (no está hecho)
 - Bichos y jefes para cada piso de las dungeons.
 - Ajustar los premios del pase.
