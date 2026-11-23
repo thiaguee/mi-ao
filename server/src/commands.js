@@ -290,7 +290,7 @@ K.command = function (p, text) {
         filas.push({ n: r.name, lvl: r.stats.lvl, horas, dias, hitos, online: r.online });
       }
       filas.sort((a, b) => b.lvl - a.lvl || a.horas - b.horas);
-      this.msg(p, `Ritmo (meta: nivel 60 en ~41 días jugando 4-5 hs). Jugadores: ${filas.length}`, 'gm');
+      this.msg(p, `Ritmo (meta: nivel 60 en ~15 días jugando 3-4 hs). Jugadores: ${filas.length}`, 'gm');
       for (const f of filas.slice(0, 15)) {
         this.msg(p, `${f.online ? '●' : '○'} ${f.n} nivel ${f.lvl} — ${f.horas.toFixed(1)} hs jugadas en ${f.dias.toFixed(0)} días (${(f.horas / f.dias).toFixed(1)} hs/día)${f.hitos ? ' | llegó a ' + f.hitos : ''}`, 'gm');
       }

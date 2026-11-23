@@ -170,7 +170,7 @@ En el servidor podés editar este archivo con `nano server/config.json`
 | Opción | Para qué sirve |
 |---|---|
 | `nombreServidor` | El nombre que aparece en el juego. |
-| `expPorNivel` | Multiplicador de experiencia según el nivel del que mata, en pares `[hasta el nivel, multiplicador]`. Viene en `[[14,4],[29,2.5],[34,3],[39,4],[44,5.5],[49,9],[54,17],[59,30]]`: pensado para llegar al 60 en unas 6 semanas jugando 4-5 hs por día (20 el primer día, 30 a los 3 días, 40 a los 10, 50 a las 3 semanas, 60 a las 6). |
+| `expPorNivel` | Multiplicador de experiencia según el nivel del que mata, en pares `[hasta el nivel, multiplicador]`. Viene en `[[19,6],[29,6.5],[34,8.5],[39,12.5],[44,18],[49,32],[54,60],[59,118]]`: pensado para llegar al 60 en unos 15-16 días jugando 3-4 hs por día (30 el segundo día, 40 al cuarto, 50 al noveno, 60 el día 15-16); el resto de la versión queda para túnicas, facción, clanes y roleo. |
 | `multiplicadorExp` | Multiplica toda la experiencia encima de lo anterior. Viene en `1`; poné `2` para un evento de experiencia doble. |
 | `multiplicadorOro` | Lo mismo para el oro que tiran los monstruos. Viene en `50`. |
 | `oroInicial` | Oro con el que arranca cada personaje nuevo (viene en `1000`). |

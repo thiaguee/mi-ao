@@ -35,9 +35,10 @@ const DEFAULT_CONFIG = {
   primerPersonajeEsAdmin: false,
   gms: { admins: [...NOMBRES_RESERVADOS], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
-  // Experiencia: multiplicador según el nivel del que mata (pensado para llegar al 60 en ~6 semanas jugando 4-5 hs por día).
-  // Cada par es [hasta el nivel, multiplicador]. multiplicadorExp multiplica todo (por ejemplo 2 para un evento de exp doble).
-  expPorNivel: [[14, 4], [29, 2.5], [34, 3], [39, 4], [44, 5.5], [49, 9], [54, 17], [59, 30]],
+  // Experiencia: multiplicador según el nivel del que mata. Pensado para llegar al 60 en ~15 días jugando 3-4 hs por día
+  // (el resto de la versión es para túnicas, facción, clanes y roleo). Cada par es [hasta el nivel, multiplicador].
+  // multiplicadorExp multiplica todo (por ejemplo 2 para un evento de exp doble).
+  expPorNivel: [[19, 6], [29, 6.5], [34, 8.5], [39, 12.5], [44, 18], [49, 32], [54, 60], [59, 118]],
   multiplicadorExp: 1,
   multiplicadorOro: 50, // oro x50 de los monstruos
   oroInicial: 1000, // oro con el que arranca cada personaje nuevo
