@@ -586,8 +586,8 @@ function hsvHex(h) {
 
 function drawSay(ctx, c, px, py) {
   // como en el AO de siempre: sólo las letras, con sombra, arriba de la cabeza
-  // letra del AO original: Tahoma 8,25 en negrita, sombra negra 2 px a la izquierda y 1 px arriba, renglones de 13 px
-  ctx.font = 'bold 11px Tahoma, Verdana, "DejaVu Sans", sans-serif';
+  // letra MS Sans Serif 8 (la de Visual Basic 6); en Windows nuevo se llama Microsoft Sans Serif. Sombra como el AO original
+  ctx.font = '11px "Microsoft Sans Serif", "MS Sans Serif", Tahoma, Arial, sans-serif';
   ctx.textAlign = 'center';
   const lines = c.say.lines;
   const sube = c.sit === 2 ? 20 : 0;
