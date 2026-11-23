@@ -379,7 +379,7 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - Los GMs eligen a mano un líder por facción: **/LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL**. Si ya había uno, lo reemplaza.
 - Al nombrarlo recibe su chupín automáticamente: Criminal **2043**, Ciudadano **2045**, Neutral **2047**.
-- Su nombre cambia de color (Criminal rojo bordó, Ciudadano celeste brillante, Neutral gris apagado) y abajo dice « Líder ... ».
+- Su nombre cambia de color (Criminal bordó apagado, Ciudadano celeste brillante, Neutral gris oscuro) y abajo dice « Líder ... ».
 - Cuando habla, sus letras salen rojas (criminal), celestes (ciudadano) o grises (neutral). Los jugadores comunes hablan en blanco y los GMs en naranja.
 - **/QUITARLIDER nombre** le saca el rango y el chupín (aunque esté desconectado). **/LIDERES** muestra quién es cada uno.
 

@@ -13,7 +13,7 @@ export function ajustarCaminata(frameMs) { E.frameMs = frameMs; }
 const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
 const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#ff8c1a', npc: '#d8d8d8', npc_h: '#ffb0b0', noble: '#ffd633' };
-const LIDER_COLOR = { cri: '#a3192b', ciu: '#3fe0ff', neu: '#6e6e6e' };
+const LIDER_COLOR = { cri: '#7d1f2a', ciu: '#3fe0ff', neu: '#545454' };
 const LIDER_TITULO = { cri: 'Líder Criminal', ciu: 'Líder Ciudadano', neu: 'Líder Neutral' };
 const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', lider_cri: '#ff3b3b', lider_ciu: '#5ad2ff', lider_neu: '#b4b4b4', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
 
