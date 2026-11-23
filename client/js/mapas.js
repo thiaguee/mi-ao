@@ -17,6 +17,7 @@ function mapImg(n, onload) {
 
 export async function cargarMundo() {
   try { MUNDO.data = await fetch('assets/mundo/mundo.json').then((r) => r.json()); } catch (e) { MUNDO.data = null; }
+  try { MUNDO.dungeons = await fetch('assets/mundo/dungeons.json').then((r) => r.json()); } catch (e) { MUNDO.dungeons = []; }
 }
 
 // ---------- minimapa ----------
@@ -72,6 +73,14 @@ export function abrirMundo(openModal, send, gm, esc) {
   const actual = d.mapas[E.mapNum] || { n: 'Mapa ' + E.mapNum };
   const me = E.chars.get(E.me);
   if (actual.g === undefined) {
+    const dg = (MUNDO.dungeons || []).find((x) => x.pisos.includes(E.mapNum));
+    if (dg) {
+      const piso = dg.pisos.indexOf(E.mapNum) + 1, ent = d.mapas[dg.entrada[0]];
+      openModal('Mapa', `<p>Estás en <b>${esc(dg.n)}</b> · Piso ${piso} de 3 (mapa ${E.mapNum}).</p>
+        <p>${piso < 3 ? 'Buscá la escalera que baja al próximo piso: cuanto más abajo, más difíciles los bichos.' : 'Este es el último piso: acá vive el jefe de la dungeon.'}</p>
+        <p>La entrada está en <b>${esc(ent ? ent.n : 'mapa ' + dg.entrada[0])}</b> (mapa ${dg.entrada[0]}).</p>`);
+      return;
+    }
     openModal('Mapa', `<p>Estás en <b>${esc(actual.n)}</b> (mapa ${E.mapNum}).</p>
       <p>Este lugar no está conectado con el mundo por caminos (una casa, una cueva o un dungeon).</p>`);
     return;
@@ -88,12 +97,14 @@ export function abrirMundo(openModal, send, gm, esc) {
     if (vistas.has(b)) return false;
     vistas.add(b); return true;
   });
+  const dungeonsAca = (MUNDO.dungeons || []).filter((x) => d.mapas[x.entrada[0]] && d.mapas[x.entrada[0]].g === actual.g);
   openModal(actual.g === 0 ? 'Mapa del mundo' : 'Mapa de la zona', `<div class="mundo-wrap">
     <canvas id="mundo-cv" width="${g.w * S}" height="${g.h * S}"></canvas>
     <div class="mundo-info">
       Estás en:<br><b>${esc(actual.n)}</b><br>Mapa ${E.mapNum}${me ? ` (${me.x}, ${me.y})` : ''}<br><br>
       <div id="mundo-hover">Pasá el mouse por el mapa para ver el nombre de cada zona.</div><br>
       ${ciudades.length ? `<b>Ciudades:</b><br>${ciudades.map(([n, m]) => `${esc(base(m.n))} (mapa ${n})`).join('<br>')}<br><br>` : ''}
+      ${dungeonsAca.length ? `<b>Dungeons</b> (☠ = dificultad):<br>${dungeonsAca.map((x) => `<span style="color:#ff9b6b">${'☠'.repeat(x.dificultad)}</span> ${esc(x.n)} · ${esc((d.mapas[x.entrada[0]] || {}).n || '')}`).join('<br>')}<br><br>` : ''}
       ${gm ? '<span style="color:#ff8c1a">GM: hacé clic en una zona para viajar ahí.</span>' : ''}
     </div></div>`, 'mundo');
   const cv = document.getElementById('mundo-cv');
@@ -117,6 +128,16 @@ export function abrirMundo(openModal, send, gm, esc) {
       const x = m.x * S + S / 2, y = m.y * S + S / 2;
       ctx.fillStyle = '#000'; ctx.fillText(nombre, x + 1, y + 1);
       ctx.fillStyle = '#ffe9a0'; ctx.fillText(nombre, x, y);
+    }
+    // entradas de las dungeons: calavera en la boca de la cueva y el nombre
+    for (const dg of dungeonsAca) {
+      const m = d.mapas[dg.entrada[0]];
+      const px = m.x * S + (dg.entrada[1] - 0.5) / 100 * S, py = m.y * S + (dg.entrada[2] - 0.5) / 100 * S;
+      ctx.font = `${Math.max(12, Math.floor(S / 2.4))}px "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+      ctx.fillText('💀', px, py + 5);
+      ctx.font = `bold ${Math.max(8, Math.floor(S / 4))}px Tahoma, sans-serif`;
+      ctx.fillStyle = '#000'; ctx.fillText(dg.n, px + 1, py + 17);
+      ctx.fillStyle = '#ff9b6b'; ctx.fillText(dg.n, px, py + 16);
     }
     // dónde estoy
     const x0 = actual.x * S, y0 = actual.y * S;

@@ -266,7 +266,7 @@ class World {
 
   warp(p, m, x, y, fx = true) {
     if (!this.maps[m]) return false;
-    if (p.kind === 'pc' && m >= 319 && m <= 323 && this.retoPase) this.retoPase(p, 'dungeons', 1, m); // dungeons nuevas
+    if (p.kind === 'pc' && m >= 319 && m <= 333 && this.retoPase) this.retoPase(p, 'dungeons', 1, Math.floor((m - 319) / 3)); // dungeons nuevas (3 pisos cada una)
     const pos = this.closestLegalPos(m, x, y, { water: !!p.sailing }) || { x, y };
     const changed = m !== p.map;
     this.remove(p);
