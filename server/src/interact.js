@@ -96,6 +96,18 @@ I.priest = function (p, npc) {
   this.msg(p, 'El sacerdote te ha curado.', 'info');
 };
 
+// Los muertos que llegan cerca del sacerdote se resucitan solos, sin entrar ni hacer doble clic.
+// Alcance alrededor del sacerdote: en Ullathorpe es justo la capilla (paredes 40-48 x 35-40) más 2 baldosas de cada lado.
+const ALCANCE_SACERDOTE = { izq: 6, der: 6, arriba: 4, abajo: 5 };
+I.reviveCercaDeSacerdote = function (p) {
+  for (const id of this.maps[p.map].chars) {
+    const n = this.npcs.get(id);
+    if (!n || n.def.type !== NPC_TYPE.RESUCITADOR) continue;
+    const A = ALCANCE_SACERDOTE, dx = p.x - n.x, dy = p.y - n.y;
+    if (dx >= -A.izq && dx <= A.der && dy >= -A.arriba && dy <= A.abajo) return this.priest(p, n);
+  }
+};
+
 I.toggleDoor = function (p, x, y, o, od) {
   if (Math.abs(p.x - x) > 2 || Math.abs(p.y - y) > 2) return this.msg(p, 'Estás muy lejos.', 'warn');
   // Está abierta si es el objeto "abierto" de su par (en los .dat del AO Libre el campo Abierta está al revés)

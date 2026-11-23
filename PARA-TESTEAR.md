@@ -86,6 +86,8 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Abismo de Fuego piso 3: no se puede caminar sobre la lava, sólo por los puentes y la roca.
 - [ ] Templo Hundido: el agua tampoco se camina.
 
+- [ ] Muerto, caminá hasta 2 baldosas de la capilla de Ullathorpe (por cualquier lado): el sacerdote te resucita solo.
+
 ## Pendiente (no está hecho)
 - Bichos y jefes para cada piso de las dungeons.
 - Ajustar los premios del pase.

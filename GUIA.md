@@ -384,6 +384,10 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 - **Cartelear**: Enter, Espacio, Enter borra lo que dijiste de arriba de tu cabeza.
 - El daño se ve como en el AO original: sólo en la consola (sin números flotantes).
 
+## Sacerdote de Ullathorpe
+
+- Si estás muerto y llegás a **2 baldosas de la capilla** (por cualquier lado), el sacerdote te resucita solo: no hace falta entrar ni hacer doble clic. Vale también para los sacerdotes de las otras ciudades (mismo alcance alrededor de ellos).
+
 ## Líderes faccionarios
 
 - Los GMs eligen a mano un líder por facción: **/LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL**. Si ya había uno, lo reemplaza.

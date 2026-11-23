@@ -237,6 +237,7 @@ class World {
 
   afterPlayerMove(p) {
     const mp = this.maps[p.map];
+    if (p.dead && p.kind === 'pc' && this.reviveCercaDeSacerdote) this.reviveCercaDeSacerdote(p);
     const k = idx(p.x, p.y);
     let ex = mp.d.exits.get(k);
     // Salir de la Dungeon Newbie por la salida te deja en Ullathorpe
