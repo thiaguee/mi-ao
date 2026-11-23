@@ -1,32 +1,31 @@
 'use strict';
 // Misiones: se piden en los Maestros de Misiones de las ciudades (máximo 3 activas), son de
 // matar bichos y dan oro, experiencia y PUNTOS DE MISIÓN (no se pierden al morir).
-// También hay 3 misiones diarias por personaje y misiones semanales de clan.
+// También hay misiones semanales de clan y misiones de facción (escalones de matar ciudadanos/criminales).
 const fs = require('fs');
 const path = require('path');
 const G = require('./gamedata');
 
 const M = {};
 const MAX_ACTIVAS = 3;
-const DIARIAS_POR_DIA = 3;
+const REPETIR_VICTIMA_MS = 30 * 60 * 1000; // matar al mismo jugador sólo cuenta una vez cada 30 minutos
+const NIVEL_MIN_VICTIMA = 13; // los newbies no cuentan
 
 M.cargarMisiones = function () {
   const p = path.join(__dirname, '..', 'data', 'misiones.json');
   try {
     const d = JSON.parse(fs.readFileSync(p, 'utf8'));
-    this.misiones = { normales: d.normales || [], elite: d.elite || [], diarias: d.diarias || [], clan: d.clan || [] };
+    this.misiones = { normales: d.normales || [], elite: d.elite || [], clan: d.clan || [], faccion: d.faccion || [] };
   } catch (e) {
     console.error('Error leyendo misiones.json:', e.message);
-    this.misiones = { normales: [], elite: [], diarias: [], clan: [] };
+    this.misiones = { normales: [], elite: [], clan: [], faccion: [] };
   }
   this.misionPorId = {};
   for (const lista of Object.values(this.misiones)) for (const m of lista) this.misionPorId[m.id] = m;
-  console.log(`Misiones: ${this.misiones.normales.length} normales, ${this.misiones.elite.length} de élite, ${this.misiones.diarias.length} diarias, ${this.misiones.clan.length} de clan`);
+  console.log(`Misiones: ${this.misiones.normales.length} normales, ${this.misiones.elite.length} de élite, ${this.misiones.clan.length} de clan, ${this.misiones.faccion.length} de facción`);
 };
 
-const hoy = () => new Date().toISOString().slice(0, 10);
 const semana = () => { const d = new Date(); const lunes = new Date(d); lunes.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); return lunes.toISOString().slice(0, 10); };
-function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 
 // Estado guardado en el personaje
 M.misDe = function (p) {
@@ -36,22 +35,9 @@ M.misDe = function (p) {
   m.hechas = m.hechas || [];
   m.puntos = m.puntos || 0;
   m.totalHechas = m.totalHechas || 0;
-  if (!m.dia || m.dia.fecha !== hoy()) m.dia = { fecha: hoy(), ids: this.elegirDiarias(p), prog: {}, hechas: [] };
+  delete m.dia; // las diarias ya no existen
+  m.fac = m.fac || { cri: 0, ciu: 0, cobradas: [] }; // muertes de facción que cuentan para los escalones
   return m;
-};
-
-M.elegirDiarias = function (p) {
-  const lvl = p.stats.lvl;
-  let pool = this.misiones.diarias.filter((d) => d.nivel <= lvl && d.nivel >= lvl - 10);
-  if (pool.length < DIARIAS_POR_DIA) pool = this.misiones.diarias.filter((d) => d.nivel <= lvl).slice(-6);
-  pool = pool.slice();
-  let seed = hash(p.name.toLowerCase() + hoy());
-  const out = [];
-  while (pool.length && out.length < DIARIAS_POR_DIA) {
-    seed = Math.imul(seed ^ (seed >>> 15), 2246822507) >>> 0;
-    out.push(pool.splice(seed % pool.length, 1)[0].id);
-  }
-  return out;
 };
 
 const cuenta = (obj, num) => obj.bichos.includes('*') || obj.bichos.includes(num);
@@ -65,14 +51,6 @@ M.misionKill = function (p, num) {
     if (!def) { delete m.activas[id]; continue; }
     def.objetivos.forEach((o, i) => { if (prog[i] < o.cantidad && cuenta(o, num)) { prog[i]++; cambio = true; } });
     if (def.objetivos.every((o, i) => prog[i] >= o.cantidad)) this.completarMision(p, def, 'normal');
-  }
-  for (const id of m.dia.ids) {
-    if (m.dia.hechas.includes(id)) continue;
-    const def = this.misionPorId[id];
-    if (!def) continue;
-    const prog = m.dia.prog[id] || (m.dia.prog[id] = def.objetivos.map(() => 0));
-    def.objetivos.forEach((o, i) => { if (prog[i] < o.cantidad && cuenta(o, num)) { prog[i]++; cambio = true; } });
-    if (def.objetivos.every((o, i) => prog[i] >= o.cantidad)) { m.dia.hechas.push(id); this.completarMision(p, def, 'diaria'); }
   }
   this.misionClanKill(p, num);
   if (cambio) this.enviarSeguimiento(p);
@@ -96,7 +74,7 @@ M.completarMision = function (p, def, tipo) {
     if (!m.hechas.includes(def.id)) m.hechas.push(def.id);
   }
   m.totalHechas++;
-  if (this.sumarXpPase) { this.sumarXpPase(p, tipo === 'diaria' ? this.cfgPase.xp.diaria : this.cfgPase.xp.mision); this.retoPase(p, 'misiones'); }
+  if (this.sumarXpPase) { this.sumarXpPase(p, this.cfgPase.xp.mision); this.retoPase(p, 'misiones'); }
   this.darRecompensa(p, def.recompensa, `Misión cumplida: ${def.nombre}`);
   this.savePlayer(p);
   this.enviarSeguimiento(p);
@@ -167,7 +145,7 @@ M.enviarMisiones = function (p, maestro) {
     nivelMax: G.MAX_NIVEL, desbloqueado: lvl >= 50 ? 1 : 0,
     activas: Object.entries(m.activas).map(([id, prog]) => this.misionPorId[id] && this.infoMision(this.misionPorId[id], prog)).filter(Boolean),
     disponibles: visibles,
-    diarias: m.dia.ids.map((id) => this.misionPorId[id] && Object.assign(this.infoMision(this.misionPorId[id], m.dia.prog[id]), { hecha: m.dia.hechas.includes(id) ? 1 : 0 })).filter(Boolean),
+    faccion: this.infoMisionesFaccion(p),
     clan: this.infoMisionesClan(p),
   });
 };
@@ -180,10 +158,8 @@ M.enviarSeguimiento = function (p) {
     const def = this.misionPorId[id];
     if (def) items.push(this.infoMision(def, prog));
   }
-  for (const id of m.dia.ids) {
-    const def = this.misionPorId[id];
-    if (def && !m.dia.hechas.includes(id)) items.push(this.infoMision(def, m.dia.prog[id]));
-  }
+  const sig = this.proximaFaccion(p); // el próximo escalón de facción también se sigue en pantalla
+  if (sig && sig.obj[0].c > 0) items.push(sig); // recién aparece cuando ya mataste a alguien del otro bando
   this.send(p, { t: 'misSeg', items, puntos: m.puntos });
 };
 
@@ -235,6 +211,50 @@ M.infoMisionesClan = function (p) {
   if (!clan) return null;
   const cm = this.misClan(clan);
   return { n: clan.nombre, items: this.misiones.clan.map((d) => Object.assign(this.infoMision(d, cm.prog[d.id]), { hecha: cm.hechas.includes(d.id) ? 1 : 0 })) };
+};
+
+// ---------- misiones de facción ----------
+// Escalones que se cobran una sola vez: los criminales suman ciudadanos muertos y los ciudadanos suman criminales.
+const bando = (p) => (p.crim ? 'cri' : 'ciu');
+const infoFac = (def, c) => ({ id: def.id, n: def.nombre, d: def.desc, lvl: 0, tipo: 'faccion',
+  obj: [{ n: def.bando === 'cri' ? 'Ciudadanos' : 'Criminales', c: Math.min(c, def.cantidad), t: def.cantidad }],
+  r: { o: def.recompensa.oro || 0, e: def.recompensa.exp || 0, ep: def.recompensa.expPct || 0, p: def.recompensa.puntos || 0 } });
+
+// lo llama killPlayer cuando un jugador mata a otro fuera de zona de pelea
+M.misionPk = function (killer, victima, victimaEraCrim) {
+  if (!killer || killer.kind !== 'pc' || killer.gm > 0 || victima.gm > 0 || victima.duelo || killer.duelo) return;
+  if (victima.stats.lvl < NIVEL_MIN_VICTIMA) return;
+  const b = bando(killer);
+  if ((b === 'cri') === victimaEraCrim) return; // sólo cuenta matar al bando contrario
+  const ahora = Date.now();
+  killer._facVict = killer._facVict || {};
+  const clave = victima.name.toLowerCase();
+  if (killer._facVict[clave] && ahora - killer._facVict[clave] < REPETIR_VICTIMA_MS) return;
+  killer._facVict[clave] = ahora;
+  const m = this.misDe(killer);
+  m.fac[b]++;
+  for (const def of this.misiones.faccion) {
+    if (def.bando !== b || m.fac[b] < def.cantidad || m.fac.cobradas.includes(def.id)) continue;
+    m.fac.cobradas.push(def.id);
+    m.totalHechas++;
+    if (this.sumarXpPase) { this.sumarXpPase(killer, this.cfgPase.xp.mision); this.retoPase(killer, 'misiones'); }
+    this.darRecompensa(killer, def.recompensa, `Misión de facción cumplida: ${def.nombre}`);
+  }
+  this.savePlayer(killer);
+  this.enviarSeguimiento(killer);
+};
+
+M.proximaFaccion = function (p) {
+  const m = this.misDe(p);
+  const b = bando(p);
+  const def = this.misiones.faccion.find((d) => d.bando === b && !m.fac.cobradas.includes(d.id));
+  return def ? infoFac(def, m.fac[b]) : null;
+};
+
+M.infoMisionesFaccion = function (p) {
+  const m = this.misDe(p);
+  const b = bando(p);
+  return { bando: b, cuenta: m.fac[b], items: this.misiones.faccion.filter((d) => d.bando === b).map((d) => Object.assign(infoFac(d, m.fac[b]), { hecha: m.fac.cobradas.includes(d.id) ? 1 : 0 })) };
 };
 
 module.exports = Object.assign(M, { MAX_ACTIVAS });

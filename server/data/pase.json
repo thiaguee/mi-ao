@@ -1,7 +1,7 @@
 {
   "_ayuda": "Pase de temporada (se reinicia cada mes). 'xpPorNivel': experiencia de pase por nivel (100 niveles). 'xp': cuánto da cada cosa. 'retos': desafíos del mes (cada uno se cumple una vez). 'premios': por nivel; tipos: titulo (texto debajo del nombre), aura (color), capa (colores y emblema: estrella, espadas, escudo, calavera, corona, luna, sol, rayo, cruz, dragon, llama, ojo), objeto (número de objeto; no se cae al morir). Los cosméticos ganados quedan para siempre.",
   "xpPorNivel": 1000,
-  "xp": { "bichoMin": 3, "bichoMax": 60, "mision": 150, "diaria": 100, "dueloGanado": 80, "dueloJugado": 25, "guerra": 120, "killGuerra": 10, "venta": 30 },
+  "xp": { "bichoMin": 3, "bichoMax": 60, "mision": 150, "dueloGanado": 80, "dueloJugado": 25, "guerra": 120, "killGuerra": 10, "venta": 30 },
   "retos": [
     { "id": "bichos", "n": "Matá 500 bichos", "tipo": "bichos", "meta": 500, "xp": 3000 },
     { "id": "noche", "n": "Matá 100 bichos de noche", "tipo": "noche", "meta": 100, "xp": 2000 },

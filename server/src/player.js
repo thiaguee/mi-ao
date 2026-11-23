@@ -756,6 +756,7 @@ P.killPlayer = function (p, killer) {
   if (enGuerra) this.muerteEnGuerra(p, killer);
   if (p.duelo) this.muerteEnDuelo(p);
   if (killer && killer.kind === 'pc' && killer.id !== p.id && !zonaPelea) {
+    const victimaEraCrim = !!p.crim;
     if (!p.crim) {
       killer.kills.ciu++;
       if (!killer.crim) {
@@ -771,6 +772,7 @@ P.killPlayer = function (p, killer) {
     this.giveExp(killer, Math.floor(p.stats.lvl * 2));
     this.send(killer, { t: 'stats', kills: killer.kills, crim: killer.crim });
     this.sumarKillRanking(killer);
+    if (this.misionPk) this.misionPk(killer, p, victimaEraCrim);
   }
 };
 

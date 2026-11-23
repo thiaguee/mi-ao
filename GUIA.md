@@ -246,8 +246,9 @@ Cada vez que se suben cambios al proyecto, GitHub arma solo un instalador nuevo 
 - Todas son de **matar bichos** y se cumplen solas al llegar al número: dan **oro, experiencia
   y puntos de misión**.
 - Podés tener **3 misiones activas**. Al terminar una se libera el lugar.
-- **Diarias**: 3 por día según tu nivel, no ocupan lugar.
+- La ventana tiene 3 pestañas: **Individuales**, **Clan** y **Facción**. (Las diarias se sacaron: para eso están los retos del Pase.)
 - **De clan**: semanales, suman las muertes de todos los integrantes y premian a todos.
+- **De facción**: escalones que se cumplen solos y se cobran una vez. Los **criminales** suman ciudadanos muertos y los **ciudadanos** suman criminales: 10, 20, 50, 100, 250, 500 y 1000. No cuentan newbies, zonas de pelea, guerras ni matar al mismo jugador más de una vez cada 30 minutos.
 - **Élite**: al llegar al **nivel 50** se desbloquean 10 niveles más (hasta el 60) y misiones de élite.
 - **Puntos de misión**: no se pierden al morir. Más adelante se van a poder canjear por objetos.
 - Las misiones están en `server/data/misiones.json` (se regenera con `python3 tools/misiones.py`).
@@ -371,7 +372,7 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 ## Pase de Temporada (1 a 100)
 
 - Botón **PASE** (o /PASE). Cada mes arranca una temporada nueva y los niveles vuelven a 0; **los cosméticos ganados quedan para siempre**.
-- Se gana experiencia de pase matando bichos (más los grandes), con misiones (150, diarias 100), duelos (80 ganado / 25 jugado), guerras (120 + 10 por kill) y ventas en el Mercado (30). Además hay **retos del mes** que dan mucha experiencia de una (matar 500 bichos, 100 de noche, 15 misiones, ganar 5 duelos, 3 guerras, visitar las 5 dungeons nuevas, etc.).
+- Se gana experiencia de pase matando bichos (más los grandes), con misiones (150, también las de facción), duelos (80 ganado / 25 jugado), guerras (120 + 10 por kill) y ventas en el Mercado (30). Además hay **retos del mes** que dan mucha experiencia de una (matar 500 bichos, 100 de noche, 15 misiones, ganar 5 duelos, 3 guerras, visitar las 5 dungeons nuevas, etc.).
 - Premios **sólo estéticos** cada 5 niveles: títulos (se ven debajo del nombre), auras de colores, capas y, en el nivel 100, la Montura de Corcel Alazán + Aura Arcoíris + título "Leyenda de la Temporada". Se equipan en la pestaña **Mis cosméticos**.
 - Todo (experiencia por nivel, cuánto da cada cosa, retos y premios) se cambia en `server/data/pase.json`. Admins: **/PASEXP nombre cantidad**.
 

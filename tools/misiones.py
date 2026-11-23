@@ -1,4 +1,4 @@
-"""Genera server/data/misiones.json (misiones normales, de élite, diarias y de clan).
+"""Genera server/data/misiones.json (misiones normales, de élite, de clan y de facción).
 Todas son de MATAR bichos. Las recompensas se calculan según el nivel, pero el archivo
 generado se puede editar a mano. Uso: python3 tools/misiones.py"""
 import json, math, os
@@ -87,16 +87,20 @@ def armar(lista, tipo, factor=1.0):
                     'recompensa': recompensa(nivel, factor)})
     return out
 
+# Misiones de facción: escalones que se cobran una vez (criminales matan ciudadanos, ciudadanos matan criminales)
+FACCION = [{"id": "f_cri_10", "tipo": "faccion", "bando": "cri", "nombre": "Primera sangre", "desc": "Matá 10 ciudadanos.", "cantidad": 10, "recompensa": {"oro": 20000, "expPct": 0.05, "puntos": 2}}, {"id": "f_cri_20", "tipo": "faccion", "bando": "cri", "nombre": "Cazador de ciudadanos", "desc": "Matá 20 ciudadanos.", "cantidad": 20, "recompensa": {"oro": 40000, "expPct": 0.08, "puntos": 3}}, {"id": "f_cri_50", "tipo": "faccion", "bando": "cri", "nombre": "Terror de los caminos", "desc": "Matá 50 ciudadanos.", "cantidad": 50, "recompensa": {"oro": 100000, "expPct": 0.12, "puntos": 5}}, {"id": "f_cri_100", "tipo": "faccion", "bando": "cri", "nombre": "Azote de la Armada", "desc": "Matá 100 ciudadanos.", "cantidad": 100, "recompensa": {"oro": 200000, "expPct": 0.18, "puntos": 8}}, {"id": "f_cri_250", "tipo": "faccion", "bando": "cri", "nombre": "Pesadilla imperial", "desc": "Matá 250 ciudadanos.", "cantidad": 250, "recompensa": {"oro": 450000, "expPct": 0.25, "puntos": 12}}, {"id": "f_cri_500", "tipo": "faccion", "bando": "cri", "nombre": "Señor del caos", "desc": "Matá 500 ciudadanos.", "cantidad": 500, "recompensa": {"oro": 900000, "expPct": 0.35, "puntos": 20}}, {"id": "f_cri_1000", "tipo": "faccion", "bando": "cri", "nombre": "Leyenda criminal", "desc": "Matá 1000 ciudadanos.", "cantidad": 1000, "recompensa": {"oro": 2000000, "expPct": 0.5, "puntos": 35}}, {"id": "f_ciu_10", "tipo": "faccion", "bando": "ciu", "nombre": "Primera justicia", "desc": "Matá 10 criminales.", "cantidad": 10, "recompensa": {"oro": 20000, "expPct": 0.05, "puntos": 2}}, {"id": "f_ciu_20", "tipo": "faccion", "bando": "ciu", "nombre": "Cazador de criminales", "desc": "Matá 20 criminales.", "cantidad": 20, "recompensa": {"oro": 40000, "expPct": 0.08, "puntos": 3}}, {"id": "f_ciu_50", "tipo": "faccion", "bando": "ciu", "nombre": "Guardián de los caminos", "desc": "Matá 50 criminales.", "cantidad": 50, "recompensa": {"oro": 100000, "expPct": 0.12, "puntos": 5}}, {"id": "f_ciu_100", "tipo": "faccion", "bando": "ciu", "nombre": "Azote del Caos", "desc": "Matá 100 criminales.", "cantidad": 100, "recompensa": {"oro": 200000, "expPct": 0.18, "puntos": 8}}, {"id": "f_ciu_250", "tipo": "faccion", "bando": "ciu", "nombre": "Brazo de la ley", "desc": "Matá 250 criminales.", "cantidad": 250, "recompensa": {"oro": 450000, "expPct": 0.25, "puntos": 12}}, {"id": "f_ciu_500", "tipo": "faccion", "bando": "ciu", "nombre": "Héroe del Imperio", "desc": "Matá 500 criminales.", "cantidad": 500, "recompensa": {"oro": 900000, "expPct": 0.35, "puntos": 20}}, {"id": "f_ciu_1000", "tipo": "faccion", "bando": "ciu", "nombre": "Leyenda de la Armada", "desc": "Matá 1000 criminales.", "cantidad": 1000, "recompensa": {"oro": 2000000, "expPct": 0.5, "puntos": 35}}]
+
 data = {
     '_ayuda': ('Misiones de Norway AO. Todas son de matar bichos. "bichos" son números de NPC (ver el Excel), '
                '"*" = cualquier bicho. recompensa: oro, exp y puntos de misión (no se pierden al morir). '
+               'Las de "faccion" son escalones: los criminales suman ciudadanos muertos y los ciudadanos suman criminales (cantidad = total a llegar). '
                'Para regenerar este archivo: python3 tools/misiones.py'),
     'normales': armar(NORMALES, 'normal'),
     'elite': armar(ELITE, 'elite'),
-    'diarias': armar(DIARIAS, 'diaria', 0.5),
     'clan': [{'id': i, 'tipo': 'clan', 'nombre': n, 'desc': d,
               'objetivos': [{'bichos': b if isinstance(b, list) else [b], 'cantidad': c} for b, c in obj], 'recompensa': r}
              for (i, n, d, obj, r) in CLAN],
+    'faccion': FACCION,
 }
 json.dump(data, open(SALIDA, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('misiones:', {k: len(v) for k, v in data.items() if isinstance(v, list)})

@@ -462,3 +462,7 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .ps-reto .ps-barra { height: 18px; border-radius: 9px; } .ps-reto .ps-barra em { line-height: 16px; }
 .ver-lider { color: #e8d3a0 !important; border-color: #e8d3a0 !important; }
 .c-gmtalk { color: #ff9f40; } .c-lider_cri { color: #ff3b3b; } .c-lider_ciu { color: #5ad2ff; } .c-lider_neu { color: #b4b4b4; }
+.mi-tag.faccion { background: #6a1a1a; color: #ffd0d0; }
+.mi-tabs { margin: 8px 0 0; }
+.mi-cuerpo { min-height: 260px; }
+.mi-grilla { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
