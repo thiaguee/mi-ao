@@ -122,7 +122,7 @@ Cada dungeon tiene 3 pisos y cada piso tiene bichos más difíciles que el anter
 | | 3 | 32-35 | 5 Mago Malvado (4.000), 5 Hada Oscura (4.700) |
 | **Abismo de Fuego** (entrada en el mapa 213) | 1 | 35-38 | 7 Bruja (6.100), 3 Hada Oscura (4.700) |
 | | 2 | 38-41 | 4 Huargo (6.700), 4 Fango (7.100), 5 Cíclope Guardián (7.288) |
-| | 3 | 41-45 | **Solo 3 Dragones Rojos** (8.500, 5.000 de vida) |
+| | 3 | 41-45 | **Solo 3 Dragones Rojos** grandes (8.500, 5.000 de vida; NPC 2001) |
 | **Cripta de los Olvidados** (entrada en el mapa 159) | 1 | 43-46 | 5 Liche Infernal (10.000), 4 Viuda Negra (10.500), 4 Guerrero Protector (11.500) |
 | | 2 | 46-48 | 5 Momia Oscura (12.500), 4 Medusa (12.250), 4 Destructor de Almas (15.000) |
 | | 3 | 48-50 | 4 Aurgelmir (16.500), 4 Gorgona (17.250), 3 Momia (20.500) y de jefe 1 Jinete del Apocalipsis (25.000) |
@@ -134,6 +134,7 @@ Cada dungeon tiene 3 pisos y cada piso tiene bichos más difíciles que el anter
 | | 3 | 59-60 | Jefes finales: Titán de Fuego, Titán de Tierra (150.000 cada uno) y **Smaug** (900.000, solo en grupo) |
 
 - Los dragones y los jefes están al fondo de cada piso, lejos de la escalera.
-- El **Dragón Plateado** es nuevo (NPC 2000): es la versión plata del Dragón Rojo, más fuerte. Tira mucho oro, pociones azules y a veces Armadura de Dragón.
+- Los dragones de los dos pisos 3 son **grandes** (el dibujo del Gran Dragón Rojo) y al morir **reaparecen en un lugar al azar del mismo piso** (`ReaparecerAlAzar=1` en npcs.dat).
+- El **Dragón Plateado** es nuevo (NPC 2000): es la versión plata, más fuerte. Tira mucho oro, pociones azules y a veces Armadura de Dragón.
 - Para cambiar un bicho: se edita el mapa del piso (319 a 333) o se usan /PONERNPC y /SACARNPC.
 - **Calibrar:** el comando **/RITMO** muestra en qué hora de juego llegó cada jugador a cada nivel. Si la gente llega antes o después de lo planeado, se ajusta `expPorNivel` en la config.

@@ -55,6 +55,14 @@ C.respawnNpc = function (npc) {
   setTimeout(() => {
     if (!this.maps[o.map]) return;
     if (def.posOrig || !def.attackable) return void this.spawnNpc(npc.num, o.map, o.x, o.y, true);
+    if (def.azar) { // los dragones de las dungeons: reaparecen en un lugar al azar del mismo mapa
+      const mp = this.maps[o.map];
+      for (let i = 0; i < 400; i++) {
+        const x = rnd(2, 99), y = rnd(2, 99);
+        if (this.legalPos(o.map, x, y, { npc: true }) && !mp.d.exits.has(G.idx(x, y)) && !mp.d.water[G.idx(x, y)] &&
+          this.trigger(o.map, x, y) !== G.TRIGGER.ZONASEGURA) return void this.spawnNpc(npc.num, o.map, x, y, true);
+      }
+    }
     for (let i = 0; i < 30; i++) {
       const x = o.x + rnd(-6, 6), y = o.y + rnd(-6, 6);
       if (this.inMap(x, y) && this.legalPos(o.map, x, y, { water: def.aguaValida, npc: true }) &&

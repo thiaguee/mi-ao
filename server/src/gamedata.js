@@ -193,6 +193,7 @@ function loadNpcs() {
       comercia: num(v.COMERCIA) === 1,
       tipoItems: num(v.TIPOITEMS),
       exp: num(v.GIVEEXP), gld: num(v.GIVEGLD),
+      azar: num(v.REAPARECERALAZAR) === 1, // al morir reaparece en cualquier lugar del mapa
       minHp: num(v.MINHP), maxHp: num(v.MAXHP),
       minHit: num(v.MINHIT), maxHit: num(v.MAXHIT),
       def: num(v.DEF), defM: num(v.DEFM),
