@@ -460,3 +460,5 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .ps-cosm { margin-bottom: 10px; } .ps-cosm > b { color: #f0d9a0; display: block; margin-bottom: 4px; }
 .ps-ops { display: flex; flex-wrap: wrap; gap: 4px; }
 .ps-reto .ps-barra { height: 18px; border-radius: 9px; } .ps-reto .ps-barra em { line-height: 16px; }
+.ver-lider { color: #e8d3a0 !important; border-color: #e8d3a0 !important; }
+.c-gmtalk { color: #ff9f40; } .c-lider_cri { color: #ff3b3b; } .c-lider_ciu { color: #5ad2ff; } .c-lider_neu { color: #b4b4b4; }

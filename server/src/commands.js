@@ -33,9 +33,10 @@ K.handleTalk = function (p, text) {
     return;
   }
   if (p.meditating) this.stopMeditating(p);
-  const color = p.gm > 0 && !p.hideGm ? 'gm' : 'talk';
+  const lf = this.liderDe ? this.liderDe(p) : '';
+  const color = p.gm > 0 && !p.hideGm ? 'gm' : lf ? 'lider_' + lf : 'talk'; // los líderes hablan del color de su facción
   this.toMap(p.map, { t: 'say', id: p.id, text, color });
-  this.toMap(p.map, { t: 'msg', text: `${p.name}: ${text}`, color: 'talk' });
+  this.toMap(p.map, { t: 'msg', text: `${p.name}: ${text}`, color: color === 'gm' ? 'gmtalk' : color }); // la consola usa el mismo color que el globito
   this.chatLog(`[${p.map}] ${p.name}: ${text}`);
 };
 
@@ -66,7 +67,7 @@ const AYUDA_GM = {
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
     '/TELEPLOC (teleport a donde hiciste clic) /BUSCARNPC texto /BUSCAROBJ texto'],
-  3: ['[Dios] /HORA n (cambia la hora del juego: día y noche) /PONERNPC número (pone un NPC fijo donde hiciste clic) /SACARNPC (saca el NPC señalado) /NPCSPUESTOS',
+  3: ['[Dios] /LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL /QUITARLIDER nombre /LIDERES /HORA n (cambia la hora del juego: día y noche) /PONERNPC número (pone un NPC fijo donde hiciste clic) /SACARNPC (saca el NPC señalado) /NPCSPUESTOS',
     '/TIENDAS (elegir qué vende cada NPC) /NOBLE nombre (dar o sacar nobleza) /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
     '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
@@ -441,6 +442,9 @@ K.command = function (p, text) {
     case 'APOSTAR': return this.comandoApostar(p, args[0], args[1]);
     case 'COLISEO': return this.comandoColiseo(p);
     case 'PASE': return this.enviarPase(p);
+    case 'LIDER': return this.comandoLider(p, args[0], args[1]);
+    case 'QUITARLIDER': return this.comandoQuitarLider(p, args[0]);
+    case 'LIDERES': return this.mostrarLideres(p);
     case 'PASEXP':
       if (!need(4)) return;
       return this.comandoPaseXp(p, args[0], args[1]);

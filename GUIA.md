@@ -375,6 +375,14 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 - Premios **sólo estéticos** cada 5 niveles: títulos (se ven debajo del nombre), auras de colores, capas y, en el nivel 100, la Montura de Corcel Alazán + Aura Arcoíris + título "Leyenda de la Temporada". Se equipan en la pestaña **Mis cosméticos**.
 - Todo (experiencia por nivel, cuánto da cada cosa, retos y premios) se cambia en `server/data/pase.json`. Admins: **/PASEXP nombre cantidad**.
 
+## Líderes faccionarios
+
+- Los GMs eligen a mano un líder por facción: **/LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL**. Si ya había uno, lo reemplaza.
+- Al nombrarlo recibe su chupín automáticamente: Criminal **2043**, Ciudadano **2045**, Neutral **2047**.
+- Su nombre cambia de color (Criminal rojo bordó, Ciudadano celeste brillante, Neutral gris apagado) y abajo dice « Líder ... ».
+- Cuando habla, sus letras salen rojas (criminal), celestes (ciudadano) o grises (neutral). Los jugadores comunes hablan en blanco y los GMs en naranja.
+- **/QUITARLIDER nombre** le saca el rango y el chupín (aunque esté desconectado). **/LIDERES** muestra quién es cada uno.
+
 ## Pasajes de viaje
 
 - En cada ciudad (Ullathorpe, Nix, Banderbill, Lindos, Arghal, Nemahuak, Arkhein y Gotland) hay un **Agente de Viajes** que vende pasajes a las otras ciudades a **10.000 de oro**.

@@ -13,7 +13,9 @@ export function ajustarCaminata(frameMs) { E.frameMs = frameMs; }
 const WALK_ANIM = 0.5;
 const ROOF_TRIGGERS = new Set([1, 2, 4]);
 const NAME_COLORS = { ciu: '#4a8cff', cri: '#ff3b3b', gm: '#ff8c1a', npc: '#d8d8d8', npc_h: '#ffb0b0', noble: '#ffd633' };
-const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
+const LIDER_COLOR = { cri: '#a3192b', ciu: '#3fe0ff', neu: '#6e6e6e' };
+const LIDER_TITULO = { cri: 'Líder Criminal', ciu: 'Líder Ciudadano', neu: 'Líder Neutral' };
+const SAY_COLORS = { talk: '#ffffff', gm: '#ff9f40', lider_cri: '#ff3b3b', lider_ciu: '#5ad2ff', lider_neu: '#b4b4b4', npc: '#ffffff', spell: '#ff9b3b', dead: '#9bd0ff' };
 
 // Reloj del juego: avanza de a cuadros parejos (ver tick en main.js). Todo lo que se mueve usa
 // este reloj, así las pequeñas variaciones del reloj de Windows no se ven como tirones.
@@ -546,7 +548,8 @@ function drawName(ctx, c, px, py) {
   const parts = c.n.split(' <');
   const y = py + 44;
   // los nobles tienen el nombre amarillo (los GMs siguen en naranja)
-  const col = c.dead ? '#9bd0ff' : c.nb && c.col !== 'gm' ? NAME_COLORS.noble : NAME_COLORS[c.col] || '#fff';
+  // líderes faccionarios: bordó (criminal), celeste brillante (ciudadano), gris apagado (neutral); los nobles en amarillo
+  const col = c.dead ? '#9bd0ff' : c.lf && c.col !== 'gm' ? LIDER_COLOR[c.lf] : c.nb && c.col !== 'gm' ? NAME_COLORS.noble : NAME_COLORS[c.col] || '#fff';
   ctx.fillStyle = '#000';
   ctx.fillText(parts[0], px + 17, y + 1);
   ctx.fillStyle = col;
@@ -562,6 +565,12 @@ function drawName(ctx, c, px, py) {
     ctx.fillStyle = '#000'; ctx.fillText(g, px + 17, y + 13);
     ctx.fillStyle = col; ctx.fillText(g, px + 16, y + 12);
     yy += 12;
+  }
+  if (c.lf && c.col !== 'gm' && !c.dead) { // título de líder faccionario
+    ctx.font = 'bold 10px Georgia, serif';
+    ctx.fillStyle = '#000'; ctx.fillText(LIDER_TITULO[c.lf], px + 17, yy + 13);
+    ctx.fillStyle = LIDER_COLOR[c.lf]; ctx.fillText(LIDER_TITULO[c.lf], px + 16, yy + 12);
+    yy += 11;
   }
   if (c.tt && !c.dead) { // título del pase de temporada
     ctx.font = 'italic bold 10px Georgia, serif';

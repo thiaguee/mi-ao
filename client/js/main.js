@@ -362,7 +362,7 @@ on('ver', (m) => {
   const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
   const d = document.createElement('div');
   d.className = 'c-ver ver-' + m.k + (m.noble && m.k !== 'gm' ? ' ver-nb' : '');
-  d.innerHTML = `<span class="ver-n">${esc(m.n)}</span>${m.clan ? `<span class="ver-clan">del clan <b>${esc(m.clan)}</b></span>` : ''}<span class="ver-tag">${esc(m.tipo)}</span>${m.noble ? '<span class="ver-tag ver-noble">Noble</span>' : ''}${m.muerto ? '<span class="ver-muerto">✝ Muerto</span>' : ''}${m.desc ? `<span class="ver-desc">“${esc(m.desc)}”</span>` : ''}`;
+  d.innerHTML = `<span class="ver-n">${esc(m.n)}</span>${m.clan ? `<span class="ver-clan">del clan <b>${esc(m.clan)}</b></span>` : ''}<span class="ver-tag">${esc(m.tipo)}</span>${m.lider ? `<span class="ver-tag ver-lider">${esc(m.lider)}</span>` : ''}${m.noble ? '<span class="ver-tag ver-noble">Noble</span>' : ''}${m.muerto ? '<span class="ver-muerto">✝ Muerto</span>' : ''}${m.desc ? `<span class="ver-desc">“${esc(m.desc)}”</span>` : ''}`;
   el.appendChild(d);
   if (atBottom) el.scrollTop = el.scrollHeight;
 });
