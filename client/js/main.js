@@ -273,7 +273,7 @@ on('emote', (m) => Eng.emote(m.id, m.e));
 on('shot', (m) => Eng.addShot(m.from, m.to));
 on('msg', (m) => log(m.text, m.color));
 on('rain', (m) => { E.rain = !!m.on; });
-on('hora', (m) => Clima.setHora(m.h, m.mpd));
+on('hora', (m) => Clima.setHora(m.h, m.dia, m.noche));
 // el relojito de la caja de ubicación se actualiza solo
 setInterval(() => {
   const c = S.inGame && E.chars.get(S.me);

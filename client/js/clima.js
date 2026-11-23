@@ -2,9 +2,15 @@
 import { E } from './engine.js';
 import { idx } from './mapdata.js';
 
-const T = { base: 12, at: 0, mpd: 60 };
-export function setHora(h, mpd) { T.base = h; T.at = performance.now(); T.mpd = mpd || 60; }
-export function hora() { return (T.base + (performance.now() - T.at) / 60000 / T.mpd * 24) % 24; }
+// el día dura T.dia minutos (5 a 20.5 hs) y la noche T.noche (20.5 a 5 hs)
+const T = { base: 12, at: 0, dia: 180, noche: 30 };
+export function setHora(h, dia, noche) { T.base = h; T.at = performance.now(); T.dia = dia || 180; T.noche = noche || 30; }
+const aMinuto = (h) => { const d = ((h - 5) % 24 + 24) % 24; return d < 15.5 ? d / 15.5 * T.dia : T.dia + (d - 15.5) / 8.5 * T.noche; };
+const aHora = (m) => (m < T.dia ? 5 + m / T.dia * 15.5 : 20.5 + (m - T.dia) / T.noche * 8.5) % 24;
+export function hora() {
+  const total = T.dia + T.noche;
+  return aHora((aMinuto(T.base) + (performance.now() - T.at) / 60000) % total);
+}
 export function textoHora() {
   const h = hora(); const hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
   const ic = h >= 20.5 || h < 5 ? '🌙' : h < 7 ? '🌅' : h < 18.5 ? '☀️' : '🌇';

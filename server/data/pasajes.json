@@ -1,0 +1,79 @@
+{
+  "_ayuda": "Pasajes de viaje: se compran al Agente de Viajes de cada ciudad y se usan (doble clic) parado al lado de cualquier Agente. precio en oro.",
+  "precio": 10000,
+  "grh": 34614,
+  "ciudades": [
+    {
+      "obj": 2100,
+      "nombre": "Ullathorpe",
+      "destino": [
+        1,
+        58,
+        45
+      ]
+    },
+    {
+      "obj": 2101,
+      "nombre": "Nix",
+      "destino": [
+        34,
+        44,
+        88
+      ]
+    },
+    {
+      "obj": 2102,
+      "nombre": "Banderbill",
+      "destino": [
+        59,
+        50,
+        50
+      ]
+    },
+    {
+      "obj": 2103,
+      "nombre": "Lindos",
+      "destino": [
+        62,
+        72,
+        41
+      ]
+    },
+    {
+      "obj": 2104,
+      "nombre": "Arghal",
+      "destino": [
+        196,
+        52,
+        75
+      ]
+    },
+    {
+      "obj": 2105,
+      "nombre": "Nemahuak",
+      "destino": [
+        286,
+        50,
+        65
+      ]
+    },
+    {
+      "obj": 2106,
+      "nombre": "Arkhein",
+      "destino": [
+        151,
+        40,
+        48
+      ]
+    },
+    {
+      "obj": 2107,
+      "nombre": "Gotland",
+      "destino": [
+        296,
+        50,
+        56
+      ]
+    }
+  ]
+}

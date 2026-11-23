@@ -459,6 +459,17 @@ P.useItem = function (p, i) {
     case OBJ.BARCO:
       this.toggleSail(p, i);
       break;
+    case OBJ.PASAJE: {
+      // se usa parado al lado de un Agente de Viajes (en cualquier ciudad)
+      const cerca = [...this.maps[p.map].chars].some((id) => { const n = this.npcs.get(id); return n && n.def.pasajes && Math.abs(n.x - p.x) <= 4 && Math.abs(n.y - p.y) <= 4; });
+      if (!cerca) return this.msg(p, 'Para viajar tenés que estar al lado de un Agente de Viajes (hay uno en cada ciudad).', 'warn');
+      if (p.duelo || p.enGuerra || p.jailUntil) return this.msg(p, 'Ahora no podés viajar.', 'warn');
+      const [m, x, y] = o.destino;
+      this.removeFromSlot(p, i, 1);
+      this.msg(p, `🐴 ¡Buen viaje! Llegaste a ${this.maps[m].d.name.replace(/\.$/, '')}.`, 'server');
+      this.warp(p, m, x, y);
+      break;
+    }
     default:
       this.msg(p, 'No podés usar este objeto.', 'warn');
   }

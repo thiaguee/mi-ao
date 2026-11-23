@@ -829,8 +829,360 @@
       "mercado": true,
       "spawn": [
         1,
-        51,
-        45
+        58,
+        39
+      ]
+    },
+    {
+      "num": 1040,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2101,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        1,
+        62,
+        52
+      ]
+    },
+    {
+      "num": 1041,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        34,
+        47,
+        88
+      ]
+    },
+    {
+      "num": 1042,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2101,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        59,
+        53,
+        50
+      ]
+    },
+    {
+      "num": 1043,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2101,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        62,
+        75,
+        41
+      ]
+    },
+    {
+      "num": 1044,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2101,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        196,
+        55,
+        75
+      ]
+    },
+    {
+      "num": 1045,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2101,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        286,
+        53,
+        65
+      ]
+    },
+    {
+      "num": 1046,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2101,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2107,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        151,
+        43,
+        48
+      ]
+    },
+    {
+      "num": 1047,
+      "name": "Agente de Viajes",
+      "desc": "¡Viajá a cualquier ciudad! Comprame un pasaje y usalo parado al lado mío (o de cualquier Agente).",
+      "body": 3,
+      "head": 4,
+      "items": [
+        [
+          2100,
+          10000
+        ],
+        [
+          2101,
+          10000
+        ],
+        [
+          2102,
+          10000
+        ],
+        [
+          2103,
+          10000
+        ],
+        [
+          2104,
+          10000
+        ],
+        [
+          2105,
+          10000
+        ],
+        [
+          2106,
+          10000
+        ]
+      ],
+      "tipoItems": 1000,
+      "pasajes": true,
+      "spawn": [
+        296,
+        53,
+        56
       ]
     }
   ]

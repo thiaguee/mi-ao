@@ -345,7 +345,7 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 ## Novedades: emotes, día y noche, mercado
 
 - **Emotes**: /SALUDAR /BAILAR /SENTARSE (al lado de un banco te sentás en el banco) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR. /EMOTES los lista.
-- **Día y noche**: un día dura 1 hora. De noche oscurece, se prenden faroles, antorchas y fogatas, y los bichos pegan 25% más pero dan 50% más experiencia y oro. Llueve de vez en cuando, nieva en los mapas nevados y hay niebla al amanecer. GMs: **/HORA n** cambia la hora (se configura en `config.json` → `ciclo`).
+- **Día y noche**: el día dura 3 horas y la noche 30 minutos (se cambia en `config.json` → `ciclo`: minutosDia, minutosNoche). De noche oscurece, se prenden faroles, antorchas y fogatas, y los bichos pegan 25% más pero dan 50% más experiencia y oro. Llueve de vez en cuando, nieva en los mapas nevados y hay niebla al amanecer. GMs: **/HORA n** cambia la hora (se configura en `config.json` → `ciclo`).
 - **Mercado entre jugadores**: el **Mercader del Pueblo** está en la plaza de Ullathorpe (puesto con cartel MERCADO). Publicás un objeto con su precio, queda a la venta aunque te desconectes y cobrás solo (el mercado se queda con 5%). Hasta 10 publicaciones por personaje; los objetos newbie y los premios no se venden.
 
 ## Coliseo de Norway (duelos)
@@ -376,3 +376,8 @@ Cada una tiene un portal de entrada afuera y uno de salida adentro (en `server/d
 - Se gana experiencia de pase matando bichos (más los grandes), con misiones (150, diarias 100), duelos (80 ganado / 25 jugado), guerras (120 + 10 por kill) y ventas en el Mercado (30). Además hay **retos del mes** que dan mucha experiencia de una (matar 500 bichos, 100 de noche, 15 misiones, ganar 5 duelos, 3 guerras, visitar las 5 dungeons nuevas, etc.).
 - Premios **sólo estéticos** cada 5 niveles: títulos (se ven debajo del nombre), auras de colores, capas y, en el nivel 100, la Montura de Corcel Alazán + Aura Arcoíris + título "Leyenda de la Temporada". Se equipan en la pestaña **Mis cosméticos**.
 - Todo (experiencia por nivel, cuánto da cada cosa, retos y premios) se cambia en `server/data/pase.json`. Admins: **/PASEXP nombre cantidad**.
+
+## Pasajes de viaje
+
+- En cada ciudad (Ullathorpe, Nix, Banderbill, Lindos, Arghal, Nemahuak, Arkhein y Gotland) hay un **Agente de Viajes** que vende pasajes a las otras ciudades a **10.000 de oro**.
+- El pasaje queda en el inventario: **parado al lado de cualquier Agente**, doble clic en el pasaje y viajás (se gasta). Precio y destinos en `server/data/pasajes.json`.

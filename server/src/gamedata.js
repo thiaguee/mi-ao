@@ -15,6 +15,7 @@ const OBJ = {
   ANILLO: 18, TELEPORT: 19, YACIMIENTO: 22, MINERAL: 23, PERGAMINO: 24, INSTRUMENTO: 26,
   YUNQUE: 27, FRAGUA: 28, BARCO: 31, FLECHA: 32, BOTELLA_VACIA: 33, BOTELLA_LLENA: 34,
   MONTURA: 25, MOCHILA: 37,
+  PASAJE: 50, // pasaje de viaje (nuestro)
 };
 
 // ---- Objetos de Norway AO renumerados al 2000+ (número viejo -> nuevo) ----
@@ -358,7 +359,7 @@ function cargarNpcsExtra(npcs) {
       heading: e.heading || 3, movement: e.movimiento || 1, attackable: false, respawn: true, hostile: false,
       comercia: !!e.items, tipoItems: e.tipoItems || 0, exp: 0, gld: 0, minHp: 1, maxHp: 1, minHit: 0, maxHit: 0,
       def: 0, defM: 0, ataque: 0, evasion: 0, veneno: false, aguaValida: false, tierraInvalida: false,
-      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [], misiones: !!e.misiones, comandante: e.comandante || '', hechizos: !!e.hechizos, mercado: !!e.mercado,
+      posOrig: true, ciudad: 0, inflacion: 0, items: e.items || [], drops: [], spells: [], misiones: !!e.misiones, comandante: e.comandante || '', hechizos: !!e.hechizos, mercado: !!e.mercado, pasajes: !!e.pasajes,
     };
   }
   return lista;
@@ -384,6 +385,13 @@ function loadAll() {
   }
   const cities = loadCities();
   aplicarAjustes(spells, objs);
+  // Pasajes de viaje (data/pasajes.json): objetos nuevos armados a partir de uno común
+  try {
+    const pj = JSON.parse(fs.readFileSync(path.join(DATA, 'pasajes.json'), 'utf8'));
+    for (const c of pj.ciudades) {
+      objs[c.obj] = Object.assign({}, objs[41], { id: c.obj, name: `Pasaje a ${c.nombre}`, grh: pj.grh, type: OBJ.PASAJE, value: pj.precio, destino: c.destino, newbie: false, agarrable: true, prohibidas: [], soloClases: null });
+    }
+  } catch (e) { console.error('pasajes.json:', e.message); }
   const npcsExtra = cargarNpcsExtra(npcs);
   // objetos agregados a la venta de NPCs (data/ajustes.json -> vendedores)
   try {

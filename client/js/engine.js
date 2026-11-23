@@ -576,28 +576,15 @@ function hsvHex(h) {
 }
 
 function drawSay(ctx, c, px, py) {
+  // como en el AO de siempre: sólo las letras, con sombra, arriba de la cabeza
   ctx.font = '11px Tahoma, sans-serif';
   ctx.textAlign = 'center';
   const lines = c.say.lines;
   const sube = c.sit === 2 ? 20 : 0;
-  const ancho = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 12;
-  const alto = lines.length * 12 + 7;
-  const cx = px + 16, abajo = py - 44 - sube;
-  const x0 = Math.round(cx - ancho / 2), y0 = Math.round(abajo - alto);
-  // globo: fondo oscuro, borde del color del texto y una colita hacia el personaje
-  ctx.fillStyle = 'rgba(14,11,8,.8)';
-  ctx.strokeStyle = c.say.color === '#ffffff' ? 'rgba(224,180,90,.85)' : c.say.color;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  const r = 5;
-  ctx.moveTo(x0 + r, y0); ctx.lineTo(x0 + ancho - r, y0); ctx.quadraticCurveTo(x0 + ancho, y0, x0 + ancho, y0 + r);
-  ctx.lineTo(x0 + ancho, y0 + alto - r); ctx.quadraticCurveTo(x0 + ancho, y0 + alto, x0 + ancho - r, y0 + alto);
-  ctx.lineTo(cx + 4, y0 + alto); ctx.lineTo(cx, y0 + alto + 5); ctx.lineTo(cx - 4, y0 + alto);
-  ctx.lineTo(x0 + r, y0 + alto); ctx.quadraticCurveTo(x0, y0 + alto, x0, y0 + alto - r);
-  ctx.lineTo(x0, y0 + r); ctx.quadraticCurveTo(x0, y0, x0 + r, y0);
-  ctx.closePath(); ctx.fill(); ctx.stroke();
+  const base = py - 52 - sube - (lines.length - 1) * 12;
   lines.forEach((l, i) => {
-    ctx.fillStyle = c.say.color; ctx.fillText(l, cx, y0 + 12 + i * 12);
+    ctx.fillStyle = '#000'; ctx.fillText(l, px + 17, base + i * 12 + 1);
+    ctx.fillStyle = c.say.color; ctx.fillText(l, px + 16, base + i * 12);
   });
 }
 
