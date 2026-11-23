@@ -1,0 +1,3 @@
+fuente-mss.png / fuente-mss.json: letras sacadas de "MS Sans Serif" de Wine (ms_sans_serif.ttf, tamaño 13 px),
+un clon libre de la MS Sans Serif de Windows. Wine es software libre bajo la licencia GNU LGPL 2.1 o posterior
+(https://www.winehq.org/license). Copyright (c) los autores de Wine.

@@ -584,18 +584,58 @@ function hsvHex(h) {
   return '#' + [f(5), f(3), f(1)].map((v) => v.toString(16).padStart(2, '0')).join('');
 }
 
+// ---------- letra MS Sans Serif de mapa de bits (la de Visual Basic 6), dibujada píxel por píxel ----------
+const MSS = { img: null, def: null, tintes: new Map() };
+(function cargarMSS() {
+  const img = new Image();
+  img.onload = () => { MSS.img = img; };
+  img.src = 'assets/ui/fuente-mss.png';
+  fetch('assets/ui/fuente-mss.json').then((r) => r.json()).then((d) => { MSS.def = d; }).catch(() => {});
+})();
+function atlasMSS(color) {
+  let cv = MSS.tintes.get(color);
+  if (!cv) {
+    cv = document.createElement('canvas'); cv.width = MSS.img.width; cv.height = MSS.img.height;
+    const x = cv.getContext('2d');
+    x.drawImage(MSS.img, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = color; x.fillRect(0, 0, cv.width, cv.height);
+    MSS.tintes.set(color, cv);
+  }
+  return cv;
+}
+function anchoMSS(t, negrita) { let w = 0; for (const ch of t) { const g = MSS.def.g[ch.codePointAt(0)] || MSS.def.g[63]; w += g[6] + (negrita ? 1 : 0); } return w; }
+// texto centrado en cx con la línea de base en y
+// negrita como la hacía Windows con las letras de mapa de bits: cada letra 1 píxel más gruesa
+function textoMSS(ctx, t, cx, y, color, negrita) {
+  const at = atlasMSS(color);
+  let x = Math.round(cx - anchoMSS(t, negrita) / 2);
+  y = Math.round(y);
+  for (const ch of t) {
+    const g = MSS.def.g[ch.codePointAt(0)] || MSS.def.g[63];
+    if (g[2] && g[3]) {
+      ctx.drawImage(at, g[0], g[1], g[2], g[3], x + g[4], y - g[5], g[2], g[3]);
+      if (negrita) ctx.drawImage(at, g[0], g[1], g[2], g[3], x + g[4] + 1, y - g[5], g[2], g[3]);
+    }
+    x += g[6] + (negrita ? 1 : 0);
+  }
+}
+
 function drawSay(ctx, c, px, py) {
-  // como en el AO de siempre: sólo las letras, con sombra, arriba de la cabeza
-  // letra MS Sans Serif 8 (la de Visual Basic 6); en Windows nuevo se llama Microsoft Sans Serif. Sombra como el AO original
-  ctx.font = '11px "Microsoft Sans Serif", "MS Sans Serif", Tahoma, Arial, sans-serif';
-  ctx.textAlign = 'center';
+  // como en el AO de siempre: sólo las letras en negrita con sombra negra pegada, arriba de la cabeza
   const lines = c.say.lines;
   const sube = c.sit === 2 ? 20 : 0;
   const base = py - 52 - sube - (lines.length - 1) * 13;
+  const x = Math.round(px + 16);
+  if (MSS.img && MSS.def) {
+    const suave = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false;
+    lines.forEach((l, i) => { textoMSS(ctx, l, x + 1, base + i * 13 + 1, '#000', true); textoMSS(ctx, l, x, base + i * 13, c.say.color, true); });
+    ctx.imageSmoothingEnabled = suave;
+    return;
+  }
+  ctx.font = 'bold 11px "Microsoft Sans Serif", "MS Sans Serif", Tahoma, Arial, sans-serif'; // mientras carga la letra
+  ctx.textAlign = 'center';
   lines.forEach((l, i) => {
-    const x = Math.round(px + 16), y = Math.round(base + i * 13);
-    ctx.fillStyle = '#000'; ctx.fillText(l, x - 2, y - 1);
-    ctx.fillStyle = c.say.color; ctx.fillText(l, x, y);
+    ctx.fillStyle = '#000'; ctx.fillText(l, x + 1, base + i * 13 + 1);
+    ctx.fillStyle = c.say.color; ctx.fillText(l, x, base + i * 13);
   });
 }
 
