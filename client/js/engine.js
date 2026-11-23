@@ -436,7 +436,7 @@ export function render(now) {
         const esc = t < 200 ? 0.4 + t / 333 : 1;
         ctx.save();
         ctx.globalAlpha = t > 3000 ? (3500 - t) / 500 : 1;
-        const ey = py - 52 - sube - (c.say ? c.say.lines.length * 12 + 12 : 0) + Math.sin(t / 200) * 2;
+        const ey = py - 52 - sube - (c.say ? c.say.lines.length * 13 + 12 : 0) + Math.sin(t / 200) * 2;
         ctx.fillStyle = 'rgba(255,248,230,.92)'; ctx.strokeStyle = 'rgba(90,70,40,.9)'; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.arc(px + 16, ey - 8, 14 * esc, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.font = `${Math.round(20 * esc)}px "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
@@ -586,14 +586,16 @@ function hsvHex(h) {
 
 function drawSay(ctx, c, px, py) {
   // como en el AO de siempre: sólo las letras, con sombra, arriba de la cabeza
-  ctx.font = '11px Tahoma, sans-serif';
+  // letra del AO original: Tahoma 8,25 en negrita, sombra negra 2 px a la izquierda y 1 px arriba, renglones de 13 px
+  ctx.font = 'bold 11px Tahoma, Verdana, "DejaVu Sans", sans-serif';
   ctx.textAlign = 'center';
   const lines = c.say.lines;
   const sube = c.sit === 2 ? 20 : 0;
-  const base = py - 52 - sube - (lines.length - 1) * 12;
+  const base = py - 52 - sube - (lines.length - 1) * 13;
   lines.forEach((l, i) => {
-    ctx.fillStyle = '#000'; ctx.fillText(l, px + 17, base + i * 12 + 1);
-    ctx.fillStyle = c.say.color; ctx.fillText(l, px + 16, base + i * 12);
+    const x = Math.round(px + 16), y = Math.round(base + i * 13);
+    ctx.fillStyle = '#000'; ctx.fillText(l, x - 2, y - 1);
+    ctx.fillStyle = c.say.color; ctx.fillText(l, x, y);
   });
 }
 
