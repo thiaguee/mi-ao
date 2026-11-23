@@ -88,7 +88,13 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 
 - [ ] Muerto, caminá hasta 2 baldosas de la capilla de Ullathorpe (por cualquier lado): el sacerdote te resucita solo.
 
+## Dungeons pobladas
+- [ ] Recorrer las 5 dungeons: en cada piso los bichos son más difíciles que en el anterior.
+- [ ] Abismo de Fuego piso 3: solo 3 Dragones Rojos, y al matar uno reaparece otro.
+- [ ] Caverna Helada piso 3: solo 3 Dragones Plateados (bicho nuevo), y al matar uno reaparece otro.
+- [ ] Templo Hundido: se puede caminar todo de nuevo (estaba roto desde la v1.62).
+- [ ] /RITMO muestra las horas jugadas de cada uno.
+
 ## Pendiente (no está hecho)
-- Bichos y jefes para cada piso de las dungeons.
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

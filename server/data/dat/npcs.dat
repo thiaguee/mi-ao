@@ -14056,12 +14056,34 @@ Comercia=0
 BackUp=0
 QuestNumber=24
 
-
-
-
-
-
-
-
-
-
+[NPC2000] 'Norway AO: Dragon Plateado (piso 3 de la Caverna Helada), version plata del Dragon Rojo
+Name=Dragon Plateado
+Desc=Un dragon de escamas de plata que custodia lo mas profundo de la Caverna Helada.
+NpcType=0
+Head=0
+Heading=3
+Body=739
+Movement=3
+AguaValida=0
+Attackable=1
+ReSpawn=0
+Hostile=1
+Domable=0
+Alineacion=2
+Comercia=0
+GiveEXP=48000
+MinHP=42000
+MaxHP=42000
+MaxHIT=600
+MinHIT=450
+GolpeExacto=1
+DEF=90
+PoderAtaque=600
+PoderEvasion=400
+Snd3=160
+BackUp=0
+NROITEMS=4
+Drop1=12-9000 'Oro
+Drop2=12-20000 'Oro
+Drop3=37-80 'Pociones Azules
+Drop4=481-1 'Armadura de Dragon
