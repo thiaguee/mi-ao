@@ -151,6 +151,8 @@ P.playerFromRecord = function (rec) {
   p.spells = (rec.spells || []).slice(0, SPELL_SLOTS);
   p.jailUntil = rec.jailUntil || 0;
   p.silenced = rec.silenced || 0;
+  p.jugado = rec.jugado || 0; p._desde = Date.now(); // tiempo jugado (ms), para medir el ritmo
+  p.nivelesHoras = rec.nivelesHoras || {};
   return p;
 };
 
@@ -163,6 +165,8 @@ P.gmLevel = function (name) {
 };
 
 P.toRecord = function (p) {
+  const ahora = Date.now();
+  p.jugado = (p.jugado || 0) + (ahora - (p._desde || ahora)); p._desde = ahora;
   return {
     name: p.name, pass: p.pass, created: p.created, raza: p.raza, genero: p.genero, clase: p.clase,
     head: p.head, body: p.body, attrs: p.attrs, skills: p.skills, stats: p.stats, inv: p.inv,
@@ -172,6 +176,7 @@ P.toRecord = function (p) {
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
     killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], pase: p.pase || null, noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
     nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
+    jugado: p.jugado, nivelesHoras: p.nivelesHoras || {},
   };
 };
 
@@ -573,6 +578,9 @@ P.checkLevel = function (p) {
     s.exp -= G.ELU[s.lvl];
     s.lvl++;
     subio = true;
+    // a qué hora de juego llegó a cada nivel (para medir el ritmo con /RITMO)
+    if (!p.nivelesHoras) p.nivelesHoras = {};
+    p.nivelesHoras[s.lvl] = Math.round(((p.jugado || 0) + (Date.now() - (p._desde || Date.now()))) / 360000) / 10;
     const con = p.attrs[4];
     const prom = con / 2 - (G.RESTA[p.clase] || 2);
     const hp = Math.max(1, rnd(Math.floor(prom - 1), Math.round(prom + 1)));

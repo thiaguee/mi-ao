@@ -24,7 +24,7 @@ const VERSION_CONFIG = 5;
 
 // Valores de balance que el dueño puede cambiar. Si el dueño los dejó como venían, se
 // actualizan solos cuando cambia el valor por defecto; si los cambió, se respeta lo suyo.
-const AJUSTABLES = ['multiplicadorExp', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin',
+const AJUSTABLES = ['multiplicadorExp', 'expPorNivel', 'multiplicadorOro', 'oroInicial', 'respawnSegundos', 'primerPersonajeEsAdmin',
   'intervaloCaminar', 'intervaloGolpe', 'intervaloHechizo'];
 
 const DEFAULT_CONFIG = {
@@ -35,7 +35,10 @@ const DEFAULT_CONFIG = {
   primerPersonajeEsAdmin: false,
   gms: { admins: [...NOMBRES_RESERVADOS], dioses: [], semidioses: [], consejeros: [] },
   motd: ['¡Bienvenidos! Escribí /AYUDA para ver los comandos.'],
-  multiplicadorExp: 100, // experiencia x100: se sube rápido de nivel
+  // Experiencia: multiplicador según el nivel del que mata (pensado para llegar al 60 en ~6 semanas jugando 4-5 hs por día).
+  // Cada par es [hasta el nivel, multiplicador]. multiplicadorExp multiplica todo (por ejemplo 2 para un evento de exp doble).
+  expPorNivel: [[14, 4], [29, 2.5], [34, 3], [39, 4], [44, 5.5], [49, 9], [54, 17], [59, 30]],
+  multiplicadorExp: 1,
   multiplicadorOro: 50, // oro x50 de los monstruos
   oroInicial: 1000, // oro con el que arranca cada personaje nuevo
   respawnSegundos: 30,

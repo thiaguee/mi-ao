@@ -66,7 +66,7 @@ const AYUDA_USUARIO = [
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
-  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE o /INVI /ULLA /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
+  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE o /INVI /ULLA /RITMO /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
     '/CARCEL nombre minutos /SILENCIAR nombre minutos /TRABAJANDO /ONLINEGM /MOSTRARGM'],
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
@@ -276,6 +276,26 @@ K.command = function (p, text) {
       return this.msg(p, `Usuarios online: ${this.players.size}. Uptime: ${this.uptime()}.`, 'gm');
 
     // ===================== SEMIDIOS (2) =====================
+    case 'RITMO': { // GMs: cuánto tardan los jugadores en subir (para balancear la experiencia)
+      if (!need(1)) return;
+      const accounts = require('./accounts');
+      const filas = [];
+      for (const n of accounts.list()) {
+        const o = this.findPlayer(n);
+        const r = o ? Object.assign(this.toRecord(o), { online: 1 }) : accounts.load(n);
+        if (!r || !r.stats || this.gmLevel(r.name) > 0) continue;
+        const horas = (r.jugado || 0) / 3600000;
+        const dias = Math.max(1, (Date.now() - (r.created || Date.now())) / 86400000);
+        const hitos = [20, 30, 40, 50, 60].filter((l) => r.nivelesHoras && r.nivelesHoras[l]).map((l) => `${l}:${r.nivelesHoras[l]}h`).join(' ');
+        filas.push({ n: r.name, lvl: r.stats.lvl, horas, dias, hitos, online: r.online });
+      }
+      filas.sort((a, b) => b.lvl - a.lvl || a.horas - b.horas);
+      this.msg(p, `Ritmo (meta: nivel 60 en ~41 días jugando 4-5 hs). Jugadores: ${filas.length}`, 'gm');
+      for (const f of filas.slice(0, 15)) {
+        this.msg(p, `${f.online ? '●' : '○'} ${f.n} nivel ${f.lvl} — ${f.horas.toFixed(1)} hs jugadas en ${f.dias.toFixed(0)} días (${(f.horas / f.dias).toFixed(1)} hs/día)${f.hitos ? ' | llegó a ' + f.hitos : ''}`, 'gm');
+      }
+      return;
+    }
     case 'ULLA': // GMs: directo a la plaza de Ullathorpe
       if (!need(1)) return;
       return this.warp(p, 1, 55, 49);

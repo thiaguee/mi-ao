@@ -170,7 +170,8 @@ En el servidor podés editar este archivo con `nano server/config.json`
 | Opción | Para qué sirve |
 |---|---|
 | `nombreServidor` | El nombre que aparece en el juego. |
-| `multiplicadorExp` | Cuánto rinde la experiencia. Viene en `50` (50 veces más que el original). |
+| `expPorNivel` | Multiplicador de experiencia según el nivel del que mata, en pares `[hasta el nivel, multiplicador]`. Viene en `[[14,4],[29,2.5],[34,3],[39,4],[44,5.5],[49,9],[54,17],[59,30]]`: pensado para llegar al 60 en unas 6 semanas jugando 4-5 hs por día (20 el primer día, 30 a los 3 días, 40 a los 10, 50 a las 3 semanas, 60 a las 6). |
+| `multiplicadorExp` | Multiplica toda la experiencia encima de lo anterior. Viene en `1`; poné `2` para un evento de experiencia doble. |
 | `multiplicadorOro` | Lo mismo para el oro que tiran los monstruos. Viene en `50`. |
 | `oroInicial` | Oro con el que arranca cada personaje nuevo (viene en `1000`). |
 | `respawnSegundos` | Cuánto tardan en reaparecer los monstruos. |
@@ -380,6 +381,7 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - **Teleport a Ullathorpe** (pergamino 2064, en la Casa de Hechizos para todas las clases mágicas): hacés clic en cualquier lugar visible, a los **3 segundos** aparece un portal que dura **10 segundos** y lleva a quien lo pise a la plaza de Ullathorpe (1, 58, 44). Gasta 300 de maná y pide 30 de Magia. No anda en duelos, guerras ni la cárcel.
 - **/ULLA** (GMs): te lleva a Ullathorpe (1, 55, 49).
+- **/RITMO** (GMs): muestra cuántas horas jugó cada uno, en cuántos días, y a qué hora de juego llegó a los niveles 20, 30, 40, 50 y 60. Sirve para ajustar `expPorNivel`.
 - **/INVI** (GMs, igual que /INVISIBLE): te volvés invisible para los usuarios; los GMs de tu rango o más te siguen viendo.
 - **Cartelear**: Enter, Espacio, Enter borra lo que dijiste de arriba de tu cabeza.
 - El daño se ve como en el AO original: sólo en la consola (sin números flotantes).

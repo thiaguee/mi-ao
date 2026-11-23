@@ -67,6 +67,14 @@ C.respawnNpc = function (npc) {
   }, this.config.respawnSegundos * 1000);
 };
 
+// Multiplicador de experiencia según el nivel del jugador (config.expPorNivel) por el multiplicador general
+C.multExp = function (p) {
+  const lvl = (p && p.stats && p.stats.lvl) || 1;
+  const t = this.config.expPorNivel || [];
+  const fila = t.find((x) => lvl <= x[0]) || t[t.length - 1];
+  return (fila ? fila[1] : 1) * (this.config.multiplicadorExp || 1);
+};
+
 C.killNpc = function (npc, killer) {
   this.remove(npc);
   this.npcs.delete(npc.id);
@@ -74,7 +82,7 @@ C.killNpc = function (npc, killer) {
   if (killer && killer.kind === 'pc') {
     // Experiencia restante y oro
     const noche = this.esDeNoche() ? this.cfgCiclo().premioNoche : 1; // de noche dan más
-    const exp = Math.floor((npc.expLeft === undefined ? def.exp * this.config.multiplicadorExp : npc.expLeft) * noche);
+    const exp = Math.floor((npc.expLeft === undefined ? def.exp : npc.expLeft) * this.multExp(killer) * noche);
     if (exp > 0) this.giveExp(killer, exp);
     killer.kills.npcs++;
     if (this.paseMatarBicho) this.paseMatarBicho(killer, npc);
@@ -385,10 +393,12 @@ C.damageNpc = function (npc, dmg, p, magic = false) {
     this.toMap(npc.map, { t: 'dmg', id: npc.id, v: dmg });
     if (!magic) this.msg(p, `¡Le has pegado a ${npc.name} por ${dmg}!`, 'fight');
     // Fénix: la experiencia se gana en proporción al daño hecho
-    if (npc.expLeft === undefined) npc.expLeft = Math.floor(npc.def.exp * this.config.multiplicadorExp);
+    // (expLeft queda en experiencia base; el multiplicador depende del nivel de quien pega)
+    if (npc.expLeft === undefined) npc.expLeft = npc.def.exp;
     if (npc.hp > 0) {
-      const exp = Math.min(npc.expLeft, Math.floor(npc.def.exp * this.config.multiplicadorExp * real / npc.maxHp));
-      if (exp > 0) { npc.expLeft -= exp; this.giveExp(p, exp); }
+      const base = Math.min(npc.expLeft, npc.def.exp * real / npc.maxHp);
+      const exp = Math.floor(base * this.multExp(p));
+      if (exp > 0) { npc.expLeft -= base; this.giveExp(p, exp); }
     }
   }
   if (npc.hp <= 0) this.killNpc(npc, p);
