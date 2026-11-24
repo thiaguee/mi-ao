@@ -63,7 +63,7 @@ export function resize() {
   // Si la PC no tiene aceleración de video para el juego, usamos un modo más liviano:
   // se dibuja a 800x600 y la pantalla lo agranda.
   const gpu = new URLSearchParams(location.search).get('gpu') || '';
-  E.lowRes = /software|disabled|unavailable/.test(gpu);
+  E.lowRes = /software|disabled|unavailable/.test(gpu) || localStorage.getItem('ao_liviano') === '1';
   if (E.lowRes) {
     E.canvas.width = logW; E.canvas.height = logH;
     E.zoomDraw = 1;
@@ -480,8 +480,8 @@ export function render(now) {
   }
 
   // lluvia
-  if (E.rain && !underRoof) drawRain(ctx, now);
-  if (E.rain) { ctx.fillStyle = 'rgba(0,10,30,0.25)'; ctx.fillRect(0, 0, E.viewW, E.viewH); }
+  if (E.rain && !underRoof && !E.sinClima) drawRain(ctx, now);
+  if (E.rain && !E.sinClima) { ctx.fillStyle = 'rgba(0,10,30,0.25)'; ctx.fillRect(0, 0, E.viewW, E.viewH); }
 
 }
 

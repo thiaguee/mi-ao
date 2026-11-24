@@ -391,6 +391,10 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - Si estás muerto y llegás a **2 baldosas de la capilla** (por cualquier lado), el sacerdote te resucita solo: no hace falta entrar ni hacer doble clic. Vale también para los sacerdotes de las otras ciudades (mismo alcance alrededor de ellos).
 
+## Opciones del jugador
+
+- Botón **OPCIONES**: una ventana con secciones (Sonido, Video, Interfaz, Chat, Controles, Rendimiento, Información). Música y efectos con su volumen, mostrar nombres/minimapa/FPS, lluvia y oscuridad de la noche, filtros de la consola, **teclas configurables** (modo moderno) y modo liviano. Se guarda en cada PC.
+
 ## Líderes faccionarios
 
 - Los GMs eligen a mano un líder por facción: **/LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL**. Si ya había uno, lo reemplaza.

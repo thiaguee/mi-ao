@@ -106,6 +106,14 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] /TELEP YO 334 51 50 y recorrerla: iglesia gris con Sacerdote, HOGAR, muelle, pociones (Lilith), herrería, patio del leñador y minero, fuente, lago y 6 casas (sastre, armadura, armas, magia, banco, artesano).
 - [ ] Entrar a las casas y comerciar con cada NPC.
 
+## Ventana de OPCIONES
+- [ ] Botón OPCIONES: secciones Sonido, Video, Interfaz, Chat, Controles, Rendimiento e Información.
+- [ ] Sonido: apagar/prender música y efectos, y cambiar sus volúmenes.
+- [ ] Controles: cambiar una tecla (por ejemplo Atacar a R) y probarla. "Volver a las de fábrica".
+- [ ] Chat: ocultar mensajes de combate o de experiencia; tamaño de letra de la consola.
+- [ ] Video: nombres, minimapa, lluvia, oscuridad de la noche, FPS y pantalla completa.
+- [ ] Todo queda guardado al cerrar y volver a entrar.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

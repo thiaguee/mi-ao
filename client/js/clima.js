@@ -57,7 +57,7 @@ export function dibujarClima(ctx, now, sx, sy, me, bajoTecho) {
   const W = Math.ceil(E.viewW), H = Math.ceil(E.viewH);
   const h = hora();
   const dungeon = E.zona === 'DUNGEON';
-  let a = dungeon ? 0.45 : oscuridad(h);
+  let a = dungeon ? 0.45 : oscuridad(h) * (E.nocheFactor === undefined ? 1 : E.nocheFactor);
   if (bajoTecho && !dungeon) a *= 0.45;
   const luces = lucesDelMapa();
   if (a > 0.01) {
@@ -96,7 +96,7 @@ export function dibujarClima(ctx, now, sx, sy, me, bajoTecho) {
   }
   if (bajoTecho || dungeon) return;
   // nieve en los mapas nevados
-  if (E.terreno === 'NIEVE') {
+  if (E.terreno === 'NIEVE' && !E.sinClima) {
     if (copos.length < 140) for (let i = 0; i < 140; i++) copos.push({ x: Math.random() * W, y: Math.random() * H, v: 0.4 + Math.random() * 0.9, r: 1 + Math.random() * 1.6, f: Math.random() * 6 });
     ctx.fillStyle = 'rgba(255,255,255,.85)';
     for (const c of copos) {

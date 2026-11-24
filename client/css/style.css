@@ -477,3 +477,37 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .gm-inv .gi-lista { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; max-height: 260px; overflow: auto; }
 .gm-inv .gi-it { display: flex; align-items: center; gap: 6px; padding: 2px 4px; border-radius: 3px; background: #0004; }
 .gm-inv .gi-it span { flex: 1; } .gm-inv .gi-it i { color: #8fe07a; font-size: 11px; } .gm-inv .gi-it.eq { outline: 1px solid #4f7a3a; }
+
+/* ===== Ventana de Opciones ===== */
+#console { font-size: var(--chat-tam, 13px); }
+.op-win { display: flex; gap: 12px; width: 720px; height: 470px; max-width: 100%; }
+.op-menu { width: 170px; display: flex; flex-direction: column; gap: 5px; padding-right: 10px; border-right: 1px solid #3a2e1c; }
+.op-menu button { display: flex; align-items: center; gap: 9px; padding: 9px 12px; text-align: left; font: bold 13px Georgia, serif; color: #cdbd9c;
+  background: linear-gradient(#251c13, #18120c); border: 1px solid #3f3120; border-radius: 6px; cursor: pointer; transition: all .12s; }
+.op-menu button span { width: 18px; text-align: center; }
+.op-menu button:hover { border-color: #7a5e35; color: #fff; }
+.op-menu button.on { background: linear-gradient(#5a4322, #34260f); border-color: #c99a4a; color: #ffe2a8; box-shadow: 0 0 10px #c99a4a33 inset; }
+.op-sep { flex: 1; }
+.op-menu .op-reset { justify-content: center; font-size: 11px; color: #c98a7a; }
+.op-body { flex: 1; overflow: auto; padding: 2px 6px 6px 2px; }
+.op-body h4 { margin: 2px 0 12px; font: bold 16px Georgia, serif; color: #ffd27a; letter-spacing: .5px; }
+.op-body h4 small { font-size: 11px; color: #a8977a; font-weight: normal; }
+.op-fila { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 10px 12px; margin-bottom: 6px;
+  background: #0006; border: 1px solid #2e2418; border-radius: 6px; cursor: pointer; }
+.op-txt { display: flex; flex-direction: column; color: #e8dcc3; font-size: 13px; }
+.op-txt small { color: #9c8c70; font-size: 11px; margin-top: 2px; }
+.op-sw { position: relative; width: 44px; height: 24px; border-radius: 12px; background: #3a3128; border: 1px solid #5a4a36; flex: none; transition: background .15s; }
+.op-sw i { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #bfb29a; transition: left .15s, background .15s; }
+.op-sw.on { background: #3f7a2e; border-color: #6fbf4f; } .op-sw.on i { left: 22px; background: #fff; }
+.op-sl { display: flex; align-items: center; gap: 10px; }
+.op-sl input { width: 190px; accent-color: #d9a84e; } .op-sl b { width: 46px; text-align: right; color: #ffd27a; font-size: 12px; }
+.op-seg { display: flex; border: 1px solid #5a4a36; border-radius: 6px; overflow: hidden; }
+.op-seg button { padding: 6px 12px; background: #1d1610; color: #cdbd9c; border: 0; cursor: pointer; font: bold 12px Georgia, serif; }
+.op-seg button.on { background: #5a4322; color: #ffe2a8; }
+.op-teclas { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-bottom: 10px; }
+.op-tecla { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 8px; background: #0006; border: 1px solid #2e2418; border-radius: 6px; color: #e8dcc3; font-size: 12px; }
+.op-tecla button { min-width: 92px; padding: 5px 8px; background: #f4efe4; color: #222; border: 1px solid #8a7a5a; border-radius: 4px; font: bold 12px Tahoma, sans-serif; cursor: pointer; }
+.op-tecla button.esp { background: #ffd27a; animation: parpadeo 0.8s infinite; }
+@keyframes parpadeo { 50% { opacity: .55; } }
+.op-info p { color: #e8dcc3; line-height: 1.5; margin: 0 0 10px; }
+.op-txt { text-align: left; }

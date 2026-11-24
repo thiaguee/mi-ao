@@ -16,13 +16,15 @@ import * as Clima from './clima.js';
 import * as MercadoUI from './mercadoui.js';
 import * as PaseUI from './paseui.js';
 import { preguntar, confirmar } from './dialogo.js';
+import * as Opc from './opcionesui.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
 // Modo moderno: WASD para caminar (además de las flechas)
-const DIR_MODERNO = { KeyW: 1, KeyD: 2, KeyS: 3, KeyA: 4 };
 let MODO = localStorage.getItem('ao_teclas') || 'moderno';
-const dirOf = (code) => DIR[code] || (MODO === 'moderno' ? DIR_MODERNO[code] : 0);
+// en modo moderno las teclas para caminar salen de Opciones > Controles
+const DIR_ACC = { arriba: 1, derecha: 2, abajo: 3, izquierda: 4 };
+const dirOf = (code) => DIR[code] || (MODO === 'moderno' ? (DIR_ACC[Opc.accionDe(code)] || 0) : 0);
 const DXY = { 1: [0, -1], 2: [1, 0], 3: [0, 1], 4: [-1, 0] };
 
 const S = {
@@ -379,6 +381,7 @@ window.addEventListener('resize', escalar);
 escalar();
 
 function log(text, color = 'info') {
+  if (!Opc.mostrarEnConsola(text, color)) return;
   const el = $('console');
   const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 20;
   const d = document.createElement('div');
@@ -583,21 +586,13 @@ on('guerraEstado', (m) => {
 on('capaEstado', (m) => { $('b-capa').textContent = 'Capa: ' + (m.on ? 'sí' : 'no'); });
 $('minimap').addEventListener('click', (e) => Mapas.minimapaClic(e, send, S.gm));
 $('minimap').addEventListener('dblclick', () => Mapas.abrirMundo(openModal, send, S.gm, esc));
-const miniOn = localStorage.getItem('ao_minimapa') !== '0';
-$('minimap').classList.toggle('hidden', !miniOn);
-$('b-mini').textContent = 'Minimapa: ' + (miniOn ? 'sí' : 'no');
-$('b-mini').onclick = () => {
-  const on = $('minimap').classList.toggle('hidden') === false;
-  localStorage.setItem('ao_minimapa', on ? '1' : '0');
-  $('b-mini').textContent = 'Minimapa: ' + (on ? 'sí' : 'no');
-};
-$('b-names').onclick = () => { E.showNames = !E.showNames; $('b-names').textContent = 'Nombres: ' + (E.showNames ? 'sí' : 'no'); };
+// la ventana de Opciones (sonido, video, chat, teclas...) está en opcionesui.js
 // Menús desplegables de OPCIONES y MENÚ
 function togglePop(id) {
   for (const p of ['pop-menu', 'pop-opts']) $(p).classList.toggle('hidden', p !== id || !$(p).classList.contains('hidden'));
 }
 $('b-menu').onclick = (e) => { e.stopPropagation(); togglePop('pop-menu'); };
-$('b-opts').onclick = (e) => { e.stopPropagation(); togglePop('pop-opts'); };
+$('b-opts').onclick = (e) => { e.stopPropagation(); togglePop(null); Opc.abrir(); };
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.pop')) { $('pop-menu').classList.add('hidden'); $('pop-opts').classList.add('hidden'); }
 });
@@ -842,30 +837,36 @@ window.addEventListener('keydown', (e) => {
   if (S.modal && e.key === 'Escape') { closeModal(); return; }
   // Enter con una ventana abierta: la cierra y te deja escribir en el chat
   if (S.modal && e.key === 'Enter' && !['ask', 'clanEditor', 'trade', 'bank'].includes(S.modal)) { closeModal(); chat.focus(); e.preventDefault(); return; }
-  if (S.modal === 'mundo' && e.code === 'KeyM' && MODO === 'moderno') { closeModal(); return; }
+  if (S.modal === 'mundo' && MODO === 'moderno' && Opc.accionDe(Opc.teclaDe(e)) === 'mapa') { closeModal(); return; }
   if (S.modal && S.modal !== 'trade' && S.modal !== 'bank') return;
   const code = e.code;
   if (dirOf(code)) { S.keys.add(code); S.lastKey = code; e.preventDefault(); if (MACRO.on) pararMacro('te moviste'); return; }
   if (e.key === 'Enter') { chat.focus(); e.preventDefault(); return; }
   if (e.key === 'Escape') { setTarget(null); return; }
-  if (e.key === 'F1') { openHelp(); e.preventDefault(); return; }
-  if (e.key === 'F7') { e.preventDefault(); if (!e.repeat) (MACRO.on ? pararMacro('F7') : iniciarMacro()); return; }
-  if (e.key === 'Control') { atacar(); return; }
-  if (e.repeat && code !== 'Space') return;
   if (MODO === 'moderno') {
-    switch (code) {
-      // Espacio: usa el objeto seleccionado (seleccioná la poción y apretá Espacio para potear)
-      case 'Space': useSelected(); e.preventDefault(); return;
-      case 'KeyQ': send({ t: 'pick' }); return;
-      case 'KeyM': Mapas.abrirMundo(openModal, send, S.gm, esc); return;
-      case 'KeyF': send({ t: 'meditate' }); return;
-      case 'KeyE': equipSelected(); return;
-      case 'KeyU': useSelected(); return;
-      case 'KeyT': e.preventDefault(); dropSelected(); return;
-      case 'KeyN': E.showNames = !E.showNames; return;
+    // teclas configurables (Opciones > Controles)
+    const acc = Opc.accionDe(Opc.teclaDe(e));
+    if (!acc) return;
+    if (acc === 'ayuda') { openHelp(); e.preventDefault(); return; }
+    if (acc === 'macro') { e.preventDefault(); if (!e.repeat) (MACRO.on ? pararMacro('F7') : iniciarMacro()); return; }
+    if (acc === 'atacar') { atacar(); e.preventDefault(); return; }
+    if (e.repeat && acc !== 'usar') return;
+    switch (acc) {
+      case 'usar': useSelected(); e.preventDefault(); return;
+      case 'agarrar': send({ t: 'pick' }); return;
+      case 'mapa': Mapas.abrirMundo(openModal, send, S.gm, esc); return;
+      case 'meditar': send({ t: 'meditate' }); return;
+      case 'equipar': equipSelected(); return;
+      case 'usar2': useSelected(); return;
+      case 'tirar': e.preventDefault(); dropSelected(); return;
+      case 'nombres': E.showNames = !E.showNames; return;
       default:
     }
   } else {
+    if (e.key === 'F1') { openHelp(); e.preventDefault(); return; }
+    if (e.key === 'F7') { e.preventDefault(); if (!e.repeat) (MACRO.on ? pararMacro('F7') : iniciarMacro()); return; }
+    if (e.key === 'Control') { atacar(); return; }
+    if (e.repeat && code !== 'Space') return;
     switch (code) {
       case 'KeyA': send({ t: 'pick' }); return;
       case 'KeyM': send({ t: 'meditate' }); return;
@@ -885,6 +886,7 @@ function setModo(m) {
   localStorage.setItem('ao_teclas', m);
   $('b-keys').textContent = m === 'moderno' ? '⌨ Moderno' : '⌨ Clásico';
 }
+Opc.init({ openModal, closeModal, E, S, AU: Snd.AU, Snd, setModo, getModo: () => MODO, send, $ });
 $('b-keys').onclick = () => {
   setModo(MODO === 'moderno' ? 'clasico' : 'moderno');
   log(MODO === 'moderno'
