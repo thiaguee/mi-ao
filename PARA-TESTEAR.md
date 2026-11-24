@@ -102,6 +102,10 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 ## Alas del Ángel Oscuro
 - [ ] /CI 2065 1 y equiparlas: versión negra con soga dorada de las Alas de Ángel, con rayos alrededor todo el tiempo (también caminando).
 
+## Ciudad Nueva (mapa 334)
+- [ ] /TELEP YO 334 51 50 y recorrerla: iglesia gris con Sacerdote, HOGAR, muelle, pociones (Lilith), herrería, patio del leñador y minero, fuente, lago y 6 casas (sastre, armadura, armas, magia, banco, artesano).
+- [ ] Entrar a las casas y comerciar con cada NPC.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?
