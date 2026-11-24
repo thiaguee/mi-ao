@@ -142,6 +142,7 @@ class World {
       tt: this.cosmeticosDe ? this.cosmeticosDe(e).titulo : '', // título del pase
       au: e.dead || e.sailing || !this.cosmeticosDe ? '' : this.cosmeticosDe(e).aura, // aura del pase
       lf: this.liderDe ? this.liderDe(e) : '', // líder faccionario: cri, ciu o neu
+      ry: !e.dead && e.eq && e.eq.armor >= 0 && e.inv[e.eq.armor] && (this.data.objs[e.inv[e.eq.armor].id] || {}).rayos ? 1 : 0, // ropa con rayos
       sit: e.sentado || 0, // sentado: 1 en el piso, 2 en un banco
       nb: e.noble ? 1 : 0, // noble: nombre en amarillo
       rk: this.puestoDe ? this.puestoDe(e) : 0, // puesto en el ranking de kills (1, 2 o 3 = estrella)

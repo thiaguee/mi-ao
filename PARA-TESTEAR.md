@@ -99,6 +99,9 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Clic derecho sobre un usuario (siendo GM): aparece el menú. Probar cada botón: Info, Inventario, Devolver, Ullathorpe, Echar, Advertir, Cárcel, Pelear, Revivir, Estadísticas.
 - [ ] Con un GM de igual o mayor rango no tiene que hacer nada.
 
+## Alas del Ángel Oscuro
+- [ ] /CI 2065 1 y equiparlas: versión oscura de las Alas de Ángel, con rayos alrededor todo el tiempo (también caminando).
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

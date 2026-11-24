@@ -502,8 +502,10 @@ function drawChar(ctx, c, px, py, now, me) {
       dibujarAura(ctx, { ld: 1, ce: col, b: c.au === 'arcoiris' ? hsvHex((now / 2000 + 0.5) % 1) : '#ffffff' }, px, py, now);
     }
     if (cap) { if (!c.au) dibujarAura(ctx, cap, px, py, now); dibujarCapa(ctx, cap, px, py, h, 'atras', now, c.walking); }
+    if (c.ry && !ghost) dibujarRayos(ctx, c, px, py, now, false);
     // la animación de caminar sólo avanza mientras se mueve
     drawGrh(ctx, bg, px, py, true, c.walking ? walkT * WALK_ANIM : 0);
+    if (c.ry && !ghost) dibujarRayos(ctx, c, px, py, now, true);
     if (cap) dibujarCapa(ctx, cap, px, py, h, 'adelante', now, c.walking);
     const head = sinJinete ? null : A.heads[c.hd];
     if (head && head[h - 1]) drawGrh(ctx, head[h - 1], px + body.ox, py + body.oy, true, 0);
@@ -655,6 +657,45 @@ function drawRain(ctx, now) {
     ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - 2, d.y + 9);
   }
   ctx.stroke();
+}
+
+// Rayos que rodean al personaje (ropas con Rayos=1, por ejemplo las Alas del Ángel Oscuro)
+function rayo(ctx, x1, y1, x2, y2, quiebres) {
+  ctx.beginPath(); ctx.moveTo(x1, y1);
+  for (let i = 1; i < quiebres; i++) {
+    const t = i / quiebres;
+    ctx.lineTo(x1 + (x2 - x1) * t + (Math.random() - 0.5) * 9, y1 + (y2 - y1) * t + (Math.random() - 0.5) * 9);
+  }
+  ctx.lineTo(x2, y2); ctx.stroke();
+}
+function dibujarRayos(ctx, c, px, py, now, adelante) {
+  const cx = px + 16, cy = py - 2;
+  // cada ~80 ms se arman rayos nuevos (siempre hay alguno)
+  if (!c._rayos || now - c._rayosT > 80) {
+    c._rayosT = now; c._rayos = [];
+    const n = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, b = a + (Math.random() - 0.5) * 2.2;
+      const r1 = 14 + Math.random() * 10, r2 = 22 + Math.random() * 14;
+      c._rayos.push({ x1: cx + Math.cos(a) * r1, y1: cy + Math.sin(a) * r1 * 1.4, x2: cx + Math.cos(b) * r2, y2: cy + Math.sin(b) * r2 * 1.4,
+        q: 4 + Math.floor(Math.random() * 3), frente: Math.sin(a) > 0, semilla: Math.random() });
+    }
+  }
+  ctx.save();
+  if (!adelante) { // resplandor oscuro de fondo, latiendo
+    const p = 0.55 + Math.sin(now / 140) * 0.2;
+    const g = ctx.createRadialGradient(cx, cy + 6, 4, cx, cy + 6, 34);
+    g.addColorStop(0, `rgba(150,90,255,${0.32 * p})`); g.addColorStop(1, 'rgba(60,20,120,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy + 6, 34, 40, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const r of c._rayos) {
+    if (r.frente !== adelante) continue;
+    ctx.globalAlpha = 0.75 + r.semilla * 0.25;
+    ctx.strokeStyle = 'rgba(170,110,255,0.55)'; ctx.lineWidth = 3.5; rayo(ctx, r.x1, r.y1, r.x2, r.y2, r.q);
+    ctx.strokeStyle = '#f2e8ff'; ctx.lineWidth = 1.2; rayo(ctx, r.x1, r.y1, r.x2, r.y2, r.q);
+  }
+  ctx.restore();
 }
 
 export { frameOf };

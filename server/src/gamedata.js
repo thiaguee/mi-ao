@@ -132,6 +132,7 @@ function loadObjs() {
       spell: num(v.HECHIZOINDEX),
       newbie: num(v.NEWBIE) === 1,
       noSeCae: num(v.NOSECAE) === 1,
+      rayos: num(v.RAYOS) === 1, // rodea al que la tiene puesta de rayos
       agarrable: num(v.AGARRABLE) === 0,
       crucial: num(v.CRUCIAL) === 1,
       proyectil: num(v.PROYECTIL) === 1,
