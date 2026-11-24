@@ -466,3 +466,14 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .mi-tabs { margin: 8px 0 0; }
 .mi-cuerpo { min-height: 260px; }
 .mi-grilla { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+#menu-gm { position: fixed; z-index: 3000; width: 190px; padding: 6px; background: #1b140d; border: 1px solid #6b5230;
+  border-radius: 6px; box-shadow: 0 6px 20px #000c; display: flex; flex-direction: column; gap: 4px; }
+#menu-gm .mg-tit { font-family: Georgia, serif; font-weight: bold; color: #ffd27a; text-align: center; padding: 2px 0 4px; border-bottom: 1px solid #3a2e1c; }
+#menu-gm button { display: flex; align-items: center; gap: 8px; text-align: left; padding: 7px 10px; font: bold 14px Georgia, serif; color: #e8dcc3;
+  background: linear-gradient(#2a2117, #1d1610); border: 1px solid #4a3a22; border-radius: 4px; cursor: pointer; }
+#menu-gm button span { width: 18px; text-align: center; }
+#menu-gm button:hover { background: linear-gradient(#4a3a20, #2a2014); color: #fff; border-color: #8a6a3a; }
+.gm-inv .gi-oro { margin-bottom: 6px; color: #e8dcc3; } .gm-inv .gi-oro b { color: var(--gold, #ffd633); }
+.gm-inv .gi-lista { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; max-height: 260px; overflow: auto; }
+.gm-inv .gi-it { display: flex; align-items: center; gap: 6px; padding: 2px 4px; border-radius: 3px; background: #0004; }
+.gm-inv .gi-it span { flex: 1; } .gm-inv .gi-it i { color: #8fe07a; font-size: 11px; } .gm-inv .gi-it.eq { outline: 1px solid #4f7a3a; }

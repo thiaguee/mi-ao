@@ -381,6 +381,7 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - **Teleport a Ullathorpe** (pergamino 2064, en la Casa de Hechizos para todas las clases mágicas): hacés clic en cualquier lugar visible, a los **3 segundos** aparece un portal que dura **10 segundos** y lleva a quien lo pise a la plaza de Ullathorpe (1, 58, 44). Gasta 300 de maná y pide 30 de Magia. No anda en duelos, guerras ni la cárcel.
 - **/ULLA** (GMs): te lleva a Ullathorpe (1, 55, 49).
+- **Menú de GM**: clic derecho sobre un usuario de menor rango abre un menú con **Info, Inventario** (ve inventario, banco y oro), **Devolver** (lo vuelve a donde estaba antes de que un GM lo moviera), **Ullathorpe**, **Echar**, **Advertir** (con motivo; le aparece un cartel y se le suma una advertencia), **Cárcel** (pide los minutos), **Pelear** (el GM se vuelve atacable para pelear con él; otra vez lo desactiva), **Revivir** y **Estadísticas**. Clic derecho en el piso sigue siendo teletransportarse.
 - **/RITMO** (GMs): muestra cuántas horas jugó cada uno, en cuántos días, y a qué hora de juego llegó a los niveles 20, 30, 40, 50 y 60. Sirve para ajustar `expPorNivel`.
 - **/INVI** (GMs, igual que /INVISIBLE): te volvés invisible para los usuarios; los GMs de tu rango o más te siguen viendo.
 - **Cartelear**: Enter, Espacio, Enter borra lo que dijiste de arriba de tu cabeza.

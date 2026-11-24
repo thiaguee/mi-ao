@@ -208,6 +208,7 @@ function handle(sock, msg) {
     case 'objCrear': return world.crearDesdePanel(p, msg); // panel /OBJETOS de los Admin
     case 'torneo': return world.accionTorneo(p, msg); // tienda de puntos de torneo
     case 'testeoNpc': return world.testeoNpc(p, msg); // panel /TESTEO: invocar NPC
+    case 'gmMenu': return world.gmMenu(p, msg); // menú de clic derecho de los GMs sobre un usuario
     case 'tp': // teletransporte de GM con clic derecho
       if (p.gm < 1) return;
       if (!world.inMap(+msg.x, +msg.y)) return;

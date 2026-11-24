@@ -81,6 +81,85 @@ const AYUDA_GM = {
     '/DARGM nombre nivel(0-4) /MOTD texto /APAGAR /ANUNCIO texto (cartel en pantalla a todos)'],
 };
 
+// ---------- Menú de clic derecho de los GMs sobre un usuario de menor rango ----------
+K.gmMenu = function (p, msg) {
+  if (!(p.gm > 0)) return;
+  const t = this.players.get(+msg.id);
+  if (!t || t.kind !== 'pc') return this.msg(p, 'Ese usuario ya no está conectado.', 'warn');
+  if (t.id === p.id) return;
+  if (t.gm >= p.gm) return this.msg(p, 'Sólo podés usar este menú con usuarios de menor rango.', 'warn');
+  const log = (que) => this.gmLog(`${p.name}: [menú] ${que} a ${t.name}`);
+  const s = t.stats;
+  switch (msg.a) {
+    case 'info': return this.command(p, '/INFO ' + t.name);
+    case 'inv': {
+      log('vio el inventario de');
+      const eq = new Set(Object.values(t.eq || {}).filter((i) => i >= 0));
+      const items = t.inv.map((it, i) => {
+        if (!it) return null;
+        const o = this.data.objs[it.id];
+        return o ? { n: o.name, id: it.id, a: it.amount, g: o.grh, eq: eq.has(i) ? 1 : 0 } : null;
+      }).filter(Boolean);
+      const banco = (t.bank || []).filter(Boolean).map((it) => { const o = this.data.objs[it.id]; return o ? { n: o.name, id: it.id, a: it.amount, g: o.grh } : null; }).filter(Boolean);
+      return this.send(p, { t: 'gmInv', nombre: t.name, items, banco, oro: s.gld, oroBanco: t.bankGld || 0 });
+    }
+    case 'devolver': {
+      const v = t.posAntesGm;
+      if (!v) return this.msg(p, `${t.name} no fue movido por un GM: no hay a dónde devolverlo.`, 'warn');
+      log('devolvió');
+      t.posAntesGm = null;
+      if (t.jailUntil) t.jailUntil = 0;
+      this.warp(t, v.map, v.x, v.y);
+      this.msg(t, `${p.name} te devolvió a donde estabas.`, 'gm');
+      return this.msg(p, `${t.name} volvió a donde estaba (mapa ${v.map}, ${v.x} ${v.y}).`, 'gm');
+    }
+    case 'ulla': {
+      log('mandó a Ullathorpe');
+      t.posAntesGm = { map: t.map, x: t.x, y: t.y };
+      this.warp(t, 1, 55, 49);
+      this.msg(t, `${p.name} te llevó a Ullathorpe.`, 'gm');
+      return this.msg(p, `${t.name} fue llevado a Ullathorpe.`, 'gm');
+    }
+    case 'echar': return this.command(p, '/ECHAR ' + t.name);
+    case 'advertir': {
+      const motivo = String(msg.extra || '').replace(/[\r\n]/g, ' ').trim().slice(0, 150);
+      if (!motivo) return this.msg(p, 'Escribí el motivo de la advertencia.', 'warn');
+      t.advertencias = (t.advertencias || 0) + 1;
+      log(`advirtió (${motivo})`);
+      this.msg(t, `⚠ ADVERTENCIA de ${p.name}: ${motivo}. (Tenés ${t.advertencias} advertencia${t.advertencias > 1 ? 's' : ''}.)`, 'warn');
+      this.send(t, { t: 'sign', text: `⚠ ADVERTENCIA\n\n${motivo}\n\n— ${p.name}` });
+      this.savePlayer(t);
+      return this.msg(p, `${t.name} advertido. Lleva ${t.advertencias} advertencia${t.advertencias > 1 ? 's' : ''}.`, 'gm');
+    }
+    case 'carcel': {
+      const mins = Math.max(1, Math.min(60, Math.floor(+msg.extra) || 5));
+      const j = this.config.carcel;
+      log(`encarceló ${mins} min`);
+      t.posAntesGm = { map: t.map, x: t.x, y: t.y };
+      t.jailUntil = Date.now() + mins * 60000;
+      this.warp(t, j.map, j.x, j.y);
+      this.msg(t, `${p.name} te encarceló por ${mins} minutos.`, 'warn');
+      return this.msg(p, `${t.name} encarcelado por ${mins} minutos.`, 'gm');
+    }
+    case 'pelear': {
+      // el GM se vuelve atacable para pelear con ese usuario (otra vez "Pelear" lo vuelve a proteger)
+      p.gmAtacable = !p.gmAtacable;
+      log(p.gmAtacable ? 'se puso a pelear con' : 'dejó de pelear con');
+      if (p.gmAtacable) this.msg(t, `⚔ ${p.name} te desafía: ¡ahora lo podés atacar!`, 'fight');
+      return this.msg(p, p.gmAtacable ? `Ahora ${t.name} (y los bichos) te pueden atacar. Volvé a tocar "Pelear" para dejar de ser atacable.` : 'Ya no te pueden atacar.', 'gm');
+    }
+    case 'revivir': return this.command(p, '/REVIVIR ' + t.name);
+    case 'est': {
+      log('vio las estadísticas de');
+      this.msg(p, `${t.name} — ${G.CLASES[t.clase]} ${G.RAZAS[t.raza]} nivel ${s.lvl} (${s.exp}/${G.ELU[s.lvl] || 0}) · ${t.crim ? 'Criminal' : 'Ciudadano'}${t.guild ? ' · Clan ' + t.guild : ''}`, 'gm');
+      this.msg(p, `Vida ${s.hp}/${s.maxHp} · Maná ${s.man}/${s.maxMan} · Energía ${s.sta}/${s.maxSta} · Golpe ${s.minHit}-${s.maxHit} · Oro ${s.gld.toLocaleString('es-AR')} (banco ${(t.bankGld || 0).toLocaleString('es-AR')})`, 'gm');
+      this.msg(p, `Fuerza ${t.attrs[0]} · Agilidad ${t.attrs[1]} · Inteligencia ${t.attrs[2]} · Carisma ${t.attrs[3]} · Constitución ${t.attrs[4]}`, 'gm');
+      this.msg(p, `Mató ${t.kills.ciu} ciudadanos, ${t.kills.cri} criminales y ${t.kills.npcs} bichos · Murió ${t.deaths || 0} veces · Advertencias: ${t.advertencias || 0} · Jugó ${(((t.jugado || 0) + (Date.now() - (t._desde || Date.now()))) / 3600000).toFixed(1)} hs`, 'gm');
+      return;
+    }
+  }
+};
+
 K.command = function (p, text) {
   const parts = text.slice(1).split(' ');
   const cmd = parts[0].toUpperCase();
@@ -305,6 +384,7 @@ K.command = function (p, text) {
       const m = +args[1], x = +args[2] || 50, y = +args[3] || 50;
       if (!this.maps[m]) return this.msg(p, 'Mapa inexistente.', 'warn');
       gmLog();
+      if (t !== p) t.posAntesGm = { map: t.map, x: t.x, y: t.y }; // para "Devolver"
       this.warp(t, m, x, y);
       if (t !== p) this.msg(t, `${p.name} te transportó.`, 'gm');
       return;
@@ -317,6 +397,7 @@ K.command = function (p, text) {
       if (!need(2)) return;
       const t = target(rest); if (!t) return;
       gmLog();
+      if (t !== p) t.posAntesGm = { map: t.map, x: t.x, y: t.y }; // para "Devolver"
       this.warp(t, p.map, p.x, p.y + 1);
       return this.msg(t, `${p.name} te ha trasportado.`, 'gm');
     }

@@ -286,7 +286,7 @@ on('announce', (m) => {
   a.textContent = m.text; a.classList.remove('hidden');
   clearTimeout(S.annT); S.annT = setTimeout(() => a.classList.add('hidden'), 8000);
 });
-on('sign', (m) => openModal('Cartel', `<p style="max-width:380px">${esc(m.text)}</p>`));
+on('sign', (m) => openModal('Cartel', `<p style="max-width:380px; white-space:pre-line">${esc(m.text)}</p>`));
 on('bye', (m) => { S.byeText = m.text; });
 on('pong', (m) => { S.ping = Date.now() - m.ts; });
 
@@ -941,11 +941,56 @@ view.addEventListener('dblclick', (e) => {
 view.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   if (S.targetMode) { setTarget(null); return; }
-  // GMs: clic derecho = teletransportarse a ese lugar
+  // GMs: clic derecho sobre un usuario = menú de acciones; en el piso = teletransportarse ahí
   if (S.gm > 0) {
     const t = Eng.screenToTile(e.clientX, e.clientY);
+    const c = Eng.charAt(t.x, t.y, true);
+    if (c && !c.npc && c.id !== S.me) return menuGm(c, e.clientX, e.clientY);
     send({ t: 'tp', x: t.x, y: t.y });
   }
+});
+
+// ---------- Menú de GM sobre un usuario ----------
+const MENU_GM = [
+  ['info', 'ℹ', 'Info'], ['inv', '🎒', 'Inventario'], ['devolver', '↩', 'Devolver'], ['ulla', '🏠', 'Ullathorpe'],
+  ['echar', '🚪', 'Echar'], ['advertir', '⚠', 'Advertir'], ['carcel', '🔒', 'Cárcel'], ['pelear', '⚔', 'Pelear'],
+  ['revivir', '❤', 'Revivir'], ['est', '📊', 'Estadísticas'],
+];
+function cerrarMenuGm() { const m = document.getElementById('menu-gm'); if (m) m.remove(); }
+function menuGm(c, mx, my) {
+  cerrarMenuGm();
+  const nombre = String(c.n || '').replace(/ <.*>$/, '');
+  const d = document.createElement('div');
+  d.id = 'menu-gm';
+  d.innerHTML = `<div class="mg-tit">${esc(nombre)}</div>` + MENU_GM.map(([a, ic, n]) => `<button data-a="${a}"><span>${ic}</span>${n}</button>`).join('');
+  document.body.appendChild(d);
+  const r = d.getBoundingClientRect();
+  d.style.left = Math.min(mx + 6, innerWidth - r.width - 6) + 'px';
+  d.style.top = Math.max(6, Math.min(my - 20, innerHeight - r.height - 6)) + 'px';
+  d.querySelectorAll('[data-a]').forEach((b) => {
+    b.onclick = async (ev) => {
+      ev.stopPropagation();
+      const a = b.dataset.a; cerrarMenuGm();
+      let extra = '';
+      if (a === 'advertir') { extra = await preguntar(`Motivo de la advertencia a ${nombre}:`, '', 150); if (!extra) return; }
+      if (a === 'carcel') { extra = await preguntar(`¿Cuántos minutos de cárcel para ${nombre}? (1 a 60)`, '5', 2); if (!extra) return; }
+      if (a === 'echar' && !(await confirmar(`¿Echar a ${nombre} del servidor?`, 'Echar'))) return;
+      send({ t: 'gmMenu', a, id: c.id, extra });
+    };
+  });
+  setTimeout(() => {
+    const fuera = (ev) => { if (!d.contains(ev.target)) { cerrarMenuGm(); document.removeEventListener('mousedown', fuera, true); } };
+    document.addEventListener('mousedown', fuera, true);
+  }, 0);
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarMenuGm(); });
+on('gmInv', (m) => {
+  const fila = (x) => `<div class="gi-it${x.eq ? ' eq' : ''}"><canvas width="32" height="32" data-g="${x.g}"></canvas><span>${esc(x.n)}</span><b>${Number(x.a).toLocaleString('es-AR')}</b>${x.eq ? '<i>equipado</i>' : ''}</div>`;
+  openModal(`Inventario de ${m.nombre}`, `<div class="gm-inv">
+    <div class="gi-oro">Oro: <b>${Number(m.oro).toLocaleString('es-AR')}</b> · En el banco: <b>${Number(m.oroBanco).toLocaleString('es-AR')}</b></div>
+    <div class="mc-tit">Inventario</div><div class="gi-lista">${m.items.map(fila).join('') || '<div class="hint">Vacío</div>'}</div>
+    <div class="mc-tit">Banco</div><div class="gi-lista">${m.banco.map(fila).join('') || '<div class="hint">Vacío</div>'}</div></div>`);
+  document.querySelectorAll('.gm-inv canvas[data-g]').forEach((cv) => { const x = cv.getContext('2d'); if (!drawIcon(x, +cv.dataset.g)) setTimeout(() => drawIcon(x, +cv.dataset.g), 500); });
 });
 
 // ================== BUCLE PRINCIPAL ==================

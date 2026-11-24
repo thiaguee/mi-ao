@@ -95,6 +95,10 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Templo Hundido: se puede caminar todo de nuevo (estaba roto desde la v1.62).
 - [ ] /RITMO muestra las horas jugadas de cada uno.
 
+## Menú de GM
+- [ ] Clic derecho sobre un usuario (siendo GM): aparece el menú. Probar cada botón: Info, Inventario, Devolver, Ullathorpe, Echar, Advertir, Cárcel, Pelear, Revivir, Estadísticas.
+- [ ] Con un GM de igual o mayor rango no tiene que hacer nada.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

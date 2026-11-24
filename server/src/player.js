@@ -153,6 +153,7 @@ P.playerFromRecord = function (rec) {
   p.silenced = rec.silenced || 0;
   p.jugado = rec.jugado || 0; p._desde = Date.now(); // tiempo jugado (ms), para medir el ritmo
   p.nivelesHoras = rec.nivelesHoras || {};
+  p.advertencias = rec.advertencias || 0;
   return p;
 };
 
@@ -176,7 +177,7 @@ P.toRecord = function (p) {
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
     killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], pase: p.pase || null, noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
     nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
-    jugado: p.jugado, nivelesHoras: p.nivelesHoras || {},
+    jugado: p.jugado, nivelesHoras: p.nivelesHoras || {}, advertencias: p.advertencias || 0,
   };
 };
 
