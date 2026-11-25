@@ -44,7 +44,7 @@ const DEFAULT_CONFIG = {
   oroInicial: 1000, // oro con el que arranca cada personaje nuevo
   respawnSegundos: 30,
   intervaloGolpe: 900,
-  intervaloHechizo: 1000,
+  intervaloHechizo: 500, // 2 hechizos por segundo como máximo (también para la macro F7)
   intervaloCaminar: 150,
   chatGlobal: true,
   guardadoMinutos: 5,

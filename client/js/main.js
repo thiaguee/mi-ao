@@ -222,7 +222,7 @@ on('char', (m) => {
     Eng.moveChar(c.id, c.x, c.y, c.h);
   } else Eng.addChar(c);
 });
-on('rm', (m) => { E.chars.delete(m.id); if (MACRO.on && m.id === MACRO.target) pararMacro(`${MACRO.nombre || 'el bicho'} murió`); });
+on('rm', (m) => { E.chars.delete(m.id); });
 on('mv', (m) => Eng.moveChar(m.id, m.x, m.y, m.h));
 on('turn', (m) => { const c = E.chars.get(m.id); if (c) c.h = m.h; });
 on('pos', (m) => {
@@ -447,7 +447,7 @@ function renderState() {
   if (s.dead) st.push('☠ Estás muerto (/HOGAR o buscá un sacerdote)');
   if (S.paralyzed) st.push('Paralizado');
   if (S.meditando) st.push('Meditando...');
-  if (MACRO.on) st.push(`⚡ MACRO F7: ${(S.spells[MACRO.slot] || {}).n || ''} sobre ${MACRO.nombre || ''}`);
+  if (MACRO.on) st.push(`⚡ MACRO F7: ${(S.spells[MACRO.slot] || {}).n || ''} (mouse sobre el bicho)`);
   $('bb-state').textContent = st.join(' · ');
 }
 function updatePos() {
@@ -800,34 +800,25 @@ function openHelp() {
 }
 
 // ================== MACRO F7 ==================
-// Con un hechizo elegido, F7 lo tira solo sobre UN bicho (el que clickeaste o, si no, el más
-// cercano en pantalla) y toma pociones: azul cuando falta maná, roja si la vida baja.
-// Cuando ese bicho muere (o desaparece), la macro se apaga sola: se vuelve a activar con F7.
-const MACRO = { on: false, slot: -1, target: 0, iv: 0, lastCast: 0, lastPot: 0, avisoSinBicho: 0 };
+// Con un hechizo elegido, F7 deja la macro PRENDIDA hasta que caminás o volvés a apretar F7.
+// Tira el hechizo (2 por segundo como máximo) sobre el bicho que tengas ABAJO DEL MOUSE: si el
+// mouse no está arriba de una criatura, no tira nada. También toma pociones: azul si falta maná,
+// roja si la vida baja de la mitad.
+const MACRO = { on: false, slot: -1, iv: 0, lastCast: 0, lastPot: 0, avisoMana: 0 };
+const MACRO_MS = 500; // 2 hechizos por segundo
 
-function enPantalla(c) {
-  const px = (c.x - 1) * 32, py = (c.y - 1) * 32;
-  return px >= E.camX - 16 && px <= E.camX + E.viewW - 16 && py >= E.camY - 16 && py <= E.camY + E.viewH - 16;
-}
-function bichoMasCercano() {
-  const me = E.chars.get(S.me);
-  let mejor = null, d = 1e9;
-  for (const c of E.chars.values()) {
-    if (!c.npc || c.col !== 'npc_h' || !enPantalla(c)) continue;
-    const dd = Math.abs(c.x - me.x) + Math.abs(c.y - me.y);
-    if (dd < d) { d = dd; mejor = c; }
-  }
-  return mejor;
+function bichoBajoMouse() {
+  const m = E.mouseTile;
+  if (!m) return null;
+  for (const c of E.chars.values()) if (c.npc && c.col === 'npc_h' && c.x === m.x && c.y === m.y) return c;
+  return null;
 }
 function iniciarMacro() {
   const sp = S.spells[S.selSpell];
   if (!sp || !sp.id) { log('Para usar la macro: elegí un hechizo en la pestaña HECHIZOS y apretá F7.', 'warn'); return; }
-  const obj = E.chars.get(S.objetivo);
-  const t = obj && obj.npc && enPantalla(obj) ? obj : bichoMasCercano();
-  if (!t) { log('Macro F7: no hay ningún bicho en pantalla.', 'warn'); return; }
-  MACRO.on = true; MACRO.slot = S.selSpell; MACRO.target = t.id; MACRO.nombre = t.n;
-  MACRO.iv = setInterval(tickMacro, 100);
-  log(`Macro F7 activada: ${sp.n} sobre ${t.n}. Se apaga sola cuando muere (F7 o caminar también la frenan).`, 'server');
+  MACRO.on = true; MACRO.slot = S.selSpell;
+  MACRO.iv = setInterval(tickMacro, 50);
+  log(`Macro F7 activada: ${sp.n}. Poné el mouse arriba de un bicho y lo tira solo (2 por segundo). Se apaga al caminar o con F7.`, 'server');
   renderState();
 }
 function pararMacro(motivo) {
@@ -849,15 +840,13 @@ function tickMacro() {
     if (s.maxHp && s.hp < s.maxHp * 0.5 && poc(3)) { send({ t: 'use', i: poc(3).i }); MACRO.lastPot = now; return; }
     if (s.maxMan && s.man < Math.max(sp.mana, s.maxMan * 0.35) && poc(4)) { send({ t: 'use', i: poc(4).i }); MACRO.lastPot = now; return; }
   }
-  // tirar el hechizo
+  if (now - MACRO.lastCast < MACRO_MS) return;
+  const t = bichoBajoMouse();
+  if (!t) return; // el mouse no está arriba de una criatura: no tira
   if (s.man < sp.mana) {
     if (now - (MACRO.avisoMana || 0) > 8000) { MACRO.avisoMana = now; log('Macro F7: no te queda maná ni pociones azules.', 'warn'); }
     return;
   }
-  if (now - MACRO.lastCast < 1050) return;
-  const t = E.chars.get(MACRO.target);
-  if (!t) return pararMacro(`${MACRO.nombre || 'el bicho'} murió`);
-  if (!enPantalla(t)) return pararMacro(`${MACRO.nombre || 'el bicho'} se fue de la pantalla`);
   MACRO.lastCast = now;
   send({ t: 'cast', i: MACRO.slot, x: t.x, y: t.y });
 }
@@ -989,7 +978,7 @@ view.addEventListener('click', (e) => {
   if (S.targetMode === 'trabajo') { send({ t: 'trabajo', x: t.x, y: t.y }); setTarget(null); return; }
   send({ t: 'click', x: t.x, y: t.y });
   const c = Eng.charAt(t.x, t.y, false);
-  if (c && c.npc) { S.objetivo = c.id; if (MACRO.on) MACRO.target = c.id; }
+  if (c && c.npc) { S.objetivo = c.id; }
 });
 view.addEventListener('dblclick', (e) => {
   const t = Eng.screenToTile(e.clientX, e.clientY);

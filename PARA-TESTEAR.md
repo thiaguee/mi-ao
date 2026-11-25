@@ -163,6 +163,10 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Matar a alguien ya no te vuelve criminal.
 - [ ] /HACERNEUTRAL y /RESETFACCION.
 
+## Macro F7
+- [ ] Con el mouse arriba de un bicho tira 2 hechizos por segundo; con el mouse afuera no tira.
+- [ ] Sigue prendida aunque muera el bicho; se apaga al caminar o con F7.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

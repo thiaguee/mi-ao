@@ -16,7 +16,7 @@ S.castSpell = function (p, slot, x, y) {
   if (p.dead) return this.msg(p, '¡¡Estás muerto!!', 'warn');
   // sin skills: los hechizos fuertes piden nivel (data/ajustes.json → nivel)
   if (sp.nivel && p.stats.lvl < sp.nivel && p.gm < 2) return this.msg(p, `Necesitás nivel ${sp.nivel} para lanzar ${sp.name}.`, 'warn');
-  if (now - p.lastSpell < this.config.intervaloHechizo) return;
+  if (now - p.lastSpell < this.config.intervaloHechizo - 50) return; // 50 ms de margen por el lag
   if (this.maps[p.map].d.magiaSinEfecto && p.gm === 0) return this.msg(p, 'Una fuerza oscura te impide canalizar tu energía.', 'warn');
   const s = p.stats;
   if (s.man < sp.mana) return this.msg(p, 'No tenés suficiente maná.', 'warn');
