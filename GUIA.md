@@ -391,6 +391,13 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - Si estás muerto y llegás a **2 baldosas de la capilla** (por cualquier lado), el sacerdote te resucita solo: no hace falta entrar ni hacer doble clic. Vale también para los sacerdotes de las otras ciudades (mismo alcance alrededor de ellos).
 
+## Grupos (party) y chat de voz
+
+- **Clic derecho sobre un jugador → Invitar al grupo** (o **/GRUPO nombre**). Hasta 6 integrantes. **/P mensaje** habla con el grupo, **/SALIRGRUPO** y **/ECHARGRUPO nombre** (líder).
+- La **experiencia** de los bichos se reparte entre los que estén cerca (mismo mapa, 25 baldosas) con **+10% por cada integrante extra**; cada uno la recibe con el multiplicador de su nivel. El **oro** va directo a la billetera de cada uno, en partes iguales.
+- Panel del grupo arriba a la derecha: vida, maná, líder y quién está hablando.
+- **Chat de voz**: botón "🎤 Voz" en el panel. Micrófono abierto o "V para hablar" (mantener V). 🔊/🔇 silencia a los demás. La voz va directo entre los jugadores; funciona en la aplicación de Windows (en el navegador sólo por https o localhost).
+
 ## Opciones del jugador
 
 - Botón **OPCIONES**: una ventana con secciones (Sonido, Video, Interfaz, Chat, Controles, Rendimiento, Información). Música y efectos con su volumen, mostrar nombres/minimapa/FPS, lluvia y oscuridad de la noche, filtros de la consola, **teclas configurables** (modo moderno) y modo liviano. Se guarda en cada PC.

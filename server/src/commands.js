@@ -375,6 +375,14 @@ K.command = function (p, text) {
       }
       return;
     }
+    case 'GRUPO': case 'PARTY': { // invitar a alguien al grupo
+      if (!rest) return this.msg(p, 'Grupos: /GRUPO nombre invita · clic derecho en un jugador también · /P mensaje habla con el grupo · /SALIRGRUPO · /ECHARGRUPO nombre (líder).', 'party');
+      const t = target(rest); if (!t) return;
+      return this.partyInvitar(p, t);
+    }
+    case 'P': return this.partyChat(p, rest);
+    case 'SALIRGRUPO': return this.partySalir(p);
+    case 'ECHARGRUPO': return this.partyEchar(p, rest);
     case 'ULLA': // GMs: directo a la plaza de Ullathorpe
       if (!need(1)) return;
       return this.warp(p, 1, 55, 49);

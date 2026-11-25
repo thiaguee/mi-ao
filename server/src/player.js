@@ -199,6 +199,7 @@ P.logout = function (p) {
   if (p.duelo) { const d = this.duelos[p.duelo.arena]; vuelta = d && d.vuelta[p.id]; this.muerteEnDuelo(p); p.duelo = null; }
   else if (p.map === 318) vuelta = p.vueltaColiseo || [1, 58, 45];
   this.endTrade(p);
+  if (p.party && this.partySalir) this.partySalir(p, 'se desconectó');
   this.savePlayer(p);
   this.remove(p);
   if (vuelta) { [p.map, p.x, p.y] = vuelta; p.vueltaColiseo = null; if (p.dead) this.revive(p, true); this.savePlayer(p); }

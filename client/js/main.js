@@ -17,6 +17,7 @@ import * as MercadoUI from './mercadoui.js';
 import * as PaseUI from './paseui.js';
 import { preguntar, confirmar } from './dialogo.js';
 import * as Opc from './opcionesui.js';
+import * as PartyUI from './partyui.js';
 
 const $ = (id) => document.getElementById(id);
 const DIR = { ArrowUp: 1, ArrowRight: 2, ArrowDown: 3, ArrowLeft: 4 };
@@ -887,6 +888,8 @@ function setModo(m) {
   $('b-keys').textContent = m === 'moderno' ? '⌨ Moderno' : '⌨ Clásico';
 }
 Opc.init({ openModal, closeModal, E, S, AU: Snd.AU, Snd, setModo, getModo: () => MODO, send, $ });
+PartyUI.init({ send, S, $, confirmar, log, esc });
+PartyUI.mensajes(on);
 $('b-keys').onclick = () => {
   setModo(MODO === 'moderno' ? 'clasico' : 'moderno');
   log(MODO === 'moderno'
@@ -943,28 +946,27 @@ view.addEventListener('dblclick', (e) => {
 view.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   if (S.targetMode) { setTarget(null); return; }
-  // GMs: clic derecho sobre un usuario = menú de acciones; en el piso = teletransportarse ahí
-  if (S.gm > 0) {
-    const t = Eng.screenToTile(e.clientX, e.clientY);
-    const c = Eng.charAt(t.x, t.y, true);
-    if (c && !c.npc && c.id !== S.me) return menuGm(c, e.clientX, e.clientY);
-    send({ t: 'tp', x: t.x, y: t.y });
-  }
+  // clic derecho sobre un jugador: menú (GMs: acciones de GM; todos: invitar al grupo). GMs en el piso: teletransporte
+  const t = Eng.screenToTile(e.clientX, e.clientY);
+  const c = Eng.charAt(t.x, t.y, true);
+  if (c && !c.npc && c.id !== S.me) return menuGm(c, e.clientX, e.clientY, S.gm > 0 ? MENU_GM : MENU_JUGADOR);
+  if (S.gm > 0) send({ t: 'tp', x: t.x, y: t.y });
 });
 
 // ---------- Menú de GM sobre un usuario ----------
 const MENU_GM = [
   ['info', 'ℹ', 'Info'], ['inv', '🎒', 'Inventario'], ['devolver', '↩', 'Devolver'], ['ulla', '🏠', 'Ullathorpe'],
   ['echar', '🚪', 'Echar'], ['advertir', '⚠', 'Advertir'], ['carcel', '🔒', 'Cárcel'], ['pelear', '⚔', 'Pelear'],
-  ['revivir', '❤', 'Revivir'], ['est', '📊', 'Estadísticas'],
+  ['revivir', '❤', 'Revivir'], ['est', '📊', 'Estadísticas'], ['grupo', '👥', 'Invitar al grupo'],
 ];
+const MENU_JUGADOR = [['grupo', '👥', 'Invitar al grupo']];
 function cerrarMenuGm() { const m = document.getElementById('menu-gm'); if (m) m.remove(); }
-function menuGm(c, mx, my) {
+function menuGm(c, mx, my, items = MENU_GM) {
   cerrarMenuGm();
   const nombre = String(c.n || '').replace(/ <.*>$/, '');
   const d = document.createElement('div');
   d.id = 'menu-gm';
-  d.innerHTML = `<div class="mg-tit">${esc(nombre)}</div>` + MENU_GM.map(([a, ic, n]) => `<button data-a="${a}"><span>${ic}</span>${n}</button>`).join('');
+  d.innerHTML = `<div class="mg-tit">${esc(nombre)}</div>` + items.map(([a, ic, n]) => `<button data-a="${a}"><span>${ic}</span>${n}</button>`).join('');
   document.body.appendChild(d);
   const r = d.getBoundingClientRect();
   d.style.left = Math.min(mx + 6, innerWidth - r.width - 6) + 'px';
@@ -973,6 +975,7 @@ function menuGm(c, mx, my) {
     b.onclick = async (ev) => {
       ev.stopPropagation();
       const a = b.dataset.a; cerrarMenuGm();
+      if (a === 'grupo') return PartyUI.invitar(c.id);
       let extra = '';
       if (a === 'advertir') { extra = await preguntar(`Motivo de la advertencia a ${nombre}:`, '', 150); if (!extra) return; }
       if (a === 'carcel') { extra = await preguntar(`¿Cuántos minutos de cárcel para ${nombre}? (1 a 60)`, '5', 2); if (!extra) return; }

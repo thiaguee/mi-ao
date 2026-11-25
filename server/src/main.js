@@ -91,7 +91,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'), require('./mercado'), require('./duelos'), require('./pase'), require('./lideres'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'), require('./mercado'), require('./duelos'), require('./pase'), require('./lideres'), require('./party'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -115,6 +115,7 @@ world.cargarMercado();
 world.cargarDuelos();
 world.cargarPase();
 world.cargarLideres();
+world.initParty();
 world.cargarTiendas();
 
 // ---------- logs, bans y guardado ----------
@@ -208,6 +209,14 @@ function handle(sock, msg) {
     case 'objCrear': return world.crearDesdePanel(p, msg); // panel /OBJETOS de los Admin
     case 'torneo': return world.accionTorneo(p, msg); // tienda de puntos de torneo
     case 'testeoNpc': return world.testeoNpc(p, msg); // panel /TESTEO: invocar NPC
+    case 'party': // grupos
+      if (msg.a === 'invitar') return world.partyInvitar(p, world.players.get(+msg.id));
+      if (msg.a === 'aceptar' || msg.a === 'rechazar') return world.partyResponder(p, msg.a === 'aceptar');
+      if (msg.a === 'salir') return world.partySalir(p);
+      if (msg.a === 'echar') return world.partyEchar(p, msg.n);
+      return;
+    case 'voz': return world.partyVoz(p, !!msg.on);
+    case 'vozSig': return world.partyVozSenal(p, msg);
     case 'gmMenu': return world.gmMenu(p, msg); // menú de clic derecho de los GMs sobre un usuario
     case 'tp': // teletransporte de GM con clic derecho
       if (p.gm < 1) return;

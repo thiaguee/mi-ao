@@ -90,18 +90,18 @@ C.killNpc = function (npc, killer) {
   if (killer && killer.kind === 'pc') {
     // Experiencia restante y oro
     const noche = this.esDeNoche() ? this.cfgCiclo().premioNoche : 1; // de noche dan más
-    const exp = Math.floor((npc.expLeft === undefined ? def.exp : npc.expLeft) * this.multExp(killer) * noche);
-    if (exp > 0) this.giveExp(killer, exp);
+    this.repartirExp(killer, npc.expLeft === undefined ? def.exp : npc.expLeft, noche); // con grupo se reparte
     killer.kills.npcs++;
     if (this.paseMatarBicho) this.paseMatarBicho(killer, npc);
     if (this.misionKill) this.misionKill(killer, npc.num);
     this.msg(killer, `¡Has matado a ${npc.name}!`, 'fight');
-    if (def.gld > 0) this.dropObj(npc.map, npc.x, npc.y, 12, Math.floor(def.gld * this.config.multiplicadorOro * noche));
+    if (def.gld > 0) this.repartirOro(killer, Math.floor(def.gld * this.config.multiplicadorOro * noche), npc.map, npc.x, npc.y);
     // Drop al azar (uno de la lista)
     if (def.drops.length && Math.random() < 0.9) {
       const [id, amount] = def.drops[rnd(0, def.drops.length - 1)];
       const o = this.data.objs[id];
-      if (o) this.dropObj(npc.map, npc.x, npc.y, id, o.type === OBJ.ORO ? Math.floor(amount * this.config.multiplicadorOro) : amount);
+      if (o && o.type === OBJ.ORO) this.repartirOro(killer, Math.floor(amount * this.config.multiplicadorOro * noche), npc.map, npc.x, npc.y);
+      else if (o) this.dropObj(npc.map, npc.x, npc.y, id, amount);
     }
     // Matar guardias te hace criminal
     if ((def.type === NPC_TYPE.GUARDIA) && !killer.crim) {
@@ -405,8 +405,7 @@ C.damageNpc = function (npc, dmg, p, magic = false) {
     if (npc.expLeft === undefined) npc.expLeft = npc.def.exp;
     if (npc.hp > 0) {
       const base = Math.min(npc.expLeft, npc.def.exp * real / npc.maxHp);
-      const exp = Math.floor(base * this.multExp(p));
-      if (exp > 0) { npc.expLeft -= base; this.giveExp(p, exp); }
+      if (base > 0) { npc.expLeft -= base; this.repartirExp(p, base); }
     }
   }
   if (npc.hp <= 0) this.killNpc(npc, p);

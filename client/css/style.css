@@ -511,3 +511,19 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 @keyframes parpadeo { 50% { opacity: .55; } }
 .op-info p { color: #e8dcc3; line-height: 1.5; margin: 0 0 10px; }
 .op-txt { text-align: left; }
+
+/* ===== Grupo (party) ===== */
+.c-party { color: #8fd0ff; }
+#party-panel { position: absolute; right: 8px; top: 26px; z-index: 3; width: 190px; background: #000c; border: 1px solid #5a4628; border-radius: 6px;
+  padding: 6px 8px; font-size: 12px; text-shadow: 1px 1px 0 #000; }
+.pp-tit { font: bold 12px Georgia, serif; color: #8fd0ff; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+.pp-tit span { color: #a8977a; }
+.pp-m { margin-top: 5px; } .pp-m.muerto { opacity: .5; } .pp-m.yo .pp-n { color: #ffd27a; }
+.pp-n { color: #e8dcc3; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+.pp-n small { color: #a8977a; font-weight: normal; } .pp-n a { margin-left: auto; color: #c98a7a; cursor: pointer; text-decoration: none; }
+.pp-voz { font-style: normal; font-size: 11px; opacity: .45; } .pp-voz.on { opacity: 1; filter: drop-shadow(0 0 4px #6fdc6f); }
+.pp-b { height: 5px; background: #2a1f14; border-radius: 3px; margin-top: 2px; overflow: hidden; }
+.pp-b div { height: 100%; } .pp-b.hp div { background: linear-gradient(#e04a3a, #a3241a); } .pp-b.mn div { background: linear-gradient(#4a8ae0, #1a4aa3); }
+.pp-acc { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; }
+.pp-acc button { flex: 1 1 45%; padding: 3px 4px; font: bold 10px Georgia, serif; color: #cdbd9c; background: #1d1610; border: 1px solid #4a3a22; border-radius: 4px; cursor: pointer; }
+.pp-acc button.on { background: #2f5a22; color: #fff; border-color: #6fbf4f; }

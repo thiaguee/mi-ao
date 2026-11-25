@@ -114,6 +114,13 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Video: nombres, minimapa, lluvia, oscuridad de la noche, FPS y pantalla completa.
 - [ ] Todo queda guardado al cerrar y volver a entrar.
 
+## Grupos y voz
+- [ ] Clic derecho en otro jugador → Invitar al grupo; el otro acepta.
+- [ ] Panel del grupo arriba a la derecha con la vida de cada uno.
+- [ ] Matar bichos juntos: la experiencia y el oro se reparten (el oro va directo a cada uno).
+- [ ] /P para hablar con el grupo.
+- [ ] Voz: los dos aprietan "🎤 Voz" y se escuchan; probar "V para hablar" y el 🔇.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?
