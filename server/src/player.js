@@ -409,6 +409,9 @@ P.useItem = function (p, i) {
   const o = this.data.objs[it.id];
   if (!o) return;
   if (p.dead) return this.msg(p, '¡¡Estás muerto!! Los muertos no pueden usar objetos.', 'warn');
+  // oficios: la herramienta equipada se usa para trabajar; los minerales se funden en la fragua
+  if (this.esHerramienta && this.esHerramienta(it.id) && p.eq.weapon === i && this.usarHerramienta(p)) return;
+  if (o.type === OBJ.MINERAL && this.fundir && this.fundir(p, i)) return;
   const s = p.stats;
   switch (o.type) {
     case OBJ.COMIDA:

@@ -398,6 +398,14 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 - Panel del grupo arriba a la derecha: vida, maná, líder y quién está hablando.
 - **Chat de voz**: botón "🎤 Voz" en el panel. Micrófono abierto o "V para hablar" (mantener V). 🔊/🔇 silencia a los demás. La voz va directo entre los jugadores; funciona en la aplicación de Windows (en el navegador sólo por https o localhost).
 
+## Oficios
+
+- **Talar, minar y pescar**: equipá la herramienta (Hacha de Talador, Piquete de Minero, Equipo de Pescar o Red de Pesca), usala (U / Espacio / doble clic) y hacé clic en el árbol, el yacimiento o el agua. Seguís trabajando solo cada 1,5 s hasta que te movés; gasta energía y sube el skill (Talar, Minería, Pesca). Más skill = más chance y más cantidad; las clases trabajadoras (Minero, Leñador, Pescador, Herrero, Carpintero, Trabajador) sacan el doble.
+- **Fundir**: usá los minerales al lado de una **fragua**: cada 5 minerales sale 1 lingote (hierro, plata u oro; la plata y el oro piden más Minería).
+- **Herrería**: Martillo de Herrero equipado, usalo al lado de un **yunque**: se abre la ventana con todas las armas y armaduras (lingotes y skill que pide cada una).
+- **Carpintería**: Serrucho equipado, usalo en cualquier lado: flechas, arcos, barcas, muebles... con madera.
+- En la Ciudad Nueva hay yunque y fragua en el patio del leñador y el minero.
+
 ## Opciones del jugador
 
 - Botón **OPCIONES**: una ventana con secciones (Sonido, Video, Interfaz, Chat, Controles, Rendimiento, Información). Música y efectos con su volumen, mostrar nombres/minimapa/FPS, lluvia y oscuridad de la noche, filtros de la consola, **teclas configurables** (modo moderno) y modo liviano. Se guarda en cada PC.

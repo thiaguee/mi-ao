@@ -91,7 +91,7 @@ const config = loadConfig();
 const data = G.loadAll();
 const world = new World(data, config);
 Object.assign(world, require('./player'), require('./combat'), require('./spells'),
-  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'), require('./mercado'), require('./duelos'), require('./pase'), require('./lideres'), require('./party'));
+  require('./interact'), require('./commands'), require('./teleports'), require('./clanes'), require('./misiones'), require('./guerra'), require('./ranking'), require('./faccion'), require('./estructuras'), require('./torneo'), require('./nobleza'), require('./tiendas'), require('./npcsgm'), require('./testeo'), require('./emotes'), require('./ciclo'), require('./mercado'), require('./duelos'), require('./pase'), require('./lideres'), require('./party'), require('./oficios'));
 world.dataDir = DATA_DIR;
 // Adentro de la aplicación de Windows el servidor es solo para esa PC: ahí los nombres
 // reservados se pueden crear sin contraseña previa.
@@ -116,6 +116,7 @@ world.cargarDuelos();
 world.cargarPase();
 world.cargarLideres();
 world.initParty();
+world.cargarOficios();
 world.cargarTiendas();
 
 // ---------- logs, bans y guardado ----------
@@ -215,6 +216,8 @@ function handle(sock, msg) {
       if (msg.a === 'salir') return world.partySalir(p);
       if (msg.a === 'echar') return world.partyEchar(p, msg.n);
       return;
+    case 'trabajo': return world.empezarTrabajo(p, +msg.x, +msg.y); // clic con la herramienta (talar, minar, pescar)
+    case 'fabricar': return world.fabricar(p, msg.oficio, +msg.id, +msg.cant);
     case 'voz': return world.partyVoz(p, !!msg.on);
     case 'vozSig': return world.partyVozSenal(p, msg);
     case 'gmMenu': return world.gmMenu(p, msg); // menú de clic derecho de los GMs sobre un usuario

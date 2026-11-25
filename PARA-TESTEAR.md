@@ -121,6 +121,14 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] /P para hablar con el grupo.
 - [ ] Voz: los dos aprietan "🎤 Voz" y se escuchan; probar "V para hablar" y el 🔇.
 
+## Oficios
+- [ ] Talar: Hacha de Talador equipada, usarla y clic en un árbol. Se sigue solo hasta moverte.
+- [ ] Minar: Piquete equipado, clic en un yacimiento (Minas de Hierro, mapa 33).
+- [ ] Pescar: Equipo de Pescar o Red, clic en el agua.
+- [ ] Fundir: usar los minerales al lado de la fragua (Ciudad Nueva) → lingotes.
+- [ ] Herrería: martillo al lado del yunque → ventana, fabricar una daga.
+- [ ] Carpintería: serrucho → ventana, fabricar flechas con madera.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

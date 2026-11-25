@@ -527,3 +527,13 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .pp-acc { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; }
 .pp-acc button { flex: 1 1 45%; padding: 3px 4px; font: bold 10px Georgia, serif; color: #cdbd9c; background: #1d1610; border: 1px solid #4a3a22; border-radius: 4px; cursor: pointer; }
 .pp-acc button.on { background: #2f5a22; color: #fff; border-color: #6fbf4f; }
+
+/* ===== Oficios: ventana de fabricar ===== */
+.rc-win { width: 560px; max-width: 100%; }
+.rc-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: #e8dcc3; margin-bottom: 8px; }
+.rc-top b { color: #ffd27a; } .rc-top input { margin-left: auto; width: 150px; }
+.rc-lista { display: flex; flex-direction: column; gap: 4px; max-height: 420px; overflow: auto; }
+.rc-it { display: flex; align-items: center; gap: 8px; padding: 4px 8px; background: #0006; border: 1px solid #2e2418; border-radius: 6px; }
+.rc-it.no { opacity: .55; } .rc-n { flex: 1; display: flex; flex-direction: column; color: #e8dcc3; } .rc-n small { color: #a8977a; }
+.rc-it input { width: 52px; }
+.rc-h { color: #c9c9d6; } .rc-p { color: #e0e6f0; } .rc-o { color: #ffd633; } .rc-m { color: #d9a15a; } .falta { color: #e06a5a !important; }

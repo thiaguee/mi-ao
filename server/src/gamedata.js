@@ -145,6 +145,10 @@ function loadObjs() {
       prohibidas,
       texto: v.TEXTO || '',
       minSkill: num(v.MINSKILL),
+      // oficios: lingotes y madera para fabricar, skill necesario, qué mineral da un yacimiento y qué lingote sale de un mineral
+      lingH: num(v.LINGH), lingP: num(v.LINGP), lingO: num(v.LINGO), skHerreria: num(v.SKHERRERIA),
+      madera: num(v.MADERA), skCarpinteria: num(v.SKCARPINTERIA),
+      mineral: num(v.MINERALINDEX), lingote: num(v.LINGOTEINDEX),
       cerrada: num(v.CERRADA) === 1, indexAbierta: num(v.INDEXABIERTA), indexCerrada: num(v.INDEXCERRADA),
       llave: num(v.LLAVE), clave: num(v.CLAVE),
       apunala: num(v.APUNALA) === 1,

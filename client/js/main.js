@@ -935,6 +935,7 @@ view.addEventListener('click', (e) => {
   const t = Eng.screenToTile(e.clientX, e.clientY);
   if (S.targetMode === 'cast') { send({ t: 'cast', i: S.selSpell, x: t.x, y: t.y }); setTarget(null); return; }
   if (S.targetMode === 'shoot') { send({ t: 'shoot', x: t.x, y: t.y }); setTarget(null); return; }
+  if (S.targetMode === 'trabajo') { send({ t: 'trabajo', x: t.x, y: t.y }); setTarget(null); return; }
   send({ t: 'click', x: t.x, y: t.y });
   const c = Eng.charAt(t.x, t.y, false);
   if (c && c.npc) { S.objetivo = c.id; if (MACRO.on) MACRO.target = c.id; }
@@ -989,6 +990,32 @@ function menuGm(c, mx, my, items = MENU_GM) {
   }, 0);
 }
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarMenuGm(); });
+// ---------- oficios ----------
+on('trabajoApuntar', (m) => { setTarget('trabajo'); log(m.texto, 'info'); });
+let ultRecetas = null, filtroRecetas = '';
+function pintarRecetas(m) {
+  ultRecetas = m;
+  const herr = m.oficio === 'herreria';
+  const t = m.tengo;
+  const costo = (c) => herr
+    ? [['h', 'Hierro'], ['p', 'Plata'], ['o', 'Oro']].filter(([k]) => c[k]).map(([k, n]) => `<span class="rc-${k}${t[k] >= c[k] ? '' : ' falta'}">${c[k]} ${n}</span>`).join(' ')
+    : `<span class="rc-m${t.m >= c.m ? '' : ' falta'}">${c.m} Madera</span>`;
+  const puede = (x) => m.sk >= x.c.sk && (herr ? ['h', 'p', 'o'].every((k) => !x.c[k] || t[k] >= x.c[k]) : t.m >= x.c.m);
+  const lista = m.items.filter((x) => !filtroRecetas || x.n.toLowerCase().includes(filtroRecetas));
+  openModal(herr ? 'Herrería' : 'Carpintería', `<div class="rc-win">
+    <div class="rc-top">Tu skill de ${herr ? 'Herrería' : 'Carpintería'}: <b>${m.sk}</b> · Tenés: ${herr ? `<b>${t.h}</b> hierro · <b>${t.p}</b> plata · <b>${t.o}</b> oro` : `<b>${t.m}</b> madera`}
+      <input id="rc-buscar" placeholder="Buscar..." value="${esc(filtroRecetas)}"></div>
+    <div class="rc-lista">${lista.map((x) => `<div class="rc-it${puede(x) ? '' : ' no'}"><canvas width="32" height="32" data-g="${x.g}"></canvas>
+      <div class="rc-n"><b>${esc(x.n)}</b><small>${costo(x.c)} · skill ${x.c.sk}${m.sk < x.c.sk ? ' (te falta)' : ''}</small></div>
+      <input type="number" min="1" max="100" value="1" data-cant="${x.id}"><button class="btn sm main" data-fab="${x.id}" ${puede(x) ? '' : 'disabled'}>Fabricar</button></div>`).join('')}</div></div>`, 'recetas');
+  document.querySelectorAll('.rc-win canvas[data-g]').forEach((cv) => { const x = cv.getContext('2d'); if (!drawIcon(x, +cv.dataset.g)) setTimeout(() => drawIcon(x, +cv.dataset.g), 500); });
+  document.querySelectorAll('[data-fab]').forEach((b) => { b.onclick = () => send({ t: 'fabricar', oficio: m.oficio, id: +b.dataset.fab, cant: +document.querySelector(`[data-cant="${b.dataset.fab}"]`).value }); });
+  const bus = $('rc-buscar');
+  bus.oninput = () => { filtroRecetas = bus.value.toLowerCase(); const pos = bus.selectionStart; pintarRecetas(ultRecetas); const b2 = $('rc-buscar'); b2.focus(); b2.setSelectionRange(pos, pos); };
+  bus.onkeydown = (e) => e.stopPropagation();
+}
+on('recetas', (m) => pintarRecetas(m));
+
 on('gmInv', (m) => {
   const fila = (x) => `<div class="gi-it${x.eq ? ' eq' : ''}"><canvas width="32" height="32" data-g="${x.g}"></canvas><span>${esc(x.n)}</span><b>${Number(x.a).toLocaleString('es-AR')}</b>${x.eq ? '<i>equipado</i>' : ''}</div>`;
   openModal(`Inventario de ${m.nombre}`, `<div class="gm-inv">
