@@ -412,7 +412,7 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
   - **Invasión**: una horda (Lord Orcos, Orcos Brujos, Ogros y un Dark Morgolock) ataca las afueras de una ciudad. 5.000 de oro por invasor y premio grande al que más mate. 15 minutos.
   - **Cacería**: aparece la **Bestia Dorada** (NPC 2002) en un bosque al azar; el que la mata gana 250.000 de oro y 5 puntos de torneo. 20 minutos.
   - **Trivia**: una pregunta en el chat; el primero que acierta (escribiendo la respuesta normal) gana 50.000.
-  - **Sorteo**: entre los conectados de nivel 13 o más (oro, puntos de torneo o las Alas del Ángel Oscuro).
+  - **Sorteo**: entre los conectados de nivel 13 o más (oro o puntos de torneo).
   - **Hora Feliz**: experiencia doble por 30 minutos.
 - **/EVENTO** muestra el evento actual y cuándo viene el próximo. GMs: **/EVENTO INVASION | CACERIA | TRIVIA | SORTEO | DOBLEEXP | TERMINAR**.
 - Todo (cada cuánto, premios, lugares, bichos, preguntas de la trivia) se cambia en `server/data/eventos.json`.

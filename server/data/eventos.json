@@ -265,20 +265,12 @@
    },
    {
     "puntosTorneo": 5
-   },
-   {
-    "item": [
-     2065,
-     1
-    ],
-    "nombre": "Alas del Ángel Oscuro"
    }
   ],
   "pesos": [
    5,
    3,
-   2,
-   1
+   2
   ]
  },
  "dobleexp": {
