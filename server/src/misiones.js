@@ -215,17 +215,18 @@ M.infoMisionesClan = function (p) {
 
 // ---------- misiones de facción ----------
 // Escalones que se cobran una sola vez: los criminales suman ciudadanos muertos y los ciudadanos suman criminales.
-const bando = (p) => (p.crim ? 'cri' : 'ciu');
+const bando = (p) => (p.faccion === 'neu' ? 'neu' : p.crim ? 'cri' : 'ciu');
 const infoFac = (def, c) => ({ id: def.id, n: def.nombre, d: def.desc, lvl: 0, tipo: 'faccion',
   obj: [{ n: def.bando === 'cri' ? 'Ciudadanos' : 'Criminales', c: Math.min(c, def.cantidad), t: def.cantidad }],
   r: { o: def.recompensa.oro || 0, e: def.recompensa.exp || 0, ep: def.recompensa.expPct || 0, p: def.recompensa.puntos || 0 } });
 
 // lo llama killPlayer cuando un jugador mata a otro fuera de zona de pelea
-M.misionPk = function (killer, victima, victimaEraCrim) {
+M.misionPk = function (killer, victima, victimaEraCrim, facVictima) {
   if (!killer || killer.kind !== 'pc' || killer.gm > 0 || victima.gm > 0 || victima.duelo || killer.duelo) return;
   if (victima.stats.lvl < NIVEL_MIN_VICTIMA) return;
   const b = bando(killer);
-  if ((b === 'cri') === victimaEraCrim) return; // sólo cuenta matar al bando contrario
+  const fv = facVictima || (victimaEraCrim ? 'cri' : 'ciu');
+  if (b === 'neu' || fv === 'neu' || b === fv) return; // sólo cuenta matar al bando contrario
   const ahora = Date.now();
   killer._facVict = killer._facVict || {};
   const clave = victima.name.toLowerCase();

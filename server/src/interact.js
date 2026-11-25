@@ -41,7 +41,7 @@ I.look = function (p, x, y) {
       // Sólo nombre, clan y qué es (GM, ciudadano o criminal)
       const esGm = e.gm > 0 && !e.hideGm;
       this.send(p, { t: 'ver', n: e.name, clan: e.guild || '', desc: e.desc || '', noble: e.noble ? 1 : 0, lider: this.tituloLider ? this.tituloLider(this.liderDe(e)) : '', muerto: e.dead ? 1 : 0,
-        k: esGm ? 'gm' : e.crim ? 'cri' : 'ciu', tipo: esGm ? this.gmTitle(e.gm) : e.crim ? 'Criminal' : 'Ciudadano' });
+        k: esGm ? 'gm' : e.crim ? 'cri' : e.faccion === 'neu' ? 'neu' : e.faccion ? 'ciu' : 'nov', tipo: esGm ? this.gmTitle(e.gm) : this.nombreFaccion(e) });
     }
     return;
   }

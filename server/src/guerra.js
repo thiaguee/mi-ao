@@ -25,6 +25,7 @@ W.proximaGuerra = function (desde = Date.now()) {
 // horario de Argentina (el servidor alquilado suele estar en otra zona horaria)
 const hora = (t) => new Date(t).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Argentina/Buenos_Aires' }) + ' hs';
 const bandoDe = (p) => (p.crim ? 'cri' : 'ciu');
+const puedeGuerra = (p) => p.faccion === 'ciu' || p.faccion === 'cri';
 const NOMBRE = { ciu: 'Ciudadanos', cri: 'Criminales' };
 
 W.relojGuerra = function (now) {
@@ -83,6 +84,7 @@ W.comandoGuerra = function (p, arg) {
     return this.msg(p, `Guerra: ${g.estado} (${restan}). Ciudadanos ${g.totales.ciu} · Criminales ${g.totales.cri} · ${g.participantes.size} participantes. GM: /GUERRA INICIAR o /GUERRA TERMINAR.`, 'gm');
   }
   if (p.stats.lvl < (this.cfgGuerra.nivelMinimo || 25) && p.gm === 0) return this.msg(p, `Para entrar a la guerra necesitás nivel ${this.cfgGuerra.nivelMinimo || 25}.`, 'warn');
+  if (!puedeGuerra(p) && p.gm === 0) return this.msg(p, p.faccion === 'neu' ? 'Los neutrales no participan de la guerra.' : 'Primero elegí tu facción (Ciudadano o Criminal).', 'warn');
   if (p.dead) return this.msg(p, 'Estás muerto. Resucitá antes de ir a la guerra.', 'warn');
   if (p.jailUntil) return this.msg(p, 'Estás en la cárcel.', 'warn');
   if (g.estado === 'nada') return this.msg(p, `No hay ninguna guerra ahora. La próxima empieza a las ${hora(g.proxima)}.`, 'info');

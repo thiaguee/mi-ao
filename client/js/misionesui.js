@@ -51,8 +51,8 @@ function render(m) {
     }
   } else {
     const f = m.faccion;
-    html += `<div class="mc-tit">${f.bando === 'cri' ? 'Criminales: matá ciudadanos' : 'Ciudadanos: matá criminales'} — llevás <b>${fmt(f.cuenta)}</b></div>
-      <p class="hint">Se cumplen solas al llegar a cada número y se cobran una sola vez. No cuentan los newbies, las zonas de pelea ni matar al mismo jugador más de una vez cada 30 minutos.${f.bando === 'ciu' ? ' Si te hacés criminal pasás a sumar para la lista de los criminales.' : ''}</p><div class="mi-grilla">`;
+    html += `<div class="mc-tit">${f.bando === 'neu' ? 'Neutrales: no tienen misiones de facción' : f.bando === 'cri' ? 'Criminales: matá ciudadanos' : 'Ciudadanos: matá criminales'} — llevás <b>${fmt(f.cuenta)}</b></div>
+      <p class="hint">Se cumplen solas al llegar a cada número y se cobran una sola vez. No cuentan los newbies, las zonas de pelea ni matar al mismo jugador más de una vez cada 30 minutos.${f.bando === 'ciu' ? ' La facción se elige una sola vez al llegar a nivel 13.' : ''}</p><div class="mi-grilla">`;
     html += f.items.map((x) => tarjeta(x, x.hecha ? '<div class="mi-ok">✔ Cobrada</div>' : '')).join('') + '</div>';
   }
   html += '</div></div>';

@@ -152,7 +152,7 @@ K.gmMenu = function (p, msg) {
     case 'revivir': return this.command(p, '/REVIVIR ' + t.name);
     case 'est': {
       log('vio las estadísticas de');
-      this.msg(p, `${t.name} — ${G.CLASES[t.clase]} ${G.RAZAS[t.raza]} nivel ${s.lvl} (${s.exp}/${G.ELU[s.lvl] || 0}) · ${t.crim ? 'Criminal' : 'Ciudadano'}${t.guild ? ' · Clan ' + t.guild : ''}`, 'gm');
+      this.msg(p, `${t.name} — ${G.CLASES[t.clase]} ${G.RAZAS[t.raza]} nivel ${s.lvl} (${s.exp}/${G.ELU[s.lvl] || 0}) · ${this.nombreFaccion(t)}${t.guild ? ' · Clan ' + t.guild : ''}`, 'gm');
       this.msg(p, `Vida ${s.hp}/${s.maxHp} · Maná ${s.man}/${s.maxMan} · Energía ${s.sta}/${s.maxSta} · Golpe ${s.minHit}-${s.maxHit} · Oro ${s.gld.toLocaleString('es-AR')} (banco ${(t.bankGld || 0).toLocaleString('es-AR')})`, 'gm');
       this.msg(p, `Fuerza ${t.attrs[0]} · Agilidad ${t.attrs[1]} · Inteligencia ${t.attrs[2]} · Carisma ${t.attrs[3]} · Constitución ${t.attrs[4]}`, 'gm');
       this.msg(p, `Mató ${t.kills.ciu} ciudadanos, ${t.kills.cri} criminales y ${t.kills.npcs} bichos · Murió ${t.deaths || 0} veces · Advertencias: ${t.advertencias || 0} · Jugó ${(((t.jugado || 0) + (Date.now() - (t._desde || Date.now()))) / 3600000).toFixed(1)} hs`, 'gm');
@@ -197,7 +197,7 @@ K.command = function (p, text) {
       return this.toggleMeditate(p);
     case 'SEGURO':
       p.seguroOff = !p.seguroOff;
-      return this.msg(p, p.seguroOff ? 'Seguro DESACTIVADO: ahora podés atacar ciudadanos (te volverás criminal).' : 'Seguro ACTIVADO.', 'warn');
+      return this.msg(p, p.seguroOff ? 'Seguro DESACTIVADO: ahora podés atacar a neutrales (y los neutrales a cualquiera).' : 'Seguro ACTIVADO: sólo podés atacar a la facción enemiga.', 'warn');
     case 'EST': {
       const s = p.stats;
       this.msg(p, `${p.name} - ${G.CLASES[p.clase]} ${G.RAZAS[p.raza]} - Nivel ${s.lvl} (${s.exp}/${G.ELU[s.lvl]})`, 'info');
@@ -263,6 +263,7 @@ K.command = function (p, text) {
     case 'NOBLEZA':
       return this.comandoNobleza(p);
     case 'PREMIOS':
+      if (p.faccion !== 'ciu' && p.faccion !== 'cri' && p.gm < 2) return this.msg(p, 'Los premios de facción son para Ciudadanos y Criminales.', 'warn');
       return this.enviarCanje(p, p.crim ? 'cri' : 'ciu', true);
     case 'RANKING':
       return this.mostrarRanking(p);
@@ -301,7 +302,7 @@ K.command = function (p, text) {
       const t = target(rest); if (!t) return;
       const s = t.stats;
       this.msg(p, `${t.name}: ${G.CLASES[t.clase]} ${G.RAZAS[t.raza]} nivel ${s.lvl} | HP ${s.hp}/${s.maxHp} MAN ${s.man}/${s.maxMan} | Oro ${s.gld} Banco ${t.bankGld || 0}`, 'gm');
-      return this.msg(p, `Mapa ${t.map} ${t.x} ${t.y} | IP ${t.ip} | ${t.crim ? 'Criminal' : 'Ciudadano'} | Muertes ${t.deaths || 0}`, 'gm');
+      return this.msg(p, `Mapa ${t.map} ${t.x} ${t.y} | IP ${t.ip} | ${this.nombreFaccion(t)} | Muertes ${t.deaths || 0}`, 'gm');
     }
     case 'INVISIBLE': case 'INVI':
       if (!need(1)) return;
@@ -596,14 +597,15 @@ K.command = function (p, text) {
       if (!o) return this.msg(p, 'No hay objetos acá.', 'warn');
       return this.removeObj(p.map, p.x, p.y, o.amount);
     }
-    case 'HACERCRIMI': case 'HACERCIUDA': {
+    case 'HACERCRIMI': case 'HACERCIUDA': case 'HACERNEUTRAL': case 'RESETFACCION': {
       if (!need(3)) return;
       const t = target(rest); if (!t) return;
-      t.crim = cmd === 'HACERCRIMI';
-      this.sendCharToMap(t);
-      this.send(t, { t: 'stats', crim: t.crim });
+      const f = { HACERCRIMI: 'cri', HACERCIUDA: 'ciu', HACERNEUTRAL: 'neu', RESETFACCION: '' }[cmd];
+      this.ponerFaccion(t, f);
+      this.savePlayer(t);
+      if (!f) this.ofrecerFaccion(t);
       gmLog();
-      return this.msg(p, `${t.name} ahora es ${t.crim ? 'criminal' : 'ciudadano'}.`, 'gm');
+      return this.msg(p, f ? `${t.name} ahora es ${this.nombreFaccion(t)}.` : `${t.name} quedó sin facción y puede volver a elegir.`, 'gm');
     }
     case 'SKILLS': {
       if (!need(3)) return;

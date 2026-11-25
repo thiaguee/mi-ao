@@ -67,7 +67,7 @@ P.armarPersonaje = function (name, pass, raza, genero, headPedida, dice) {
     inv: [], eq: { weapon: -1, armor: -1, shield: -1, helmet: -1, ammo: -1 },
     spells: [], bank: [], bankGld: 0,
     pos: { map: city.map, x: city.x, y: city.y },
-    crim: false, kills: { ciu: 0, cri: 0, npcs: 0 }, deaths: 0,
+    crim: false, faccion: '', kills: { ciu: 0, cri: 0, neu: 0, npcs: 0 }, deaths: 0,
     hogar: 'ULLATHORPE',
   };
   // Equipo inicial newbie
@@ -117,6 +117,7 @@ P.login = function (sock, req) {
   this.sendSpells(p);
   this.sendSkills(p);
   this.msg(p, `Bienvenido a ${this.config.nombreServidor}, ${p.name}.`, 'server');
+  setTimeout(() => { if (this.players.get(p.id) === p) this.ofrecerFaccion(p); }, 1500);
   for (const line of this.config.motd) this.msg(p, line, 'server');
   if (p.gm > 0) this.msg(p, `Tenés poderes de ${this.gmTitle(p.gm)}. Escribí /GMAYUDA para ver tus comandos.`, 'gm');
   this.checkClassUp(p);
@@ -156,6 +157,9 @@ P.playerFromRecord = function (rec) {
   p.nivelesHoras = rec.nivelesHoras || {};
   p.advertencias = rec.advertencias || 0;
   p.cabezaObj = rec.cabezaObj || 0;
+  // facción: los personajes viejos sin facción guardada eligen al entrar (si son nivel 13+)
+  p.faccion = ['ciu', 'cri', 'neu'].includes(rec.faccion) ? rec.faccion : '';
+  p.crim = p.faccion ? p.faccion === 'cri' : !!rec.crim;
   return p;
 };
 
@@ -174,7 +178,7 @@ P.toRecord = function (p) {
     name: p.name, pass: p.pass, created: p.created, raza: p.raza, genero: p.genero, clase: p.clase,
     head: p.head, body: p.body, attrs: p.attrs, skills: p.skills, stats: p.stats, inv: p.inv,
     eq: p.eq, spells: p.spells, bank: p.bank, bankGld: p.bankGld,
-    pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, kills: p.kills, deaths: p.deaths,
+    pos: { map: p.map, x: p.x, y: p.y }, crim: p.crim, faccion: p.faccion || '', kills: p.kills, deaths: p.deaths,
     hogar: p.hogar, poisoned: p.poisoned, jailUntil: p.jailUntil, silenced: p.silenced,
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
     killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], pase: p.pase || null, noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
@@ -218,7 +222,7 @@ P.sendAllStats = function (p) {
     maxSta: s.maxSta, ham: s.ham, sed: s.sed, gld: s.gld, lvl: s.lvl, exp: s.exp,
     elu: s.lvl >= G.MAX_NIVEL ? 0 : G.ELU[s.lvl], clase: G.CLASES[p.clase], raza: G.RAZAS[p.raza],
     fu: p.attrs[0], ag: p.attrs[1], int: p.attrs[2], ca: p.attrs[3], co: p.attrs[4],
-    minHit: s.minHit, maxHit: s.maxHit, crim: p.crim, skillPts: s.skillPts, bankGld: p.bankGld,
+    minHit: s.minHit, maxHit: s.maxHit, crim: p.crim, faccion: p.faccion || '', skillPts: s.skillPts, bankGld: p.bankGld,
     map: p.map, x: p.x, y: p.y, dead: p.dead, mapName: this.maps[p.map].d.name,
     def: this.armorDef(p), kills: p.kills });
 };
@@ -609,6 +613,7 @@ P.checkLevel = function (p) {
     s.minHit = Math.min(99, s.minHit + hit);
     s.maxHit = Math.min(99, s.maxHit + hit);
     this.msg(p, `¡Has subido al nivel ${s.lvl}!`, 'server');
+    if (s.lvl === this.NIVEL_FACCION) this.ofrecerFaccion(p);
     if (this.retoPase) this.retoPase(p, 'niveles');
     if (s.lvl === G.NIVEL_DESBLOQUEO) {
       this.msg(p, `¡Llegaste al nivel ${G.NIVEL_DESBLOQUEO}! Se desbloquearon 10 niveles más (hasta el ${G.MAX_NIVEL}) y las MISIONES DE ÉLITE en los Maestros de Misiones.`, 'server');
@@ -781,23 +786,16 @@ P.killPlayer = function (p, killer) {
   if (enGuerra) this.muerteEnGuerra(p, killer);
   if (p.duelo) this.muerteEnDuelo(p);
   if (killer && killer.kind === 'pc' && killer.id !== p.id && !zonaPelea) {
+    // ya nadie se vuelve criminal por matar: sólo se cuenta a quién mataste
     const victimaEraCrim = !!p.crim;
-    if (!p.crim) {
-      killer.kills.ciu++;
-      if (!killer.crim) {
-        killer.crim = true;
-        this.msg(killer, '¡Te has convertido en criminal por asesinar a un ciudadano!', 'warn');
-        this.sendCharToMap(killer);
-      }
-    } else {
-      killer.kills.cri++;
-    }
+    const fv = p.faccion === 'neu' ? 'neu' : p.crim ? 'cri' : 'ciu';
+    killer.kills[fv] = (killer.kills[fv] || 0) + 1;
     this.msg(killer, `Has matado a ${p.name}!`, 'fight');
     this.msg(p, `${killer.name} te ha matado!`, 'fight');
     this.giveExp(killer, Math.floor(p.stats.lvl * 2));
     this.send(killer, { t: 'stats', kills: killer.kills, crim: killer.crim });
     this.sumarKillRanking(killer);
-    if (this.misionPk) this.misionPk(killer, p, victimaEraCrim);
+    if (this.misionPk) this.misionPk(killer, p, victimaEraCrim, fv);
   }
 };
 
@@ -974,6 +972,7 @@ P.ponerNivel = function (p, lvl) {
   this.msg(p, 'Ahora sos nivel ' + lvl + '.', 'server');
   this.sendSkills(p);
   this.checkClassUp(p); // si le faltan evoluciones, le aparece el cartel (y después los siguientes)
+  this.ofrecerFaccion(p);
 };
 
 module.exports = Object.assign(P, { INV_SLOTS, SPELL_SLOTS, BANK_SLOTS, NEWBIE_LVL });

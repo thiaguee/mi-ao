@@ -43,7 +43,7 @@ export function dibujarMinimapa(now, opts) {
     if (c.id === E.me || (c.inv && !opts.gm)) continue;
     let col = null, r = 2.5;
     if (c.npc) { if (c.col === 'npc_h') col = '#ff4a3a'; else if (opts.gm) { col = '#e8d070'; r = 2; } }
-    else col = c.col === 'cri' ? '#ff6060' : c.col === 'gm' ? '#ff8c1a' : '#59a8ff';
+    else col = c.col === 'cri' ? '#ff6060' : c.col === 'gm' ? '#ff8c1a' : c.col === 'neu' ? '#cfcfcf' : '#59a8ff';
     if (!col) continue;
     ctx.fillStyle = col;
     ctx.beginPath(); ctx.arc((c.x - 0.5) * k, (c.y - 0.5) * k, r * (c.npc ? 1 : 1.4), 0, Math.PI * 2); ctx.fill();

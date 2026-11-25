@@ -431,6 +431,16 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - Botón **OPCIONES**: una ventana con secciones (Sonido, Video, Interfaz, Chat, Controles, Rendimiento, Información). Música y efectos con su volumen, mostrar nombres/minimapa/FPS, lluvia y oscuridad de la noche, filtros de la consola, **teclas configurables** (modo moderno) y modo liviano. Se guarda en cada PC.
 
+## Facciones: se eligen a nivel 13
+- Ya **nadie se vuelve criminal por matar** (ni por pegarle a un ciudadano ni por matar guardias).
+- Hasta nivel 12 sos **novato** (nombre celeste clarito): no podés atacar usuarios ni te pueden atacar (salvo plantes, duelos y arena).
+- Al llegar a **nivel 13** aparece una ventana para elegir **Ciudadano**, **Criminal** o **Neutral**. Es **para siempre**. Si la cerrás, vuelve a aparecer al entrar o al intentar pelear.
+- **Ciudadanos** (azul) y **Criminales** (rojo) pelean entre ellos; no se pueden atacar entre los de la misma facción. Tienen guerra, comandante, premios y misiones de facción.
+- **Neutrales** (gris): sin guerra, sin premios ni misiones de facción; los guardias no los persiguen. Pueden atacar a cualquiera y cualquiera los puede atacar.
+- **/SEGURO**: puesto, sólo deja atacar a la facción enemiga. Para pegarle a un neutral (o si sos neutral) hay que sacarlo.
+- Los personajes viejos de nivel 13 o más eligen la próxima vez que entran.
+- GM: **/HACERCIUDA**, **/HACERCRIMI**, **/HACERNEUTRAL nombre**, y **/RESETFACCION nombre** para que vuelva a elegir.
+
 ## Líderes faccionarios
 
 - Los GMs eligen a mano un líder por facción: **/LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL**. Si ya había uno, lo reemplaza.

@@ -211,6 +211,7 @@ function handle(sock, msg) {
     case 'objCrear': return world.crearDesdePanel(p, msg); // panel /OBJETOS de los Admin
     case 'torneo': return world.accionTorneo(p, msg); // tienda de puntos de torneo
     case 'testeoNpc': return world.testeoNpc(p, msg); // panel /TESTEO: invocar NPC
+    case 'faccion': return world.elegirFaccion(p, String(msg.f || ''));
     case 'party': // grupos
       if (msg.a === 'invitar') return world.partyInvitar(p, world.players.get(+msg.id));
       if (msg.a === 'aceptar' || msg.a === 'rechazar') return world.partyResponder(p, msg.a === 'aceptar');

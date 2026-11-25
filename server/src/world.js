@@ -148,7 +148,7 @@ class World {
       b: e.dead ? G.CUERPO_MUERTO : e.body,
       hd: e.dead ? G.CABEZA_MUERTO : this.cabezaDe ? this.cabezaDe(e) : e.head,
       w: e.dead ? 0 : e.weaponAnim, s: e.dead ? 0 : e.shieldAnim, c: e.dead ? 0 : e.helmetAnim,
-      col: e.gm > 0 && !e.hideGm ? 'gm' : (e.crim ? 'cri' : 'ciu'),
+      col: e.gm > 0 && !e.hideGm ? 'gm' : (e.crim ? 'cri' : e.faccion === 'neu' ? 'neu' : e.faccion || e.stats.lvl >= 13 ? 'ciu' : 'nov'),
       inv: e.invisible || e.hidden ? 1 : 0, dead: e.dead ? 1 : 0,
       nav: e.sailing ? 1 : 0,
       cap: e.dead || e.sailing || !this.capaInfo ? null : this.capaInfo(e), // capa del clan (o la del pase)

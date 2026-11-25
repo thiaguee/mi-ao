@@ -370,6 +370,26 @@ on('ver', (m) => {
   if (atBottom) el.scrollTop = el.scrollHeight;
 });
 
+// ================== ELEGIR FACCIÓN (nivel 13) ==================
+const FACCIONES = [
+  ['ciu', '⚜', 'Ciudadano', '#4fa3ff', 'Defendés la ley junto a la Armada Real. Peleás contra los criminales, entrás a la guerra con los ciudadanos y canjeás premios con el Comandante de Arghal. Los guardias reales te protegen.'],
+  ['cri', '💀', 'Criminal', '#ff4a4a', 'Vivís fuera de la ley junto a las Legiones del Caos. Peleás contra los ciudadanos, entrás a la guerra con los criminales y canjeás premios con el Comandante de Banderbill.'],
+  ['neu', '⚖', 'Neutral', '#cfcfcf', 'No tenés bando ni guerra ni premios de facción. Sin seguro podés atacar a cualquiera, y cualquiera te puede atacar. Los guardias no te persiguen.'],
+];
+on('elegirFaccion', (m) => {
+  const html = `<div class="fac-elegir"><p class="hint">Llegaste a nivel ${m.nivel}: dejaste de ser novato. Elegí qué facción vas a representar.<br><b>Es para siempre: no se puede cambiar.</b></p>
+    <div class="fac-opc">${FACCIONES.map(([k, ic, n, col, d]) => `<div class="fac-card" style="--fc:${col}"><div class="fac-ic">${ic}</div><div class="fac-n">${n}</div><p>${d}</p><button class="btn main" data-fac="${k}">Ser ${n}</button></div>`).join('')}</div>
+    <p class="hint">Si cerrás esta ventana te la vamos a volver a mostrar. Mientras no elijas no podés pelear con usuarios.</p></div>`;
+  openModal('Elegí tu facción', html, 'faccion');
+  document.querySelectorAll('[data-fac]').forEach((b) => {
+    b.onclick = () => {
+      const f = FACCIONES.find((x) => x[0] === b.dataset.fac);
+      if (!confirm(`¿Seguro que querés ser ${f[2]}? No se puede cambiar.`)) return;
+      send({ t: 'faccion', f: f[0] }); closeModal();
+    };
+  });
+});
+
 // ================== 800x600 ==================
 // La pantalla de juego mide siempre 800x600 (como el AO original) y se agranda o achica
 // entera para llenar la ventana, sin importar el tamaño de la pantalla.
@@ -402,7 +422,7 @@ function bar(id, v, max) {
 function renderStats() {
   const s = S.stats;
   $('s-name').textContent = S.name;
-  $('s-name').style.color = S.gm ? '#ff8c1a' : s.crim ? '#ff5a4a' : '#e0b45a';
+  $('s-name').style.color = S.gm ? '#ff8c1a' : s.crim ? '#ff5a4a' : s.faccion === 'neu' ? '#cfcfcf' : '#e0b45a';
   $('s-class').textContent = `${s.clase || ''} ${s.raza || ''}`;
   $('s-level').innerHTML = `Nivel <b>${s.lvl || 1}</b>`;
   const pct = s.elu ? Math.floor((s.exp / s.elu) * 10000) / 100 : 100;

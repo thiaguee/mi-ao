@@ -8,14 +8,61 @@ const G = require('./gamedata');
 const F = {};
 const BANDO = { ciu: 'ciudadanos', cri: 'criminales' };
 const NOMBRE = { ciu: 'Ciudadanos', cri: 'Criminales' };
-const bandoDe = (p) => (p.crim ? 'cri' : 'ciu');
+const bandoDe = (p) => (p.faccion === 'neu' ? 'neu' : p.crim ? 'cri' : 'ciu');
 // los ciudadanos cuentan criminales matados; los criminales, ciudadanos matados
-const killsPara = (p) => (p.crim ? (p.kills.ciu || 0) : (p.kills.cri || 0));
+const killsPara = (p) => (p.faccion === 'neu' ? 0 : p.crim ? (p.kills.ciu || 0) : (p.kills.cri || 0));
 
 // Grupo de armaduras de facción según la clase (como en armadurasfaccionarias.dat)
 const MAGOS = new Set([36, 37, 38, 39]); // Con uso de maná, Hechicero, Mago, Nigromante
 const SACERDOTES = new Set([40, 42, 43, 44, 45]); // Orden sagrada, Clérigo, Naturalista, Bardo, Druida
 const grupoDe = (p) => (MAGOS.has(p.clase) ? 1 : SACERDOTES.has(p.clase) ? 2 : 3); // 3 = guerreros y demás
+
+// ---------- elegir facción a nivel 13 ----------
+// Nadie se vuelve criminal por matar: al llegar a nivel NIVEL_FACCION cada uno elige (una sola vez)
+// si representa a los Ciudadanos, a los Criminales o a los Neutrales. Antes de eso es "novato":
+// no puede pelear contra usuarios ni lo pueden atacar (salvo en zonas de pelea, duelos o arena).
+const NIVEL_FACCION = 13;
+const NOMBRE_FAC = { ciu: 'Ciudadano', cri: 'Criminal', neu: 'Neutral' };
+F.NIVEL_FACCION = NIVEL_FACCION;
+F.nombreFaccion = function (p) { return p.faccion ? NOMBRE_FAC[p.faccion] : (p.stats.lvl < NIVEL_FACCION ? 'Novato' : 'Sin facción'); };
+F.esNovato = function (p) { return p.kind === 'pc' && !p.faccion && p.stats.lvl < NIVEL_FACCION && !p.gm; };
+F.ofrecerFaccion = function (p) {
+  if (p.faccion || p.gm > 0 || p.stats.lvl < NIVEL_FACCION) return;
+  this.send(p, { t: 'elegirFaccion', nivel: NIVEL_FACCION });
+};
+F.ponerFaccion = function (p, f) {
+  p.faccion = f || '';
+  p.crim = f === 'cri';
+  this.sendCharToMap(p);
+  this.send(p, { t: 'stats', crim: p.crim, faccion: p.faccion });
+  if (this.revisarTunicaDeBando) this.revisarTunicaDeBando(p);
+};
+F.elegirFaccion = function (p, f) {
+  if (!NOMBRE_FAC[f]) return;
+  if (p.faccion) return this.msg(p, `Ya elegiste: sos ${NOMBRE_FAC[p.faccion]}. La facción no se puede cambiar.`, 'warn');
+  if (p.stats.lvl < NIVEL_FACCION && p.gm === 0) return this.msg(p, `Podés elegir facción a partir del nivel ${NIVEL_FACCION}.`, 'warn');
+  this.ponerFaccion(p, f);
+  this.savePlayer(p);
+  const txt = { ciu: 'Ahora representás a los CIUDADANOS. Tu enemigo son los criminales; tu comandante está en Arghal.',
+    cri: 'Ahora representás a los CRIMINALES. Tu enemigo son los ciudadanos; tu comandante está en Banderbill.',
+    neu: 'Ahora sos NEUTRAL: no tenés bando ni guerra. Podés pelear con cualquiera (sacá el seguro con /SEGURO) y cualquiera te puede atacar.' }[f];
+  this.msg(p, '⚑ ' + txt, 'server');
+  this.toAll({ t: 'msg', text: `⚑ ${p.name} eligió ser ${NOMBRE_FAC[f]}.`, color: 'server' });
+};
+
+// ¿Pueden pelear estos dos usuarios por la facción? (fuera de zona segura/pelea/guerra/duelo). true o el motivo
+F.reglaFaccion = function (p, t) {
+  if (p.gm >= 3) return true;
+  if (this.esNovato(p)) return `Los novatos no pelean contra usuarios. A nivel ${NIVEL_FACCION} vas a elegir tu facción.`;
+  if (this.esNovato(t)) return `${t.name} es novato (menos de nivel ${NIVEL_FACCION}): no se lo puede atacar.`;
+  if (!p.faccion && p.gm === 0) { this.ofrecerFaccion(p); return 'Primero elegí tu facción.'; }
+  const a = bandoDe(p), b = bandoDe(t);
+  if (a !== 'neu' && a === b) return `${t.name} es de tu facción (${NOMBRE_FAC[a] === 'Criminal' ? 'Criminales' : 'Ciudadanos'}).`;
+  // el seguro: puesto, sólo deja atacar a la facción enemiga (los neutrales no tienen enemiga)
+  const enemigo = (a === 'ciu' && b === 'cri') || (a === 'cri' && b === 'ciu');
+  if (!enemigo && !p.seguroOff) return 'Con el seguro puesto sólo podés atacar a la facción enemiga. Sacalo con /SEGURO.';
+  return true;
+};
 
 F.cargarFaccion = function () {
   const dir = path.join(__dirname, '..', 'data');

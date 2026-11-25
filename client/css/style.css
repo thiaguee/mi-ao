@@ -559,3 +559,13 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .guia table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 11.5px; }
 .guia th, .guia td { border: 1px solid #3a2e1c; padding: 3px 6px; text-align: left; vertical-align: top; } .guia th { background: #2a2117; color: #ffd27a; }
 .guia code { background: #0006; padding: 0 3px; border-radius: 3px; }
+
+/* elegir facción (nivel 13) */
+.fac-elegir { max-width: 760px; }
+.fac-opc { display: flex; gap: 12px; margin: 12px 0; }
+.fac-card { flex: 1; border: 1px solid var(--fc); border-radius: 6px; padding: 12px; background: linear-gradient(#0000, color-mix(in srgb, var(--fc) 14%, #0000)); text-align: center; display: flex; flex-direction: column; gap: 6px; }
+.fac-ic { font-size: 34px; }
+.fac-n { font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: var(--fc); text-shadow: 0 0 6px var(--fc); }
+.fac-card p { font-size: 12px; line-height: 1.4; flex: 1; color: #d9c9a3; margin: 0; }
+.ver-neu .ver-n, .ver-neu .ver-tag { color: #cfcfcf; }
+.ver-nov .ver-n, .ver-nov .ver-tag { color: #9fd4ff; }

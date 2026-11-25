@@ -105,12 +105,6 @@ C.killNpc = function (npc, killer) {
       if (o && o.type === OBJ.ORO) this.repartirOro(killer, Math.floor(amount * this.config.multiplicadorOro * noche), npc.map, npc.x, npc.y);
       else if (o) this.dropObj(npc.map, npc.x, npc.y, id, amount);
     }
-    // Matar guardias te hace criminal
-    if ((def.type === NPC_TYPE.GUARDIA) && !killer.crim) {
-      killer.crim = true;
-      this.msg(killer, '¡Te has convertido en criminal por matar a un guardia!', 'warn');
-      this.sendCharToMap(killer);
-    }
   }
   if (npc.spawnOrig && !npc.summoned && !npc.sinRespawn) this.respawnNpc(npc);
 };
@@ -207,7 +201,7 @@ C.guardAI = function (npc, now) {
   for (const id of mp.players) {
     const p = this.players.get(id);
     if (!p || p.dead || p.gmInvis || p.gm > 0) continue;
-    if ((caos ? !p.crim : p.crim) && Math.max(Math.abs(p.x - npc.x), Math.abs(p.y - npc.y)) <= 6) { target = p; break; }
+    if ((caos ? p.faccion === 'ciu' : p.faccion === 'cri') && Math.max(Math.abs(p.x - npc.x), Math.abs(p.y - npc.y)) <= 6) { target = p; break; }
   }
   if (npc.target) {
     const t = this.players.get(npc.target);
@@ -294,17 +288,18 @@ C.canAttack = function (p, target) {
     if (this.isSafe(p) || this.isSafe(target)) {
       this.msg(p, this.enZonaPelea(p) ? 'Tu rival tiene que estar adentro de la zona de pelea.' : 'No podés pelear en zona segura.', 'warn'); return false;
     }
-    if (!p.crim && !target.crim && !p.seguroOff) {
-      this.msg(p, 'Para atacar ciudadanos sacá el seguro con /SEGURO (te vas a volver criminal).', 'warn');
-      return false;
-    }
+    const rf = this.reglaFaccion(p, target);
+    if (rf !== true) { this.msg(p, rf, 'warn'); return false; }
     return true;
   }
   if (!target.def.attackable) {
     if (target.def.type !== NPC_TYPE.COMUN || !target.def.hostile) { this.msg(p, 'No podés atacar a este NPC.', 'warn'); return false; }
   }
-  if ((target.def.type === NPC_TYPE.GUARDIA) && !p.crim && !p.seguroOff) {
-    this.msg(p, 'Para atacar guardias sacá el seguro con /SEGURO.', 'warn'); return false;
+  // los guardias de tu propia facción no se atacan; los novatos no atacan guardias
+  const tg = target.def.type;
+  if (tg === NPC_TYPE.GUARDIA || tg === NPC_TYPE.GUARDIA_CAOS) {
+    const suyo = tg === NPC_TYPE.GUARDIA ? 'ciu' : 'cri';
+    if (p.gm < 2 && (!p.faccion || p.faccion === suyo)) { this.msg(p, p.faccion ? 'Es un guardia de tu facción.' : 'No podés atacar guardias.', 'warn'); return false; }
   }
   return true;
 };
@@ -340,12 +335,6 @@ C.attack = function (p) {
 C.hitTarget = function (p, target, ranged) {
   if (!this.canAttack(p, target)) return;
   if (p.hidden) { p.hidden = false; this.sendCharToMap(p); }
-  if (target.kind === 'pc' && !p.crim && !target.crim && !this.peleaDeGuerra(p, target) && !(this.enZonaPelea(p) && this.enZonaPelea(target))) {
-    p.crim = true;
-    this.msg(p, '¡Te has convertido en criminal por atacar a un ciudadano!', 'warn');
-    this.sendCharToMap(p);
-    this.send(p, { t: 'stats', crim: true });
-  }
   const atk = this.poderAtaque(p);
   const eva = target.kind === 'pc' ? this.poderEvasion(target) : target.def.evasion;
   const sk = ranged ? SK['Armas de proyectiles'] : this.weaponOf(p) ? SK['Combate con armas'] : SK['Wrestling'];

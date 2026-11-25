@@ -153,6 +153,14 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Apocalipsis, Descarga Eléctrica, Tormenta de Fuego y Castigo: antes del nivel 30 dice "Necesitás nivel 30".
 - [ ] Meditar, comerciar y los oficios andan siempre al máximo.
 
+## Facciones a nivel 13
+- [ ] Un personaje nuevo es novato: no puede pegarle a usuarios ni se lo puede atacar.
+- [ ] Con /NIVEL nombre 13 le aparece la ventana con Ciudadano / Criminal / Neutral; después no se puede cambiar.
+- [ ] Ciudadano contra ciudadano o criminal contra criminal: "es de tu facción". Ciudadano contra criminal: pega.
+- [ ] Neutral: con el seguro puesto no pega; con /SEGURO le pega a cualquiera. Nombre gris.
+- [ ] Matar a alguien ya no te vuelve criminal.
+- [ ] /HACERNEUTRAL y /RESETFACCION.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?
