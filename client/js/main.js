@@ -888,7 +888,8 @@ function setModo(m) {
   $('b-keys').textContent = m === 'moderno' ? '⌨ Moderno' : '⌨ Clásico';
 }
 Opc.init({ openModal, closeModal, E, S, AU: Snd.AU, Snd, setModo, getModo: () => MODO, send, $ });
-PartyUI.init({ send, S, $, confirmar, log, esc });
+PartyUI.init({ send, S, $, confirmar, log, esc, openModal });
+$('b-grupo').onclick = () => PartyUI.abrir();
 PartyUI.mensajes(on);
 $('b-keys').onclick = () => {
   setModo(MODO === 'moderno' ? 'clasico' : 'moderno');

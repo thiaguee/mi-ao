@@ -41,6 +41,34 @@ async function accion(a) {
 
 export function invitar(id) { H.send({ t: 'party', a: 'invitar', id }); }
 
+// ---------- ventana del botón GRUPO ----------
+export function abrir() {
+  const yo = H.S.me, soyLider = !G.miembros.length || G.lider === yo;
+  const filas = G.miembros.map((m) => {
+    const hp = Math.round((m.hp / Math.max(1, m.mhp)) * 100);
+    return `<div class="gw-m"><b>${m.lider ? '👑 ' : ''}${H.esc(m.n)}</b><span>Nivel ${m.lvl}</span>
+      <div class="pp-b hp"><div style="width:${hp}%"></div></div><span>${m.muerto ? '💀 muerto' : `${m.hp}/${m.mhp}`}</span>${m.voz ? '🎤' : ''}
+      ${G.lider === yo && m.id !== yo ? `<button class="btn sm" data-gecha="${H.esc(m.n)}">Echar</button>` : ''}</div>`;
+  }).join('');
+  H.openModal('Grupo', `<div class="gw">
+    ${G.miembros.length ? `<div class="gw-lista">${filas}</div>` : '<p class="hint">No estás en un grupo. En grupo la experiencia de los bichos se reparte entre los que están cerca (con +10% por cada integrante) y el oro va directo a cada uno. Hasta 6 jugadores.</p>'}
+    ${soyLider ? `<div class="gw-inv"><input id="gw-nombre" placeholder="Nombre del jugador" maxlength="20"><button class="btn sm main" id="gw-invitar">Invitar</button></div>
+      <p class="hint">También podés invitar con clic derecho sobre un jugador.</p>` : '<p class="hint">Sólo el líder puede invitar.</p>'}
+    ${G.miembros.length ? `<div class="gw-acc"><button class="btn sm${G.voz ? ' main' : ''}" data-ga="voz">${G.voz ? '🎤 Voz: sí' : '🎤 Voz: no'}</button>
+      <button class="btn sm" data-ga="ptt">${G.ptt ? 'Modo: V para hablar' : 'Modo: micrófono abierto'}</button>
+      <button class="btn sm" data-ga="mute">${G.mute ? '🔇 Demás silenciados' : '🔊 Escuchar a todos'}</button>
+      <button class="btn sm" data-ga="salir">Salir del grupo</button></div>` : ''}
+    <p class="hint">/P mensaje habla con el grupo.</p></div>`, 'grupo');
+  const inp = document.getElementById('gw-nombre');
+  if (inp) {
+    const inv = () => { const n = inp.value.trim(); if (n) H.send({ t: 'talk', text: '/GRUPO ' + n }); inp.value = ''; };
+    document.getElementById('gw-invitar').onclick = inv;
+    inp.onkeydown = (e) => { e.stopPropagation(); if (e.key === 'Enter') inv(); };
+  }
+  document.querySelectorAll('[data-ga]').forEach((b) => { b.onclick = async () => { await accion(b.dataset.ga); if (H.S.modal === 'grupo') abrir(); }; });
+  document.querySelectorAll('[data-gecha]').forEach((b) => { b.onclick = () => H.send({ t: 'party', a: 'echar', n: b.dataset.gecha }); });
+}
+
 // ---------- voz ----------
 async function vozPrender() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -138,6 +166,7 @@ export function mensajes(on) {
     G.miembros = m.miembros || []; G.lider = m.lider || 0;
     if (!G.miembros.length && G.voz) vozApagar();
     sincronizarPeers(); render();
+    if (H.S.modal === 'grupo' && !document.activeElement.matches('#gw-nombre')) abrir();
   });
   on('partyInv', async (m) => {
     const si = await H.confirmar(`${m.de} te invita a su grupo. La experiencia y el oro de los bichos se reparten entre los que estén cerca.`, 'Unirme', 'No');

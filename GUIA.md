@@ -395,7 +395,7 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - **Clic derecho sobre un jugador → Invitar al grupo** (o **/GRUPO nombre**). Hasta 6 integrantes. **/P mensaje** habla con el grupo, **/SALIRGRUPO** y **/ECHARGRUPO nombre** (líder).
 - La **experiencia** de los bichos se reparte entre los que estén cerca (mismo mapa, 25 baldosas) con **+10% por cada integrante extra**; cada uno la recibe con el multiplicador de su nivel. El **oro** va directo a la billetera de cada uno, en partes iguales.
-- Panel del grupo arriba a la derecha: vida, maná, líder y quién está hablando.
+- Panel del grupo arriba a la derecha: vida, maná, líder y quién está hablando. Botón **GRUPO** (abajo de MAPA/PASE/MENÚ): ver el grupo, invitar por nombre, voz y salir.
 - **Chat de voz**: botón "🎤 Voz" en el panel. Micrófono abierto o "V para hablar" (mantener V). 🔊/🔇 silencia a los demás. La voz va directo entre los jugadores; funciona en la aplicación de Windows (en el navegador sólo por https o localhost).
 
 ## Oficios
