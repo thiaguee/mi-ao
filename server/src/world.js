@@ -153,7 +153,8 @@ class World {
       nav: e.sailing ? 1 : 0,
       cap: e.dead || e.sailing || !this.capaInfo ? null : this.capaInfo(e), // capa del clan (o la del pase)
       tt: this.cosmeticosDe ? this.cosmeticosDe(e).titulo : '', // título del pase
-      au: e.dead || e.sailing ? '' : (this.cosmeticosDe && this.cosmeticosDe(e).aura) || this.auraRopa(e), // aura del pase o de la ropa
+      au: e.dead || e.sailing || !this.cosmeticosDe ? '' : this.cosmeticosDe(e).aura, // aura del pase
+      al: e.dead || e.sailing ? '' : this.auraRopa(e), // luz de fondo que da la ropa (campo Aura)
       lf: this.liderDe ? this.liderDe(e) : '', // líder faccionario: cri, ciu o neu
       ry: !e.dead && e.eq && e.eq.armor >= 0 && e.inv[e.eq.armor] && (this.data.objs[e.inv[e.eq.armor].id] || {}).rayos ? 1 : 0, // ropa con rayos
       sit: e.sentado || 0, // sentado: 1 en el piso, 2 en un banco

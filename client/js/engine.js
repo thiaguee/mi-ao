@@ -502,6 +502,7 @@ function drawChar(ctx, c, px, py, now, me) {
       dibujarAura(ctx, { ld: 1, ce: col, b: c.au === 'arcoiris' ? hsvHex((now / 2000 + 0.5) % 1) : '#ffffff' }, px, py, now);
     }
     if (cap) { if (!c.au) dibujarAura(ctx, cap, px, py, now); dibujarCapa(ctx, cap, px, py, h, 'atras', now, c.walking); }
+    if (c.al && !ghost) dibujarLuz(ctx, c.al, px, py, now); // luz de fondo (Aura de la ropa)
     if (c.ry && !ghost) dibujarRayos(ctx, c, px, py, now, false);
     // la animación de caminar sólo avanza mientras se mueve
     drawGrh(ctx, bg, px, py, true, c.walking ? walkT * WALK_ANIM : 0);
@@ -660,6 +661,24 @@ function drawRain(ctx, now) {
     ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - 2, d.y + 9);
   }
   ctx.stroke();
+}
+
+// Luz de fondo detrás del personaje (ropas con Aura=color): un resplandor suave que late despacio
+function dibujarLuz(ctx, color, px, py, now) {
+  const cx = px + 16, cy = py - 6;
+  const p = 0.75 + Math.sin(now / 700) * 0.2;
+  const n = parseInt(color.replace('#', ''), 16) || 0x8fe6ff;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  ctx.save();
+  ctx.globalCompositeOperation = 'screen';
+  const gr = ctx.createRadialGradient(cx, cy, 2, cx, cy, 48);
+  gr.addColorStop(0, `rgba(${r},${g},${b},${0.95 * p})`);
+  gr.addColorStop(0.4, `rgba(${r},${g},${b},${0.55 * p})`);
+  gr.addColorStop(0.75, `rgba(${r},${g},${b},${0.18 * p})`);
+  gr.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  ctx.fillStyle = gr;
+  ctx.beginPath(); ctx.ellipse(cx, cy, 44, 54, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
 }
 
 // Rayos que rodean al personaje (ropas con Rayos=1, por ejemplo las Alas del Ángel Oscuro)
