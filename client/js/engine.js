@@ -673,8 +673,8 @@ function rayo(ctx, x1, y1, x2, y2, quiebres) {
 }
 function dibujarRayos(ctx, c, px, py, now, adelante) {
   const cx = px + 16, cy = py - 2;
-  // cada ~80 ms se arman rayos nuevos (siempre hay alguno)
-  if (!c._rayos || now - c._rayosT > 80) {
+  // cada ~250 ms se arman rayos nuevos (siempre hay alguno)
+  if (!c._rayos || now - c._rayosT > 250) {
     c._rayosT = now; c._rayos = [];
     const n = 2 + Math.floor(Math.random() * 3);
     for (let i = 0; i < n; i++) {
@@ -686,7 +686,7 @@ function dibujarRayos(ctx, c, px, py, now, adelante) {
   }
   ctx.save();
   if (!adelante) { // resplandor oscuro de fondo, latiendo
-    const p = 0.55 + Math.sin(now / 140) * 0.2;
+    const p = 0.55 + Math.sin(now / 420) * 0.2;
     const g = ctx.createRadialGradient(cx, cy + 6, 4, cx, cy + 6, 34);
     g.addColorStop(0, `rgba(150,90,255,${0.32 * p})`); g.addColorStop(1, 'rgba(60,20,120,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy + 6, 34, 40, 0, 0, Math.PI * 2); ctx.fill();
