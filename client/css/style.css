@@ -537,3 +537,5 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .rc-it.no { opacity: .55; } .rc-n { flex: 1; display: flex; flex-direction: column; color: #e8dcc3; } .rc-n small { color: #a8977a; }
 .rc-it input { width: 52px; }
 .rc-h { color: #c9c9d6; } .rc-p { color: #e0e6f0; } .rc-o { color: #ffd633; } .rc-m { color: #d9a15a; } .falta { color: #e06a5a !important; }
+.side-btns .b-quests { grid-column: 1 / -1; background: linear-gradient(#4a3a1a, #2a1f0e); color: #ffd84a; border-color: #8a6a2a; }
+.side-btns #b-menu { grid-column: span 2; }

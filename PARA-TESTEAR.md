@@ -136,6 +136,12 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] /EVENTO SORTEO y /EVENTO DOBLEEXP.
 - [ ] Esperar uno automático (45-75 min con 2 o más jugadores).
 
+## Ítems de demonio y arreglos
+- [ ] /CI 2066 1 (Corona Demoníaca, casco) y /CI 2067 1 (Cabeza de Demonio: se usa con doble clic y se saca igual). Sólo GMs.
+- [ ] Con las Alas del Ángel Oscuro, caminar de espaldas: la cabeza ya no flota.
+- [ ] Botón ⚔ QUESTS abajo de MAPA/MENÚ.
+- [ ] Ciudad 334: dos fuentes a los costados y dos árboles en el medio para pararse.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

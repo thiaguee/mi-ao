@@ -507,10 +507,13 @@ function drawChar(ctx, c, px, py, now, me) {
     drawGrh(ctx, bg, px, py, true, c.walking ? walkT * WALK_ANIM : 0);
     if (c.ry && !ghost) dibujarRayos(ctx, c, px, py, now, true);
     if (cap) dibujarCapa(ctx, cap, px, py, h, 'adelante', now, c.walking);
-    const head = sinJinete ? null : A.heads[c.hd];
-    if (head && head[h - 1]) drawGrh(ctx, head[h - 1], px + body.ox, py + body.oy, true, 0);
+    // ajuste de altura de la cabeza por dirección y cuadro de caminata (body.hf), para cuerpos como las alas
+    const hfila = body.hf && body.hf[h - 1];
+    const hdy = hfila ? hfila[frameIndex(bg, c.walking ? walkT * WALK_ANIM : 0) % hfila.length] || 0 : 0;
+    const head = sinJinete || c.sinCabeza ? null : A.heads[c.hd];
+    if (head && head[h - 1]) drawGrh(ctx, head[h - 1], px + body.ox, py + body.oy + hdy, true, 0);
     const helm = sinJinete ? null : A.helmets[c.c];
-    if (helm && helm[h - 1]) drawGrh(ctx, helm[h - 1], px + body.ox + 1, py + body.oy - 34, true, 0);
+    if (helm && helm[h - 1]) drawGrh(ctx, helm[h - 1], px + body.ox + 1, py + body.oy - 34 + hdy, true, 0);
     const wpn = sinJinete ? null : A.weapons[c.w];
     if (wpn && wpn[h - 1]) drawGrh(ctx, wpn[h - 1], px, py, true, c.walking ? walkT * WALK_ANIM : 0);
     const sh = sinJinete ? null : A.shields[c.s];

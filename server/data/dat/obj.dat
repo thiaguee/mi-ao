@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2065
+NumOBJs=2067
 
 
 
@@ -16050,3 +16050,23 @@ MinDef=50
 Valor=10000000
 SoloGM=1
 Rayos=1
+
+[OBJ2066] 'Norway AO: corona demoniaca de hierro negro con filos dorados y cuernos (casco 23), para GMs; combina con las Alas del Angel Oscuro
+Name=Corona Demoniaca
+GrhIndex=43312
+ObjType=17
+Anim=23
+Agarrable=0
+MinDef=10
+MaxDef=12
+Valor=10000000
+SoloGM=1
+
+[OBJ2067] 'Norway AO: al usarla cambia tu cabeza por una de demonio (cabeza 515); usarla otra vez la saca. Para GMs
+Name=Cabeza de Demonio
+GrhIndex=43302
+ObjType=52
+CabezaIndex=515
+Agarrable=0
+Valor=10000000
+SoloGM=1

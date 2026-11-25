@@ -16,6 +16,7 @@ const OBJ = {
   YUNQUE: 27, FRAGUA: 28, BARCO: 31, FLECHA: 32, BOTELLA_VACIA: 33, BOTELLA_LLENA: 34,
   MONTURA: 25, MOCHILA: 37,
   PASAJE: 50, // pasaje de viaje (nuestro)
+  APARIENCIA: 52, // cambia la cabeza al usarlo (Cabeza de Demonio)
 };
 
 // ---- Objetos de Norway AO renumerados al 2000+ (número viejo -> nuevo) ----
@@ -149,6 +150,7 @@ function loadObjs() {
       lingH: num(v.LINGH), lingP: num(v.LINGP), lingO: num(v.LINGO), skHerreria: num(v.SKHERRERIA),
       madera: num(v.MADERA), skCarpinteria: num(v.SKCARPINTERIA),
       mineral: num(v.MINERALINDEX), lingote: num(v.LINGOTEINDEX),
+      cabeza: num(v.CABEZAINDEX), // objetos de apariencia: cabeza que ponen
       cerrada: num(v.CERRADA) === 1, indexAbierta: num(v.INDEXABIERTA), indexCerrada: num(v.INDEXCERRADA),
       llave: num(v.LLAVE), clave: num(v.CLAVE),
       apunala: num(v.APUNALA) === 1,

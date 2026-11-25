@@ -125,6 +125,12 @@ class World {
   msg(p, text, color = 'info') { this.send(p, { t: 'msg', text, color }); }
 
   // ---------- personajes visibles ----------
+  // cabeza que se ve: la de un objeto de apariencia (si todavía lo tiene) o la propia
+  cabezaDe(e) {
+    if (e.cabezaObj && this.countItem(e, e.cabezaObj) > 0) { const o = this.data.objs[e.cabezaObj]; if (o && o.cabeza) return o.cabeza; }
+    return e.head;
+  }
+
   charInfo(e) {
     if (e.kind === 'npc') {
       return { id: e.id, n: e.name, x: e.x, y: e.y, h: e.heading, b: e.body, hd: e.head,
@@ -133,7 +139,7 @@ class World {
     return {
       id: e.id, n: e.name + (e.guild ? ` <${e.guild}>` : ''), x: e.x, y: e.y, h: e.heading,
       b: e.dead ? G.CUERPO_MUERTO : e.body,
-      hd: e.dead ? G.CABEZA_MUERTO : e.head,
+      hd: e.dead ? G.CABEZA_MUERTO : this.cabezaDe ? this.cabezaDe(e) : e.head,
       w: e.dead ? 0 : e.weaponAnim, s: e.dead ? 0 : e.shieldAnim, c: e.dead ? 0 : e.helmetAnim,
       col: e.gm > 0 && !e.hideGm ? 'gm' : (e.crim ? 'cri' : 'ciu'),
       inv: e.invisible || e.hidden ? 1 : 0, dead: e.dead ? 1 : 0,

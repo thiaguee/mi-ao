@@ -154,6 +154,7 @@ P.playerFromRecord = function (rec) {
   p.jugado = rec.jugado || 0; p._desde = Date.now(); // tiempo jugado (ms), para medir el ritmo
   p.nivelesHoras = rec.nivelesHoras || {};
   p.advertencias = rec.advertencias || 0;
+  p.cabezaObj = rec.cabezaObj || 0;
   return p;
 };
 
@@ -177,7 +178,7 @@ P.toRecord = function (p) {
     lastLogin: Date.now(), guild: p.guild || '', capaOculta: !!p.capaOculta, mis: p.mis,
     killsGuerra: p.killsGuerra || 0, puntosTorneo: p.puntosTorneo || 0, canjesFaccion: p.canjesFaccion || [], pase: p.pase || null, noble: !!p.noble, tunicaNoble: p.tunicaNoble || 0,
     nivelGm: !!p.nivelGm, yaNoNewbie: !!p.yaNoNewbie,
-    jugado: p.jugado, nivelesHoras: p.nivelesHoras || {}, advertencias: p.advertencias || 0,
+    jugado: p.jugado, nivelesHoras: p.nivelesHoras || {}, advertencias: p.advertencias || 0, cabezaObj: p.cabezaObj || 0,
   };
 };
 
@@ -413,6 +414,14 @@ P.useItem = function (p, i) {
   if (this.esHerramienta && this.esHerramienta(it.id) && p.eq.weapon === i && this.usarHerramienta(p)) return;
   if (o.type === OBJ.MINERAL && this.fundir && this.fundir(p, i)) return;
   const s = p.stats;
+  if (o.type === OBJ.APARIENCIA) { // Cabeza de Demonio: se pone y se saca usándola
+    const puede = this.canUseObj(p, o);
+    if (puede !== true) return this.msg(p, puede, 'warn');
+    p.cabezaObj = p.cabezaObj === it.id ? 0 : it.id;
+    this.msg(p, p.cabezaObj ? `Te pusiste: ${o.name}.` : `Te sacaste: ${o.name}.`, 'info');
+    this.sendCharToMap(p);
+    return;
+  }
   switch (o.type) {
     case OBJ.COMIDA:
       s.ham = Math.min(100, s.ham + (o.minHam || 10));
