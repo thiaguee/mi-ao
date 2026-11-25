@@ -16007,6 +16007,7 @@ Agarrable=0
 MaxDef=55
 MinDef=50
 Valor=10000000
+Aura=#fff1c2
 
 [OBJ2020] 'Norway AO: Espada Argentum con guarda de cristales dorados (golpe +1)
 Name=Espada Argentum +1
