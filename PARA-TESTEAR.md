@@ -129,6 +129,13 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Herrería: martillo al lado del yunque → ventana, fabricar una daga.
 - [ ] Carpintería: serrucho → ventana, fabricar flechas con madera.
 
+## Eventos
+- [ ] /EVENTO TRIVIA (GM) y contestar en el chat.
+- [ ] /EVENTO CACERIA: ir al bosque anunciado y matar la Bestia Dorada.
+- [ ] /EVENTO INVASION: matar invasores (5.000 c/u) y ver el premio al que más mató.
+- [ ] /EVENTO SORTEO y /EVENTO DOBLEEXP.
+- [ ] Esperar uno automático (45-75 min con 2 o más jugadores).
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

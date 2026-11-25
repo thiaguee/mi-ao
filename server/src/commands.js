@@ -41,6 +41,7 @@ K.handleTalk = function (p, text, cartel) {
   const color = p.gm > 0 && !p.hideGm ? 'gm' : lf ? 'lider_' + lf : 'talk'; // los líderes hablan del color de su facción
   this.toMap(p.map, { t: 'say', id: p.id, text, color });
   this.toMap(p.map, { t: 'msg', text: `${p.name}: ${text}`, color: color === 'gm' ? 'gmtalk' : color }); // la consola usa el mismo color que el globito
+  if (this.eventoChat) this.eventoChat(p, text); // respuestas de la trivia
   this.chatLog(`[${p.map}] ${p.name}: ${text}`);
 };
 
@@ -375,6 +376,7 @@ K.command = function (p, text) {
       }
       return;
     }
+    case 'EVENTO': case 'EVENTOS': return this.comandoEvento(p, rest);
     case 'GRUPO': case 'PARTY': { // invitar a alguien al grupo
       if (!rest) return this.msg(p, 'Grupos: /GRUPO nombre invita · clic derecho en un jugador también · /P mensaje habla con el grupo · /SALIRGRUPO · /ECHARGRUPO nombre (líder).', 'party');
       const t = target(rest); if (!t) return;

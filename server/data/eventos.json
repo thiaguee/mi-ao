@@ -1,0 +1,287 @@
+{
+ "_ayuda": "Eventos automáticos. cadaMinutos: cada cuánto (al azar entre min y max) arranca uno. tipos: cuáles pueden salir y con qué peso. Los GMs: /EVENTO tipo para largarlo, /EVENTO TERMINAR, /EVENTO para ver el actual.",
+ "activo": true,
+ "cadaMinutos": [
+  45,
+  75
+ ],
+ "tipos": {
+  "invasion": 3,
+  "caceria": 3,
+  "trivia": 3,
+  "sorteo": 2,
+  "dobleexp": 1
+ },
+ "invasion": {
+  "duracionMinutos": 15,
+  "bichos": [
+   [
+    555,
+    6
+   ],
+   [
+    549,
+    4
+   ],
+   [
+    541,
+    4
+   ],
+   [
+    558,
+    1
+   ]
+  ],
+  "lugares": [
+   [
+    "Ullathorpe",
+    2
+   ],
+   [
+    "Ullathorpe",
+    12
+   ],
+   [
+    "Nix",
+    35
+   ],
+   [
+    "Banderbill",
+    56
+   ],
+   [
+    "Arghal",
+    157
+   ]
+  ],
+  "premioPorBicho": {
+   "oro": 5000
+  },
+  "premioMejor": {
+   "oro": 150000,
+   "puntosTorneo": 3
+  }
+ },
+ "caceria": {
+  "duracionMinutos": 20,
+  "npc": 2002,
+  "mapas": [
+   3,
+   8,
+   9,
+   12,
+   13,
+   19,
+   24,
+   29,
+   38,
+   55,
+   71,
+   73,
+   85,
+   158,
+   185,
+   193
+  ],
+  "premio": {
+   "oro": 250000,
+   "puntosTorneo": 5
+  }
+ },
+ "trivia": {
+  "segundos": 90,
+  "premio": {
+   "oro": 50000
+  },
+  "preguntas": [
+   [
+    "¿Cómo se llama la ciudad donde empiezan todos en Norway AO?",
+    [
+     "ullathorpe",
+     "ulla"
+    ]
+   ],
+   [
+    "¿Qué comando usás para volver a la ciudad estando muerto?",
+    [
+     "/hogar",
+     "hogar"
+    ]
+   ],
+   [
+    "¿Cuántos jugadores entran como máximo en un grupo?",
+    [
+     "6",
+     "seis"
+    ]
+   ],
+   [
+    "¿Qué gemas pide la nobleza? (decí una)",
+    [
+     "roja",
+     "verde",
+     "violeta"
+    ]
+   ],
+   [
+    "¿Cómo se llama el hechizo que sólo daña a las criaturas, con golpe divino?",
+    [
+     "castigo"
+    ]
+   ],
+   [
+    "¿Cuántos minerales hacen falta para un lingote?",
+    [
+     "5",
+     "cinco"
+    ]
+   ],
+   [
+    "¿Qué herramienta se usa para talar?",
+    [
+     "hacha",
+     "hacha de talador"
+    ]
+   ],
+   [
+    "¿Qué herramienta se usa al lado del yunque?",
+    [
+     "martillo",
+     "martillo de herrero"
+    ]
+   ],
+   [
+    "¿Cómo se llama la dungeon más difícil de las nuevas?",
+    [
+     "fortaleza del vacio",
+     "fortaleza del vacío",
+     "fortaleza"
+    ]
+   ],
+   [
+    "¿En qué piso del Abismo de Fuego están los Dragones Rojos?",
+    [
+     "3",
+     "tres",
+     "tercero"
+    ]
+   ],
+   [
+    "¿De qué color es el Dragón de la Caverna Helada?",
+    [
+     "plateado",
+     "plata"
+    ]
+   ],
+   [
+    "¿Cuál es el nivel máximo de Norway AO?",
+    [
+     "60",
+     "sesenta"
+    ]
+   ],
+   [
+    "¿Qué comando abre el Pase de Temporada?",
+    [
+     "/pase",
+     "pase"
+    ]
+   ],
+   [
+    "¿Cómo se llama el NPC que vende pasajes?",
+    [
+     "agente de viajes",
+     "agente"
+    ]
+   ],
+   [
+    "¿Cuánto oro sale un pasaje de viaje?",
+    [
+     "10000",
+     "10.000",
+     "diez mil"
+    ]
+   ],
+   [
+    "¿Qué tecla abre el mapa del mundo en modo moderno?",
+    [
+     "m"
+    ]
+   ],
+   [
+    "¿Cuántas arenas tiene el Coliseo?",
+    [
+     "6",
+     "seis"
+    ]
+   ],
+   [
+    "¿Qué comando sirve para retar a alguien a duelo?",
+    [
+     "/duelo",
+     "duelo"
+    ]
+   ],
+   [
+    "¿Cómo se llama la facción contraria a los ciudadanos?",
+    [
+     "criminales",
+     "criminal",
+     "crimis"
+    ]
+   ],
+   [
+    "¿Qué objeto te permite navegar?",
+    [
+     "barca",
+     "barco"
+    ]
+   ],
+   [
+    "¿Cuántas horas dura el día en el juego?",
+    [
+     "3",
+     "tres"
+    ]
+   ],
+   [
+    "¿Con cuánto oro ya no se te cae al morir?",
+    [
+     "40000",
+     "40.000",
+     "cuarenta mil"
+    ]
+   ]
+  ]
+ },
+ "sorteo": {
+  "nivelMinimo": 13,
+  "premios": [
+   {
+    "oro": 100000
+   },
+   {
+    "oro": 200000
+   },
+   {
+    "puntosTorneo": 5
+   },
+   {
+    "item": [
+     2065,
+     1
+    ],
+    "nombre": "Alas del Ángel Oscuro"
+   }
+  ],
+  "pesos": [
+   5,
+   3,
+   2,
+   1
+  ]
+ },
+ "dobleexp": {
+  "duracionMinutos": 30
+ }
+}

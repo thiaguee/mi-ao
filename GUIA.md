@@ -406,6 +406,17 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 - **Carpintería**: Serrucho equipado, usalo en cualquier lado: flechas, arcos, barcas, muebles... con madera.
 - En la Ciudad Nueva hay yunque y fragua en el patio del leñador y el minero.
 
+## Eventos automáticos
+
+- Cada 45 a 75 minutos (si hay al menos 2 jugadores y no hay guerra) arranca un evento al azar:
+  - **Invasión**: una horda (Lord Orcos, Orcos Brujos, Ogros y un Dark Morgolock) ataca las afueras de una ciudad. 5.000 de oro por invasor y premio grande al que más mate. 15 minutos.
+  - **Cacería**: aparece la **Bestia Dorada** (NPC 2002) en un bosque al azar; el que la mata gana 250.000 de oro y 5 puntos de torneo. 20 minutos.
+  - **Trivia**: una pregunta en el chat; el primero que acierta (escribiendo la respuesta normal) gana 50.000.
+  - **Sorteo**: entre los conectados de nivel 13 o más (oro, puntos de torneo o las Alas del Ángel Oscuro).
+  - **Hora Feliz**: experiencia doble por 30 minutos.
+- **/EVENTO** muestra el evento actual y cuándo viene el próximo. GMs: **/EVENTO INVASION | CACERIA | TRIVIA | SORTEO | DOBLEEXP | TERMINAR**.
+- Todo (cada cuánto, premios, lugares, bichos, preguntas de la trivia) se cambia en `server/data/eventos.json`.
+
 ## Opciones del jugador
 
 - Botón **OPCIONES**: una ventana con secciones (Sonido, Video, Interfaz, Chat, Controles, Rendimiento, Información). Música y efectos con su volumen, mostrar nombres/minimapa/FPS, lluvia y oscuridad de la noche, filtros de la consola, **teclas configurables** (modo moderno) y modo liviano. Se guarda en cada PC.

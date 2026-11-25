@@ -80,17 +80,19 @@ C.multExp = function (p) {
   const lvl = (p && p.stats && p.stats.lvl) || 1;
   const t = this.config.expPorNivel || [];
   const fila = t.find((x) => lvl <= x[0]) || t[t.length - 1];
-  return (fila ? fila[1] : 1) * (this.config.multiplicadorExp || 1);
+  return (fila ? fila[1] : 1) * (this.config.multiplicadorExp || 1) * (this.eventoExp || 1); // eventoExp: Hora Feliz
 };
 
 C.killNpc = function (npc, killer) {
   this.remove(npc);
   this.npcs.delete(npc.id);
   const def = npc.def;
+  if (npc.evento && this.eventoKill && !(killer && killer.kind === 'pc')) this.eventoKill(null, npc);
   if (killer && killer.kind === 'pc') {
     // Experiencia restante y oro
     const noche = this.esDeNoche() ? this.cfgCiclo().premioNoche : 1; // de noche dan más
     this.repartirExp(killer, npc.expLeft === undefined ? def.exp : npc.expLeft, noche); // con grupo se reparte
+    if (npc.evento && this.eventoKill) this.eventoKill(killer, npc);
     killer.kills.npcs++;
     if (this.paseMatarBicho) this.paseMatarBicho(killer, npc);
     if (this.misionKill) this.misionKill(killer, npc.num);
