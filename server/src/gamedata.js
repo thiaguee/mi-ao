@@ -346,6 +346,7 @@ function aplicarAjustes(spells, objs) {
     if (a.danio) { s.minHp = Math.round(s.minHp * a.danio); s.maxHp = Math.round(s.maxHp * a.danio); }
     if (a.mana !== undefined) s.mana = a.mana;
     if (a.skill !== undefined) s.minSkill = a.skill;
+    if (a.nivel !== undefined) s.nivel = a.nivel; // nivel mínimo para lanzarlo
     console.log(`Ajuste: ${s.name} -> daño ${s.minHp}-${s.maxHp}, maná ${s.mana}`);
   }
   for (const [id, a] of Object.entries(aj.objetos || {})) {

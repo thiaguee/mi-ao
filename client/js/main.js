@@ -403,7 +403,7 @@ function renderStats() {
   const s = S.stats;
   $('s-name').textContent = S.name;
   $('s-name').style.color = S.gm ? '#ff8c1a' : s.crim ? '#ff5a4a' : '#e0b45a';
-  $('s-class').textContent = `${s.clase || ''} ${s.raza || ''}` + (s.skillPts ? ` · ${s.skillPts} skillpoints libres` : '');
+  $('s-class').textContent = `${s.clase || ''} ${s.raza || ''}`;
   $('s-level').innerHTML = `Nivel <b>${s.lvl || 1}</b>`;
   const pct = s.elu ? Math.floor((s.exp / s.elu) * 10000) / 100 : 100;
   $('s-exp-pct').textContent = `[${pct.toLocaleString('es-AR')}%]`;
@@ -539,7 +539,7 @@ document.querySelectorAll('.tab').forEach((t) => {
 });
 
 // ================== BOTONES ==================
-$('b-skills').onclick = () => openSkills();
+// sin skills: no hay botón SKILLS
 $('b-stats').onclick = () => send({ t: 'talk', text: '/EST' });
 $('b-med').onclick = () => send({ t: 'meditate' });
 $('b-help').onclick = () => openHelp();
@@ -631,7 +631,7 @@ $('b-spinfo').onclick = () => {
   const sp = S.spells[S.selSpell];
   if (!sp || !sp.id) return log('Elegí un hechizo de la lista.', 'warn');
   openModal(sp.n, `<div style="max-width:420px;line-height:1.5">${esc(sp.d || '')}<br><br>
-    <b>Maná:</b> ${sp.mana} · <b>Skill de magia necesario:</b> ${sp.sk || 0}${sp.w ? `<br><b>Palabras mágicas:</b> ${esc(sp.w)}` : ''}</div>`);
+    <b>Maná:</b> ${sp.mana}${sp.nivel ? ` · <b>Nivel mínimo:</b> ${sp.nivel}` : ''}${sp.w ? `<br><b>Palabras mágicas:</b> ${esc(sp.w)}` : ''}</div>`);
 };
 $('b-exit').onclick = () => { S.byeText = 'Saliste del juego.'; send({ t: 'logout' }); };
 

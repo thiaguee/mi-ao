@@ -61,7 +61,7 @@ P.armarPersonaje = function (name, pass, raza, genero, headPedida, dice) {
     name, pass: accounts.hashPass(pass), created: Date.now(),
     raza, genero, clase: 1, head, body: ap.body,
     attrs,
-    skills: new Array(G.SKILLS.length).fill(0),
+    skills: new Array(G.SKILLS.length).fill(100), // sin skills: todos al máximo
     stats: { lvl: 1, exp: 0, maxHp, hp: maxHp, maxMan: 0, man: 0, maxSta, sta: maxSta,
       ham: 100, sed: 100, gld: this.config.oroInicial || 0, minHit: 1, maxHit: 2, skillPts: 10 },
     inv: [], eq: { weapon: -1, armor: -1, shield: -1, helmet: -1, ammo: -1 },
@@ -149,6 +149,7 @@ P.playerFromRecord = function (rec) {
   p.bank = (rec.bank || []).slice(0, BANK_SLOTS);
   while (p.bank.length < BANK_SLOTS) p.bank.push(null);
   p.spells = (rec.spells || []).slice(0, SPELL_SLOTS);
+  p.skills = new Array(G.SKILLS.length).fill(100); p.stats.skillPts = 0; // sin skills: todos al máximo
   p.jailUntil = rec.jailUntil || 0;
   p.silenced = rec.silenced || 0;
   p.jugado = rec.jugado || 0; p._desde = Date.now(); // tiempo jugado (ms), para medir el ritmo
@@ -257,7 +258,7 @@ P.sendSpells = function (p) {
   const list = [];
   for (let i = 0; i < SPELL_SLOTS; i++) {
     const s = this.data.spells[p.spells[i]];
-    list.push(s ? { i, id: s.id, n: s.name, mana: s.mana, d: s.desc, sk: s.minSkill, w: s.words } : { i, id: 0 });
+    list.push(s ? { i, id: s.id, n: s.name, mana: s.mana, d: s.desc, nivel: s.nivel || 0, w: s.words } : { i, id: 0 });
   }
   this.send(p, { t: 'spells', list });
 };
@@ -607,15 +608,13 @@ P.checkLevel = function (p) {
     s.maxMan = Math.min(3000, s.maxMan + man);
     s.minHit = Math.min(99, s.minHit + hit);
     s.maxHit = Math.min(99, s.maxHit + hit);
-    const pts = s.lvl === 2 ? 10 : 5;
-    s.skillPts += pts;
     this.msg(p, `¡Has subido al nivel ${s.lvl}!`, 'server');
     if (this.retoPase) this.retoPase(p, 'niveles');
     if (s.lvl === G.NIVEL_DESBLOQUEO) {
       this.msg(p, `¡Llegaste al nivel ${G.NIVEL_DESBLOQUEO}! Se desbloquearon 10 niveles más (hasta el ${G.MAX_NIVEL}) y las MISIONES DE ÉLITE en los Maestros de Misiones.`, 'server');
       this.toAll({ t: 'msg', text: `¡${p.name} llegó al nivel ${G.NIVEL_DESBLOQUEO} y desbloqueó los niveles de élite!`, color: 'server' });
     }
-    this.msg(p, `Ganaste ${hp} de vida, ${sta} de energía${man ? `, ${man} de maná` : ''}, ${hit} de golpe y ${pts} skillpoints.`, 'info');
+    this.msg(p, `Ganaste ${hp} de vida, ${sta} de energía${man ? `, ${man} de maná` : ''}, ${hit} de golpe.`, 'info');
     if (s.lvl > NEWBIE_LVL && s.lvl - 1 === NEWBIE_LVL) this.dropNewbieItems(p);
   }
   if (subio) {
@@ -709,6 +708,8 @@ P.chooseClass = function (p, c) {
 };
 
 P.assignSkills = function (p, values) {
+  return; // sin skills: todos tienen el máximo
+  // eslint-disable-next-line no-unreachable
   if (!Array.isArray(values)) return;
   let total = 0;
   const add = values.map((v) => Math.max(0, Math.floor(+v || 0)));
@@ -725,6 +726,8 @@ P.assignSkills = function (p, values) {
 
 // Sube un skill por uso (estilo Fénix: probabilidad que baja con el nivel del skill)
 P.trainSkill = function (p, sk) {
+  return; // sin skills: todos tienen el máximo, no se entrenan
+  // eslint-disable-next-line no-unreachable
   if (p.skills[sk] >= 100) return;
   const cap = Math.min(100, 3 + p.stats.lvl * 3);
   if (p.skills[sk] >= cap) return;
@@ -959,7 +962,7 @@ P.ponerNivel = function (p, lvl) {
   s.lvl = lvl;
   s.exp = 0;
   // Skillpoints: suma los de los niveles ganados o quita de los libres los de los niveles perdidos
-  s.skillPts = Math.max(0, (s.skillPts || 0) + skillPtsHasta(lvl) - skillPtsHasta(antes));
+  s.skillPts = 0; void skillPtsHasta; // sin skills
   // Al pasar el nivel newbie pierde lo newbie y recibe el set de aventurero, una sola vez
   // (si un GM lo bajó y lo vuelve a subir, no se le da otro set)
   if (antes > NEWBIE_LVL && lvl <= NEWBIE_LVL) p.yaNoNewbie = true;

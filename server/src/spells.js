@@ -14,14 +14,13 @@ S.castSpell = function (p, slot, x, y) {
   const sp = this.data.spells[p.spells[slot]];
   if (!sp) return this.msg(p, 'No tenés un hechizo en ese lugar.', 'warn');
   if (p.dead) return this.msg(p, '¡¡Estás muerto!!', 'warn');
+  // sin skills: los hechizos fuertes piden nivel (data/ajustes.json → nivel)
+  if (sp.nivel && p.stats.lvl < sp.nivel && p.gm < 2) return this.msg(p, `Necesitás nivel ${sp.nivel} para lanzar ${sp.name}.`, 'warn');
   if (now - p.lastSpell < this.config.intervaloHechizo) return;
   if (this.maps[p.map].d.magiaSinEfecto && p.gm === 0) return this.msg(p, 'Una fuerza oscura te impide canalizar tu energía.', 'warn');
   const s = p.stats;
   if (s.man < sp.mana) return this.msg(p, 'No tenés suficiente maná.', 'warn');
   if (s.sta < sp.sta) return this.msg(p, 'Estás muy cansado para lanzar este hechizo.', 'warn');
-  if (p.gm < 2) {
-    if (p.skills[SK['Magia']] < sp.minSkill) return this.msg(p, 'No tenés suficientes puntos de magia para lanzar este hechizo.', 'warn');
-  }
   // Sin límite de alcance: si lo ves en tu pantalla, lo podés atacar (el límite es sólo anti-trampas)
   if (Math.abs(x - p.x) > 40 || Math.abs(y - p.y) > 30) return this.msg(p, 'Estás demasiado lejos.', 'warn');
   const mp = this.maps[p.map];

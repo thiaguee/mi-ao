@@ -139,7 +139,7 @@ Con `/GMAYUDA` ves la lista completa adentro del juego.
 | `/BUSCARNPC texto` | Busca el número de un NPC (por ejemplo, `/BUSCARNPC dragon`). |
 | `/ORO nombre cantidad` | Da oro. |
 | `/NIVEL nombre nivel` · `/EXP nombre cantidad` | Sube de nivel o da experiencia. |
-| `/SKILLS nombre valor` | Pone todos los skills en ese valor. |
+| `/SKILLS nombre valor` | (Ya no se usa: no hay skills, todos tienen el máximo.) |
 | `/HECHIZO nombre numero` | Le enseña un hechizo. |
 | `/CLASE nombre numero` | Le cambia la clase. |
 | `/MOD nombre HP 500` | Cambia vida, maná, energía, atributos, oro o golpe (HP, MAN, STA, ATRIB, ORO, BANCO, GOLPE). |
@@ -319,7 +319,7 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 - Elegís un vendedor y ves lo que vende, con su precio. Con **✕** lo sacás, con **▲ ▼** cambiás el orden.
 - A la derecha está **la lista de todos los objetos del juego** (buscador por nombre o número y filtro por tipo). Con **+** (o doble clic) se agrega a la tienda.
 - El cambio es inmediato, vale para ese NPC en todas las ciudades donde aparece y queda guardado en `tiendas.json` (carpeta de datos del servidor), así que sigue después de reiniciar.
-- El precio de compra es el valor del objeto (con descuento por skill de Comercio).
+- El precio de compra es el valor del objeto (todos tienen el mejor precio: no hay skills).
 
 ---
 
@@ -392,6 +392,11 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 - Si estás muerto y llegás a **2 baldosas de la capilla** (por cualquier lado), el sacerdote te resucita solo: no hace falta entrar ni hacer doble clic. Vale también para los sacerdotes de las otras ciudades (mismo alcance alrededor de ellos).
 
+## Sin skills
+
+- **No hay skills ni skillpoints**: todos los personajes tienen el máximo en todo (combate, magia, meditar, comercio, oficios, navegación...). Se quitó el botón SKILLS.
+- Los **hechizos fuertes** piden **nivel 30** para lanzarlos: Apocalipsis, Descarga Eléctrica, Tormenta de Fuego y Castigo. Se cambia en `server/data/ajustes.json` (campo `nivel` de cada hechizo).
+
 ## Grupos (party) y chat de voz
 
 - **Clic derecho sobre un jugador → Invitar al grupo** (o **/GRUPO nombre**). Hasta 6 integrantes. **/P mensaje** habla con el grupo, **/SALIRGRUPO** y **/ECHARGRUPO nombre** (líder).
@@ -401,9 +406,9 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 
 ## Oficios
 
-- **Talar, minar y pescar**: equipá la herramienta (Hacha de Talador, Piquete de Minero, Equipo de Pescar o Red de Pesca), usala (U / Espacio / doble clic) y hacé clic en el árbol, el yacimiento o el agua. Seguís trabajando solo cada 1,5 s hasta que te movés; gasta energía y sube el skill (Talar, Minería, Pesca). Más skill = más chance y más cantidad; las clases trabajadoras (Minero, Leñador, Pescador, Herrero, Carpintero, Trabajador) sacan el doble.
+- **Talar, minar y pescar**: equipá la herramienta (Hacha de Talador, Piquete de Minero, Equipo de Pescar o Red de Pesca), usala (U / Espacio / doble clic) y hacé clic en el árbol, el yacimiento o el agua. Seguís trabajando solo cada 1,5 s hasta que te movés; gasta energía. las clases trabajadoras (Minero, Leñador, Pescador, Herrero, Carpintero, Trabajador) sacan el doble.
 - **Fundir**: usá los minerales al lado de una **fragua**: cada 5 minerales sale 1 lingote (hierro, plata u oro; la plata y el oro piden más Minería).
-- **Herrería**: Martillo de Herrero equipado, usalo al lado de un **yunque**: se abre la ventana con todas las armas y armaduras (lingotes y skill que pide cada una).
+- **Herrería**: Martillo de Herrero equipado, usalo al lado de un **yunque**: se abre la ventana con todas las armas y armaduras (lingotes que pide cada una).
 - **Carpintería**: Serrucho equipado, usalo en cualquier lado: flechas, arcos, barcas, muebles... con madera.
 - En la Ciudad Nueva hay yunque y fragua en el patio del leñador y el minero.
 

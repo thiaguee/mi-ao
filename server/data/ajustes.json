@@ -1,10 +1,26 @@
 {
-  "_ayuda": "Ajustes de balance. 'danio' multiplica el daño del hechizo, 'mana' cambia el maná que gasta, 'skill' el skill de magia necesario. Los números son los del hechizo (ver la lista en el juego con /HECHIZO nombre 0). En 'objetos', 'valor' es el precio de venta en los comerciantes.",
+  "_ayuda": "Ajustes de balance. 'danio' multiplica el daño del hechizo, 'mana' cambia el maná que gasta, 'nivel' el nivel mínimo para lanzarlo (no hay skills: todos tienen el máximo). Los números son los del hechizo (ver la lista en el juego con /HECHIZO nombre 0). En 'objetos', 'valor' es el precio de venta en los comerciantes.",
   "hechizos": {
     "2": {
       "danio": 20,
       "skill": 0,
       "_nombre": "Dardo Mágico"
+    },
+    "25": {
+      "nivel": 30,
+      "_nombre": "Apocalipsis"
+    },
+    "23": {
+      "nivel": 30,
+      "_nombre": "Descarga Eléctrica"
+    },
+    "15": {
+      "nivel": 30,
+      "_nombre": "Tormenta de Fuego"
+    },
+    "51": {
+      "nivel": 30,
+      "_nombre": "Castigo"
     }
   },
   "objetos": {
@@ -13,67 +29,112 @@
       "_nombre": "Barca"
     },
     "2000": {
-      "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
+      "clases": [
+        "Paladín",
+        "Guerrero",
+        "Arquero",
+        "Caballero",
+        "Bardo",
+        "Clérigo"
+      ],
       "_nombre": "Coraza del Mal (sólo estas clases la pueden usar)"
     },
     "2004": {
-      "clases": ["Paladín", "Guerrero", "Arquero", "Caballero", "Bardo", "Clérigo"],
+      "clases": [
+        "Paladín",
+        "Guerrero",
+        "Arquero",
+        "Caballero",
+        "Bardo",
+        "Clérigo"
+      ],
       "_nombre": "Coraza Divina (sólo estas clases la pueden usar)"
     },
     "2012": {
-      "clases": ["Asesino"],
+      "clases": [
+        "Asesino"
+      ],
       "_nombre": "Daga Sangrienta (sólo Asesinos)"
     },
     "2013": {
-      "clases": ["Bardo"],
+      "clases": [
+        "Bardo"
+      ],
       "_nombre": "Daga Celestial (sólo Bardos)"
     },
     "2025": {
-      "clases": ["Asesino"],
+      "clases": [
+        "Asesino"
+      ],
       "_nombre": "Túnica del Asesino (sólo Asesinos)"
     },
     "2029": {
-      "clases": ["Paladín"],
+      "clases": [
+        "Paladín"
+      ],
       "_nombre": "Armadura Sagrada (sólo Paladines)"
     },
     "2037": {
-      "clases": ["Druida"],
+      "clases": [
+        "Druida"
+      ],
       "_nombre": "Túnica de Druida Ancestral (sólo Druidas)"
     },
     "2038": {
-      "clases": ["Bardo"],
+      "clases": [
+        "Bardo"
+      ],
       "_nombre": "Túnica de Bardo (sólo Bardos)"
     },
     "2056": {
-      "clases": ["Mago"],
+      "clases": [
+        "Mago"
+      ],
       "_nombre": "Báculo del Archimago (sólo Magos)"
     },
     "2057": {
-      "clases": ["Mago", "Druida", "Bardo"],
+      "clases": [
+        "Mago",
+        "Druida",
+        "Bardo"
+      ],
       "_nombre": "Báculo Alado (Magos, Druidas y Bardos)"
     },
     "2058": {
-      "clases": ["Bardo"],
+      "clases": [
+        "Bardo"
+      ],
       "_nombre": "Daga de Saladín (sólo Bardos)"
     },
     "2059": {
-      "clases": ["Bardo", "Asesino"],
+      "clases": [
+        "Bardo",
+        "Asesino"
+      ],
       "_nombre": "Daga Errante (Bardos y Asesinos)"
     },
     "2060": {
-      "clases": ["Druida"],
+      "clases": [
+        "Druida"
+      ],
       "_nombre": "Sable de Druida (sólo Druidas)"
     },
     "2061": {
-      "clases": ["Paladín"],
+      "clases": [
+        "Paladín"
+      ],
       "_nombre": "Espada Infernal (sólo Paladines)"
     },
     "2062": {
-      "clases": ["Guerrero"],
+      "clases": [
+        "Guerrero"
+      ],
       "_nombre": "Espada de Guerrero (sólo Guerreros)"
     },
     "2063": {
-      "clases": ["Clérigo"],
+      "clases": [
+        "Clérigo"
+      ],
       "_nombre": "Espada de Clérigo (sólo Clérigos)"
     }
   },

@@ -148,6 +148,11 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] /CI 2070 1: Cara de Slenderman (se usa con doble clic y se saca igual).
 - [ ] Teleport a Ullathorpe en zona segura: tiene que decir que sólo se puede en zona insegura.
 
+## Sin skills
+- [ ] No hay botón SKILLS ni "skillpoints libres".
+- [ ] Apocalipsis, Descarga Eléctrica, Tormenta de Fuego y Castigo: antes del nivel 30 dice "Necesitás nivel 30".
+- [ ] Meditar, comerciar y los oficios andan siempre al máximo.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

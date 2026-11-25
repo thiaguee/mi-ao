@@ -537,7 +537,7 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .rc-it.no { opacity: .55; } .rc-n { flex: 1; display: flex; flex-direction: column; color: #e8dcc3; } .rc-n small { color: #a8977a; }
 .rc-it input { width: 52px; }
 .rc-h { color: #c9c9d6; } .rc-p { color: #e0e6f0; } .rc-o { color: #ffd633; } .rc-m { color: #d9a15a; } .falta { color: #e06a5a !important; }
-.side-btns .b-grupo { grid-column: 1 / -1; background: linear-gradient(#1f3a4a, #0e202a); color: #8fd0ff; border-color: #2a6a8a; }
+.side-btns .b-grupo { background: linear-gradient(#1f3a4a, #0e202a); color: #8fd0ff; border-color: #2a6a8a; }
 .gw { width: 460px; max-width: 100%; }
 .gw-lista { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
 .gw-m { display: grid; grid-template-columns: 1fr 70px 90px 70px 20px auto; align-items: center; gap: 8px; padding: 6px 8px; background: #0006; border: 1px solid #2e2418; border-radius: 6px; color: #e8dcc3; }
