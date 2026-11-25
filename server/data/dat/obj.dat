@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2067
+NumOBJs=2068
 
 
 
@@ -16070,3 +16070,13 @@ CabezaIndex=515
 Agarrable=0
 Valor=10000000
 SoloGM=1
+
+[OBJ2068] 'Norway AO: camiseta de Boca Juniors (azul y oro, body 741) hecha sobre las Vestimentas Comunes
+Name=Camiseta de Boca Juniors
+GrhIndex=43414
+ObjType=3
+NumRopaje=741
+Agarrable=0
+MinDef=5
+MaxDef=10
+Valor=10000
