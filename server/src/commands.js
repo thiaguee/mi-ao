@@ -376,6 +376,7 @@ K.command = function (p, text) {
       }
       return;
     }
+    case 'GUIA': case 'ENTRENAMIENTO': return this.send(p, { t: 'abrirGuia' }); // guía de entrenamiento
     case 'EVENTO': case 'EVENTOS': return this.comandoEvento(p, rest);
     case 'CABEZA': case 'CABEZAS': { // GMs: elegir cualquier cabeza del AO
       if (!need(1)) return;

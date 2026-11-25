@@ -15724,6 +15724,7 @@ MinDef=30
 MaxDef=35
 Valor=675000
 Crucial=0
+Aura=#b46bff
 
 [OBJ2043] 'Norway AO: chupin del Mega Pack de graficos (Cuerpos/1085ee392134b3ccb62cd46b59365861.png)
 Name=Chupin de Consejero del Mal

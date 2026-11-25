@@ -418,6 +418,10 @@ Se entra **caminando** por una boca de cueva con su cartel (se ven en el mapa de
 - **/EVENTO** muestra el evento actual y cuándo viene el próximo. GMs: **/EVENTO INVASION | CACERIA | TRIVIA | SORTEO | DOBLEEXP | TERMINAR**.
 - Todo (cada cuánto, premios, lugares, bichos, preguntas de la trivia) se cambia en `server/data/eventos.json`.
 
+## Guía de entrenamiento en el juego
+
+- **MENÚ → 📖 Guía de entrenamiento** (o **/GUIA**): zonas para subir por nivel, bichos y las dungeons nuevas. El texto está en `client/assets/guia-entrenamiento.md` (es la misma `GUIA-ENTRENAMIENTO.md`; si cambiás una, copiala a la otra).
+
 ## Opciones del jugador
 
 - Botón **OPCIONES**: una ventana con secciones (Sonido, Video, Interfaz, Chat, Controles, Rendimiento, Información). Música y efectos con su volumen, mostrar nombres/minimapa/FPS, lluvia y oscuridad de la noche, filtros de la consola, **teclas configurables** (modo moderno) y modo liviano. Se guarda en cada PC.

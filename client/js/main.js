@@ -543,6 +543,36 @@ $('b-skills').onclick = () => openSkills();
 $('b-stats').onclick = () => send({ t: 'talk', text: '/EST' });
 $('b-med').onclick = () => send({ t: 'meditate' });
 $('b-help').onclick = () => openHelp();
+// ---------- Guía de entrenamiento (assets/guia-entrenamiento.md, la misma que GUIA-ENTRENAMIENTO.md) ----------
+function mdAHtml(md) {
+  const inl = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`(.+?)`/g, '<code>$1</code>');
+  const out = []; let lista = false, tabla = null;
+  const cerrar = () => { if (lista) { out.push('</ul>'); lista = false; } if (tabla) { out.push('<table>' + tabla.join('') + '</table>'); tabla = null; } };
+  for (const l of md.split('\n')) {
+    if (/^\s*\|/.test(l)) {
+      if (/^\s*\|[\s|:-]+\|\s*$/.test(l)) continue;
+      const celdas = l.trim().replace(/^\||\|$/g, '').split('|').map((x) => inl(x.trim()));
+      if (!tabla) { cerrar(); tabla = [`<tr>${celdas.map((x) => `<th>${x}</th>`).join('')}</tr>`]; } else tabla.push(`<tr>${celdas.map((x) => `<td>${x}</td>`).join('')}</tr>`);
+      continue;
+    }
+    if (tabla) cerrar();
+    let m;
+    if ((m = /^(#{1,4})\s+(.*)/.exec(l))) { cerrar(); out.push(`<h${m[1].length + 1}>${inl(m[2])}</h${m[1].length + 1}>`); continue; }
+    if ((m = /^\s*(?:-|\d+\.)\s+(.*)/.exec(l))) { if (!lista) { out.push('<ul>'); lista = true; } out.push(`<li>${inl(m[1])}</li>`); continue; }
+    if (/^---/.test(l) || !l.trim()) { cerrar(); continue; }
+    cerrar(); out.push(`<p>${inl(l)}</p>`);
+  }
+  cerrar();
+  return out.join('');
+}
+async function abrirGuia() {
+  try {
+    const md = await (await fetch('assets/guia-entrenamiento.md?v=' + Date.now())).text();
+    openModal('Guía de entrenamiento', `<div class="guia">${mdAHtml(md)}</div>`, 'guia');
+  } catch (e) { log('No se pudo abrir la guía.', 'warn'); }
+}
+$('b-guia').onclick = () => abrirGuia();
+on('abrirGuia', () => abrirGuia());
 $('b-sound').textContent = Snd.AU.on ? '🔊 Sonido: sí' : '🔇 Sonido: no';
 $('b-sound').onclick = () => { $('b-sound').textContent = Snd.toggle() ? '🔊 Sonido: sí' : '🔇 Sonido: no'; };
 $('b-mapa').onclick = () => Mapas.abrirMundo(openModal, send, S.gm, esc);

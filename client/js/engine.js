@@ -699,7 +699,8 @@ function dibujarRayos(ctx, c, px, py, now, adelante) {
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, b = a + (Math.random() - 0.5) * 2.2;
       const r1 = 14 + Math.random() * 10, r2 = 22 + Math.random() * 14;
-      c._rayos.push({ x1: cx + Math.cos(a) * r1, y1: cy + Math.sin(a) * r1 * 1.4, x2: cx + Math.cos(b) * r2, y2: cy + Math.sin(b) * r2 * 1.4,
+      // posiciones relativas al personaje: así los rayos lo siguen cuando camina
+      c._rayos.push({ x1: Math.cos(a) * r1, y1: Math.sin(a) * r1 * 1.4, x2: Math.cos(b) * r2, y2: Math.sin(b) * r2 * 1.4,
         q: 4 + Math.floor(Math.random() * 3), frente: Math.sin(a) > 0, semilla: Math.random() });
     }
   }
@@ -714,8 +715,14 @@ function dibujarRayos(ctx, c, px, py, now, adelante) {
   for (const r of c._rayos) {
     if (r.frente !== adelante) continue;
     ctx.globalAlpha = 0.75 + r.semilla * 0.25;
-    ctx.strokeStyle = 'rgba(170,110,255,0.55)'; ctx.lineWidth = 3.5; rayo(ctx, r.x1, r.y1, r.x2, r.y2, r.q);
-    ctx.strokeStyle = '#f2e8ff'; ctx.lineWidth = 1.2; rayo(ctx, r.x1, r.y1, r.x2, r.y2, r.q);
+    if (!r.forma) { // la forma quebrada se arma una vez por rayo (no en cada cuadro)
+      r.forma = [[r.x1, r.y1]];
+      for (let i = 1; i < r.q; i++) { const t = i / r.q; r.forma.push([r.x1 + (r.x2 - r.x1) * t + (Math.random() - 0.5) * 9, r.y1 + (r.y2 - r.y1) * t + (Math.random() - 0.5) * 9]); }
+      r.forma.push([r.x2, r.y2]);
+    }
+    const trazo = () => { ctx.beginPath(); r.forma.forEach(([x, y], i) => (i ? ctx.lineTo(cx + x, cy + y) : ctx.moveTo(cx + x, cy + y))); ctx.stroke(); };
+    ctx.strokeStyle = 'rgba(170,110,255,0.55)'; ctx.lineWidth = 3.5; trazo();
+    ctx.strokeStyle = '#f2e8ff'; ctx.lineWidth = 1.2; trazo();
   }
   ctx.restore();
 }
