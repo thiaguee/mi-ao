@@ -154,6 +154,8 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Meditar, comerciar y los oficios andan siempre al máximo.
 
 ## Facciones a nivel 13
+- [ ] Un personaje recién creado aparece en la Dungeon Newbie.
+- [ ] Al subir a nivel 13 lo lleva solo a Ullathorpe y aparece la ventana de facción (una sola vez).
 - [ ] Un personaje nuevo es novato: no puede pegarle a usuarios ni se lo puede atacar.
 - [ ] Con /NIVEL nombre 13 le aparece la ventana con Ciudadano / Criminal / Neutral; después no se puede cambiar.
 - [ ] Ciudadano contra ciudadano o criminal contra criminal: "es de tu facción". Ciudadano contra criminal: pega.

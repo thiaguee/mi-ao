@@ -66,7 +66,7 @@ P.armarPersonaje = function (name, pass, raza, genero, headPedida, dice) {
       ham: 100, sed: 100, gld: this.config.oroInicial || 0, minHit: 1, maxHit: 2, skillPts: 10 },
     inv: [], eq: { weapon: -1, armor: -1, shield: -1, helmet: -1, ammo: -1 },
     spells: [], bank: [], bankGld: 0,
-    pos: { map: city.map, x: city.x, y: city.y },
+    pos: this.inicioNewbie ? this.inicioNewbie() : { map: city.map, x: city.x, y: city.y }, // los nuevos arrancan en la Dungeon Newbie
     crim: false, faccion: '', kills: { ciu: 0, cri: 0, neu: 0, npcs: 0 }, deaths: 0,
     hogar: 'ULLATHORPE',
   };
@@ -613,7 +613,7 @@ P.checkLevel = function (p) {
     s.minHit = Math.min(99, s.minHit + hit);
     s.maxHit = Math.min(99, s.maxHit + hit);
     this.msg(p, `¡Has subido al nivel ${s.lvl}!`, 'server');
-    if (s.lvl === this.NIVEL_FACCION) this.ofrecerFaccion(p);
+    if (s.lvl === this.NIVEL_FACCION) p._aFaccion = true;
     if (this.retoPase) this.retoPase(p, 'niveles');
     if (s.lvl === G.NIVEL_DESBLOQUEO) {
       this.msg(p, `¡Llegaste al nivel ${G.NIVEL_DESBLOQUEO}! Se desbloquearon 10 niveles más (hasta el ${G.MAX_NIVEL}) y las MISIONES DE ÉLITE en los Maestros de Misiones.`, 'server');
@@ -624,6 +624,7 @@ P.checkLevel = function (p) {
   }
   if (subio) {
     s.hp = s.maxHp; s.sta = s.maxSta; s.man = s.maxMan;
+    if (p._aFaccion) { p._aFaccion = false; setTimeout(() => this.graduarNewbie(p), 1200); }
     this.toMap(p.map, { t: 'snd', w: G.SND.NIVEL });
     this.sendAllStats(p);
     this.sendSkills(p);
@@ -972,7 +973,7 @@ P.ponerNivel = function (p, lvl) {
   this.msg(p, 'Ahora sos nivel ' + lvl + '.', 'server');
   this.sendSkills(p);
   this.checkClassUp(p); // si le faltan evoluciones, le aparece el cartel (y después los siguientes)
-  this.ofrecerFaccion(p);
+  if (lvl >= this.NIVEL_FACCION && this.enDungeonNewbie(p)) this.graduarNewbie(p); else this.ofrecerFaccion(p);
 };
 
 module.exports = Object.assign(P, { INV_SLOTS, SPELL_SLOTS, BANK_SLOTS, NEWBIE_LVL });

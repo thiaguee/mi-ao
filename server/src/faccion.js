@@ -26,8 +26,32 @@ const NOMBRE_FAC = { ciu: 'Ciudadano', cri: 'Criminal', neu: 'Neutral' };
 F.NIVEL_FACCION = NIVEL_FACCION;
 F.nombreFaccion = function (p) { return p.faccion ? NOMBRE_FAC[p.faccion] : (p.stats.lvl < NIVEL_FACCION ? 'Novato' : 'Sin facción'); };
 F.esNovato = function (p) { return p.kind === 'pc' && !p.faccion && p.stats.lvl < NIVEL_FACCION && !p.gm; };
+// Los personajes nuevos aparecen en la Dungeon Newbie (el destino del portal de teleports.json)
+F.inicioNewbie = function () {
+  try {
+    const fijos = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'teleports.json'), 'utf8')).teleports || [];
+    const t = fijos.find((f) => /newbie/i.test(f.nombre || ''));
+    if (t && this.maps[t.destino[0]]) return { map: t.destino[0], x: t.destino[1], y: t.destino[2] };
+  } catch (e) { /* si no está, arranca en Ullathorpe */ }
+  const c = this.data.cities.ULLATHORPE || { map: 1, x: 58, y: 45 };
+  return { map: c.map, x: c.x, y: c.y };
+};
+F.enDungeonNewbie = function (p) { const m = this.maps[p.map]; return !!(m && /newbie/i.test(m.d.name || '')); };
+// Al llegar a nivel 13: lo llevamos a Ullathorpe y le aparece el cartel para elegir facción
+F.graduarNewbie = function (p) {
+  if (this.players.get(p.id) !== p) return;
+  if (!p.jailUntil && !p.duelo && !p.enGuerra && p.gm === 0) {
+    const c = this.data.cities.ULLATHORPE || { map: 1, x: 58, y: 45 };
+    if (p.dead && this.revive) this.revive(p, true);
+    this.warp(p, c.map, c.x, c.y);
+    this.msg(p, `¡Llegaste a nivel ${NIVEL_FACCION}! Terminaste tu etapa de novato: te llevamos a Ullathorpe. Ahora elegí tu facción.`, 'server');
+  }
+  this.ofrecerFaccion(p);
+};
 F.ofrecerFaccion = function (p) {
   if (p.faccion || p.gm > 0 || p.stats.lvl < NIVEL_FACCION) return;
+  if (Date.now() - (p._ofrecida || 0) < 3000) return; // no abrir la ventana dos veces seguidas
+  p._ofrecida = Date.now();
   this.send(p, { t: 'elegirFaccion', nivel: NIVEL_FACCION });
 };
 F.ponerFaccion = function (p, f) {
