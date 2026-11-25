@@ -71,7 +71,7 @@ usar primero los nros mas bajos.
 [INIT]
 'aca va el numero de OBJ mas alto, NO la cantidad de OBJs.
 'esto sirve para que los GMS puedan ver la lista completa de items para crear en una ventanita.
-NumOBJs=2069
+NumOBJs=2070
 
 
 
@@ -16089,5 +16089,15 @@ NumRopaje=742
 Agarrable=0
 MaxDef=55
 MinDef=50
+Valor=10000000
+Aura=#8fe6ff
+SoloGM=1
+
+[OBJ2070] 'Norway AO: al usarla tu cara pasa a ser la de Slenderman (cabeza 516, blanca y sin rasgos); usarla otra vez la saca. Para GMs
+Name=Cara de Slenderman
+GrhIndex=43702
+ObjType=52
+CabezaIndex=516
+Agarrable=0
 Valor=10000000
 SoloGM=1

@@ -134,6 +134,7 @@ function loadObjs() {
       newbie: num(v.NEWBIE) === 1,
       noSeCae: num(v.NOSECAE) === 1,
       rayos: num(v.RAYOS) === 1, // rodea al que la tiene puesta de rayos
+      aura: (v.AURA || '').trim(), // color del aura que tiene alrededor el que la tiene puesta (ej. #8fe6ff)
       agarrable: num(v.AGARRABLE) === 0,
       crucial: num(v.CRUCIAL) === 1,
       proyectil: num(v.PROYECTIL) === 1,

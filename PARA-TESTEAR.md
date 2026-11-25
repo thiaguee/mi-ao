@@ -144,7 +144,8 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 
 ## Más cosas de GM
 - [ ] /CABEZA: elegir otra cabeza con un clic.
-- [ ] /CI 2069 1: Alas del Ángel Celeste. Las oscuras ahora tienen rayos más lentos.
+- [ ] /CI 2069 1: Alas del Ángel Celeste con aura celeste. Las oscuras ahora tienen rayos más lentos.
+- [ ] /CI 2070 1: Cara de Slenderman (se usa con doble clic y se saca igual).
 - [ ] Teleport a Ullathorpe en zona segura: tiene que decir que sólo se puede en zona insegura.
 
 ## Pendiente (no está hecho)
