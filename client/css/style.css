@@ -544,3 +544,10 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .gw-m b { color: #8fd0ff; } .gw-m span { color: #a8977a; font-size: 11px; }
 .gw-inv { display: flex; gap: 6px; margin: 6px 0; } .gw-inv input { flex: 1; }
 .gw-acc { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+
+/* ===== /CABEZA ===== */
+.cab-win { width: 640px; max-width: 100%; max-height: 480px; overflow: auto; }
+.cab-grid { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.cab { display: flex; flex-direction: column; align-items: center; width: 46px; padding: 3px 0 1px; background: #0006; border: 1px solid #3a2e1c; border-radius: 5px; cursor: pointer; }
+.cab:hover { border-color: #8a6a3a; } .cab.on { border-color: #ffd27a; background: #5a432255; box-shadow: 0 0 6px #ffd27a66; }
+.cab small { color: #a8977a; font-size: 9px; }

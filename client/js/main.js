@@ -1017,6 +1017,27 @@ function pintarRecetas(m) {
 }
 on('recetas', (m) => pintarRecetas(m));
 
+// ---------- /CABEZA (GMs): todas las cabezas para elegir ----------
+let cabezaActual = 0;
+on('cabezas', (m) => {
+  cabezaActual = m.actual;
+  const html = `<div class="cab-win">${m.grupos.map((g) => {
+    const ids = g.ids.filter((id) => A.heads[id] && A.heads[id][2]);
+    return ids.length ? `<div class="mc-tit">${esc(g.n)}</div><div class="cab-grid">${ids.map((id) => `<button class="cab${id === cabezaActual ? ' on' : ''}" data-cab="${id}" title="Cabeza ${id}"><canvas width="32" height="32" data-hd="${id}"></canvas><small>${id}</small></button>`).join('')}</div>` : '';
+  }).join('')}</div>`;
+  openModal('Elegí tu cabeza', html, 'cabezas');
+  document.querySelectorAll('.cab-win canvas[data-hd]').forEach((cv) => {
+    const x = cv.getContext('2d'); const g = A.heads[+cv.dataset.hd][2];
+    const pinta = () => { x.clearRect(0, 0, 32, 32); return drawGrh(x, g, 0, 22, true, 0); };
+    if (!pinta()) setTimeout(pinta, 500);
+  });
+  document.querySelectorAll('[data-cab]').forEach((b) => { b.onclick = () => send({ t: 'cabeza', id: +b.dataset.cab }); });
+});
+on('cabezaOk', (m) => {
+  cabezaActual = m.id;
+  document.querySelectorAll('[data-cab]').forEach((b) => b.classList.toggle('on', +b.dataset.cab === m.id));
+});
+
 on('gmInv', (m) => {
   const fila = (x) => `<div class="gi-it${x.eq ? ' eq' : ''}"><canvas width="32" height="32" data-g="${x.g}"></canvas><span>${esc(x.n)}</span><b>${Number(x.a).toLocaleString('es-AR')}</b>${x.eq ? '<i>equipado</i>' : ''}</div>`;
   openModal(`Inventario de ${m.nombre}`, `<div class="gm-inv">

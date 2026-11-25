@@ -67,7 +67,7 @@ const AYUDA_USUARIO = [
   'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
 ];
 const AYUDA_GM = {
-  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE o /INVI /ULLA /RITMO /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
+  1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE o /INVI /ULLA /RITMO /CABEZA /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
     '/CARCEL nombre minutos /SILENCIAR nombre minutos /TRABAJANDO /ONLINEGM /MOSTRARGM'],
   2: ['[Semidiós] /TELEP nombre|YO mapa x y /SUM nombre /ECHAR nombre /REVIVIR nombre /CURARU nombre',
     '/ACC numeroNPC (crear NPC) /MATAR (NPC señalado) /RMATA (mata NPCs a tu alrededor) /CAMINAR (atravesar paredes)',
@@ -377,6 +377,18 @@ K.command = function (p, text) {
       return;
     }
     case 'EVENTO': case 'EVENTOS': return this.comandoEvento(p, rest);
+    case 'CABEZA': case 'CABEZAS': { // GMs: elegir cualquier cabeza del AO
+      if (!need(1)) return;
+      const grupos = [];
+      for (const [r, nombre] of Object.entries(G.RAZAS)) {
+        for (const [gen, txt] of [['h', 'hombre'], ['m', 'mujer']]) {
+          const [a, b] = G.APARIENCIA[r][gen].heads;
+          grupos.push({ n: `${nombre} ${txt}`, ids: Array.from({ length: b - a + 1 }, (_, i) => a + i) });
+        }
+      }
+      grupos.push({ n: 'Especiales', ids: [41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 385, 417, 418, 485, 486, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515] });
+      return this.send(p, { t: 'cabezas', grupos, actual: p.head });
+    }
     case 'GRUPO': case 'PARTY': { // invitar a alguien al grupo
       if (!rest) return this.msg(p, 'Grupos: /GRUPO nombre invita · clic derecho en un jugador también · /P mensaje habla con el grupo · /SALIRGRUPO · /ECHARGRUPO nombre (líder).', 'party');
       const t = target(rest); if (!t) return;

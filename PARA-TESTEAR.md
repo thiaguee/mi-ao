@@ -142,6 +142,11 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Botón 👥 GRUPO abajo de MAPA/PASE/MENÚ: ver el grupo, invitar por nombre, voz y salir.
 - [ ] Ciudad 334: dos fuentes a los costados y dos árboles en el medio (más separados) para pararse.
 
+## Más cosas de GM
+- [ ] /CABEZA: elegir otra cabeza con un clic.
+- [ ] /CI 2069 1: Alas del Ángel Celeste. Las oscuras ahora tienen rayos más lentos.
+- [ ] Teleport a Ullathorpe en zona segura: tiene que decir que sólo se puede en zona insegura.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

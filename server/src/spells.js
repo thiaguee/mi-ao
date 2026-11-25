@@ -181,6 +181,8 @@ S.portalUlla = function (p, sp, x, y, now) {
   const mp = this.maps[p.map];
   const k = idx(x, y);
   if (p.duelo || p.enGuerra || p.jailUntil > now) return this.msg(p, 'Acá no podés abrir un portal.', 'warn');
+  // sólo en zona insegura: ni parado en zona segura ni apuntando a una
+  if (this.isSafe(p) || this.trigger(p.map, x, y) === G.TRIGGER.ZONASEGURA || !mp.d.pk) return this.msg(p, 'Los portales sólo se pueden abrir en zona insegura.', 'warn');
   if (mp.d.blocked[k] || mp.d.water[k]) return this.msg(p, 'No podés abrir un portal ahí.', 'warn');
   if (mp.d.exits.has(k) || mp.objs.has(k)) return this.msg(p, 'Ya hay algo en ese lugar.', 'warn');
   if (this.portalesUlla && [...this.portalesUlla].some((t) => t.map === p.map && t.k === k)) return this.msg(p, 'Ya hay un portal abriéndose ahí.', 'warn');

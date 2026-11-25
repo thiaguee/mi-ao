@@ -221,6 +221,12 @@ function handle(sock, msg) {
     case 'fabricar': return world.fabricar(p, msg.oficio, +msg.id, +msg.cant);
     case 'voz': return world.partyVoz(p, !!msg.on);
     case 'vozSig': return world.partyVozSenal(p, msg);
+    case 'cabeza': // GMs: cambiar de cabeza desde /CABEZA
+      if (p.gm > 0 && Number.isInteger(+msg.id) && +msg.id > 0 && +msg.id < 1000) {
+        p.head = +msg.id; p.cabezaObj = 0; world.sendCharToMap(p); world.savePlayer(p);
+        world.send(p, { t: 'cabezaOk', id: p.head });
+      }
+      return;
     case 'gmMenu': return world.gmMenu(p, msg); // menú de clic derecho de los GMs sobre un usuario
     case 'tp': // teletransporte de GM con clic derecho
       if (p.gm < 1) return;
