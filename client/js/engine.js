@@ -261,6 +261,104 @@ export function setFx(id, fx, loops) {
     until: loops < 0 ? Infinity : clock() + dur * (Math.max(0, loops) + 1) };
 }
 
+// Efectos especiales dibujados a mano (no son gráficos del AO): rayo de Castigo, Destrucción
+const FX_ESP_MS = { rayo: 650, destruccion: 1600 };
+// quedan fijos en la baldosa donde pegaron (si el bicho muere, el efecto se sigue viendo)
+const efectosEsp = [];
+export function setFxEsp(id, k, x, y) {
+  const c = E.chars.get(id);
+  if (!FX_ESP_MS[k] || (!c && !x)) return;
+  efectosEsp.push({ k, x: c ? c.x : x, y: c ? c.y : y, start: clock() });
+}
+// zigzag de un rayo entre dos puntos (forma fija por rayo)
+function zigzag(x1, y1, x2, y2, pasos, amp) {
+  const pts = [[x1, y1]];
+  for (let i = 1; i < pasos; i++) { const t = i / pasos; pts.push([x1 + (x2 - x1) * t + (Math.random() - 0.5) * amp, y1 + (y2 - y1) * t]); }
+  pts.push([x2, y2]);
+  return pts;
+}
+function trazar(ctx, pts) { ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); }
+function dibujarFxEsp(ctx, f, px, py, now) {
+  const t = now - f.start, dur = FX_ESP_MS[f.k];
+  if (t > dur) return;
+  // px, py: esquina de arriba a la izquierda de la baldosa
+  const cx = px + 16, pie = py + 30, cuerpo = py + 2, arriba = py - 400;
+  ctx.save();
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (f.k === 'rayo') {
+    // dos destellos: el rayo cae, parpadea y se apaga; flash blanco donde pega
+    if (!f.forma || (t > 220 && !f.forma2)) {
+      const p = zigzag(cx + (Math.random() - 0.5) * 30, arriba, cx, cuerpo, 14, 26);
+      const ramas = [];
+      for (let i = 3; i < p.length - 3; i += 4) ramas.push(zigzag(p[i][0], p[i][1], p[i][0] + (Math.random() - 0.5) * 60, p[i][1] + 30 + Math.random() * 30, 4, 10));
+      if (!f.forma) f.forma = { p, ramas }; else f.forma2 = { p, ramas };
+    }
+    const forma = t > 220 ? f.forma2 : f.forma;
+    const vis = t < 90 || (t > 140 && t < 380) || (t > 430 && t < 520);
+    const a = Math.max(0, 1 - t / dur);
+    if (vis) {
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = `rgba(90,140,255,${0.3 * a + 0.15})`; ctx.lineWidth = 22; trazar(ctx, forma.p);
+      ctx.strokeStyle = `rgba(150,195,255,${0.6 * a + 0.3})`; ctx.lineWidth = 9; trazar(ctx, forma.p);
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3.5; trazar(ctx, forma.p);
+      ctx.strokeStyle = `rgba(190,220,255,${0.8 * a})`; ctx.lineWidth = 2; forma.ramas.forEach((r) => trazar(ctx, r));
+    }
+    // destello de impacto
+    const fl = Math.max(0, 1 - t / 380);
+    if (fl > 0) {
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createRadialGradient(cx, cuerpo, 2, cx, cuerpo, 46);
+      g.addColorStop(0, `rgba(255,255,255,${0.9 * fl})`); g.addColorStop(0.4, `rgba(160,200,255,${0.5 * fl})`); g.addColorStop(1, 'rgba(80,120,255,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cuerpo, 46, 0, Math.PI * 2); ctx.fill();
+    }
+  } else if (f.k === 'destruccion') {
+    const ent = Math.min(1, t / 260); // la columna baja del cielo
+    const sal = t > dur - 500 ? (dur - t) / 500 : 1; // se apaga al final
+    const ancho = 10 + 26 * Math.min(1, t / 500);
+    const yIni = arriba, yFin = arriba + (pie - arriba) * ent;
+    // columna: borde rojo/naranja, centro casi negro con vetas violetas
+    ctx.globalCompositeOperation = 'lighter';
+    let g = ctx.createLinearGradient(cx - ancho, 0, cx + ancho, 0);
+    g.addColorStop(0, 'rgba(255,40,0,0)'); g.addColorStop(0.2, `rgba(255,50,0,${0.8 * sal})`); g.addColorStop(0.5, `rgba(255,230,150,${sal})`);
+    g.addColorStop(0.8, `rgba(255,50,0,${0.8 * sal})`); g.addColorStop(1, 'rgba(255,60,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(cx - ancho, yIni, ancho * 2, yFin - yIni);
+    ctx.globalCompositeOperation = 'source-over';
+    g = ctx.createLinearGradient(cx - ancho * 0.45, 0, cx + ancho * 0.45, 0);
+    g.addColorStop(0, 'rgba(60,0,40,0)'); g.addColorStop(0.5, `rgba(70,0,50,${0.85 * sal})`); g.addColorStop(1, 'rgba(40,0,30,0)');
+    ctx.fillStyle = g; ctx.fillRect(cx - ancho * 0.45, yIni, ancho * 0.9, yFin - yIni);
+    if (ent >= 1) {
+      // ondas de choque en el piso
+      for (const d of [0, 260, 520]) {
+        const k = (t - 260 - d) / 700;
+        if (k < 0 || k > 1) continue;
+        ctx.strokeStyle = `rgba(255,${120 - 80 * k},30,${(1 - k) * 0.85})`; ctx.lineWidth = 4 * (1 - k) + 1;
+        ctx.beginPath(); ctx.ellipse(cx, pie - 4, 12 + 90 * k, (12 + 90 * k) * 0.42, 0, 0, Math.PI * 2); ctx.stroke();
+      }
+      // suelo quemado
+      g = ctx.createRadialGradient(cx, pie - 4, 2, cx, pie - 4, 44);
+      g.addColorStop(0, `rgba(20,0,0,${0.6 * sal})`); g.addColorStop(1, 'rgba(20,0,0,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, pie - 4, 44, 18, 0, 0, Math.PI * 2); ctx.fill();
+      // chispas y escombros que salen volando
+      if (!f.chispas) f.chispas = Array.from({ length: 26 }, () => ({ a: Math.random() * Math.PI * 2, v: 40 + Math.random() * 110, h: 60 + Math.random() * 140, r: 1 + Math.random() * 2.5 }));
+      const k = (t - 260) / (dur - 260);
+      ctx.globalCompositeOperation = 'lighter';
+      for (const s of f.chispas) {
+        const x = cx + Math.cos(s.a) * s.v * k, y = pie - 8 + Math.sin(s.a) * s.v * k * 0.4 - s.h * k + 160 * k * k;
+        ctx.fillStyle = `rgba(255,${150 + Math.floor(s.r * 30)},60,${1 - k})`;
+        ctx.beginPath(); ctx.arc(x, y, s.r, 0, Math.PI * 2); ctx.fill();
+      }
+      // fogonazo inicial
+      const fl = Math.max(0, 1 - (t - 260) / 300);
+      if (fl > 0) {
+        g = ctx.createRadialGradient(cx, cuerpo, 2, cx, cuerpo, 70);
+        g.addColorStop(0, `rgba(255,240,200,${fl})`); g.addColorStop(0.5, `rgba(255,80,20,${0.6 * fl})`); g.addColorStop(1, 'rgba(120,0,0,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cuerpo, 70, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  ctx.restore();
+}
+
 export function say(id, text, color) {
   const c = E.chars.get(id);
   if (!c) return;
@@ -420,6 +518,14 @@ export function render(now) {
 
   // noche, luces y clima (antes de los nombres y diálogos, así se leen siempre)
   dibujarClima(ctx, now, sx, sy, me, underRoof);
+
+  // efectos especiales de hechizos (rayo de Castigo, Destrucción): encima de la noche porque dan luz
+  for (let i = efectosEsp.length - 1; i >= 0; i--) {
+    const f = efectosEsp[i];
+    if (now - f.start > FX_ESP_MS[f.k]) { efectosEsp.splice(i, 1); continue; }
+    dibujarFxEsp(ctx, f, sx(f.x), sy(f.y), now);
+  }
+
 
   // diálogos (lo que dicen) encima de todo
   for (const c of E.chars.values()) {

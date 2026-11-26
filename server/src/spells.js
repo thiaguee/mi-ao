@@ -15,12 +15,16 @@ S.castSpell = function (p, slot, x, y) {
   if (!sp) return this.msg(p, 'No tenés un hechizo en ese lugar.', 'warn');
   if (p.dead) return this.msg(p, '¡¡Estás muerto!!', 'warn');
   // sin skills: los hechizos fuertes piden nivel (data/ajustes.json → nivel)
+  if (sp.soloDios && p.gm < 3) return this.msg(p, `${sp.name} es un poder reservado a los Dioses.`, 'warn');
   if (sp.nivel && p.stats.lvl < sp.nivel && p.gm < 2) return this.msg(p, `Necesitás nivel ${sp.nivel} para lanzar ${sp.name}.`, 'warn');
   if (now - p.lastSpell < this.config.intervaloHechizo - 50) return; // 50 ms de margen por el lag
   if (this.maps[p.map].d.magiaSinEfecto && p.gm === 0) return this.msg(p, 'Una fuerza oscura te impide canalizar tu energía.', 'warn');
   const s = p.stats;
-  if (s.man < sp.mana) return this.msg(p, 'No tenés suficiente maná.', 'warn');
-  if (s.sta < sp.sta) return this.msg(p, 'Estás muy cansado para lanzar este hechizo.', 'warn');
+  // hechizos para todas las clases (Castigo): las clases sin maná lo pagan con energía
+  const conEnergia = sp.paraTodas && !s.maxMan;
+  const costoMana = conEnergia ? 0 : sp.mana, costoSta = conEnergia ? sp.sta + Math.ceil(sp.mana / 2) : sp.sta;
+  if (s.man < costoMana) return this.msg(p, 'No tenés suficiente maná.', 'warn');
+  if (s.sta < costoSta) return this.msg(p, 'Estás muy cansado para lanzar este hechizo.', 'warn');
   // Sin límite de alcance: si lo ves en tu pantalla, lo podés atacar (el límite es sólo anti-trampas)
   if (Math.abs(x - p.x) > 40 || Math.abs(y - p.y) > 30) return this.msg(p, 'Estás demasiado lejos.', 'warn');
   const mp = this.maps[p.map];
@@ -45,18 +49,19 @@ S.castSpell = function (p, slot, x, y) {
     sp.subeMana === 2 || sp.subeSta === 2;
   if (ofensivo) {
     if (target.id === p.id) return this.msg(p, 'No podés atacarte a vos mismo.', 'warn');
-    if (!this.canAttack(p, target)) return;
+    if (!(sp.soloDios && target.kind === 'npc') && !this.canAttack(p, target)) return; // Destrucción: cualquier criatura
   }
   if (sp.revivir && (target.kind !== 'pc' || !target.dead)) return this.msg(p, 'Sólo podés revivir a los muertos.', 'warn');
   if (!sp.revivir && target.kind === 'pc' && target.dead) return this.msg(p, 'No podés lanzar hechizos a un espíritu.', 'warn');
 
   p.lastSpell = now;
   if (p.meditating) this.stopMeditating(p);
-  s.man -= sp.mana; s.sta -= sp.sta;
+  s.man -= costoMana; s.sta -= costoSta;
   this.sendStat(p, ['man', 'sta']);
   this.trainSkill(p, SK['Magia']);
   if (sp.words) this.toMap(p.map, { t: 'say', id: p.id, text: sp.words, color: 'spell' });
   if (sp.fx) this.toMap(p.map, { t: 'fx', id: target.id, fx: sp.fx, loops: sp.loops || 0 });
+  if (sp.especial) this.toMap(p.map, { t: 'fxEsp', id: target.id, k: sp.especial, x: target.x, y: target.y });
   if (sp.wav) this.toMap(p.map, { t: 'snd', w: sp.wav });
 
   this.applySpell(p, target, sp);
@@ -90,6 +95,7 @@ S.applySpell = function (p, t, sp) {
         else if (r < (sp.divino || 0) + (sp.critico || 0)) { dmg *= 2; golpe = '¡Golpe crítico! '; }
       }
       dmg = Math.max(1, dmg - (t.def.defM || 0));
+      if (sp.danioFijo) { dmg = sp.minHp; golpe = '☠ DESTRUCCIÓN: '; }
       this.msg(p, `${golpe}¡Le has quitado ${dmg} puntos de vida a ${t.name}!`, 'spell');
       this.damageNpc(t, dmg, p, true);
       return;

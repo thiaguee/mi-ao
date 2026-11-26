@@ -72,11 +72,11 @@ P.armarPersonaje = function (name, pass, raza, genero, headPedida, dice) {
   };
   // Equipo inicial newbie
   const bajo = G.ES_RAZA_BAJA(raza);
-  const items = [[460, 1], [461, 50], [462, 20], [467, 30], [468, 30], [bajo ? 466 : 463, 1]];
+  const items = [[460, 1], [461, 50], [462, 20], [bajo ? 466 : 463, 1]]; // sin comida ni bebida (no hay hambre ni sed)
   rec.inv = new Array(INV_SLOTS).fill(null);
   items.forEach(([id, amount], i) => { rec.inv[i] = { id, amount }; });
   rec.eq.weapon = 0;
-  rec.eq.armor = 5;
+  rec.eq.armor = 3;
   return rec;
 };
 
@@ -429,17 +429,8 @@ P.useItem = function (p, i) {
   }
   switch (o.type) {
     case OBJ.COMIDA:
-      s.ham = Math.min(100, s.ham + (o.minHam || 10));
-      this.removeFromSlot(p, i, 1);
-      this.sendStat(p, ['ham']);
-      this.toMap(p.map, { t: 'snd', w: G.SND.COMER });
-      break;
     case OBJ.BEBIDA:
-      s.sed = Math.min(100, s.sed + (o.minSed || 10));
-      this.removeFromSlot(p, i, 1);
-      this.sendStat(p, ['sed']);
-      this.toMap(p.map, { t: 'snd', w: G.SND.BEBER });
-      break;
+      return this.msg(p, 'En Norway AO no hay hambre ni sed: no hace falta comer ni beber.', 'info');
     case OBJ.POCION: {
       const v = rnd(o.minMod, o.maxMod);
       if (o.pocion === 3) { s.hp = Math.min(s.maxHp, s.hp + v); this.sendStat(p, ['hp']); }
@@ -464,7 +455,7 @@ P.useItem = function (p, i) {
       break;
     }
     case OBJ.PERGAMINO:
-      if (!G.claseConMana(p.clase) && p.gm < 2) return this.msg(p, 'Tu clase no puede aprender hechizos.', 'warn');
+      if (!G.claseConMana(p.clase) && p.gm < 2 && !(this.data.spells[o.spell] || {}).paraTodas) return this.msg(p, 'Tu clase no puede aprender hechizos.', 'warn');
       if (p.spells.includes(o.spell)) return this.msg(p, 'Ya conocés ese hechizo.', 'warn');
       {
         let slot = -1;
@@ -860,12 +851,9 @@ P.playerTick = function (p, now) {
   if (p.dead) return;
   p.tick = (p.tick || 0) + 1;
   if (p.tick % 3 === 0 && this.revisarTunicaDeBando) this.revisarTunicaDeBando(p);
-  // Hambre y sed bajan de a poco (más lento que el original para que sea más amigable)
-  if (p.tick % 90 === 0 && p.gm === 0) {
-    if (s.ham > 0) { s.ham = Math.max(0, s.ham - 5); changed.push('ham'); }
-    if (s.sed > 0) { s.sed = Math.max(0, s.sed - 5); changed.push('sed'); }
-  }
-  const hungry = s.ham <= 0 || s.sed <= 0;
+  // Sin hambre ni sed: el sistema se sacó (siempre quedan llenos)
+  s.ham = 100; s.sed = 100;
+  const hungry = false;
   // Energía
   if (p.tick % 2 === 0 && !hungry && s.sta < s.maxSta) {
     s.sta = Math.min(s.maxSta, s.sta + Math.max(1, Math.floor(s.maxSta * 0.04)));
