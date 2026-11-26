@@ -66,7 +66,7 @@ P.armarPersonaje = function (name, pass, raza, genero, headPedida, dice) {
       ham: 100, sed: 100, gld: this.config.oroInicial || 0, minHit: 1, maxHit: 2, skillPts: 10 },
     inv: [], eq: { weapon: -1, armor: -1, shield: -1, helmet: -1, ammo: -1 },
     spells: [], bank: [], bankGld: 0,
-    pos: this.inicioNewbie ? this.inicioNewbie() : { map: city.map, x: city.x, y: city.y }, // los nuevos arrancan en la Dungeon Newbie
+    pos: this.inicioNewbie && !(this.gmLevel && this.gmLevel(name) > 0) ? this.inicioNewbie() : { map: city.map, x: city.x, y: city.y }, // los nuevos arrancan en la Dungeon Newbie
     crim: false, faccion: '', kills: { ciu: 0, cri: 0, neu: 0, npcs: 0 }, deaths: 0,
     hogar: 'ULLATHORPE',
   };

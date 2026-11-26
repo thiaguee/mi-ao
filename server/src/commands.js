@@ -64,8 +64,27 @@ const AYUDA_USUARIO = [
   'Coliseo: /DUELO nombre [oro] · /DUELO2 compañero rival1 rival2 [oro] · /ACEPTO nombre · /RECHAZO nombre · /APOSTAR nombre oro · /COLISEO (ir a mirar) · /RANKINGDUELOS · /RENDIRSE',
   'Emotes: /SALUDAR /BAILAR /SENTARSE (en un banco o en el piso) /REIR /APLAUDIR /LLORAR /ENOJAR /AMOR /PENSAR',
   'Guerra: /GUERRA (entrar) · /SALIRGUERRA · /RANKING (ranking de kills) · /PREMIOS (premios por kills) · /NOBLEZA',
-  'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar',
+  'Teclas: flechas = caminar, Ctrl = atacar, A = agarrar, M = meditar, U = usar, E = equipar, T = tirar, F7 = macro de hechizos',
 ];
+// Panel de /AYUDA (ventana con secciones). [comando, para qué sirve]
+const AYUDA_PANEL = [
+  ['Básicos', [['/EST', 'Ver tus estadísticas'], ['/ONLINE', 'Quiénes están conectados'], ['/MEDITAR (o M)', 'Recuperar maná'],
+    ['/HOGAR', 'Volver a tu ciudad (si estás muerto)'], ['/RESUCITAR · /CURAR', 'Cerca de un sacerdote'], ['/DESC texto', 'Tu descripción al hacerte clic'],
+    ['\\nombre mensaje', 'Susurrarle a alguien'], ['/GM mensaje', 'Pedir ayuda a un GM'], ['/PASSWORD vieja nueva', 'Cambiar la contraseña'], ['/SALIR', 'Salir del juego'],
+    ['/GUIA', 'Guía de entrenamiento (dónde levelear)']]],
+  ['Banco y comercio', [['/BALANCE', 'Cuánto oro tenés en el banco'], ['/DEPOSITAR cant', 'Guardar oro (al lado del banquero)'], ['/RETIRAR cant', 'Sacar oro del banco'],
+    ['MERCADO', 'Vender y comprar entre jugadores (cartel de la plaza)']]],
+  ['Facción y guerra', [['Nivel 13', 'Elegís Ciudadano, Criminal o Neutral (para siempre)'], ['/SEGURO', 'Puesto: sólo atacás a la facción enemiga. Sacalo para pegarle a neutrales'],
+    ['/GUERRA · /SALIRGUERRA', 'Entrar o salir de la guerra (cada hora)'], ['/PREMIOS', 'Premios por matar al bando enemigo'], ['/RANKING', 'Ranking de kills'], ['/NOBLEZA', 'Hacerte noble']]],
+  ['Grupo', [['Clic derecho → Grupo', 'Invitar a alguien (o /GRUPO nombre)'], ['/P mensaje', 'Chat del grupo'], ['V (mantener)', 'Hablar por el chat de voz'], ['/SALIRGRUPO · /ECHARGRUPO nombre', 'Salir o echar del grupo']]],
+  ['Clanes', [['/FUNDARCLAN', 'Fundar un clan (15.000.000 de oro)'], ['/CLANES', 'Lista de clanes'], ['/CL mensaje', 'Chat del clan'], ['/CAPA', 'Ponerte o sacarte la capa']]],
+  ['Coliseo y eventos', [['/DUELO nombre [oro]', 'Retar a duelo'], ['/DUELO2 compañero rival1 rival2 [oro]', 'Duelo 2 contra 2'], ['/ACEPTO · /RECHAZO nombre', 'Responder un duelo'],
+    ['/APOSTAR nombre oro', 'Apostar en un duelo'], ['/COLISEO', 'Ir a mirar'], ['/RANKINGDUELOS · /RENDIRSE', ''], ['/EVENTO', 'Ver el evento de ahora'], ['/PASE', 'Pase de temporada']]],
+  ['Emotes', [['/SALUDAR /BAILAR /SENTARSE', ''], ['/REIR /APLAUDIR /LLORAR', ''], ['/ENOJAR /AMOR /PENSAR', '']]],
+  ['Teclas', [['Flechas / WASD', 'Caminar'], ['Ctrl', 'Atacar'], ['A', 'Agarrar'], ['U · Espacio', 'Usar / consumir'], ['E', 'Equipar'], ['T', 'Tirar'], ['M', 'Meditar'],
+    ['F7', 'Macro de hechizos: mouse arriba del bicho, 2 por segundo'], ['Enter', 'Hablar']]],
+];
+
 const AYUDA_GM = {
   1: ['CLIC DERECHO en el mapa = teletransportarte ahí.', '[Consejero] /MAPAGM (2 o JUZGADO) /IR nombre /DONDE nombre /INVISIBLE o /INVI /ULLA /RITMO /CABEZA /RMSG mensaje /SOS (ver pedidos) /INFO nombre',
     '/CARCEL nombre minutos /SILENCIAR nombre minutos /TRABAJANDO /ONLINEGM /MOSTRARGM'],
@@ -74,7 +93,7 @@ const AYUDA_GM = {
     '/TELEPLOC (teleport a donde hiciste clic) /BUSCARNPC texto /BUSCAROBJ texto'],
   3: ['[Dios] /LIDER nombre CRIMINAL|CIUDADANO|NEUTRAL /QUITARLIDER nombre /LIDERES /HORA n (cambia la hora del juego: día y noche) /PONERNPC número (pone un NPC fijo donde hiciste clic) /SACARNPC (saca el NPC señalado) /NPCSPUESTOS',
     '/TIENDAS (elegir qué vende cada NPC) /NOBLE nombre (dar o sacar nobleza) /CI numeroObjeto cantidad /ORO nombre cantidad /NIVEL nombre nivel /EXP nombre cantidad',
-    '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI nombre /HACERCIUDA nombre',
+    '/BAN nombre /UNBAN nombre /GOD (invulnerable) /LIMPIAR (objetos del piso) /HACERCRIMI /HACERCIUDA /HACERNEUTRAL /RESETFACCION nombre',
     '/SKILLS nombre valor /HECHIZO nombre numero /CLASE nombre numero /DESTRUIR (objeto del piso donde estás)',
     '/CREARTP mapa x y (crea un portal donde estás parado) /BORRARTP /TPS (lista)', '/MOD nombre (HP|MAN|STA|ATRIB|ORO|BANCO) valor /ATACABLE (que los bichos te ataquen, para probar) /GRABAR /LLUVIA'],
   4: ['[Admin] /PASEXP nombre cantidad (experiencia del pase) /TESTEO (panel con todo lo nuestro: objetos, hechizos y NPCs desde el 2000) /OBJETOS (panel para crear objetos y poner estructuras) /ELIMINARESTRUCTURA (borra la última estructura que clickeaste, hasta 15 s después)',
@@ -181,9 +200,14 @@ K.command = function (p, text) {
 
   switch (cmd) {
     // ===================== USUARIOS =====================
-    case 'AYUDA':
+    case 'AYUDA': {
+      // panel con secciones; los GMs ven además sus comandos según su rango
+      const gmSecc = [];
+      for (let n = 1; n <= Math.min(gm, 4); n++) gmSecc.push(...AYUDA_GM[n]);
+      return this.send(p, { t: 'ayuda', secc: AYUDA_PANEL, gm: gmSecc });
+    }
+    case 'AYUDATEXTO':
       AYUDA_USUARIO.forEach((l) => this.msg(p, l, 'info'));
-      if (gm > 0) this.msg(p, 'Sos GM: escribí /GMAYUDA para ver tus comandos.', 'gm');
       return;
     case 'ONLINE': {
       const names = [...this.players.values()].filter((o) => !o.gmInvis || gm >= o.gm).map((o) => o.name);

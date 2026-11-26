@@ -569,3 +569,15 @@ body:has(#scr-game:not(.hidden)) .ob-win { width: 760px; height: 500px; }
 .fac-card p { font-size: 12px; line-height: 1.4; flex: 1; color: #d9c9a3; margin: 0; }
 .ver-neu .ver-n, .ver-neu .ver-tag { color: #cfcfcf; }
 .ver-nov .ver-n, .ver-nov .ver-tag { color: #9fd4ff; }
+
+/* panel de /AYUDA */
+.ayuda { display: flex; gap: 10px; width: 720px; height: 420px; }
+.ay-tabs { display: flex; flex-direction: column; gap: 3px; width: 150px; }
+.ay-tab { text-align: left; padding: 6px 8px; background: #1b1510; border: 1px solid #4a3a26; color: #c9b089; cursor: pointer; font: inherit; }
+.ay-tab.on { background: #3a2a16; color: #f3dc9b; border-color: #8a6a3a; }
+.ay-tab.gm { color: #ff9a2e; margin-top: auto; }
+.ay-body { flex: 1; overflow: auto; border: 1px solid #4a3a26; background: #120e0a; padding: 6px 10px; }
+.ay-t { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ay-t td { padding: 4px 6px; border-bottom: 1px solid #2a2016; color: #d9c9a3; vertical-align: top; }
+.ay-c { color: #f3dc9b; font-weight: bold; white-space: nowrap; width: 40%; }
+.ay-gm p { font-size: 12px; color: #ffcf9a; margin: 6px 0; line-height: 1.4; }

@@ -385,6 +385,21 @@ on('ver', (m) => {
   if (atBottom) el.scrollTop = el.scrollHeight;
 });
 
+// ================== PANEL DE /AYUDA ==================
+on('ayuda', (m) => {
+  const fila = ([c, d]) => `<tr><td class="ay-c">${esc(c)}</td><td>${esc(d)}</td></tr>`;
+  const secc = m.secc.map(([t, items], i) => `<button class="ay-tab${i ? '' : ' on'}" data-ay="${i}">${esc(t)}</button>`).join('') + (m.gm.length ? `<button class="ay-tab gm" data-ay="gm">GM</button>` : '');
+  const cuerpo = m.secc.map(([t, items], i) => `<table class="ay-t${i ? ' hidden' : ''}" data-ayt="${i}">${items.map(fila).join('')}</table>`).join('') +
+    (m.gm.length ? `<div class="ay-t ay-gm hidden" data-ayt="gm">${m.gm.map((l) => `<p>${esc(l)}</p>`).join('')}</div>` : '');
+  openModal('Ayuda', `<div class="ayuda"><div class="ay-tabs">${secc}</div><div class="ay-body">${cuerpo}</div></div>`, 'ayuda');
+  document.querySelectorAll('[data-ay]').forEach((b) => {
+    b.onclick = () => {
+      document.querySelectorAll('[data-ay]').forEach((x) => x.classList.toggle('on', x === b));
+      document.querySelectorAll('[data-ayt]').forEach((x) => x.classList.toggle('hidden', x.dataset.ayt !== b.dataset.ay));
+    };
+  });
+});
+
 // ================== ELEGIR FACCIÓN (nivel 13) ==================
 const FACCIONES = [
   ['ciu', '⚜', 'Ciudadano', '#4fa3ff', 'Defendés la ley junto a la Armada Real. Peleás contra los criminales, entrás a la guerra con los ciudadanos y canjeás premios con el Comandante de Arghal. Los guardias reales te protegen.'],
