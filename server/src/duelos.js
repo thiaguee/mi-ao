@@ -3,7 +3,7 @@
 //   /DUELO nombre [oro]              reta a alguien (1 contra 1)
 //   /DUELO2 compañero rival1 rival2 [oro]  2 contra 2
 //   /ACEPTO nombre · /RECHAZO nombre  aceptar o rechazar un reto
-//   /APOSTAR nombre oro              apostar por un duelista (en los 30 segundos antes de que empiece)
+//   /APOSTAR nombre oro              apostar por un duelista (hasta 20 segundos después de que empieza)
 //   /COLISEO                          ir a mirar al Coliseo (y volver)
 //   /RANKINGDUELOS                    ranking de la temporada (un mes); el #1 del mes es Campeón y gana premio
 //   /RENDIRSE                         abandonar el duelo
@@ -17,7 +17,8 @@ const LOBBY = [45, 35];
 const ARENAS = [ // interior de cada arena: [x0, x1, y0, y1]
   [14, 33, 10, 26], [64, 83, 11, 27], [14, 31, 44, 57], [40, 58, 46, 59], [15, 34, 72, 88], [65, 84, 71, 87],
 ];
-const PREPARACION = 30000;   // 30 s para apostar antes de pelear
+const PREPARACION = 3000;    // la pelea arranca a los 3 segundos de entrar a la arena
+const APUESTAS_MS = 20000;   // se puede apostar hasta 20 segundos después de que empieza
 const MAX_PELEA = 5 * 60000; // 5 minutos y es empate
 const CASA = 0.05;           // el coliseo se queda con el 5% de las apuestas
 const PREMIO_CAMPEON = { puntosTorneo: 20, oro: 1000000 };
@@ -109,10 +110,11 @@ D.empezarDuelo = function (reto) {
   }
   const i = this.duelos.findIndex((d) => !d);
   if (i < 0) { for (const y of ps) this.msg(y, 'Las 6 arenas están ocupadas. Probá en un ratito.', 'warn'); return; }
-  const [x0, x1, y0, y1] = ARENAS[i], ym = Math.floor((y0 + y1) / 2);
+  const [x0, x1, y0, y1] = ARENAS[i];
   const d = { arena: i, A: [], B: [], oro: reto.oro, pozo: 0, inicio: Date.now() + PREPARACION, fase: 'preparando', apuestas: [], vuelta: {}, muertos: new Set() };
   this.duelos[i] = d;
-  const lugares = { A: [[x0 + 2, ym - 1], [x0 + 2, ym + 2]], B: [[x1 - 2, ym - 1], [x1 - 2, ym + 2]] };
+  // un bando en la esquina de arriba a la izquierda y el otro en la de abajo a la derecha
+  const lugares = { A: [[x0, y0], [x0 + 1, y0]], B: [[x1, y1], [x1 - 1, y1]] };
   for (const [ladoN, noms] of [['A', reto.A], ['B', reto.B]]) {
     noms.forEach((n, j) => {
       const x = this.findPlayer(n);
@@ -124,9 +126,11 @@ D.empezarDuelo = function (reto) {
       const [lx, ly] = lugares[ladoN][j];
       const pos = this.closestLegalPos(MAPA, lx, ly) || { x: lx, y: ly };
       this.warp(x, MAPA, pos.x, pos.y);
+      x.heading = ladoN === 'A' ? 3 : 1; // mirando hacia el centro de la arena
+      this.sendCharToMap(x);
     });
   }
-  this.toAll({ t: 'msg', text: `⚔ DUELO en la Arena ${i + 1} del Coliseo: ${nombres(this, d.A)} vs ${nombres(this, d.B)}${d.pozo ? ` · pozo ${fmt(d.pozo)}` : ''}. ¡30 segundos para apostar! /APOSTAR nombre oro · /COLISEO para ir a mirar`, color: 'server' });
+  this.toAll({ t: 'msg', text: `⚔ DUELO en la Arena ${i + 1} del Coliseo: ${nombres(this, d.A)} vs ${nombres(this, d.B)}${d.pozo ? ` · pozo ${fmt(d.pozo)}` : ''}. Empieza en 3 segundos; se puede apostar en los primeros 20. /APOSTAR nombre oro · /COLISEO para ir a mirar`, color: 'server' });
 };
 
 D.tickDuelos = function () {
@@ -215,7 +219,7 @@ D.comandoApostar = function (p, nombre, oro) {
   const t = nombre && this.findPlayer(nombre);
   const d = t && t.duelo && this.duelos[t.duelo.arena];
   if (!d) return this.msg(p, 'Uso: /APOSTAR nombre oro (por alguien que esté por pelear un duelo).', 'warn');
-  if (d.fase !== 'preparando') return this.msg(p, 'Las apuestas de ese duelo ya cerraron.', 'warn');
+  if (d.fase !== 'preparando' && Date.now() - d.inicio > APUESTAS_MS) return this.msg(p, 'Las apuestas de ese duelo ya cerraron.', 'warn');
   if (lado(d, p)) return this.msg(p, 'Los duelistas no pueden apostar.', 'warn');
   if (!(oro >= 100)) return this.msg(p, 'La apuesta mínima es de 100 de oro.', 'warn');
   if (p.stats.gld < oro) return this.msg(p, 'No tenés ese oro.', 'warn');

@@ -194,6 +194,7 @@ on('welcome', (m) => {
 
 on('map', async (m) => {
   S.loadingMap = true;
+  colaMapa.length = 0; // lo del mapa anterior ya no sirve
   try {
     const map = await loadMap(m.map);
     Eng.setMap(map, m.objs);
@@ -210,21 +211,34 @@ on('map', async (m) => {
     log('Error cargando el mapa: ' + e.message, 'warn');
   }
   S.loadingMap = false;
+  aplicarColaMapa();
   S.pendingMoves = 0;
   updatePos();
 });
 
-on('char', (m) => {
+// Lo que llega de los personajes mientras se carga un mapa nuevo se guarda y se aplica al terminar
+// (si no, setMap lo borraba: por ejemplo, el rival que entra a la arena del duelo un instante después)
+const colaMapa = [];
+const esperarMapa = (tipo, m) => { if (!S.loadingMap) return false; colaMapa.push([tipo, m]); return true; };
+function aplicarColaMapa() {
+  const cola = colaMapa.splice(0);
+  for (const [tipo, m] of cola) ({ char: onChar, rm: onRm, mv: onMv, turn: onTurn })[tipo](m);
+}
+function onChar(m) {
   const c = m.c;
   const old = E.chars.get(c.id);
   if (old && (old.x !== c.x || old.y !== c.y)) {
     Eng.addChar(Object.assign({}, c, { x: old.x, y: old.y }));
     Eng.moveChar(c.id, c.x, c.y, c.h);
   } else Eng.addChar(c);
-});
-on('rm', (m) => { E.chars.delete(m.id); });
-on('mv', (m) => Eng.moveChar(m.id, m.x, m.y, m.h));
-on('turn', (m) => { const c = E.chars.get(m.id); if (c) c.h = m.h; });
+}
+function onRm(m) { E.chars.delete(m.id); }
+function onMv(m) { Eng.moveChar(m.id, m.x, m.y, m.h); }
+function onTurn(m) { const c = E.chars.get(m.id); if (c) c.h = m.h; }
+on('char', (m) => { if (!esperarMapa('char', m)) onChar(m); });
+on('rm', (m) => { if (!esperarMapa('rm', m)) onRm(m); });
+on('mv', (m) => { if (!esperarMapa('mv', m)) onMv(m); });
+on('turn', (m) => { if (!esperarMapa('turn', m)) onTurn(m); });
 on('pos', (m) => {
   const c = E.chars.get(S.me);
   if (!c) return;
