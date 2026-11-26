@@ -172,6 +172,11 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] La pelea arranca a los 3 segundos. Se puede apostar en los primeros 20.
 - [ ] No hay barras de HAMBRE ni SED; los personajes nuevos no traen comida ni agua.
 
+## Hechizos y ayuda
+- [ ] Castigo: cae un rayo del cielo sobre el bicho (ya no la animación del Apocalipsis). Un guerrero lo puede aprender y lo paga con energía.
+- [ ] /HECHIZO nombre 53 (Destrucción): sólo lo tiran Dioses y Admins; mata cualquier criatura con una columna de fuego.
+- [ ] /AYUDA abre una ventana con secciones; los GMs ven además la sección GM.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?
