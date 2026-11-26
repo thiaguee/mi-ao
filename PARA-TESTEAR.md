@@ -167,6 +167,11 @@ Marcá con una X lo que ya probaste. Versión: v1.60.0 o más nueva.
 - [ ] Con el mouse arriba de un bicho tira 2 hechizos por segundo; con el mouse afuera no tira.
 - [ ] Sigue prendida aunque muera el bicho; se apaga al caminar o con F7.
 
+## Duelos y hambre
+- [ ] /DUELO: los dos aparecen frente a frente cerca del centro de la arena y se ven; el que retó ve al rival.
+- [ ] La pelea arranca a los 3 segundos. Se puede apostar en los primeros 20.
+- [ ] No hay barras de HAMBRE ni SED; los personajes nuevos no traen comida ni agua.
+
 ## Pendiente (no está hecho)
 - Ajustar los premios del pase.
 - ¿Nombres con la letra pixelada también? ¿Misiones de facción para los neutrales?

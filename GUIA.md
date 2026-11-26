@@ -354,7 +354,7 @@ Los premios se cambian en `server/data/recompensas-faccion.json`.
 
 - Mapa nuevo **318** con **6 arenas**. Afuera es zona segura para mirar; adentro se pelea (sin perder nada al morir).
 - **/DUELO nombre [oro]**: reta a alguien 1 contra 1 (el oro lo pone cada uno y el ganador se lleva todo). **/DUELO2 compañero rival1 rival2 [oro]**: 2 contra 2. Se responde con **/ACEPTO nombre** o **/RECHAZO nombre**.
-- Antes de pelear hay **30 segundos para apostar**: **/APOSTAR nombre oro** (mínimo 100). Los que aciertan se reparten todo lo apostado (el Coliseo se queda con 5%).
+- La pelea **arranca a los 3 segundos** de entrar a la arena (los duelistas aparecen frente a frente, cerca del centro). Se puede **apostar hasta 20 segundos después de que empieza**: **/APOSTAR nombre oro** (mínimo 100). Los que aciertan se reparten todo lo apostado (el Coliseo se queda con 5%).
 - **/COLISEO**: ir a mirar los duelos (desde una ciudad) y volver. **/RENDIRSE** abandona. Si en 5 minutos no hay ganador es empate.
 - **/RANKINGDUELOS**: ranking de la temporada (un mes, puntos tipo ELO desde 1000). El **#1 del mes es Campeón del Coliseo** y gana 20 puntos de torneo y 1.000.000 de oro.
 
