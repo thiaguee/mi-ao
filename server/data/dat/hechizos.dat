@@ -12,7 +12,7 @@
 '4.....Terreno.
 
 [INIT]
-NumeroHechizos=52
+NumeroHechizos=53
 
 
 [HECHIZO1]
@@ -3131,13 +3131,15 @@ Resis=1
 
 [HECHIZO51] 'Norway AO
 Nombre=Castigo
-Desc=Un juicio sagrado que cae sobre las criaturas. Sólo afecta a las criaturas, nunca a otros aventureros. A veces golpea con fuerza crítica (doble) y, muy rara vez, con furia divina (triple).
+Desc=Un rayo sagrado cae del cielo sobre las criaturas. Lo pueden aprender todas las clases (las que no usan maná lo pagan con energía). Sólo afecta a las criaturas, nunca a otros aventureros. A veces golpea con fuerza crítica (doble) y, muy rara vez, con furia divina (triple).
 PalabrasMagicas=Iudicium Lux
 HechizeroMsg=Has lanzado Castigo sobre 
 TargetMsg=lanzó Castigo sobre ti.
 Tipo=1
 WAV=27
-FXgrh=13
+FXgrh=0
+Especial=rayo
+ParaTodas=1
 Loops=0
 MinSkill=0
 ManaRequerido=100
@@ -3164,3 +3166,23 @@ ManaRequerido=300
 StaRequerido=20
 Target=4
 PortalUlla=1
+
+[HECHIZO53] 'Norway AO: sólo Dioses; se da por el panel de admin (/HECHIZO nombre 53). Mata cualquier criatura.
+Nombre=Destrucción
+Desc=Poder reservado a los Dioses: una columna de fuego oscuro cae del cielo y aniquila a cualquier criatura (1.000.000 de daño).
+PalabrasMagicas=Exitium Totale
+HechizeroMsg=Has lanzado Destrucción sobre 
+Tipo=1
+WAV=27
+FXgrh=0
+Loops=0
+MinSkill=0
+ManaRequerido=0
+StaRequerido=0
+Target=2
+SubeHP=2
+MinHP=1000000
+MaxHP=1000000
+Especial=destruccion
+SoloDios=1
+DanioFijo=1

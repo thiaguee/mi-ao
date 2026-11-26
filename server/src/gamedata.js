@@ -251,6 +251,10 @@ function loadSpells() {
       staffAffected: num(v.STAFFAFFECTED) === 1,
       portalUlla: num(v.PORTALULLA) === 1, // abre un portal temporal a Ullathorpe
       critico: num(v.CRITICO), divino: num(v.DIVINO), // % de golpe crítico (x2) y divino (x3), una sola tirada
+      especial: String(v.ESPECIAL || '').toLowerCase(), // efecto dibujado por el cliente (rayo, destruccion)
+      paraTodas: num(v.PARATODAS) === 1, // lo aprenden todas las clases; las que no tienen maná pagan con energía
+      soloDios: num(v.SOLODIOS) === 1, // sólo lo lanzan GMs Dios o Admin
+      danioFijo: num(v.DANIOFIJO) === 1, // el daño es exactamente MinHP (sin bonus, defensa ni críticos)
     };
   }
   return spells;

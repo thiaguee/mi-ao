@@ -455,7 +455,7 @@ P.useItem = function (p, i) {
       break;
     }
     case OBJ.PERGAMINO:
-      if (!G.claseConMana(p.clase) && p.gm < 2) return this.msg(p, 'Tu clase no puede aprender hechizos.', 'warn');
+      if (!G.claseConMana(p.clase) && p.gm < 2 && !(this.data.spells[o.spell] || {}).paraTodas) return this.msg(p, 'Tu clase no puede aprender hechizos.', 'warn');
       if (p.spells.includes(o.spell)) return this.msg(p, 'Ya conocés ese hechizo.', 'warn');
       {
         let slot = -1;

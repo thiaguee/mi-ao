@@ -283,6 +283,7 @@ async function precargarVecinas(n) {
 }
 on('blk', (m) => { for (const [x, y, b] of m.tiles) if (x >= 1 && E.blocked) E.blocked[idx(x, y)] = b; });
 on('fx', (m) => Eng.setFx(m.id, m.fx, m.loops));
+on('fxEsp', (m) => Eng.setFxEsp(m.id, m.k, m.x, m.y));
 on('snd', (m) => Snd.play(m.w));
 on('say', (m) => Eng.say(m.id, m.text, m.color));
 // el daño se ve como en el AO original: sólo en la consola (sin números flotantes)
@@ -857,7 +858,7 @@ function tickMacro() {
   if (now - MACRO.lastCast < MACRO_MS) return;
   const t = bichoBajoMouse();
   if (!t) return; // el mouse no está arriba de una criatura: no tira
-  if (s.man < sp.mana) {
+  if (s.maxMan && s.man < sp.mana) {
     if (now - (MACRO.avisoMana || 0) > 8000) { MACRO.avisoMana = now; log('Macro F7: no te queda maná ni pociones azules.', 'warn'); }
     return;
   }
