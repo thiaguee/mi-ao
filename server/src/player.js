@@ -344,7 +344,21 @@ P.canUseObj = function (p, o) {
   if (o.newbie && p.stats.lvl > NEWBIE_LVL) return 'Sólo los newbies pueden usar este objeto.';
   if (this.puedeUsarPorBando) { const b = this.puedeUsarPorBando(p, o); if (b !== true) return b; }
   if (o.type === OBJ.BARCO && p.stats.lvl < 20) return 'Necesitás nivel 20 para usar una barca.';
+  if (o.type === OBJ.ARMADURA && !o.newbie && p.stats.lvl < NIVEL_TUNICAS && !this.tunicaLibre(o.id)) {
+    return `Necesitás nivel ${NIVEL_TUNICAS} para usar esta vestimenta (antes usá las de los vendedores por clase de Ullathorpe).`;
+  }
   return true;
+};
+
+// Túnicas (pedido de Lautaro): toda la ropa del cuerpo pide nivel 30 ("+30"), salvo la que venden
+// los vendedores por clase de arriba de Ullathorpe (1030 a 1034, se cambia con /TIENDAS) y el set
+// que se recibe al dejar de ser newbie: ésas son las "-30".
+const NIVEL_TUNICAS = 30;
+const VENDEDORES_CLASE = [1030, 1031, 1032, 1033, 1034];
+P.NIVEL_TUNICAS = NIVEL_TUNICAS;
+P.tunicaLibre = function (id) {
+  if ([...Object.values(SET_POST_NEWBIE).flat(), ...SET_RESTO, ...Object.values(TUNICA_CHICOS)].includes(id)) return true;
+  return VENDEDORES_CLASE.some((n) => { const d = this.data.npcs[n]; return d && d.items && d.items.some(([i]) => i === id); });
 };
 
 P.recalcEquip = function (p) {
@@ -443,7 +457,7 @@ P.useItem = function (p, i) {
         const at = o.pocion === 1 ? 1 : 0;
         p.buff = p.buff || {};
         if (!p.buff[at]) p.buff[at] = { base: p.attrs[at] };
-        p.attrs[at] = Math.min(p.buff[at].base * 2, Math.min(35, p.attrs[at] + v));
+        p.attrs[at] = Math.min(35, p.attrs[at] + v); // dopas: hasta 35 (antes también se cortaba en el doble de la base)
         p.buff[at].until = now + (o.duracion || 1200) * 40;
         this.send(p, { t: 'stats', fu: p.attrs[0], ag: p.attrs[1] });
       } else if (o.pocion === 5) {

@@ -260,6 +260,25 @@ C.poderEvasion = function (p) {
   return Math.floor((base + 2.5 * Math.max(p.stats.lvl - 12, 0)) * 0.9) + 10;
 };
 
+// Probabilidad de acertar un golpe de un usuario (pedido de Lautaro):
+// sin pociones acierta 3 de 5 (60 %); con la amarilla (agilidad) y la verde (fuerza) al máximo (35)
+// acierta 9 de 10 (90 %). En el medio sube de a poco: cuanto más dopado, más pega.
+// Contra otro usuario, si el que se defiende también está dopado, esquiva un poco más.
+const DOPA_MAX = 35;
+const dopaje = (p) => {
+  const prog = (at) => {
+    const b = p.buff && p.buff[at] ? p.buff[at].base : p.attrs[at];
+    return b >= DOPA_MAX ? 1 : Math.max(0, Math.min(1, (p.attrs[at] - b) / (DOPA_MAX - b)));
+  };
+  return 0.6 * prog(1) + 0.4 * prog(0); // agilidad pesa un poco más que la fuerza
+};
+C.chanceGolpe = function (p, target) {
+  let c = 60 + 30 * dopaje(p);
+  if (target.kind === 'pc') c -= 15 * dopaje(target);
+  return Math.max(40, Math.min(90, c));
+};
+C.dopaje = dopaje;
+
 C.hitChance = (atk, eva) => Math.max(10, Math.min(90, 50 + (atk - eva) * 0.4));
 
 C.playerDamage = function (p) {
@@ -338,7 +357,7 @@ C.hitTarget = function (p, target, ranged) {
   const atk = this.poderAtaque(p);
   const eva = target.kind === 'pc' ? this.poderEvasion(target) : target.def.evasion;
   const sk = ranged ? SK['Armas de proyectiles'] : this.weaponOf(p) ? SK['Combate con armas'] : SK['Wrestling'];
-  if (Math.random() * 100 > this.hitChance(atk, eva)) {
+  if (Math.random() * 100 > this.chanceGolpe(p, target)) {
     this.toMap(p.map, { t: 'snd', w: G.SND.SWING });
     this.msg(p, '¡Has fallado el golpe!', 'fight');
     if (target.kind === 'pc') {

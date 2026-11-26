@@ -153,7 +153,7 @@ S.applySpell = function (p, t, sp) {
     const v = sp.subeFu === 1 ? rnd(sp.minFu, sp.maxFu) : rnd(sp.minAg, sp.maxAg);
     t.buff = t.buff || {};
     if (!t.buff[at]) t.buff[at] = { base: t.attrs[at] };
-    t.attrs[at] = Math.min(t.buff[at].base * 2, Math.min(35, t.attrs[at] + v));
+    t.attrs[at] = Math.min(35, t.attrs[at] + v);
     t.buff[at].until = Date.now() + 60000;
     this.send(t, { t: 'stats', fu: t.attrs[0], ag: t.attrs[1] });
   }
