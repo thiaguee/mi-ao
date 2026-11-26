@@ -110,11 +110,11 @@ D.empezarDuelo = function (reto) {
   }
   const i = this.duelos.findIndex((d) => !d);
   if (i < 0) { for (const y of ps) this.msg(y, 'Las 6 arenas están ocupadas. Probá en un ratito.', 'warn'); return; }
-  const [x0, x1, y0, y1] = ARENAS[i], ym = Math.floor((y0 + y1) / 2), xm = Math.floor((x0 + x1) / 2);
+  const [x0, x1, y0, y1] = ARENAS[i];
   const d = { arena: i, A: [], B: [], oro: reto.oro, pozo: 0, inicio: Date.now() + PREPARACION, fase: 'preparando', apuestas: [], vuelta: {}, muertos: new Set() };
   this.duelos[i] = d;
-  // cerca del centro, frente a frente (a 6 baldosas), así se ven en la pantalla desde que entran
-  const lugares = { A: [[xm - 3, ym], [xm - 3, ym + 2]], B: [[xm + 3, ym], [xm + 3, ym + 2]] };
+  // un bando en la esquina de arriba a la izquierda y el otro en la de abajo a la derecha
+  const lugares = { A: [[x0, y0], [x0 + 1, y0]], B: [[x1, y1], [x1 - 1, y1]] };
   for (const [ladoN, noms] of [['A', reto.A], ['B', reto.B]]) {
     noms.forEach((n, j) => {
       const x = this.findPlayer(n);
@@ -126,7 +126,7 @@ D.empezarDuelo = function (reto) {
       const [lx, ly] = lugares[ladoN][j];
       const pos = this.closestLegalPos(MAPA, lx, ly) || { x: lx, y: ly };
       this.warp(x, MAPA, pos.x, pos.y);
-      x.heading = ladoN === 'A' ? 2 : 4; // mirando al rival
+      x.heading = ladoN === 'A' ? 3 : 1; // mirando hacia el centro de la arena
       this.sendCharToMap(x);
     });
   }
